@@ -14,6 +14,10 @@
 
 !defined('APP_NAME') && exit('Access Denied');
 
+define('SYS_VERSION'    , '0.1');//系统版本号
+define('VERSION_PATH'   , 'v' . SYS_VERSION . '/');//版本目录
+define('WWWROOT'        , __DIR__ . '/');//网站根目录
+
 define('IS_LOCAL'           , true);     //是否本地环境
 define('APP_DEBUG'          , true);     //调试
 define('RUNTIME_FILE'       , WWWROOT . '~runtime.php');//运行时文件

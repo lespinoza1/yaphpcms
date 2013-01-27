@@ -15,7 +15,7 @@
 define('DB_TYPE'               , 'pdo');          //数据库类型
 define('DB_HOST'               , 'localhost');    //数据库主机名
 define('DB_PORT'               , '');             //数据库端口
-define('DB_NAME'               , 'db_yaphpcms');  //数据库名
+define('DB_NAME'               , 'db_yaphpcms_v' . SYS_VERSION);  //数据库名
 define('DB_USER'               , 'root');         //数据库用户名
 define('DB_PWD'                , '');             //数据库密码
 define('DB_PREFIX'             , 'tb_');          //数据表前缀
