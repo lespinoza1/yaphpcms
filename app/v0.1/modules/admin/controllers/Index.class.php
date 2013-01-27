@@ -56,7 +56,7 @@ class IndexController extends BaseController {//继承BaseController by mrmsl on
         $admin_priv = strtolower(json_encode(array_values($this->_role_info['priv'])));
         //css文件
         $css_file  = $this->_loadTimeScript('START_TIME');//,extjs/v4.1.1/resources/css/ext-patch.css
-        $css_file .= css('extjs/v4.1.1a//resources/css/ext-all-gray.css', COMMON_IMGCACHE);
+        $css_file .= css('extjs/v4.1.1a//resources/css/ext-all-gray.css,extjs/v4.1.1a/resources/css/ext-patch.css', COMMON_IMGCACHE);
         $css_file .= css('app.css');
         $js_file   = $this->_loadTimeScript('LOAD_CSS_TIME');
         $js_file  .= js('', true, COMMON_IMGCACHE . 'extjs/v4.1.1a/');
