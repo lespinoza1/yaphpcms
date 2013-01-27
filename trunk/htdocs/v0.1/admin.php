@@ -12,9 +12,6 @@
  * @lastmodify      $Date$ $Author$
  */
 
-define('SYS_VERSION'    , '0.1');//系统版本号
-define('VERSION_PATH'   , 'v' . SYS_VERSION . '/');//版本目录
-define('WWWROOT'        , __DIR__ . '/');//网站根目录
 define('APP_NAME'       , 'admin');//项目名称
 
-require(WWWROOT . 'bootstrap.php');
+require(__DIR__ . '/bootstrap.php');
