@@ -56,7 +56,7 @@ Ext.define('Yap.Field', {
              *
              * @author          mrmsl <msl-138@163.com>
              * @date            2012-09-15 14:26:59
-             * @lastmodify      2013-01-14 15:15:39 by mrmsl
+             * @lastmodify      2013-01-27 14:02:10 by mrmsl
              *
              * @ignore
              *
@@ -66,11 +66,11 @@ Ext.define('Yap.Field', {
                 return this.base({
                     width: 80,
                     itemId: 'is_enable',
-                    value: -1,
+                    value: '-1',
                     store: [
-                        [-1, lang('ENABLE,STATUS')],
-                        [1, lang('ENABLE')],
-                        [0, lang('DISABLED')]
+                        ['-1', lang('ENABLE,STATUS')],
+                        ['1', lang('ENABLE')],
+                        ['0', lang('DISABLED')]
                     ]
                 });
             },
@@ -105,7 +105,7 @@ Ext.define('Yap.Field', {
              *
              * @author          mrmsl <msl-138@163.com>
              * @date            2012-09-15 11:16:59
-             * @lastmodify      2013-01-14 15:15:46 by mrmsl
+             * @lastmodify      2013-01-27 14:02:05 by mrmsl
              *
              * @ignore
              *
@@ -115,11 +115,11 @@ Ext.define('Yap.Field', {
                 return this.base({
                     width: 80,
                     itemId: 'is_show',
-                    value: -1,
+                    value: '-1',
                     store: [
-                        [-1, lang('SHOW,STATUS')],
-                        [1, lang('SHOW')],
-                        [0, lang('NO,SHOW')]
+                        ['-1', lang('SHOW,STATUS')],
+                        ['1', lang('SHOW')],
+                        ['0', lang('NO,SHOW')]
                     ]
                 });
             }
