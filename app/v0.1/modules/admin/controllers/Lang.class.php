@@ -37,7 +37,7 @@ class LangController extends BaseController {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-07-04 08:35:38
-     * @lastmodify      2013-01-22 10:37:53 by mrmsl
+     * @lastmodify      2013-01-27 14:14:23 by mrmsl
      *
      * @return void 无返回值
      */
@@ -52,10 +52,8 @@ class LangController extends BaseController {
             foreach ($v as $file) {
                 $lang = array_merge($lang, array_change_key_case(include($file), CASE_UPPER));
             }
-var_export($lang);exit;
+
             array2js($lang, 'L', WEB_JS_LANG_PATH . $k . '.js');
         }
-
-        D('Log')->addLog();
     }
 }
