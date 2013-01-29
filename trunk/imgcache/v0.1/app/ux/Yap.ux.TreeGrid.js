@@ -41,16 +41,6 @@ Ext.define('Yap.ux.TreeGrid', {
      * 标签数据
      */
     tabData: null,
-     /**
-     * @cfg {Object} [features="Ext.create('Yap.ux.grid.SelectFeature')"]
-     * features 单元格内容可选
-     */
-    features: [Ext.create('Yap.ux.grid.SelectFeature')],
-    /**
-     * @cfg {Boolean}
-     * forceFit
-     */
-    forceFit: true,
     /**
      * @cfg {Object}
      * listeners
@@ -81,12 +71,11 @@ Ext.define('Yap.ux.TreeGrid', {
      * @return {void} 无返回值
      */
     _afterRender: function(b) {//菜单完成渲染
-        /*b.el.on({//阻止默认行为
+        this.el.on({//阻止默认行为
             click: Ext.emptyFn,
             delegate: 'a',
             preventDefault: true
-        });*/log(arguments);
-        //this.callParent(arguments);
+        });
         this.toolbar = this.child('toolbar');
     },
 

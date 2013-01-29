@@ -43,16 +43,6 @@ Ext.define('Yap.ux.Grid', {
      * 标签数据
      */
     tabData: null,
-     /**
-     * @cfg {Object} [features="Ext.create('Yap.ux.grid.SelectFeature')"]
-     * features 单元格内容可选
-     */
-    //features: [Ext.create('Yap.ux.grid.SelectFeature')],
-    /**
-     * @cfg {Boolean}
-     * forceFit
-     */
-    forceFit: true,
     /**
      * @cfg {Boolean}
      * columnLines
