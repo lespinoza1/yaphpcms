@@ -1111,20 +1111,7 @@ Ext.define('Yap.controller.Base', {
             appgridtype: 'Yap.ux.TreeGrid',
             rootVisible: false,
             columnLines: true,
-            useArrows: true,
-            onRender0: function(b) {//菜单完成渲染
-                /*b.el.on({//阻止默认行为
-                    click: Ext.emptyFn,
-                    delegate: 'a',
-                    preventDefault: true
-                });*/
-                this.toolbar = this.child('toolbar');
-            },
-            onSortChange: function(node, checked) {//子节点状态与父节点状态一致；选中子节点，同时选中父节点 by mrmsl on 22:17 2012-7-16
-                !node.isLeaf() && node.cascadeBy(function(record) {
-                    record.set('checked', checked);
-                });
-            }
+            useArrows: true
         });
 
         return this.listgrid(data, options);
