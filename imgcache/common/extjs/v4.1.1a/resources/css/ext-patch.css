@@ -35,9 +35,9 @@ table.x-datepicker-inner th { font-size: 12px; }
 
 .x-grid-row-alt .x-grid-cell, .x-grid-row-alt .x-grid-rowwrap-div { background: #f3f3f3; }
 
-.x-selectable, .x-selectable * { 
-    -moz-user-select: text !important; 
-    -khtml-user-select: text !important; 
+.x-selectable, .x-selectable * {
+    -moz-user-select: text !important;
+    -khtml-user-select: text !important;
 }
 
 .x-tree-checkbox { margin-top: 4px; }
