@@ -128,7 +128,6 @@ Ext.define('Yap.controller.Tabs', {
 
                 this._menu && this._menu.destroy();
                 this._menu = Ext.create('Ext.menu.Menu', {
-                    height: 300,
                     items: [{
                         disabled: controller == 'index',//首页标签卡禁用
                         text: lang('REFRESH'),//刷新

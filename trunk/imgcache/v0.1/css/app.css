@@ -212,20 +212,20 @@ a.a-font-000:hover {color: #096DD1; text-decoration: none;}
 #appTabs-clearEl { clear: none; }
 #appTree .x-grid-row .x-grid-cell {background-color:#f7f7f7;}
 #appTree .x-grid-row-over .x-grid-cell, #appTree .x-grid-row-over .x-grid-rowwrap-div{background-color:#ddd !important}
-#tabOverflowMenu___ .x-menu-item-link {
+#tabOverflowMenu .x-menu-item-link {
     padding-top: 5px;
 }
-#tabOverflowMenu___ .close-all {
+#tabOverflowMenu .close-all {
     border-top: 1px dotted #AAAAAA;
     font-weight: bold;
 }
-#tabOverflowMenu___ .close-all a .x-menu-item-text {
+#tabOverflowMenu .close-all a .x-menu-item-text {
     color: #666666;
 }
-#tabOverflowMenu___ .x-menu-item-icon.close {
+#tabOverflowMenu .x-menu-item-icon.close {
     background: url("../images/x12.png") no-repeat scroll 4px 4px transparent;
 }
-.overflow__ {
+.overflow {
     background: none repeat scroll 0 0 #E3E3E3;
 }
 
