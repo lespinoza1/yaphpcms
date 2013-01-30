@@ -80,7 +80,7 @@ class FieldModel extends BaseModel {
      * {@inheritDoc}
      */
     protected function _afterInsert($data, $options) {
-        $this->_afterInsert($data);
+        $this->_afterInsert($data, $options);
     }
 
     /**
@@ -169,7 +169,7 @@ class FieldModel extends BaseModel {
                     }
 
                     count($v) < 4 && array_splice($v, 1, 0, '%' . $field_name);
-                    $this->_setValinew_date($input_name, $v);
+                    $this->_setValidate($input_name, $v);
                 }
 
             }
