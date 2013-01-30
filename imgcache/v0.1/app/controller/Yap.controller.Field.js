@@ -73,7 +73,7 @@ Ext.define('Yap.controller.Field', {
             fieldLabel: TEXT.red() + lang('PARENT_FIELD'),
             labelWidth: global('app_labelWidth'),
             width: 400,
-            name: 'menu_name',
+            name: '_menu_name',
             singleSelectValueField: 'menu_id',
             emptyText: lang('PLEASE_SELECT'),
             displayField: 'menu_name',
@@ -221,7 +221,7 @@ value: '@value'", {
      * @inheritdoc Yap.controller.Base#loadEditDataSuccess
      */
     loadEditDataSuccess: function(form, action) {
-        form.findField('menu_name').setRawValue(action.result.data.menu_name);
+        form.findField('_menu_name').setRawValue(action.result.data.menu_name);
     },
 
     /**
