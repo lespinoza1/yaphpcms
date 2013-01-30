@@ -1,14 +1,14 @@
 <?php
-//后台自动生成，请毋修改by mashanling
-//最后更新时间:2013-01-04 12:10:45
+//后台自动生成，请毋修改
+//最后更新时间:2013-01-30 13:23:06
 
 return array (
   'sys_base_domain' => 'www.yaphpcms.com',
   'sys_base_http_protocol' => 'http',
-  'sys_base_wwwroot' => 'v0.1/',
+  'sys_base_wwwroot' => '/v0.1/',
   'sys_base_web_title' => 'yaphpcms内容管理系统',
   'sys_base_web_name' => 'yaphpcms内容管理系统',
-  'sys_base_web_index_title' => 'yaphpcms内容管理系统首页"',
+  'sys_base_web_index_title' => 'yaphpcms内容管理系统首页',
   'sys_base_js_path' => 'static/js/',
   'sys_base_css_path' => 'static/css/',
   'sys_seo_keyword' => 'mrmsl',
@@ -17,7 +17,7 @@ return array (
   'sys_base_css_url' => 'http://imgcache.yaphpcms.com/v0.1/css/',
   'sys_base_img_url' => 'http://imgcache.yaphpcms.com/v0.1/images/',
   'sys_seo_description' => 'seo描述',
-  'sys_base_closed' => '1',
+  'sys_base_closed' => '0',
   'sys_base_closed_reason' => '<div style="color: red">网站关闭了</div>',
   'sys_timezone_timediff' => '28800',
   'sys_timezone_default_timezone' => 'asia/shanghai',
@@ -61,7 +61,7 @@ return array (
   'sys_verifycode_error_limit' => '5/10',
   'sys_verifycode_case' => '',
   'sys_verifycode_type' => '5',
-  'sys_base_copyright' => 'Copyright &copy; 2012 yaphpcms内容管理系统 版权所有"',
+  'sys_base_copyright' => 'Copyright &copy; 2012 yaphpcms内容管理系统 版权所有',
   'sys_base_domain_scope' => '.yaphpcms.com',
   'sys_base_website' => 'http://www.yaphpcms.com/',
 );
