@@ -211,7 +211,7 @@ class BaseController extends Yaf_Controller_Abstract {
                 $this->_infoCallback($info);
 
                 if (isset($_GET['clone'])) {//复制
-                    unset($info[$this->_pk_field]);
+                    $info[$this->_pk_field] = 0;
                 }
 
                 $this->_ajaxReturn(true, '', $info);
