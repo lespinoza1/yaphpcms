@@ -1706,7 +1706,7 @@ function toggle_order($order = 'DESC') {
  *
  * @author          mrmsl <msl-138@163.com>
  * @date            2012-09-06 14:23:23
- * @lastmodify      2012-09-18 09:56:23 by mrmsl
+ * @lastmodify      2013-01-31 14:23:05 by mrmsl
  *
  * @param string $path             路径
  * @param string $name             路径提示名称。默认''
@@ -1718,7 +1718,19 @@ function toggle_order($order = 'DESC') {
  * @return mixed true路径存在，否则返回相应提示信息
  */
 function validate_dir($path, $name = '', $relative_path = 'WWWROOT', $must_end_with = true, $allow_start_with = false, $allow_dot = false) {
-    $relative_path = defined($relative_path) ? constant($relative_path) : ROOT;
+
+    if ('null' == $relative_path) {//只是对路径 / 判断
+
+        if (DS == $path) {// /，直接返回true
+            return true;
+        }
+
+        $relative_path = defined($relative_path) ? constant($relative_path) : WWWROOT;
+    }
+    else {
+        $relative_path = null;
+    }
+
     $path          = false === strpos($path, '\\') ? $path : str_replace('\\', DS, $path);
 
     if ($must_end_with && DS != substr($path, -1)) {
@@ -1736,5 +1748,5 @@ function validate_dir($path, $name = '', $relative_path = 'WWWROOT', $must_end_w
         return $name . L('CAN_NOT,USE,RELATIVE,PATH');
     }
 
-    return is_dir($relative_path . $path) ? true :  $name . $path . L('NOT_EXIST');
-}
+    return null === $relative_path || is_dir($relative_path . $path) ? true :  $name . $path . L('NOT_EXIST');
+}// end validate_dir
