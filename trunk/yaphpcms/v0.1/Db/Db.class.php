@@ -1458,7 +1458,7 @@ class Db {
      *
      * @return mixed $this->execute() 返回结果
      */
-    public function upnew_date($data, $options) {
+    public function update($data, $options) {
         $this->_model = $options['model'];
 
         $sql = 'UPDATE ' .

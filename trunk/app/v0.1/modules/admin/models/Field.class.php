@@ -115,7 +115,7 @@ class FieldModel extends BaseModel {
      * @see BaseModel.class.php checkCreate
      */
     protected function _validateSaveValue() {
-         return $this->_autoValinew_date($_POST, Model::MODEL_BOTH);
+         return $this->_autoValidate($_POST, Model::MODEL_BOTH);
     }
 
     /**

@@ -164,7 +164,7 @@ class AdminController extends BaseController {
             array('verify_code', '_checkVerifycode', '{%PLEASE_ENTER,VERIFY_CODE}', Model::MUST_VALIDATE, 'callback', model::MODEL_BOTH, 'module_admin'),//验证码
             array('_old_password', '_checkOldPassword', '{%PLEASE_ENTER,CN_YUAN,PASSWORD}', Model::MUST_VALIDATE, 'callback', model::MODEL_BOTH, 'data'),//原密码
         );
-        $_auto_validation = array_merge($_auto_validation, $this->_model->getValinew_date('password,_password_confirm', false));
+        $_auto_validation = array_merge($_auto_validation, $this->_model->getValidate('password,_password_confirm', false));
         $this->_model->setProperty('_validate', $_auto_validation);
 
         $result = $this->_model->checkCreate();

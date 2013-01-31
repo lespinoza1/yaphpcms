@@ -74,7 +74,7 @@ class AreaModel extends BaseModel {
     /**
      * {@inheritDoc}
      */
-    protected function _afterUpnew_date($data, $options) {
+    protected function _afterUpdate($data, $options) {
         $count = count($data);
 
         if ($count == 1) {
