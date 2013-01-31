@@ -74,13 +74,6 @@ class AreaModel extends BaseModel {
     /**
      * {@inheritDoc}
      */
-    protected function _afterInsert($data, $options) {
-        $this->_afterInsert($data);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function _afterUpnew_date($data, $options) {
         $count = count($data);
 
