@@ -63,13 +63,6 @@ class RoleModel extends BaseModel {
     );
 
     /**
-     * {@inheritDoc}
-     */
-    protected function _afterInsert($data, $options) {
-        $this->_afterInsert($data);
-    }
-
-    /**
      * 验证角色名是否已经存在
      *
      * @author          mrmsl <msl-138@163.com>
