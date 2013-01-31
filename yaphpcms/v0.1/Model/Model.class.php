@@ -495,7 +495,7 @@ class Model {
      *
      * @return void 无返回值
      */
-    protected function _afterUpnew_date($data, $options) {
+    protected function _afterUpdate($data, $options) {
     }
 
     /**
@@ -509,7 +509,7 @@ class Model {
      *
      * @return bool true验证成功，否则false
      */
-    protected function _autoValinew_date($data, $type) {
+    protected function _autoValidate($data, $type) {
 
         if ($this->_validate) {//如果设置了数据自动验证则进行数据验证
             $this->_error = $this->_patch_validate ? array() : $this->_error; //重置验证错误信息
@@ -582,7 +582,7 @@ class Model {
      *
      * @return mixed|false false终止更新操作，否则继续执行
      */
-    protected function _beforeUpnew_date(&$data, $options) {
+    protected function _beforeUpdate(&$data, $options) {
     }
 
     /**
@@ -1143,7 +1143,7 @@ class Model {
             return false;
         }
 
-        if (!$this->_autoValinew_date($data, $type)) {//数据自动验证
+        if (!$this->_autoValidate($data, $type)) {//数据自动验证
             return false;
         }
 
@@ -1679,7 +1679,7 @@ class Model {
         $data    = $this->_facade($data);//数据处理
         $options = $this->_parseOptions($options);//分析表达式
 
-        if (false === $this->_beforeUpnew_date($data, $options)) {
+        if (false === $this->_beforeUpdate($data, $options)) {
             return false;
         }
 
@@ -1697,11 +1697,11 @@ class Model {
             }
         }
 
-        $result = $this->_db->upnew_date($data, $options);
+        $result = $this->_db->update($data, $options);
 
         if (false !== $result) {
             isset($pk_value) && $data[$pk] = $pk_value;
-            $this->_afterUpnew_date($data, $options);
+            $this->_afterUpdate($data, $options);
         }
 
         return $result;
