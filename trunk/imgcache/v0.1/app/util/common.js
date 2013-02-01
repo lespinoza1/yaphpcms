@@ -419,7 +419,7 @@ function G(start, end, precision) {
  * @return {String} 请求url
  */
 function getActionUrl(url) {
-    return System.sys_base_website + 'v0.1/admin.php/' + url;
+    return System.sys_base_admin_entry + '/' + url;
 }
 
 /**

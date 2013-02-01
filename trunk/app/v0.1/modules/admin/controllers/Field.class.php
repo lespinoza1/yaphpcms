@@ -162,7 +162,7 @@ class FieldController extends BaseController {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-08-30 17:36:36
-     * @lastmodify      2013-01-22 10:23:29 by mrmsl
+     * @lastmodify      2013-02-01 11:06:14 by mrmsl
      *
      * @param array $menu_info 菜单信息
      *
@@ -191,18 +191,22 @@ class FieldController extends BaseController {
             $input_name  = $item['input_name'];
             $input_value = $item['input_value'];
             $system_data[$input_name] = $input_value;
-            $item['customize_1'] ? $js_data[$input_name] = $input_value : '';
+
+            if ($item['customize_1']) {//js数据
+                $js_data[$input_name] = $input_value;
+            }
         }
 
-        $system_data['sys_base_domain_scope'] = substr($system_data['sys_base_domain'], strpos($system_data['sys_base_domain'], '.'));
-        $system_data['sys_base_website'] = $system_data['sys_base_http_protocol'] . '://' . $system_data['sys_base_domain'] . '/';
+        $system_data['sys_base_domain_scope'] = substr($system_data['sys_base_domain'], strpos($system_data['sys_base_domain'], '.'));//
+        $system_data['sys_base_website'] = $system_data['sys_base_http_protocol'] . '://' . $system_data['sys_base_domain'] . '/';//网站url
 
         $this->_setCache($system_data, $cache_key);
 
         $js_data['IS_LOCAL'] = IS_LOCAL;
-        $js_data['sys_base_website'] = $system_data['sys_base_website'];
-        $js_data['sys_base_domain_scope'] = $system_data['sys_base_domain_scope'];
-        $js_data['sys_cookie_domain'] = $system_data['sys_cookie_domain'] == '@domain' ? $system_data['sys_base_domain_scope'] : $system_data['sys_cookie_domain'];
+        $js_data['sys_base_website'] = $system_data['sys_base_website'];//网站url
+        $js_data['sys_base_admin_entry'] = $system_data['sys_base_http_protocol'] . '://' . $system_data['sys_base_domain'] . $system_data['sys_base_wwwroot'] . $system_data['sys_base_admin_entry'];//后台管理入口
+        $js_data['sys_base_domain_scope'] = $system_data['sys_base_domain_scope'];//cookie作用域
+        $js_data['sys_cookie_domain'] = $system_data['sys_cookie_domain'] == '@domain' ? $system_data['sys_base_domain_scope'] : $system_data['sys_cookie_domain'];//cookie域名
         array2js($js_data, $cache_key, WWWROOT . $system_data['sys_base_js_path'] . $cache_key . '.js');
     }//end _saveValueCallbackSystem
 

@@ -87,7 +87,7 @@ Ext.define('Yap.controller.Login', {
                        me._win.hide();
                     }
                     else {//登陆页
-                        location.replace('/');
+                        location.replace(System.sys_base_admin_entry);
                         Alert(lang('LOGIN_SUCCES_TIP'), undefined, false, false);
                     }
 

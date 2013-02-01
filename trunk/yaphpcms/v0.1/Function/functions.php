@@ -1676,17 +1676,16 @@ function sys_config($key = '', $cache_name = '', $default = '',  $cache_path = M
  *
  * @author          mrmsl <msl-138@163.com>
  * @date            2012-09-04 16:27:02
- * @lastmodify      2013-01-24 08:57:53 by mrmsl
+ * @lastmodify      2013-02-01 11:02:42 by mrmsl
  *
  * @param string $path 地址
  *
  * @return string 网站绝对url地址
  */
 function to_website_url($path) {
-    $base = 0 === strpos($v = sys_config('sys_base_wwwroot'), DS) ? substr($v, 1) : $v;//相对网站根目录
     $path = 0 === strpos($path, DS) ? substr($path, 1) : $path;
 
-    return WEB_SITE_URL . $base . $path;
+    return WEB_SITE_URL . WEB_BASE_PATH . $path;
 }
 
 /**
