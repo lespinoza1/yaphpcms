@@ -1,11 +1,11 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-02-01 11:42:54
+//最后更新时间:2013-02-01 13:25:53
 
 return array (
   'sys_base_domain' => 'www.yaphpcms.com',
   'sys_base_http_protocol' => 'http',
-  'sys_base_wwwroot' => '/v0.1/',
+  'sys_base_wwwroot' => 'v0.1/',
   'sys_base_admin_entry' => 'admin.php',
   'sys_base_web_title' => 'yaphpcms内容管理系统',
   'sys_base_web_name' => 'yaphpcms内容管理系统',
