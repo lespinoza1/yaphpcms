@@ -77,11 +77,6 @@ Ext.define('Yap.view.Tree', {
      */
     bodyStyle: 'background: #f7f7f7',
     /**
-     * @cfg {String}
-     * collapseMode
-     */
-    collapseMode: 'mini',
-    /**
      * @cfg {Boolean}
      * 根文字可见
      */
@@ -114,7 +109,6 @@ Ext.define('Yap.view.Tree', {
      * useArrows
      */
     useArrows: true,
-
     /**
      * 查找树节点
      *
