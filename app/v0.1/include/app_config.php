@@ -20,8 +20,8 @@ define('DS'                 , '/');      //路径分割符
 define('ADMIN_ID'           , 1);        //不可删除站长id
 define('ADMIN_ROLE_ID'      , 1);        //不可删除，不可编辑权限站长角色id
 
-define('ALLOW_AUTO_OPERATION_FUNCTION'  , ',time,get_client_ip,get_user_id,');//自动验证允许使用函数
-define('ALLOW_AUTO_VALIDATE_FUNCTION'   , ',validate_dir,');                    //自动填充允许使用函数
+define('ALLOW_AUTO_OPERATION_FUNCTION'  , ',time,get_client_ip,get_user_id,');//自动填充允许使用函数
+define('ALLOW_AUTO_VALIDATE_FUNCTION'   , ',validate_dir,');                    //自动验证允许使用函数
 
 //项目路径定义
 define('APP_EXT'            , 'class.php');//类库文件后缀，不包括.
@@ -48,6 +48,8 @@ define('WEB_SESSION_COOKIE_DOMAIN' , '@domain' == ($session_cookie_domain = sys_
 define('WEB_HTTP_PROTOCOL'     , sys_config('sys_base_http_protocol'));//http协议
 define('SITE_URL'              , WEB_HTTP_PROTOCOL . '://' . WEB_DOMAIN);//网站网址，不以/结束
 define('WEB_SITE_URL'          , SITE_URL . '/');//网站网址，以/结束
+define('WEB_BASE_PATH'         , sys_config('sys_base_wwwroot'));////网站相对根目录
+define('WEB_ADMIN_ENTRY'       , 0 === strpos('http://', $v = sys_config('sys_base_admin_entry')) ? $v : WEB_SITE_URL . WEB_BASE_PATH . $v);//管理员入口
 define('WEB_JS_PATH'           , WWWROOT . sys_config('sys_base_js_path'));//js物理路径
 define('WEB_JS_LANG_PATH'      , WEB_JS_PATH . 'lang/');//js语言包物理路径
 define('WEB_CSS_PATH'          , WWWROOT . sys_config('sys_base_css_path'));//css物理路径
