@@ -6,7 +6,7 @@
  * @package         Yap\Module\Admin\Model
  * @copyright       Copyright (c) 2013 {@link http://www.yaphpcms.com yaphpcms} All rights reserved
  * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
- * @author          mashanling <msl-138@163.com>
+ * @author          mrmsl <msl-138@163.com>
  * @date            2012-12-26 12:43:14
  * @lastmodify      $Date$ $Author$
  */
@@ -19,7 +19,7 @@
  * @package         Yap\Module\Admin\Model
  * @copyright       Copyright (c) 2013 {@link http://www.yaphpcms.com yaphpcms} All rights reserved
  * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
- * @author          mashanling <msl-138@163.com>
+ * @author          mrmsl <msl-138@163.com>
  * @date            2012-12-26 12:43:14
  * @lastmodify      $Date$ $Author$
  */
@@ -33,9 +33,9 @@ class BaseModel extends Model {
     /**
      * 新增数据后，将排序设为该记录自动增长id
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-12-29 14:30:03
-     * @lastmodify      2013-01-22 11:10:30 by mashanling
+     * @lastmodify      2013-01-22 11:10:30 by mrmsl
      *
      * @param $data     插入数据
      * @param $options  查询表达式
@@ -53,9 +53,9 @@ class BaseModel extends Model {
     /**
      * 验证 int1/int2 格式
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-09-28 11:46:12
-     * @lastmodify      2013-01-22 11:11:08 by mashanling
+     * @lastmodify      2013-01-22 11:11:08 by mrmsl
      *
      * @param string $string    待验证字符串
      * @param string $delimiter 字符串分割符。默认/
@@ -71,8 +71,8 @@ class BaseModel extends Model {
     /**
      * 检测值长度是否在指定范围内
      *
-     * @author          mashanling <msl-138@163.com>
-     * @lastmodify      2013-01-22 11:11:48 by mashanling
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:11:48 by mrmsl
      *
      * @param string $value 待检测值
      * @param string $name  检测名称
@@ -103,9 +103,9 @@ class BaseModel extends Model {
 	   /**
      * 验证验证码是否正确
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-06-25 16:34:04
-     * @lastmodify      2013-01-22 11:12:24 by mashanling
+     * @lastmodify      2013-01-22 11:12:24 by mrmsl
      *
      * @param string $code   验证码
      * @param string $module 验证码模块
@@ -123,8 +123,8 @@ class BaseModel extends Model {
             return false;
         }
 
-        if (($checked = check_verifycode($code, $module)) === true) {//转至check_verifycode验证 by mashanling on 2012-07-13 16:54:54
-            $this->_checkVerifycode = true;//通过验证码检测 by mashanling on 2012-07-02 09:55:53
+        if (($checked = check_verifycode($code, $module)) === true) {//转至check_verifycode验证 by mrmsl on 2012-07-13 16:54:54
+            $this->_checkVerifycode = true;//通过验证码检测 by mrmsl on 2012-07-02 09:55:53
             return true;
         }
 
@@ -136,9 +136,9 @@ class BaseModel extends Model {
     /**
      * 双重加密密码
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-07-02 10:39:04
-     * @lastmodify      2013-01-22 11:12:54 by mashanling
+     * @lastmodify      2013-01-22 11:12:54 by mrmsl
      *
      * @param string $password 密码
      *
@@ -151,9 +151,9 @@ class BaseModel extends Model {
 	   /**
      * 获取管理员id
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-07-09 11:01:05
-     * @lastmodify      2013-01-22 11:13:17 by mashanling
+     * @lastmodify      2013-01-22 11:13:17 by mrmsl
      *
      * @return int 管理员id
      */
@@ -166,9 +166,9 @@ class BaseModel extends Model {
 	   /**
      * 获取管理员姓名
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-07-09 11:11:54
-     * @lastmodify      2013-01-22 11:13:27 by mashanling
+     * @lastmodify      2013-01-22 11:13:27 by mrmsl
      *
      * @return string 管理 员姓名
      */
@@ -181,8 +181,8 @@ class BaseModel extends Model {
     /**
      * 获取表数据缓存
      *
-     * @author          mashanling <msl-138@163.com>
-     * @lastmodify      2013-01-22 11:13:36 by mashanling
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:13:36 by mrmsl
      *
      * @param int    $id     数据id。默认0
      * @param string $name   文件名。默认null，模块名称
@@ -211,8 +211,8 @@ class BaseModel extends Model {
     /**
      * 获取checkbox值
      *
-     * @author          mashanling <msl-138@163.com>
-     * @lastmodify      2013-01-22 11:14:45 by mashanling
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:14:45 by mrmsl
      *
      * @param int    $value     值。默认0，即不勾选时
      * @param string $separator 一组复选框值连接符。默认,
@@ -231,8 +231,8 @@ class BaseModel extends Model {
     /**
      * 获取当前页面url
      *
-     * @author          mashanling <msl-138@163.com>
-     * @lastmodify      2013-01-22 11:15:26 by mashanling
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:15:26 by mrmsl
      *
      * @return string 当前页面url
      */
@@ -243,8 +243,8 @@ class BaseModel extends Model {
     /**
      * 获取来路页面url
      *
-     * @author          mashanling <msl-138@163.com>
-     * @lastmodify      2013-01-22 11:15:36 by mashanling
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:15:36 by mrmsl
      *
      * @return string 如果有来路，返回来路页面url，否则返回空字符串
      */
@@ -255,9 +255,9 @@ class BaseModel extends Model {
     /**
      * 设置自动完成规则
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-09-26 08:58:58
-     * @lastmodify      2013-01-22 11:15:50 by mashanling
+     * @lastmodify      2013-01-22 11:15:50 by mrmsl
      *
      * @param string $field_name 字段名
      * @param mixed  $auto       自动完成规则
@@ -310,8 +310,8 @@ class BaseModel extends Model {
     /**
      * 设置表数据缓存
      *
-     * @author          mashanling <msl-138@163.com>
-     * @lastmodify      2013-01-22 11:17:05 by mashanling
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:17:05 by mrmsl
      *
      * @param array  $data  手工设置缓存数据
      * @param string $name  文件名。默认模块名称
@@ -337,9 +337,9 @@ class BaseModel extends Model {
     /**
      * 设置自动验证规则
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-09-26 08:58:58
-     * @lastmodify      2013-01-22 11:16:54 by mashanling
+     * @lastmodify      2013-02-01 13:29:40 by mrmsl
      *
      * @param string $field_name   字段名
      * @param mixed  $validate     自动验证规则
@@ -403,9 +403,9 @@ class BaseModel extends Model {
     /**
      * 将时间表达式转化成unix时间戳
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-09-05 15:54:10
-     * @lastmodify      2013-01-22 11:18:19 by mashanling
+     * @lastmodify      2013-01-22 11:18:19 by mrmsl
      *
      * @param string $datetime 时间表达式
      *
@@ -418,9 +418,9 @@ class BaseModel extends Model {
     /**
      * 检测时间区域是否存在
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-09-11 13:18:01
-     * @lastmodify      2013-01-22 11:18:39 by mashanling
+     * @lastmodify      2013-01-22 11:18:39 by mrmsl
      *
      * @param string $timezone 区域
      *
@@ -440,9 +440,9 @@ class BaseModel extends Model {
     /**
      * 释放值，无须入库
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-09-10 15:40:08
-     * @lastmodify      2013-01-22 11:19:48 by mashanling
+     * @lastmodify      2013-01-22 11:19:48 by mrmsl
      *
      * @param mixed $value 值，没作用，只是条合语法。默认false
      *
@@ -455,9 +455,9 @@ class BaseModel extends Model {
     /**
      * 回调unsigned字段，如排序sort_order=-1时，unset掉，否则mysql会产生Out of range value for column 'sort_order' at row 1警告
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-09-10 16:03:55
-     * @lastmodify      2013-01-22 11:20:37 by mashanling
+     * @lastmodify      2013-01-22 11:20:37 by mrmsl
      *
      * @param mixed $value 值。默认0
      * @param array  $data _POST数据
@@ -474,9 +474,9 @@ class BaseModel extends Model {
     /**
      * 构造函数
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-12-26 12:44:28
-     * @lastmodify      2013-01-22 11:21:14 by mashanling
+     * @lastmodify      2013-01-22 11:21:14 by mrmsl
      *
      * @return void 无返回值
      */
@@ -522,9 +522,9 @@ class BaseModel extends Model {
 	   /**
      * 添加系统操作日志
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-12-26 12:47:11
-     * @lastmodify      2013-01-22 11:23:55 by mashanling
+     * @lastmodify      2013-01-22 11:23:55 by mrmsl
      *
      * @param string $content   日志内容。默认''，取db最后执行sql
      * @param int    $log_type  日志类型。默认LOG_TYPE_SQL_ERROR，sql错误
@@ -546,8 +546,8 @@ class BaseModel extends Model {
     /**
      * 验证自动创建数据是否成功
      *
-     * @author          mashanling <msl-138@163.com>
-     * @lastmodify      2013-01-22 11:25:30 by mashanling
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:25:30 by mrmsl
      *
      * @param string $method 自动验证数据方法。默认create
      *
@@ -574,9 +574,9 @@ class BaseModel extends Model {
     /**
      * 检测是否是叶，即是否有子节点
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-08-19 21:39:32
-     * @lastmodify      2013-01-22 11:26:15 by mashanling
+     * @lastmodify      2013-01-22 11:26:15 by mrmsl
      *
      * @param int $pk_value 主键值
      * @param string $where where条件
@@ -598,9 +598,9 @@ class BaseModel extends Model {
     /**
      * 获取自动完成
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2012-07-14 09:56:10
-     * @lastmodify      2013-01-22 11:27:24 by mashanling
+     * @lastmodify      2013-01-22 11:27:24 by mrmsl
      *
      * @param mixed $field 字段
      * @param bool  $set_property true重设$_auto属性。默认true
@@ -626,9 +626,9 @@ class BaseModel extends Model {
     /**
      * 动态获取自动验证规则
      *
-     * @author          mashanling <msl-138@163.com>
+     * @author          mrmsl <msl-138@163.com>
      * @date            2013-01-22 11:29:44
-     * @lastmodify      2013-01-22 11:29:49 by mashanling
+     * @lastmodify      2013-01-22 11:29:49 by mrmsl
      *
      * @param mixed $field        字段
      * @param bool  $set_property true重设_validate属性。默认true
