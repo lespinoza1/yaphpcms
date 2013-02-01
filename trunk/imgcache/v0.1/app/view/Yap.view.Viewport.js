@@ -40,22 +40,17 @@ Ext.define('Yap.view.Viewport', {
     style: 'background: #fff',
 
     /**
-     * 初始化组件
-     *
-     * @private
-     *
-     * @return {void} 无返回值
+     * @cfg {Array}
+     * items
      */
-    initComponent: function() {
-        this.items = [{
-            xtype: 'appheader'
-        }, {
-            xtype: 'apptree'
-        }, {
-            xtype: 'appcenter'
-        }];
-        this.callParent(arguments);
-    },
+    items: [{
+        xtype: 'appheader'
+    }, {
+        collapseMode: 'mini',
+        xtype: 'apptree'
+    }, {
+        xtype: 'appcenter'
+    }],
 
     /**
      * 设置页面标题，参数大于2个将手动设置标题
