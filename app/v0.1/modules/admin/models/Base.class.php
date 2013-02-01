@@ -375,7 +375,7 @@ class BaseModel extends Model {
                     break;
 
                 case 'validate_path'://路径验证，不需要判断物理路径是否存在，只是判断/开始或结尾
-                    $validate = array($method, $msg . L('DATA,INVALID'), Model::MUST_VALIDATE, 'function', Model::MODEL_BOTH, $msg . '|null' . (isset($params) ? '|' . $params : ''));
+                    $validate = array('validate_dir', $msg . L('DATA,INVALID'), Model::MUST_VALIDATE, 'function', Model::MODEL_BOTH, $msg . '|null' . (isset($params) ? '|' . $params : ''));
                     break;
 
                 case '_checkLength'://验证长度 '_checkLength', '{%USERNAME,DATA,INVALID}', Model::VALUE_VALIDATE, 'callback', Model::MODEL_BOTH, array('USERNAME', 0, 20)
