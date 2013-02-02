@@ -547,7 +547,7 @@ class BaseController extends Yaf_Controller_Abstract {
             $info['parent_name'] = isset($cache_data[$info['parent_id']]) ? $cache_data[$info['parent_id']][$name_column] : L('TOP_LEVEL_' . MODULE_NAME);//父类
 
             if (isset($is_menu)) {//菜单
-                $diff_priv = $this->_diffMenuPriv(array_keys($info['priv']), $priv_id);//权限差异
+                $diff_priv = $this->diffMenuPriv(array_keys($info['priv']), $priv_id);//权限差异
                 $diff      = $this->_dataDiff($info, $data, $diff_key) . ($diff_priv['msg'] ? 'priv => ' . $diff_priv['msg'] : '');//差异
 
                 $diff_priv['msg'] && $this->_model->setMenuPriv($pk_value, $priv_id);//权限有变更
