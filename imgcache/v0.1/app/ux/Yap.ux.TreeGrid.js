@@ -114,7 +114,7 @@ Ext.define('Yap.ux.TreeGrid', {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-12-19 12:12:30
-     * @lastmodify      2013-01-12 21:25:00 by mrmsl
+     * @lastmodify      2013-02-02 16:11:13 by mrmsl
      *
      * @return {void} 无返回值
      */
@@ -122,7 +122,6 @@ Ext.define('Yap.ux.TreeGrid', {
         this.callParent();
         this.on({
             render: this._afterRender,
-            sortchange: this.onSortChange,
             itemclick: this.onItemClick,
             itemcontextmenu: this.onItemContextMenu,
             scope: this
