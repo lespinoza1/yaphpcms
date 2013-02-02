@@ -225,7 +225,7 @@ function commonFailure(action) {
             error(lang('SERVER_ERROR'));
         }
         else {
-            error(action.result.msg || lang('OPERATE,FALIURE'));
+            error(action.result.msg || lang('SERVER_ERROR'));
         }
     }
     else if (action.responseText || action.response) {//非200
