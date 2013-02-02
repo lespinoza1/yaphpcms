@@ -70,9 +70,10 @@ Ext.define('Yap.controller.Menu', {
                     url: this.getActionUrl(false, 'publicTree', 'unshift&menu_id={0}&parent_id={1}'.format(data[this.idProperty], data.parent_id))
                 }),
                 storeOnLoad: function(store) {//添加指定菜单子菜单，设置指定菜单相关信息 by mrmsl on 2012-08-21 13:44:41
-                     var data = store.proxy.reader.rawData.parent_data;
+                    var data = store.proxy.reader.rawData;
 
-                     if (data) {
+                    if (data && data.parent_data) {
+                        data = data.parent_data;
                          var form = this.up('form').getForm();
                          form.setValues({
                              parent_id: data[me.idProperty],//父级id

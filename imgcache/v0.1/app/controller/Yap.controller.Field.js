@@ -83,11 +83,12 @@ Ext.define('Yap.controller.Field', {
                 url: this.getActionUrl('menu', 'publicTree', 'parent_id=' + data.parent_id)
             }),
             storeOnLoad: function(store) {//添加指定菜单表单域，设置指定菜单相关信息 by mrmsl on 2012-08-21 15:20:19
-                 var data = store.proxy.reader.rawData.parent_data;
+                 var data = store.proxy.reader.rawData;
 
-                 if (data) {
-                     this.up('form').getForm().findField('menu_id').setValue(data.menu_id);//父级id
-                     this.setRawValue(data.parent_name);
+                 if (data && data.parent_data) {
+                    data = data.parent_data
+                    this.up('form').getForm().findField('menu_id').setValue(data.menu_id);//父级id
+                    this.setRawValue(data.parent_name);
                  }
             }
         },
@@ -347,9 +348,9 @@ value: '@value'", {
                     url: this.getActionUrl('menu', 'publicTree', 'unshift&include_self&menu_id={0}&parent_id={0}&emptyText={1}'.format(data.menu_id, encodeURIComponent(lang('PARENT_FIELD'))))
                 }),
                 storeOnLoad: function(store) {//设置所属分类文字
-                     var data = store.proxy.reader.rawData.parent_data;
-                     if (data) {
-                         this.setRawValue(data.parent_name);
+                     var data = store.proxy.reader.rawData;
+                     if (data && data.parent_data) {
+                         this.setRawValue(data.parent_data.parent_name);
                      }
                 }
             }, {

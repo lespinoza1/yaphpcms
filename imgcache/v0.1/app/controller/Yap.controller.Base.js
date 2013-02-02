@@ -994,9 +994,10 @@ Ext.define('Yap.controller.Base', {
     setTreeStoreOnLoad: function(store) {
         var me = this;
         store.on('load', function() {
+            var data = this.proxy.reader.rawData;
 
-            if (this.proxy.reader.rawData.total !== undefined) {
-                me._listgrid.getComponent('bbar').getComponent('total_records').update(lang('TOTAL_RECORDS').format(this.proxy.reader.rawData.total));
+            if (data && data.total !== undefined) {
+                me._listgrid.getComponent('bbar').getComponent('total_records').update(lang('TOTAL_RECORDS').format(data.total));
             }
         });
     },
