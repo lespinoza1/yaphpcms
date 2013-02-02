@@ -66,31 +66,6 @@ Ext.override(Ext.form.Basic, {
             Ext.callback(action.failure, action.scope || action, [this, action]);
             this.fireEvent('actionfailed', this, action);
         }
-    },
-
-    errorReader: {//errorReader 自定义处理返回结果 by mrmsl on 2012-10-30 21:51:11
-        read: function(response) {
-            var response = response.responseText, result = Ext.decode(response, true), success = false;
-
-            if (result) {
-                return result;
-            }
-
-            if (-1 != response.indexOf('"success":true')) {
-                success = true;
-            }
-
-            return {
-                success: false,
-                response: response
-            };
-        }
-    },
-    reader: {//reader 自定义处理返回结果 by mrmsl on 2012-10-30 22:25:50
-        read: function(response) {
-            var result = Ext.decode(response.responseText, true);
-            return result ? {records: [{data: result.data}], success: true} : {};
-        }
     }
 });
 

@@ -78,6 +78,32 @@ Ext.define('Yap.ux.Form', {
         });
     },
 
+    errorReader: {//errorReader 自定义处理返回结果 by mrmsl on 2012-10-30 21:51:11
+        read: function(response) {log('Ext.form.Base.errorReader');
+            var response = response.responseText, result = Ext.decode(response, true), success = false;
+
+            if (result) {
+                return result;
+            }
+
+            if (-1 != response.indexOf('"success":true')) {
+                success = true;
+            }
+
+            return {
+                success: false,
+                response: response
+            };
+        }
+    },
+
+    reader: {//reader 自定义处理返回结果 by mrmsl on 2012-10-30 22:25:50
+        read: function(response) {log('Ext.form.Base.reader');
+            var result = Ext.decode(response.responseText, true);
+            return result ? {records: [{data: result.data}], success: true} : {};
+        }
+    },
+
     /**
      * 初始化组件
      *
