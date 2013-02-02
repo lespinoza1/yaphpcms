@@ -73,9 +73,10 @@ Ext.define('Yap.controller.Area', {
                     url: this.getActionUrl(false, 'publicArea', 'unshift=1&parent_id=' + data.parent_id)
                 }),
                 storeOnLoad: function(store) {//添加指定地区子级地区，设置指定地区相关信息 by mrmsl on 2012-08-21 13:29:49
-                     var data = store.proxy.reader.rawData.parent_data;
+                     var data = store.proxy.reader.rawData;
 
-                     if (data) {
+                    if (data && data.parent_data) {
+                        data = data.parent_data;
                          this.up('form').getForm().setValues({
                              parent_id: data[me.idProperty],//父级id
                              _node: data.node//父级节点
