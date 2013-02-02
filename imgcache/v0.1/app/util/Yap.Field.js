@@ -66,11 +66,11 @@ Ext.define('Yap.Field', {
                 return this.base({
                     width: 80,
                     itemId: 'is_enable',
-                    value: '-1',
+                    value: -1,
                     store: [
-                        ['-1', lang('ENABLE,STATUS')],
-                        ['1', lang('ENABLE')],
-                        ['0', lang('DISABLED')]
+                        [-1, lang('ENABLE,STATUS')],
+                        [1, lang('ENABLE')],
+                        [0, lang('DISABLED')]
                     ]
                 });
             },
@@ -115,11 +115,11 @@ Ext.define('Yap.Field', {
                 return this.base({
                     width: 80,
                     itemId: 'is_show',
-                    value: '-1',
+                    value: -1,
                     store: [
-                        ['-1', lang('SHOW,STATUS')],
-                        ['1', lang('SHOW')],
-                        ['0', lang('NO,SHOW')]
+                        [-1, lang('SHOW,STATUS')],
+                        [1, lang('SHOW')],
+                        [0, lang('NO,SHOW')]
                     ]
                 });
             }

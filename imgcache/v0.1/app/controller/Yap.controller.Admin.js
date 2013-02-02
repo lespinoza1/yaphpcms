@@ -430,20 +430,20 @@ Ext.define('Yap.controller.Admin', {
             }, extCombo.base({//绑定登陆状态 by mrmsl on 2012-09-15 11:53:38
                 width: 80,
                 itemId: 'is_restrict',
-                value: '-1',
+                value: -1,
                 store: [
-                    ['-1', lang('CN_BANGDING,STATUS')],
-                    ['0', lang('CN_WEI,CN_BANGDING')],
-                    ['1', lang('CN_YI,CN_BANGDING')]
+                    [-1, lang('CN_BANGDING,STATUS')],
+                    [0, lang('CN_WEI,CN_BANGDING')],
+                    [1, lang('CN_YI,CN_BANGDING')]
                 ]
             }), extCombo.base({//锁定状态 by mrmsl on 2012-09-15 11:28:14
                 width: 80,
                 itemId: 'is_lock',
-                value: '-1',
+                value: -1,
                 store: [
-                    ['-1', lang('LOCK,STATUS')],
-                    ['0', lang('CN_WEI,LOCK')],
-                    ['1', lang('CN_YI,LOCK')]
+                    [-1, lang('LOCK,STATUS')],
+                    [0, lang('CN_WEI,LOCK')],
+                    [1, lang('CN_YI,LOCK')]
                 ]
             }), {
                 xtype: 'combobox',//搜索字段
