@@ -100,14 +100,22 @@ class PackerController extends BaseController {
                     $k++;
                 }
                 elseif(substr($f, -3) == '.js' && !in_array($f, array('app.js'))) {
+                    $desc = '';//js文件说明
+                    $file = new SplFileObject($filename);
+
+                    if (!strpos($filename, '.pack.')) {
+                        $file->fgets();
+                        $desc = trim(str_replace('*', '', $file->fgets()));//第二行为文件说明
+                    }
 
                     $file_arr[] = array(
                         'text'     => $f,
                         'id'       => $node . '/' . $f,
                         'leaf'     => true,
                         'checked'  => $node == 'pack' ? null : false,
-                        'filesize' => format_size(filesize($filename)),
-                        'filemtime'=> new_date($date_format, filemtime($filename))
+                        'filesize' => format_size($file->getSize()),
+                        'filemtime'=> new_date($date_format, $file->getMTime()),
+                        'desc'     => $desc,
                     );
                 }
 

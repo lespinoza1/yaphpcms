@@ -30,10 +30,18 @@ Ext.define('Yap.controller.Packer', {
 
         return [{
             xtype: 'treecolumn',
-            header: lang('MODULE_NAME_MENU'),//文件名
+            header: lang('FILE'),//文件名
             flex: 1,
             dataIndex: 'text',
             sortable: false
+        }, {
+            header: lang('FILE,CN_SHUOMING'),//文件说明
+            flex: 1,
+            dataIndex: 'desc',
+            sortable: false,
+            renderer: function(v, meta, record) {
+                return record.isLeaf() ? v : '--';
+            }
         }, {
             header: lang('LAST,CN_XIUGAI,TIME'),//最后修改时间
             width: 140,
@@ -91,7 +99,7 @@ Ext.define('Yap.controller.Packer', {
 
         if (!this._store) {//未创建
             this._store = Ext.create('Ext.data.TreeStore', {
-                fields: ['id', 'text', 'filesize', 'filemtime'],
+                fields: ['id', 'text', 'filesize', 'filemtime', 'desc'],
                 autoDestroy: true,
                 proxy: {
                     type: C.dataType,
