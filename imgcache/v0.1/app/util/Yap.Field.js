@@ -589,12 +589,12 @@ Ext.define('Yap.Field', {
                     return {
                         hidden: true,
                         allowBlank: true,
-                        name: 'verify_code'
+                        name: '_verify_code'
                     };
                 }
 
                 return this.fieldContainer('VERIFY_CODE',[//验证码
-                    this.textField('verify_code', 'PLEASE_ENTER,VERIFY_CODE', '', undefined, {
+                    this.textField('_verify_code', 'PLEASE_ENTER,VERIFY_CODE', '', undefined, {
                     width: 50,
                     listeners: {
                         focus: function() {//获得焦点，显示验证码
