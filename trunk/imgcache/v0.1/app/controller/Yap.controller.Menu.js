@@ -134,7 +134,7 @@ Ext.define('Yap.controller.Menu', {
         return [{
             xtype: 'treecolumn',
             header: lang('MODULE_NAME_MENU'),//菜单名
-            width: 100,
+            flex: 2,
             dataIndex: this.nameColumn,
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, me.nameColumn);
@@ -147,7 +147,7 @@ Ext.define('Yap.controller.Menu', {
             sortable: false
         }, {
             header: lang('CONTROLLER'),//控制器
-            width: 100,
+            width: 120,
             dataIndex: 'controller',
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'model');
@@ -156,7 +156,7 @@ Ext.define('Yap.controller.Menu', {
         }, {
             header: lang('ACTION'),//操作方法
             dataIndex: 'action',
-            width: 100,
+            width: 120,
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'view');
             },
@@ -177,7 +177,7 @@ Ext.define('Yap.controller.Menu', {
             },
             sortable: false
         }, {//操作列
-            width: 100,
+            flex: 1,
             xtype: 'appactioncolumn',
             items: [{
                 text: lang('ADD,CHILD,MODULE_NAME_MENU'),//添加子菜单

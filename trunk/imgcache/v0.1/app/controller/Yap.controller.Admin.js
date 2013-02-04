@@ -180,14 +180,14 @@ Ext.define('Yap.controller.Admin', {
             dataIndex: this.idProperty
         }, {
             header: lang('USERNAME'),//用户名
-            width: 100,
+            width: 120,
             dataIndex: 'username',
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'username');
             }
         }, {
             header: lang('REALNAME'),//真实姓名
-            width: 80,
+            width: 100,
             dataIndex: 'realname',
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'realname');
@@ -195,7 +195,7 @@ Ext.define('Yap.controller.Admin', {
             sortable: false
         }, {
             header: lang('BELONG_TO_ROLE'),//所属角色
-            width: 80,
+            width: 120,
             dataIndex: 'role_name',
             sortable: false
         }, {
@@ -211,6 +211,7 @@ Ext.define('Yap.controller.Admin', {
         }, {
             header: lang('LAST,LOGIN') + 'ip',//最后登陆ip
             dataIndex: 'last_login_ip',
+            width: 120,
             sortable: false
         }, {
             header: lang('LOGIN,CN_CISHU'),//登陆次数
@@ -233,7 +234,7 @@ Ext.define('Yap.controller.Admin', {
                 return me.renderYesNoImg(v, 'is_lock');
             }
         }, {//操作列
-            width: 100,
+            flex: 1,
             xtype: 'appactioncolumn',
             items: [{//编辑
                 renderer: function(v, meta, record) {

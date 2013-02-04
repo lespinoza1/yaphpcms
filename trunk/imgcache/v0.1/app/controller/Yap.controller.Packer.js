@@ -36,20 +36,26 @@ Ext.define('Yap.controller.Packer', {
             sortable: false
         }, {
             header: lang('LAST,CN_XIUGAI,TIME'),//最后修改时间
-            width: 200,
+            width: 140,
             dataIndex: 'filemtime',
-            sortable: false
+            sortable: false,
+            renderer: function(v, meta, record) {
+                return record.isLeaf() ? v : '--';
+            }
         }, {
             header: lang('FILESIZE'),//文件大小
             width: 100,
             dataIndex: 'filesize',
-            sortable: false
+            sortable: false,
+            renderer: function(v, meta, record) {
+                return record.isLeaf() ? v : '--';
+            }
         }, {//操作列
             width: 100,
             xtype: 'appactioncolumn',
             items: [{//压缩
                 renderer: function(v, meta, record) {
-                    return record.isLeaf() && record.get('text').indexOf('.pack.') == -1 ? '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('COMPRESS') + '</span>' : '';
+                    return record.isLeaf() && record.get('text').indexOf('.pack.') == -1 ? '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('COMPRESS') + '</span>' : '--';
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
