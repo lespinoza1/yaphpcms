@@ -26,6 +26,7 @@ return array(
     'CN_CI'                     => '此',
     'CN_GAI'                    => '该',
     'CN_QU'                     => '取',//by mrmsl on 2012-09-18 10:58:50
+    'CN_SHUOMING'               => '说明',//by mrmsl 2013-02-04 13:53:36
     'CN_SUOYOU'                 => '所有',//by mrmsl on 2012-08-20 10:37:05
     'CN_TO_BYTE'                => '一个汉字三个字节',
     'CN_WEI'                    => '未',//by mrmsl on 2012-09-15 11:19:15
@@ -38,6 +39,7 @@ return array(
     'DEFAULT'                   => '默认',//by mrmsl on 2012-09-18 11:00:26
     'DIFFERENTIATE'             => '区分',//mrmsl on 2012-09-27 11:28:14
     'EXPAND'                    => '展开',
+    'FILE'                      => '文件',//by mashanling on 2013-02-04 13:54:18
     'FILESIZE'                  => '文件大小',
     'FOR'                       => '为',//by mrmsl on 2012-09-20 10:37:59
     'FOR_EXAMPLE'               => '比如',
