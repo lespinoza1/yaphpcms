@@ -616,7 +616,7 @@ class BaseModel extends Model {
         }
 
         if ($set_property) {
-            $this->_auto[] = $auto;
+            $this->_auto = $auto;
         }
 
 
@@ -654,10 +654,6 @@ class BaseModel extends Model {
                     $validation[] = $this->_setValidate($field, $validator, $set_property);;
                 }
             }
-        }
-
-        if ($set_property) {
-            $this->_validate[] = $validation;
         }
 
         return $validation;
