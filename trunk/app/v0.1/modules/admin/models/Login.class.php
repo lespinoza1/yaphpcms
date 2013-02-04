@@ -36,7 +36,7 @@ class LoginModel extends BaseModel {
      * @see BaseModel.class.php __construct()方法设置自动验证字段_validate
      */
     protected $_db_fields = array (
-        'verify_code' => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码
+        '_verify_code' => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码
         'username'	   => array('validate' => '_checkUsername#PLEASE_ENTER,USERNAME'),//用户名
         'password'	   => array('validate' => '_checkPassword#PLEASE_ENTER,PASSWORD#data'),//密码
     );
