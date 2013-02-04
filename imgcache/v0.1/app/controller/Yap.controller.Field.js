@@ -148,7 +148,7 @@ value: '@value'", {
             dataIndex: this.idProperty
         }, {
             header: lang('FIELD_NAME'),//表单域名
-            width: 100,
+            width: 150,
             dataIndex: this.nameColumn,
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, me.nameColumn);
@@ -156,14 +156,14 @@ value: '@value'", {
             sortable: false
         }, {
             header: lang('INPUT_NAME'),//输入框名
-            width: 160,
+            width: 150,
             dataIndex: 'input_name',
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'input_name');
             }
         }, {
             header: lang('PARENT_FIELD'),//所属菜单
-            width: 100,
+            width: 120,
             dataIndex: 'menu_name',
             sortable: false
         }, {

@@ -156,7 +156,7 @@ Ext.define('Yap.grid.column.Action', {
     alternateClassName: 'Yap.grid.ActionColumn',
     header: lang('OPERATE'),
     sortable: false,
-    flex: 1,
+    //flex: 1,
     columnCls: 'appactioncolumn',
     constructor: function(config) {
         var me = this,

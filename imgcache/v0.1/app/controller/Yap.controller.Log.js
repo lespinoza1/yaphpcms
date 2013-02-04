@@ -87,6 +87,7 @@ Ext.define('Yap.controller.Log', {
         }, {
             header: lang('LOG,CONTENT'),//日志内容
             flex: 1,
+            minWidth: 300,
             dataIndex: 'content',
             sortable: false
         }, {
@@ -106,12 +107,13 @@ Ext.define('Yap.controller.Log', {
             hidden: true,
             header: lang('MODULE_NAME_ADMIN') + 'ip',//管理员ip
             dataIndex: 'admin_ip',
+            width: 120,
             sortable: false
         }, {
             header: lang('LOG,TIME'),//日志时间
             dataIndex: 'log_time',
             renderer: this.renderDatetime,
-            width: 150
+            width: 140
         }, {//操作列
             width: 100,
             xtype: 'appactioncolumn',

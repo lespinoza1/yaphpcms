@@ -94,7 +94,7 @@ Ext.define('Yap.controller.Role', {
             sortable: false
         }, {
             header: lang('MODULE_NAME_ROLE,NAME'),//角色名
-            width: 100,
+            width: 120,
             dataIndex: this.nameColumn,
             sortable: false
         }, {
@@ -105,11 +105,11 @@ Ext.define('Yap.controller.Role', {
             sortable: false
         }, {
             header: lang('MEMO'),//备注
-            width: 200,
+            flex: 1,
             dataIndex: 'memo',
             sortable: false
         }, {//操作列
-            width: 100,
+            width: 220,
             xtype: 'appactioncolumn',
             items: [{
                 renderer: function(v, meta, record) {//管理员列表 by mrmsl on 2012-08-14 12:59:48
