@@ -99,7 +99,7 @@ Ext.define('Yap.controller.Area', {
         return [{
             xtype: 'treecolumn',
             header: lang('MODULE_NAME_AREA'),//地区名
-            width: 100,
+            flex: 1,
             dataIndex: this.nameColumn,
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, me.nameColumn);
@@ -107,12 +107,12 @@ Ext.define('Yap.controller.Area', {
             sortable: false
         }, {
             text: lang('MODULE_NAME_AREA') + 'id',//地区id
-            width: 50,
+            width: 80,
             dataIndex: this.idProperty,
             sortable: false
         }, {
             header: lang('AREA_CODE'),//地区代码
-            width: 100,
+            width: 120,
             dataIndex: 'area_code',
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'area_code');
@@ -134,7 +134,7 @@ Ext.define('Yap.controller.Area', {
             },
             sortable: false
         }, {//操作列
-            width: 100,
+            width: 200,
             xtype: 'appactioncolumn',
             items: [{
                 text: lang('ADD,CHILD,MODULE_NAME_AREA'),//添加子地区 by mrmsl on 2012-08-21 13:29:14
