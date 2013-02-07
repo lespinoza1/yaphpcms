@@ -93,7 +93,7 @@ class LoginController extends BaseController {
      * @return void 无返回值
      */
     public function logoutAction() {
-        session(SESSION_KEY, null);
+        session(SESSION_ADMIN_KEY, null);
         $this->_redirect('login');
     }
 
