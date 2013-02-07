@@ -97,7 +97,7 @@ Ext.define('Yap.ux.TabPanel', {
      *
      * @author       mrmsl <msl-138@163.com>
      * @date         2012-08-27 13:41:19
-     * @lastmodify   2013-01-12 20:56:08 by mrmsl
+     * @lastmodify   2013-02-07 15:01:23 by mrmsl
      *
      * @return {void} 无返回值
      */
@@ -109,8 +109,10 @@ Ext.define('Yap.ux.TabPanel', {
 
         viewport.setLoading(true);//加载中提示
 
+        var url = controller.getActionUrl('field', 'publicForm', controller.getAction(controllerName, action));
+
         Ext.data.JsonP.request({
-            url: controller.getActionUrl('field', 'publicForm', controller.getAction(controllerName, action)),
+            url: url,
             timeout: 3000,
             disableCaching: false,//不禁用缓存 by mrmsl on 2012-08-30 12:20:15
             callbackName: 'Yap_form_{0}_{1}'.format(controllerName, action),
