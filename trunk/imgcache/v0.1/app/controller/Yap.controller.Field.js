@@ -170,6 +170,7 @@ value: '@value'", {
             header: lang('FIELD_CODE'),//js代码
             dataIndex: 'field_code',
             flex: 1,
+            minWidth: 250,
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'field_code');
             },
@@ -178,6 +179,7 @@ value: '@value'", {
             header: lang('VALIDATE_RULE'),//验证规则
             dataIndex: 'validate_rule',
             width: 250,
+            hidden: true,
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'validate_rule');
             },
