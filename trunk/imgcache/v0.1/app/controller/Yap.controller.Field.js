@@ -40,7 +40,7 @@ Ext.define('Yap.controller.Field', {
         data.menu_id = data.menu_id || '';
         data.column = data.column || this.nameColumn;
         data.match_mode = data.match_mode || 'eq';//匹配模式 by mrmsl on 2012-07-28 16:53:57
-        data.is_enable = Ext.valueFrom(data.is_enable, -1);//是否启用 by mrmsl on 2012-09-15 14:24:23
+        data.is_enable = Ext.valueFrom(data.is_enable, '-1');//是否启用 by mrmsl on 2012-09-15 14:24:23
         data.page = intval(data.page) || 1;//页
 
         var me = this, options = {

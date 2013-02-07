@@ -270,8 +270,8 @@ Ext.define('Yap.controller.Admin', {
         data.role_id = data.role_id || '';
         data.column = data.column || 'username';
         data.match_mode = data.match_mode || 'eq';//匹配模式 by mrmsl on 2012-07-28 16:53:57
-        data.is_lock = Ext.valueFrom(data.is_lock, -1);//锁定状态 by mrmsl on 2012-09-15 11:22:40
-        data.is_restrict = Ext.valueFrom(data.is_restrict, -1);//绑定登陆状态 by mrmsl on 2012-09-15 11:45:15
+        data.is_lock = Ext.valueFrom(data.is_lock, '-1');//锁定状态 by mrmsl on 2012-09-15 11:22:40
+        data.is_restrict = Ext.valueFrom(data.is_restrict, '-1');//绑定登陆状态 by mrmsl on 2012-09-15 11:45:15
         data.page = intval(data.page) || 1;//页
 
         var options = {
@@ -431,20 +431,20 @@ Ext.define('Yap.controller.Admin', {
             }, extCombo.base({//绑定登陆状态 by mrmsl on 2012-09-15 11:53:38
                 width: 80,
                 itemId: 'is_restrict',
-                value: -1,
+                value: '-1',
                 store: [
-                    [-1, lang('CN_BANGDING,STATUS')],
-                    [0, lang('CN_WEI,CN_BANGDING')],
-                    [1, lang('CN_YI,CN_BANGDING')]
+                    ['-1', lang('CN_BANGDING,STATUS')],
+                    ['0', lang('CN_WEI,CN_BANGDING')],
+                    ['1', lang('CN_YI,CN_BANGDING')]
                 ]
             }), extCombo.base({//锁定状态 by mrmsl on 2012-09-15 11:28:14
                 width: 80,
                 itemId: 'is_lock',
-                value: -1,
+                value: '-1',
                 store: [
-                    [-1, lang('LOCK,STATUS')],
-                    [0, lang('CN_WEI,LOCK')],
-                    [1, lang('CN_YI,LOCK')]
+                    ['-1', lang('LOCK,STATUS')],
+                    ['0', lang('CN_WEI,LOCK')],
+                    ['1', lang('CN_YI,LOCK')]
                 ]
             }), {
                 xtype: 'combobox',//搜索字段

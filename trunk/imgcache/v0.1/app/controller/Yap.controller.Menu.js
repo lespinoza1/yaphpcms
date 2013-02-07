@@ -205,7 +205,7 @@ Ext.define('Yap.controller.Menu', {
         data.keyword = data.keyword || '';
         data.column = data.column || this.nameColumn;
         data.match_mode = data.match_mode || 'eq';//匹配模式
-        data.is_show = Ext.valueFrom(data.is_show, -1);//是否显示 by mrmsl on 2012-09-15 12:20:18
+        data.is_show = Ext.valueFrom(data.is_show, '-1');//是否显示 by mrmsl on 2012-09-15 12:20:18
 
         var me = this, options = {
             xtype: 'treepanel',
