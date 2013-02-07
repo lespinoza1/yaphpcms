@@ -87,8 +87,7 @@ class AreaController extends BaseController {
         }
 
         $area_data = Tree::array2tree($area_data, $this->_pk_field);//树形式
-        //[debug]
-        $this->_model->rollback();
+
         return $this->_setCache($data)->_setCache($area_data, $this->_getControllerName() . '_tree');
     }
 
