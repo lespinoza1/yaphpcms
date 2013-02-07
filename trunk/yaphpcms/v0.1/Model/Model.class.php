@@ -161,8 +161,7 @@ class Model {
 
             foreach ($data as $key => $val) {
 
-                //!in_array($key, $this->_fields, true) ||字段不存在不理会，让db报错 by mrmsl on 2013-01-21 13:32:29
-                if (0 === strpos($key, '_')) {//_开头
+                if (!in_array($key, $this->_fields, true) || 0 === strpos($key, '_')) {//_开头
                     unset($data[$key]);
                 }
                 elseif (C('DB_FIELDTYPE_CHECK') && is_scalar($val)) {//字段类型检查
