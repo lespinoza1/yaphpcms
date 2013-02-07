@@ -35,14 +35,14 @@ class BaseModel extends Model {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-12-29 14:30:03
-     * @lastmodify      2013-01-22 11:10:30 by mrmsl
+     * @lastmodify      2013-02-07 13:46:00 by mrmsl
      *
      * @param $data     插入数据
      * @param $options  查询表达式
      *
      * @return void 无返回值
      */
-    protected function _afterInsert($data, $options) {
+    protected function _afterInserted($data, $options) {
 
         if (!isset($data['sort_order'])) {//排序-1，更新为对应id
             $pk_field = $this->getPk();

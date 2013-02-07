@@ -77,6 +77,21 @@ class FieldModel extends BaseModel {
     );
 
     /**
+     * 新增数据后，将排序设为该记录自动增长id
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-02-07 13:48:05
+     *
+     * @param $data     插入数据
+     * @param $options  查询表达式
+     *
+     * @return void 无返回值
+     */
+    protected function _afterInsert($data, $options) {
+        $this->_afterInserted($data, $options);
+    }
+
+    /**
      * 验证表单域否已经存在
      *
      * @author          mrmsl <msl-138@163.com>
