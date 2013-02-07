@@ -176,7 +176,7 @@ Ext.define('Yap.controller.Admin', {
 
         return [{
             text: lang('USER') + 'id',//用户id
-            width: 50,
+            width: 60,
             dataIndex: this.idProperty
         }, {
             header: lang('USERNAME'),//用户名
@@ -216,12 +216,12 @@ Ext.define('Yap.controller.Admin', {
         }, {
             header: lang('LOGIN,CN_CISHU'),//登陆次数
             dataIndex: 'login_num',
-            width: 70
+            width: 80
         }, {
             header: lang('CN_BANGDING,LOGIN'),//绑定登陆
             align: 'center',
             dataIndex: 'is_restrict',
-            width: 70,
+            width: 80,
             renderer: function(v) {
                 return me.renderYesNoImg(v, 'is_restrict');
             }
@@ -229,7 +229,7 @@ Ext.define('Yap.controller.Admin', {
             header: lang('LOCK'),//锁定
             align: 'center',
             dataIndex: 'is_lock',
-            width: 50,
+            width: 60,
             renderer: function(v) {
                 return me.renderYesNoImg(v, 'is_lock');
             }

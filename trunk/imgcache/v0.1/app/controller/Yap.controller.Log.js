@@ -81,7 +81,7 @@ Ext.define('Yap.controller.Log', {
 
         return [{
             text: lang('LOG') + 'id',//日志id
-            width: 60,
+            width: 70,
             align: 'center',
             dataIndex: this.idProperty
         }, {
