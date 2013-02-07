@@ -54,12 +54,12 @@ class VerifycodeController extends BaseController {
 
         if (!APP_DEBUG) {//非调试模式
 
-            if (!isset($_SERVER['HTTP_REFERER'])) {
-                $error = 'HTTP_REFERER' . L('IS_EMPTY');
+            if (!REFERER_PAGER) {
+                $error = L('REFERER_PAGER,IS_EMPTY');
             }
 
-            elseif (strpos($_SERVER['HTTP_REFERER'], WEB_SITE_URL) === false) {
-                $error = 'HTTP_REFERER(' . $_SERVER['HTTP_REFERER'] . ')' . L('IS_EMPTY');
+            elseif (strpos(REFERER_PAGER, WEB_SITE_URL) === false) {
+                $error = L('REFERER_PAGER') . '(' . REFERER_PAGER . ')' . L('IS_EMPTY');
             }
         }
 

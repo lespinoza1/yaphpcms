@@ -157,7 +157,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
      *
      * @author         mrmsl <msl-138@163.com>
      * @date           2012-12-25 09:33:26
-     * @lastmodify     2013-01-21 15:30:20 by mrmsl
+     * @lastmodify     2013-02-07 15:17:44 by mrmsl
      *
      * @param object $request  Yaf_Request_Http实例
      * @param object $response Yaf_Response_Http实例
@@ -170,6 +170,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
         define('ACTION_NAME'            , $request->getActionName());       //操作方法
         define('REQUEST_METHOD'         , $request->getMethod());           //请求方法
         define('TEMPLATE_FILE'          , THEME_PATH . strtolower(CONTROLLER_NAME) . '/' . ACTION_NAME . C('TEMPLATE_SUFFIX'));//模板文件
+        define('REFERER_PAGER'          , empty($_SERVER['HTTP_REFERER']) ? '' : urldecode($_SERVER['HTTP_REFERER']));//来路页面
 
         //请求uri
         if (isset($_SERVER['REQUEST_URI'])) {
@@ -177,9 +178,12 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
         }
         else {
             $querystring = $request->getQuery();
+            /**
+             * @ignore
+             */
             define('REQUEST_URI', urldecode($request->getRequestUri() . ($querystring ? '?' . http_build_query($querystring) : '')));
         }
 
         is_file($v = LANG_PATH . LANG . '/' . strtolower(CONTROLLER_NAME) . '.php') && L(include($v));//当前控制器语言包
-    }
+    }//end routerShutdown
 }
