@@ -107,7 +107,7 @@ Ext.define('Yap.ux.TabPanel', {
         action = controller.getActionName(),
         viewport = Yap.cmp.viewport;
 
-        viewport.setLoading(true);//加载中提示
+        setLoading(lang('LOADING'));//加载中提示
 
         var url = controller.getActionUrl('field', 'publicForm', controller.getAction(controllerName, action));
 
@@ -126,7 +126,7 @@ Ext.define('Yap.ux.TabPanel', {
                 }
             },
             callback: function() {
-                viewport.setLoading(false);
+                setLoading(false);
             },
             failure: function(err) {
                 error(Ext.String.format('{0}<span class="font-red">{1}</span>{2}<br />{3}：<span class="font-red">{4}</span>', lang('LOAD'), lang('MODULE_NAME_FIELD'), lang('FAILURE'), lang('ERROR,INFO'), url, err));
