@@ -4,7 +4,7 @@
 /*!40103 SET SQL_NOTES='ON' */;
 
 
-INSERT INTO `tb_admin` VALUES (1,1,'mrmsl','c7f2fee1add50acb122e082d256f53a0','马善灵',1312884140,1359518064,'127.0.0.1',600,0,'00:E0:66:21:F0:C9',0,0,'');
+INSERT INTO `tb_admin` VALUES (1,1,'mrmsl','c7f2fee1add50acb122e082d256f53a0','马善灵',1312884140,1360209364,'127.0.0.1',603,0,'00:E0:66:21:F0:C9',0,0,'');
 INSERT INTO `tb_admin` VALUES (7,1,'julie','9b81c4ebbf90e8c947143d234e477a61','杨丽',1247448347,1294640787,'183.14.153.167',574,1,'',1346839212,1346846412,'00');
 INSERT INTO `tb_admin` VALUES (14,8,'songlijuan','6c8c962656e750834100c46be6301ecf','宋丽娟',1248747451,1328660277,'14.153.94.126',726,1,'00:EA:01:13:B6:01',1346839216,1346846416,'00');
 INSERT INTO `tb_admin` VALUES (17,5,'blue','bcaa9887c999063ead0f37b8f064ae0c','钟启仁',1252286041,1328671075,'14.153.94.126',1193,0,'00:E0:B1:00:B7:C3',0,0,'');
@@ -39,6 +39,7 @@ INSERT INTO `tb_admin` VALUES (66,1,'wangchengbin','757889250303e6a31c086d6e2b9d
 INSERT INTO `tb_admin` VALUES (67,1,'suzy','10066b63967f36334d69e905857c1541','钱陈',1314345441,1314421143,'14.153.93.16',2,0,'00:E0:4C:BD:3E:19',0,0,'');
 INSERT INTO `tb_admin` VALUES (68,1,'wubing','08db6d1376adeb8e72cd4373293a3e12','吴冰',1316138713,1328661357,'124.234.239.214',159,1,'00:0B:2F:54:48:D5',0,0,'');
 INSERT INTO `tb_admin` VALUES (69,3,'sunny','748328b533220c024c02a147a330e62a','范圆冰',1317087218,1342087812,'127.0.0.1',50,0,'00:E0:66:25:87:72',1357246748,1357253948,'');
+INSERT INTO `tb_admin` VALUES (70,5,'mashanling','c7f2fee1add50acb122e082d256f53a0','mashanling',1360216439,0,'',0,0,'',0,0,'');
 
 INSERT INTO `tb_admin_login_history` VALUES (1,1,1356803233,2130706433);
 INSERT INTO `tb_admin_login_history` VALUES (2,1,1356803305,2130706433);
@@ -58,6 +59,9 @@ INSERT INTO `tb_admin_login_history` VALUES (15,1,1359106876,2130706433);
 INSERT INTO `tb_admin_login_history` VALUES (16,1,1359160136,2130706433);
 INSERT INTO `tb_admin_login_history` VALUES (17,1,1359349230,2130706433);
 INSERT INTO `tb_admin_login_history` VALUES (18,1,1359518064,2130706433);
+INSERT INTO `tb_admin_login_history` VALUES (19,1,1359690570,2130706433);
+INSERT INTO `tb_admin_login_history` VALUES (20,1,1359950191,2130706433);
+INSERT INTO `tb_admin_login_history` VALUES (21,1,1360209364,2130706433);
 
 INSERT INTO `tb_admin_role` VALUES (1,'站长','最高权限',0);
 INSERT INTO `tb_admin_role` VALUES (3,'录入员','部分模块权限',0);
@@ -3505,7 +3509,7 @@ INSERT INTO `tb_area` VALUES (3431,'mr0',0,'',0,3431,1,'3431');
 
 INSERT INTO `tb_field` VALUES (4,76,'安全设置','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','string','','sys_security_setting','安全设置',0,0,'',0);
 INSERT INTO `tb_field` VALUES (7,43,'网站域名','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_base_domain','www.yaphpcms.com',1,0,'',1);
-INSERT INTO `tb_field` VALUES (8,43,'网站url根目录','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_base_wwwroot','/',1,2,'',0);
+INSERT INTO `tb_field` VALUES (8,43,'网站url根目录','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\'],\n    lang(\'CAN_NOT,START_WITH\').replace(\'%s\',\'<span class=\"font-red\">/</span>\') + lang(\'%，,MUST,END_WITH\').replace(\'%s\',\'\"<span class=\"font-red\">/</span>\"\')\n]])','string\nnotblank\nvalidate_path#true','','sys_base_wwwroot','v0.1/',1,2,'',0);
 INSERT INTO `tb_field` VALUES (9,43,'网站名称','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\', {size: 30})','string\nnotblank','','sys_base_web_title','yaphpcms内容管理系统',1,3,'',1);
 INSERT INTO `tb_field` VALUES (10,43,'网站首页标题','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\', {size: 60})','string\nnotblank','','sys_base_web_index_title','yaphpcms内容管理系统首页',1,10,'',0);
 INSERT INTO `tb_field` VALUES (11,43,'网站版权信息','extField.textarea(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\', {width: 700, height: 120})','raw\nnotblank','','sys_base_copyright','Copyright &copy; 2012 yaphpcms内容管理系统 版权所有',1,99,'',0);
@@ -3574,6 +3578,13 @@ INSERT INTO `tb_field` VALUES (76,71,'事务回滚SQL是否入库','extField.che
 INSERT INTO `tb_field` VALUES (77,43,'静态资源common url地址','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\', {size: 40})','url\n#{%PLEASE_ENTER,CORRECT,FORMAT,CN_DE,@field_name}#MUST_VALIDATE#notblank','','sys_base_common_imgcache','http://imgcache.yaphpcms.com/common/',1,15,'',1);
 INSERT INTO `tb_field` VALUES (79,43,'后台入口文件','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_base_admin_entry','admin.php',1,2,'',1);
 
+INSERT INTO `tb_log` VALUES (166,'删除系统日志165成功',2,1360217244,'POST http://www.yaphpcms.com/v0.1/v0.1/admin.php/log/delete','http://www.yaphpcms.com/v0.1/admin.php',2130706433,1,'马善灵');
+INSERT INTO `tb_log` VALUES (167,'编辑菜单管理员操作日志(57).成功',2,1360218685,'POST http://www.yaphpcms.com/v0.1/v0.1/admin.php/menu/add','http://www.yaphpcms.com/v0.1/admin.php',2130706433,1,'马善灵');
+INSERT INTO `tb_log` VALUES (168,'添加菜单array ( \'menu_name\' => \'事务回滚SQL[to]NULL\', \'controller\' => \'log[to]NULL\', \'action\' => \'rollbackSql[to]NULL\', \'is_show\' => \'1[to]NULL\', \'parent_name\' => \'系统日志[to]NULL\',)成功',2,1360219067,'POST http://www.yaphpcms.com/v0.1/v0.1/admin.php/menu/add','http://www.yaphpcms.com/v0.1/admin.php',2130706433,1,'马善灵');
+INSERT INTO `tb_log` VALUES (169,'total_time => 6.591, app_launch_time => 0.504, load_ext_time => 3.976, load_css_time => 1.012, load_js_time => 1.099',9,1360219118,'POST http://www.yaphpcms.com/v0.1/v0.1/admin.php/login/logLoadTime','http://www.yaphpcms.com/v0.1/admin.php',2130706433,1,'马善灵');
+INSERT INTO `tb_log` VALUES (170,'total_time => 6.614, app_launch_time => 1.228, load_ext_time => 4.729, load_css_time => 0.462, load_js_time => 0.195',9,1360219251,'POST http://www.yaphpcms.com/v0.1/v0.1/admin.php/login/logLoadTime','http://www.yaphpcms.com/v0.1/admin.php',2130706433,1,'马善灵');
+INSERT INTO `tb_log` VALUES (171,'total_time => 6.616, app_launch_time => 1.139, load_ext_time => 4.681, load_css_time => 0.496, load_js_time => 0.3',9,1360219266,'POST http://www.yaphpcms.com/v0.1/v0.1/admin.php/login/logLoadTime','http://www.yaphpcms.com/v0.1/admin.php',2130706433,1,'马善灵');
+INSERT INTO `tb_log` VALUES (172,'total_time => 6.86, app_launch_time => 1.137, load_ext_time => 4.747, load_css_time => 0.799, load_js_time => 0.177',9,1360219304,'POST http://www.yaphpcms.com/v0.1/v0.1/admin.php/login/logLoadTime','http://www.yaphpcms.com/v0.1/admin.php',2130706433,1,'马善灵');
 
 INSERT INTO `tb_menu` VALUES (1,24,'菜单管理','menu','#',1,0,2,'24,1','');
 INSERT INTO `tb_menu` VALUES (2,1,'添加菜单','menu','add',1,1,3,'24,1,2','');
@@ -3621,6 +3632,7 @@ INSERT INTO `tb_menu` VALUES (78,42,'验证码设置','system','verifycode',1,78
 INSERT INTO `tb_menu` VALUES (79,24,'模块设置','module','#',1,79,2,'24,79','');
 INSERT INTO `tb_menu` VALUES (80,79,'管理员模块','module','admin',1,80,3,'24,79,80','');
 INSERT INTO `tb_menu` VALUES (81,0,'mrmsl','test','test',0,81,1,'81','');
+INSERT INTO `tb_menu` VALUES (82,25,'事务回滚SQL','log','rollbackSql',1,82,3,'24,25,82','');
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

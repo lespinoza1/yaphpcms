@@ -50,6 +50,6 @@ return array(
      ["' . LOG_TYPE_VERIFYCODE_ERROR . '", lang("VERIFYCODE_ERROR")],
      ["' . LOG_TYPE_LOAD_SCRIPT_TIME . '", lang("LOG_TYPE_LOAD_SCRIPT_TIME")],
      ["' . LOG_TYPE_SLOWQUERY . '", lang("SLOWQUERY")],
-     ["' . LOG_TYPE_SLOWQUERY . '", lang("ROLLBACK_SQL")],
+     ["' . LOG_TYPE_ROLLBACK_SQL . '", lang("ROLLBACK_SQL")],
  ]',
 );

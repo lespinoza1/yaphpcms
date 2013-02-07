@@ -45,7 +45,8 @@ Ext.define('Yap.controller.Log', {
             sql: lang('LOG_TYPE_SQL_ERROR'),//sql错误
             system: lang('LOG_TYPE_SYSTEM_ERROR'),//系统错误
             verifyCode: lang('LOG_TYPE_VERIFYCODE_ERROR'),//验证码错误
-            slowquery: lang('LOG_TYPE_SLOWQUERY')//慢查询 by mrmsl on 2012-09-13 13:04:57
+            slowquery: lang('LOG_TYPE_SLOWQUERY'),//慢查询 by mrmsl on 2012-09-13 13:04:57
+            rollbackSql: lang('LOG_TYPE_ROLLBACK_SQL')//事务回滚sql by mrmsl on 2013-02-07 14:38:50
         };
         data.log_type = hackAction[data.action];
 
