@@ -249,7 +249,7 @@ class BaseModel extends Model {
      * @return string 如果有来路，返回来路页面url，否则返回空字符串
      */
     protected function _getRefererUrl() {
-        return isset($_SERVER[$v = 'HTTP_REFERER']) ? urldecode($_SERVER[$v]) : '';
+        return REFERER_PAGER;
     }
 
     /**

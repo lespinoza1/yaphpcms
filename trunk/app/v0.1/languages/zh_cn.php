@@ -59,6 +59,7 @@ return array(
     'HAS_ANY_QUESTRION' => '如有任何疑问',
     'HAS_ERROR'         => '有误',
     'HIDE'              => '隐藏',
+    'REFERER_PAGE'      => '来路页面',
     'INFO'              => '信息',
     'INVALID'           => '非法',
     'INVALID_PARAM'     => '非法参数',

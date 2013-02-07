@@ -18,7 +18,6 @@ return array(
     'CRONTAB'           => '定时任务',
     'LOG_PAGE'          => '日志页面',
     'MODULE_NAME_LOG'   => '系统日志',
-    'REFERER_PAGE'      => '来路页面',
     'SQL_ERROR'         => 'sql错误',
     'VALIDATE_FORM_ERROR' => '验证表单错误',
     'VERIFYCODE_ERROR'  => '验证码错误',
