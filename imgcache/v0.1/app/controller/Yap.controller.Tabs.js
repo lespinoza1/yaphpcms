@@ -201,7 +201,7 @@ Ext.define('Yap.controller.Tabs', {
      * @return {Boolean} 成功执行，返回true，否则返回false
      */
     execScript: function(Class, data) {
-        Yap.cmp.viewport.setLoading(false);
+        setLoading(false);
 
         if (Class === 'loading') {
             return true;
@@ -288,7 +288,7 @@ Ext.define('Yap.controller.Tabs', {
 
         var viewport = Yap.cmp.viewport, controllerClassName = 'Yap.controller.' + controller;;
 
-        viewport.setLoading(true);//设置加载中提示
+        setLoading(lang('LOADING'));//设置加载中提示
 
         //data.controllerClassName = controllerClassName;
 
@@ -338,7 +338,7 @@ Ext.define('Yap.controller.Tabs', {
                  * @return {void} 无返回值
                  */
                 callback: function() {
-                    viewport.setLoading(false);
+                    setLoading(false);
                 },
 
                 /**
