@@ -33,10 +33,10 @@ return array(
     'TMPL_EXCEPTION_FILE'   => VIEW_PATH . 'error/error.phtml',//错误模板
     //smarty 模板设置
     'SMARTY_CONFIG'         => array(
-        'left_delimiter'    => '<!--{',
-        'right_delimiter'   => '}-->',
-        'template_dir'      => APP_PATH . '/views/',
-        'compile_dir'       => APP_PATH . '/views/templates_c/',
-        'cache_dir'         => APP_PATH . '/views/templates_d/',
+        'left_delimiter'    => '{{',
+        'right_delimiter'   => '}}',
+        'template_dir'      => THEME_PATH,
+        'compile_dir'       => THEME_PATH . 'templates_c/',
+        'cache_dir'         => THEME_PATH . 'templates_d/',
     ),
 );
