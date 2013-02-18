@@ -32,7 +32,7 @@ define('SESSION_PATH'       , SYS_APP_PATH . 'sessions/');   //session保存目�
 define('LOG_PATH'           , SYS_APP_PATH . 'logs/');       //日志目录
 define('APP_PATH'           , SYS_APP_PATH . 'modules/' . APP_NAME . DS);//项目目录
 define('BOOTSTRAP_FILE'     , APP_PATH . 'Bootstrap.' . APP_EXT);//ini文件
-define('CONF_FILE'          , APP_PATH . 'conf/application.ini');//ini文件
+define('CONF_FILE'          , INCLUDE_PATH . '/application.ini');//ini文件
 define('CACHE_PATH'         , SYS_APP_PATH . 'caches/');     //缓存目录
 define('MODULE_CACHE_PATH'  , CACHE_PATH . 'modules/');     //系统模块信息缓存目录
 define('LANG_PATH'          , APP_PATH . 'languages/');     //项目语言包目录
