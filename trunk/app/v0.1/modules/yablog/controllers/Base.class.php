@@ -154,6 +154,29 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
+     * 设置Smarty基础变量
+     *
+     * @author      mrmsl <msl-138@163.com>
+     * @date        2013-02-18 15:00:30
+     *
+     * @return mixed 获取成功，将返回包含字段名的数组，否则false
+     */
+    protected function _setSmartyBaseVars() {
+        $base_vars = array(
+            'SITE_URL'          => SITE_URL,//网站网址，不以/结尾
+            'WEB_SITE_URL'      => WEB_SITE_URL,//网站网址，以/结尾
+            'COMMON_IMGCACHE'   => COMMON_IMGCACHE,
+            'IMGCACHE_JS'       => IMGCACHE_JS,
+            'IMGCACHE_CSS'      => IMGCACHE_CSS,
+            'IMGCACHE_IMG'      => IMGCACHE_IMG,
+            'LANG'              => L(),
+            'SYS_CONFIG'        => sys_config()
+        );
+
+        $this->getView()->assign($base_vars);
+    }
+
+    /**
      * 设置子节点层次以及节点关系
      *
      * @param string $level_field     层次字段。默认level
@@ -266,9 +289,12 @@ class BaseController extends Yaf_Controller_Abstract {
 
         define('APP_INIT' , true);   //跨模块调用时，不再往下
 
-        Yaf_Registry::has('smarty') && $this->getView()->setConfig(C('SMARTY_CONFIG'));
-
         L('MODULE_NAME', L('MODULE_NAME_' .  $this->_getControllerName()));//C => L
+
+        if (Yaf_Registry::has('smarty')) {
+            $this->getView()->setConfig(C('SMARTY_CONFIG'));
+            $this->_setSmartyBaseVars();
+        }
 
         return true;
     }//end init

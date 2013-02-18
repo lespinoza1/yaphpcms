@@ -28,6 +28,7 @@ define('APP_EXT'            , 'class.php');//类库文件后缀，不包括.
 define('VIEW_EXT'           , 'phtml');    //模板文件后缀，不包括.
 define('VENDOR_PATH'        , SYS_PATH . 'vendor/');//第三方类库路径
 define('SMARTY_DIR'         , VENDOR_PATH . 'Smarty/');//smarty路径
+define('SMARTY_SYSPLUGINS_DIR', SMARTY_DIR . 'sysplugins/');//smarty sysplugins目录
 define('SESSION_PATH'       , SYS_APP_PATH . 'sessions/');   //session保存目录
 define('LOG_PATH'           , SYS_APP_PATH . 'logs/');       //日志目录
 define('APP_PATH'           , SYS_APP_PATH . 'modules/' . APP_NAME . DS);//项目目录

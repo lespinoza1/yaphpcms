@@ -60,7 +60,7 @@
 }
 
 .avatar,
-.avatar img { height: 50px; width: 50px; }
+.avatar img { height: 60px; width: 60px; }
 
 .form-comment {
     .control-label { width: 80px !important; }
@@ -68,5 +68,14 @@
 }
 
 p.actions {
-    a { margin-left: 10px; }
+    a {
+        color: @grayLight;
+        margin-left: 10px;
+        &:hover {
+            .icon-gray {
+                background-image: url(@iconSpritePath);
+            }
+            color: @textColor;
+        }
+    }
 }

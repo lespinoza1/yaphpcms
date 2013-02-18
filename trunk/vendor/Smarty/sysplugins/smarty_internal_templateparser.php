@@ -96,7 +96,7 @@ class Smarty_Internal_Templateparser#line 79 "smarty_internal_templateparser.php
     public $retvalue = 0;
     private $lex;
     private $internalError = false;
-    private $strip = false;
+    private $strip = true;
 
     function __construct($lex, $compiler) {
         $this->lex = $lex;

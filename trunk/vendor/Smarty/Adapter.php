@@ -12,8 +12,6 @@
  * @lastmodify      $Date$ $Author$
  */
 
-require(__DIR__ . '/Smarty.class.php');
-
 class Smarty_Adapter implements Yaf_View_Interface {
     /**
      * @var $_smarty Smarty实例
@@ -95,17 +93,18 @@ class Smarty_Adapter implements Yaf_View_Interface {
      * @param mixed $key 变量名称或一组变量数组
      * @param mixed $val 变量值。默认null
      *
-     * @return void 无返回值
+     * @return object Smarty实例
      */
     public function assign($key, $value = null) {
 
         if (is_array($key)) {
             $this->_smarty->assign($key);
-            return;
         }
         else {
             $this->_smarty->assign($key, $value);
         }
+
+        return $this->_smarty;
     }
 
     /**
