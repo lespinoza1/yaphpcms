@@ -11,14 +11,14 @@
 Ext.Loader.setConfig({//路径
     enabled: true,
     paths: {
-        Yap: System.sys_base_js_url + 'app',
-        'Yap.ux.TabPanel': System.sys_base_js_url + 'app/ux/Yap.ux.TabPanel.js',
-        'Yap#container': System.sys_base_js_url + 'app/container/',
-        'Yap#controller': System.sys_base_js_url + 'app/controller/',
-        'Yap#store': System.sys_base_js_url + 'app/store/',
-        'Yap#model': System.sys_base_js_url + 'app/model/',
-        'Yap#ux': System.sys_base_js_url + 'app/ux/',
-        'Yap#pack': System.sys_base_js_url + 'app/pack/',//压缩js路径 by mrmsl on 2012-09-04 17:49:49
+        Yap: System.sys_base_admin_imgcache + 'app',
+        'Yap.ux.TabPanel': System.sys_base_admin_imgcache + 'app/ux/Yap.ux.TabPanel.js',
+        'Yap#container': System.sys_base_admin_imgcache + 'app/container/',
+        'Yap#controller': System.sys_base_admin_imgcache + 'app/controller/',
+        'Yap#store': System.sys_base_admin_imgcache + 'app/store/',
+        'Yap#model': System.sys_base_admin_imgcache + 'app/model/',
+        'Yap#ux': System.sys_base_admin_imgcache + 'app/ux/',
+        'Yap#pack': System.sys_base_admin_imgcache + 'app/pack/',//压缩js路径 by mrmsl on 2012-09-04 17:49:49
     }
 }).getPath = function(className) {
     var path = '', paths = this.config.paths, prefix = this.getPrefix(className);

@@ -57,7 +57,7 @@ class IndexController extends BaseController {//继承BaseController by mrmsl on
         //css文件
         $css_file  = $this->_loadTimeScript('START_TIME');//,extjs/v4.1.1/resources/css/ext-patch.css
         $css_file .= css('extjs/v4.1.1a//resources/css/ext-all-gray.css,extjs/v4.1.1a/resources/css/ext-patch.css', COMMON_IMGCACHE);
-        $css_file .= css('app.css');
+        $css_file .= css('app.css', ADMIN_IMGCACHE . 'css/');
         $js_file   = $this->_loadTimeScript('LOAD_CSS_TIME');
         $js_file  .= js('', true, COMMON_IMGCACHE . 'extjs/v4.1.1a/');
         $js_file  .= $this->_loadTimeScript('LOAD_EXT_TIME');
@@ -69,7 +69,7 @@ class IndexController extends BaseController {//继承BaseController by mrmsl on
         if (APP_DEBUG) {
             $js_arr = include(APP_PATH . 'include/required_js.php');
 
-            $js_file .= js($js_arr, false, IMGCACHE_JS . 'app/');
+            $js_file .= js($js_arr, false, ADMIN_IMGCACHE . 'app/');
         }
         else {
             $js_file .= js('app/pack/app.js', false);

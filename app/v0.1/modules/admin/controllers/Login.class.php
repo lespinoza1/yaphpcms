@@ -44,17 +44,17 @@ class LoginController extends BaseController {
     public function indexAction() {
         $css_file  = $this->_loadTimeScript('START_TIME');
         $css_file .= css('extjs/v4.1.1a//resources/css/ext-all-gray.css,extjs/v4.1.1a/resources/css/ext-patch.css', COMMON_IMGCACHE);
-        $css_file .= css('app.css');
+        $css_file .= css('app.css', ADMIN_IMGCACHE . 'css/');
         $js_file   = $this->_loadTimeScript('LOAD_CSS_TIME');
         $js_file  .= js('', true, COMMON_IMGCACHE . 'extjs/v4.1.1a/');
         $js_file  .= $this->_loadTimeScript('LOAD_EXT_TIME');
         $js_file  .= js('System.js,lang/' . LANG . '.js' . ('en' != LANG ? ',lang/ext-lang-' . LANG . '.js' : ''), false, '/static/js/');
 
         if (IS_LOCAL) {
-            $js_file .= js('util/common.js,util/Yap.Field.js,ux/Yap.ux.Form.js,controller/Yap.controller.Base.js,controller/Yap.controller.Login.js', false, IMGCACHE_JS . 'app/');
+            $js_file .= js('util/common.js,util/Yap.Field.js,ux/Yap.ux.Form.js,controller/Yap.controller.Base.js,controller/Yap.controller.Login.js', false, ADMIN_IMGCACHE . 'app/');
         }
         else {
-            $js_file .= js('common.pack.js,Yap.controller.Base.pack.js,Yap.controller.Login.pack.js', false, IMGCACHE_JS . 'app/pack/');
+            $js_file .= js('common.pack.js,Yap.controller.Base.pack.js,Yap.controller.Login.pack.js', false, ADMIN_IMGCACHE . 'app/pack/');
         }
 
         $js_file  .= $this->_loadTimeScript('LOAD_JS_TIME');

@@ -39,6 +39,7 @@ return array(
     'CUSTOMIZE'         => '自定义',
     'DATA'              => '数据',
     'DELETE'            => '删除',
+    'DENY_ACCESS_CONTROLLER' => '禁止直接访问控制器：%s',
     'DISABLED'          => '禁用',
     'EDIT'              => '编辑',
     'ENABLE'            => '启用',
@@ -127,4 +128,5 @@ return array(
     'VALUE'				         => '值',
     'VERIFY_CODE'       => '验证码',
     'VERIFY_CODE_TYPE'  => '验证码类型',
+    'VISIT'             => '访问',
 );
