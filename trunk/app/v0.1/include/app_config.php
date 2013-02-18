@@ -26,6 +26,8 @@ define('ALLOW_AUTO_VALIDATE_FUNCTION'   , ',validate_dir,');                    
 //项目路径定义
 define('APP_EXT'            , 'class.php');//类库文件后缀，不包括.
 define('VIEW_EXT'           , 'phtml');    //模板文件后缀，不包括.
+define('VENDOR_PATH'        , SYS_PATH . 'vendor/');//第三方类库路径
+define('SMARTY_DIR'         , VENDOR_PATH . 'Smarty/');//smarty路径
 define('SESSION_PATH'       , SYS_APP_PATH . 'sessions/');   //session保存目录
 define('LOG_PATH'           , SYS_APP_PATH . 'logs/');       //日志目录
 define('APP_PATH'           , SYS_APP_PATH . 'modules/' . APP_NAME . DS);//项目目录
@@ -53,7 +55,8 @@ define('WEB_ADMIN_ENTRY'       , 0 === strpos('http://', $v = sys_config('sys_ba
 define('WEB_JS_PATH'           , WWWROOT . sys_config('sys_base_js_path'));//js物理路径
 define('WEB_JS_LANG_PATH'      , WEB_JS_PATH . 'lang/');//js语言包物理路径
 define('WEB_CSS_PATH'          , WWWROOT . sys_config('sys_base_css_path'));//css物理路径
-define('COMMON_IMGCACHE'       , sys_config('sys_base_common_imgcache'));//js url
+define('COMMON_IMGCACHE'       , sys_config('sys_base_common_imgcache'));//imgcache
+define('ADMIN_IMGCACHE'        , sys_config('sys_base_admin_imgcache'));//后台imgcache
 define('IMGCACHE_JS'           , sys_config('sys_base_js_url'));//js url
 define('IMGCACHE_CSS'          , sys_config('sys_base_css_url'));//css url
 define('IMGCACHE_IMG'          , sys_config('sys_base_img_url'));//img url

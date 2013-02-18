@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-02-01 13:25:53
+//最后更新时间:2013-02-18 12:26:36
 
 return array (
   'sys_base_domain' => 'www.yaphpcms.com',
@@ -14,7 +14,8 @@ return array (
   'sys_base_css_path' => 'static/css/',
   'sys_seo_keyword' => 'mrmsl',
   'sys_base_common_imgcache' => 'http://imgcache.yaphpcms.com/common/',
-  'sys_base_js_url' => 'http://imgcache.yaphpcms.com/v0.1/',
+  'sys_base_admin_imgcache' => 'http://imgcache.yaphpcms.com/v0.1/admin/',
+  'sys_base_js_url' => 'http://imgcache.yaphpcms.com/v0.1/js/',
   'sys_base_css_url' => 'http://imgcache.yaphpcms.com/v0.1/css/',
   'sys_base_img_url' => 'http://imgcache.yaphpcms.com/v0.1/images/',
   'sys_seo_description' => 'seo描述',

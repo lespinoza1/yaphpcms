@@ -28,6 +28,25 @@
 
 class BootstrapPlugin extends Yaf_Plugin_Abstract {
     /**
+     * 禁止直接访问Error,Base控制器
+     *
+     * @author         mrmsl <msl-138@163.com>
+     * @date           2013-02-17 11:39:45
+     *
+     * @throws RuntimeExpection 直接访问Error,Base控制器，抛出异常
+     *
+     * @return void 无返回值
+     */
+    private function _denyControllers() {
+        $deny_controllers = array('Error', 'Base');
+
+        if (in_array(CONTROLLER_NAME, $deny_controllers)) {
+            throw new Exception(L('INVALID,VISIT'));
+        }
+
+    }//end _denyControllers
+
+    /**
      * 启动
      *
      * @author         mrmsl <msl-138@163.com>
@@ -157,7 +176,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
      *
      * @author         mrmsl <msl-138@163.com>
      * @date           2012-12-25 09:33:26
-     * @lastmodify     2013-02-07 15:17:44 by mrmsl
+     * @lastmodify     2013-02-17 11:43:31 by mrmsl
      *
      * @param object $request  Yaf_Request_Http实例
      * @param object $response Yaf_Response_Http实例
@@ -183,6 +202,8 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
              */
             define('REQUEST_URI', urldecode($request->getRequestUri() . ($querystring ? '?' . http_build_query($querystring) : '')));
         }
+
+        $this->_denyControllers();//禁止直接访问Error,Base控制器
 
         is_file($v = LANG_PATH . LANG . '/' . strtolower(CONTROLLER_NAME) . '.php') && L(include($v));//当前控制器语言包
     }//end routerShutdown

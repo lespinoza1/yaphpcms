@@ -400,7 +400,7 @@ class FieldController extends BaseController {
         $controller = Filter::string('controller', 'get');//控制器
         $action     = Filter::string('action', 'get');//操作方法
         $callback   = Filter::string('callback', 'get');//jsonp callback
-        $error_msg  = L('GET,MODULE_NAME_FIELD,DATA,FAILURE') . "controller={$action}&action={$action}";
+        $error_msg  = L('GET,MODULE_NAME_FIELD,DATA,FAILURE') . "controller={$controller}&action={$action}";
 
         if ($controller && $action) {
             $this->_checkAdminPriv($controller, $action);//权限判断 by mashanlin on 2012-08-30 11:04:14
