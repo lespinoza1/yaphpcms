@@ -1062,6 +1062,24 @@ function clear_verifycoe($module) {
 }
 
 /**
+ * 获取php文件内容，并去掉注释及空白
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-02-18 17:02:16
+ *
+ * @return string 去掉注释及空白后php代码
+ */
+function compileFile($filename) {
+    $content = substr(php_strip_whitespace($filename), 7);
+
+    if (strpos($content, '?>') && '?>' == substr($content = rtrim($content), -2)) {//php关闭标签
+        $content = substr($content, 0, -2);
+    }
+
+    return  "\n\n//{$filename}\n" . $content;
+}
+
+/**
  * 包含css
  *
  * @param mixed  $files    css文件

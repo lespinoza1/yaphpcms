@@ -38,6 +38,7 @@ class Yaphpcms {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-01-22 15:45:33
+     * @lastmodify      2013-02-18 17:03:00 by mrmsl
      *
      * @return void 无返回值
      */
@@ -51,7 +52,7 @@ class Yaphpcms {
 
             if (defined('APP_DEBUG') && !APP_DEBUG) {
                 $filesize += filesize($file);
-                $compile  .= $this->_compileFile($file);
+                $compile  .= compileFile($file);
             }
         }
 
@@ -86,12 +87,12 @@ class Yaphpcms {
             foreach ($require_files as $file) {
                 require($file);
                 $filesize += filesize($file);
-                $compile  .= $this->_compileFile($file);
+                $compile  .= compileFile($file);
             }
 
             file_put_contents(RUNTIME_FILE, $compile);
             $size = filesize(RUNTIME_FILE);//编译后大小
-            file_put_contents(dirname(RUNTIME_FILE) . '/runtime_file.log', new_date() . '(' . format_size($filesize) . ' => ' . format_size($size) . ')' . EOL_LF, FILE_APPEND);
+            file_put_contents(LOG_PATH. 'compile_runtime_file.log', new_date() . '(' . format_size($filesize) . ' => ' . format_size($size) . ')' . EOL_LF, FILE_APPEND);
 
         }
 
@@ -109,24 +110,6 @@ class Yaphpcms {
         !extension_loaded('yaf') && exit('yaf extension required!');
         //!ini_get('yaf.use_//namespace') && exit('yaf.use_//namespace=on required!');
         !version_compare(PHP_VERSION, '5.3', '>') && exit('php5.3 or higher required!');
-    }
-
-    /**
-     * 获取php文件内容，并去掉注释及空白
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-01-22 15:49:16
-     *
-     * @return string 去掉注释及空白后php代码
-     */
-    private function _compileFile($filename) {
-        $content = substr(php_strip_whitespace($filename), 7);
-
-        if (strpos($content, '?>') && '?>' == substr($content = rtrim($content), -2)) {//php关闭标签
-            $content = substr($content, -2);
-        }
-
-        return  "\n\n//{$filename}\n" . $content;
     }
 
     /**
