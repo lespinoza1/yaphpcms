@@ -117,6 +117,7 @@ class Yaphpcms {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-01-22 14:38:13
+     * @lastmodify      2013-02-21 10:53:02 by mrmsl
      *
      * @param bool $is_yap true定义yap常量。默认true
      *
@@ -128,6 +129,9 @@ class Yaphpcms {
             define('Yap\VERSION'            , '0.1');         //yaphpcms版本
             define('Yap\RELEASE'            , '20130122');      //yaphpcms版本发布日期
             define('YAP_PATH'               , __DIR__ . '/');  //yaphpcms框架路径
+            !defined($v = 'VENDOR_PATH')    && define($v, YAP_PATH . 'Vendor/');//Vendor第三方框架目录
+            !defined($v = 'SMARTY_DIR')     && define($v, VENDOR_PATH . 'Smarty-3.1.13/');//Smarty目录
+            !defined($v = 'SMARTY_SYSPLUGINS_DIR')     && define($v, SMARTY_DIR . 'sysplugins/');//Smarty sysplugins目录
         }
         else {
             !defined($v = 'BOOTSTRAP_FILE')   && define($v, YAP_PATH . 'Bootstrap.php');//运行时文件
