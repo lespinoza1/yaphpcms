@@ -124,6 +124,7 @@ class Smarty_Adapter implements Yaf_View_Interface {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-02-17 16:08:43
+     * @lastmodify      2013-02-21 10:42:24 by mrmsl
      *
      * @param string $name 模板名称
      * @param mixed  $val  变量值。默认null
@@ -131,7 +132,7 @@ class Smarty_Adapter implements Yaf_View_Interface {
      * @return void 无返回值
      */
     public function display($name, $value = null) {
-        echo $this->_smarty->fetch($name);
+        $this->_smarty->display($name);
     }
 
     /**
