@@ -216,7 +216,7 @@ class Db {
 
         //记录慢查询 by mrmsl on 2012-09-12 15:08:30
         if (($log_sloqeury = sys_config('sys_log_slowquery')) && $query_time > $log_sloqeury && false === strpos($this->_query_str, ' ' . $this->_parseTable(TB_LOG) . ' ')) {
-            D(MODULE_NAME)->addLog($log, LOG_TYPE_SLOWQUERY);
+            D('Log')->addLog($log, LOG_TYPE_SLOWQUERY);
         }
     }
 
@@ -893,7 +893,7 @@ class Db {
             $last_sql = $this->_query_str;
             C(array('LOG_LEVEL' => E_APP_SQL, 'LOG_FILENAME' => 'errorsql'));
             trigger_error($error = $this->_query_str . '<br />' . $this->_error);
-            D(MODULE_NAME)->addLog($error);
+            D('Log')->addLog($error);
             $this->_query_str = $last_sql;
         }
     }
@@ -914,7 +914,7 @@ class Db {
 
         if (sys_config('sys_log_rollback_sql') && false === strpos($this->_query_str, ' ' . $this->_parseTable(TB_LOG) . ' ')) {
             $last_sql = $this->_query_str;
-            D(MODULE_NAME)->addLog($this->_rollback_sql, LOG_TYPE_ROLLBACK_SQL);
+            D('Log')->addLog($this->_rollback_sql, LOG_TYPE_ROLLBACK_SQL);
             $this->_setLastSql($last_sql);
         }
     }
