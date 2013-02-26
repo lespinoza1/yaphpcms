@@ -31,7 +31,7 @@ class LogModel extends BaseModel {
      */
     protected $_auto = array(
         'log_time'     => 'time',
-        'admin_ip'     => 'get_client_ip#1',
+        'user_ip'      => 'get_client_ip#1',
         'admin_id'     => '_getAdminId',
         'admin_name'   => '_getAdminName',
         'page_url'     => '_getPageUrl',
@@ -47,7 +47,7 @@ class LogModel extends BaseModel {
         'log_time'       => null,//日志时间
         'page_url'       => null,//日志页面
         'referer_url'    => null,//来路页面
-        'admin_ip'       => null,//管理员ip
+        'user_ip'        => null,//管理员ip
         'admin_id'       => null,//管理员id
         'admin_name'     => null,//管理员姓名
     );
