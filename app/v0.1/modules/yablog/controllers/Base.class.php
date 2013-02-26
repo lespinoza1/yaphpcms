@@ -128,29 +128,36 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
-     * url跳转
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @lastmodify      2013-01-21 16:13:40 by mrmsl
-     *
-     * @param string $url         跳转url。默认''，跳转到网站首页
-     * @param string $base_url    基链接。默认null，相对网站根目录
-     * @param int    $status_code 头部状态码。默认0，不发送头部状态码
-     *
-     * @return void 无返回值
-     */
-    protected function _redirect($url = '', $base_url = null, $status_code = 0) {
-        $url = null === $base_url ? to_website_url('admin.php/') . $url : $base_url . $url;
-        redirect($url, 0, '', $status_code);
-    }
-
-    /**
      * 获取表字段
      *
      * @return mixed 获取成功，将返回包含字段名的数组，否则false
      */
     protected function _getDbFields() {
         return $this->_model->getDbFields();
+    }
+
+    /**
+     * 获取当前页面url
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:15:26 by mrmsl
+     *
+     * @return string 当前页面url
+     */
+    protected function _getPageUrl() {
+        return REQUEST_METHOD . ' ' . to_website_url(REQUEST_URI);
+    }
+
+    /**
+     * 获取来路页面url
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-22 11:15:36 by mrmsl
+     *
+     * @return string 如果有来路，返回来路页面url，否则返回空字符串
+     */
+    protected function _getRefererUrl() {
+        return REFERER_PAGER;
     }
 
     /**
@@ -174,6 +181,23 @@ class BaseController extends Yaf_Controller_Abstract {
         );
 
         $this->getView()->assign($base_vars);
+    }
+
+    /**
+     * url跳转
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @lastmodify      2013-01-21 16:13:40 by mrmsl
+     *
+     * @param string $url         跳转url。默认''，跳转到网站首页
+     * @param string $base_url    基链接。默认null，相对网站根目录
+     * @param int    $status_code 头部状态码。默认0，不发送头部状态码
+     *
+     * @return void 无返回值
+     */
+    protected function _redirect($url = '', $base_url = null, $status_code = 0) {
+        $url = null === $base_url ? to_website_url('admin.php/') . $url : $base_url . $url;
+        redirect($url, 0, '', $status_code);
     }
 
     /**
@@ -298,6 +322,29 @@ class BaseController extends Yaf_Controller_Abstract {
 
         return true;
     }//end init
+
+	   /**
+     * 添加系统操作日志
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-02-26 16:27:09
+     *
+     * @param string $content   日志内容。默认''，取db最后执行sql
+     * @param int    $log_type  日志类型。默认LOG_TYPE_SQL_ERROR，sql错误
+     *
+     * @return void 无返回值
+     */
+    public function addLog($content = '', $log_type = LOG_TYPE_SQL_ERROR) {
+        $data = array(
+            'content'  => LOG_TYPE_SQL_ERROR == $log_type && !$content ? $this->getLastSql() . '<br />' . $this->getDbError() : $content,
+            'log_type' => $log_type,
+        );
+
+        $log_model = D('Log');
+        $log_model->autoOperation($data, Model::MODEL_INSERT);
+        $log_model->add($data);
+        $log_model->commit();
+    }
 
     /**
      * 获取不带链接的类似面包屑导航，如菜单管理»添加菜单
