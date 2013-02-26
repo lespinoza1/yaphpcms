@@ -799,7 +799,7 @@ Ext.define('Yap.controller.Base', {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-09-08 12:36:23
-     * @lastmodify      2013-01-14 10:59:07 by mrmsl
+     * @lastmodify      2013-02-26 17:03:18 by mrmsl
      *
      * @protected
      *
@@ -808,7 +808,7 @@ Ext.define('Yap.controller.Base', {
      * @return {String} 时间格式
      */
     renderDatetime: function(v) {
-        return v == 0 ? '' : date(System.sys_timezone_datetime_format, (intval(v) + intval(System.sys_timezone_timediff)) * 1000);
+        return v == 0 ? '' : date(System.sys_timezone_datetime_format, intval(v) * 1000);
     },
 
     /**
