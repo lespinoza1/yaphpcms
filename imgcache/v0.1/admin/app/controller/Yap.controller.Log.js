@@ -107,7 +107,7 @@ Ext.define('Yap.controller.Log', {
         }, {
             hidden: true,
             header: lang('MODULE_NAME_ADMIN') + 'ip',//管理员ip
-            dataIndex: 'admin_ip',
+            dataIndex: 'user_ip',
             width: 120,
             sortable: false
         }, {
@@ -248,7 +248,7 @@ Ext.define('Yap.controller.Log', {
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'content', 'log_time', 'page_url', 'referer_url', 'admin_ip', 'admin_name'],
+            fields: [this.idProperty, 'content', 'log_time', 'page_url', 'referer_url', 'user_ip', 'admin_name'],
             /**
              * @cfg {String}
              * 主键
