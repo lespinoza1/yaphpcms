@@ -88,7 +88,7 @@ class LogController extends BaseController {
         }
 
         $page_info = Filter::page($total);
-        $data      = $this->_model->where($where)->field('*,INET_NTOA(admin_ip) AS admin_ip')->limit($page_info['limit'])->order('' .$sort . ' ' . $order)->select();
+        $data      = $this->_model->where($where)->field('*,INET_NTOA(user_ip) AS user_ip')->limit($page_info['limit'])->order('' .$sort . ' ' . $order)->select();
 
         $data === false && $this->_sqlErrorExit(L('QUERY,MODULE_NAME_LOG') . L('LIST,ERROR'));//出错
 
