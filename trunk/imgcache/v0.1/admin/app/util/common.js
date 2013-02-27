@@ -22,9 +22,9 @@ var C = {
         DESC: 'x-column-header-sort-DESC',
     },
     images: {//小图标
-        yes: System.sys_base_img_url + 'icons/yes.gif',
-        no: System.sys_base_img_url + 'icons/no.gif',
-        loading: System.sys_base_img_url + 'icons/loading.gif'//加载中 by mrmsl on 2012-08-22 14:09:46
+        yes: System.sys_base_common_imgcache + 'images/icons/yes.gif',
+        no: System.sys_base_common_imgcache + 'images/icons/no.gif',
+        loading: System.sys_base_common_imgcache + 'images/icons/loading.gif'//加载中 by mrmsl on 2012-08-22 14:09:46
     }
 };
 
