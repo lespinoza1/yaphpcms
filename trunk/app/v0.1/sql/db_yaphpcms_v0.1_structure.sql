@@ -79,6 +79,25 @@ CREATE TABLE `tb_area` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='国家地区表 by mashanling on 2012-12-27 11:35:41';
 
+/*tb_comments留言评论表*/
+CREATE TABLE `tb_comments` (
+  `comment_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
+  `username` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名',
+  `user_ip` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ip,ip2long',
+  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+   last_reply_time int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复时间',
+  `is_admin` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0管理员;1用户.默认0',
+   status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未处理;1已通过;2未通过',
+  `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
+  `node` varchar(24) NOT NULL DEFAULT '' COMMENT '节点',
+  `content` text NOT NULL COMMENT '内容',
+  PRIMARY KEY (`comment_id`),
+  KEY (parent_id),
+  KEY (status),
+  KEY (`last_reply_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='留言评论表 by mashanling on 2013-02-27 11:48:16';
+
 /*tb_field表单域表*/
 CREATE TABLE `tb_field` (
   `field_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
@@ -99,18 +118,8 @@ CREATE TABLE `tb_field` (
 
 /*tb_guestbook留言表*/
 CREATE TABLE `tb_guestbook` (
-  `guestbook_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
-  `username` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-   last_reply_time int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复时间',
-  `is_admin` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0管理员;1用户.默认0',
-  `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
-  `node` varchar(24) NOT NULL DEFAULT '' COMMENT '节点',
-  `content` text NOT NULL COMMENT '留言内容',
-  PRIMARY KEY (`guestbook_id`),
-  KEY parent_id,
-  KEY `last_reply_time` (`last_reply_time`)
+  `comments_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE,
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='留言表 by mashanling on 2013-02-26 16:02:11';
 
 /*tb_log系统日志表*/
