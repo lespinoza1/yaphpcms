@@ -32,3 +32,5 @@ define('TB_MENU'               , TB_PREFIX . 'menu');           //后台菜单�
 define('TB_LOG'                , TB_PREFIX . 'log');            //系统日志表
 define('TB_FIELD'              , TB_PREFIX . 'field');          //表单域表 by mrmsl on 2012-08-01 17:15:55
 define('TB_SESSION'            , TB_PREFIX . 'session');        //session表 by mrmsl on 2012-09-18 16:16:56
+define('TB_GUESTBOOK'          , TB_PREFIX . 'guestbook');      //留言表 by mrmsl on 2013-02-26 17:46:53
+define('TB_COMMENTS'           , TB_PREFIX . 'comments');       //留言评论表 by mrmsl on 2013-02-27 16:29:14

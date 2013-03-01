@@ -16,7 +16,7 @@ class GuestbookController extends BaseController {
     /**
      * @var bool $_init_model true实例对应模型。默认false
      */
-    protected $_init_model      = false;
+    protected $_init_model      = true;
 
     /**
      * 首页
@@ -24,8 +24,26 @@ class GuestbookController extends BaseController {
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-02-21 13:44:11
      *
-     * @return void 无返回值。如果未登陆跳转至登陆页
+     * @return void 无返回值
      */
     public function indexAction() {
+    }
+
+    /**
+     * 添加留言
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-02-26 17:44:43
+     *
+     * @return void 无返回值
+     */
+    public function addAction() {
+        $check = $this->_model->checkCreate();//自动创建数据
+
+        true !== $check && $this->_ajaxReturn(false, $check);//未通过验证
+
+        $this->_model->startTrans()->add();
+
+        return false;
     }
 }

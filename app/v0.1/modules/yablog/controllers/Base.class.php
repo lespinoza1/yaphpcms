@@ -176,7 +176,6 @@ class BaseController extends Yaf_Controller_Abstract {
             'IMGCACHE_JS'       => IMGCACHE_JS,
             'IMGCACHE_CSS'      => IMGCACHE_CSS,
             'IMGCACHE_IMG'      => IMGCACHE_IMG,
-            'LANG'              => L(),
             'SYS_CONFIG'        => sys_config()
         );
 
@@ -203,6 +202,9 @@ class BaseController extends Yaf_Controller_Abstract {
     /**
      * 设置子节点层次以及节点关系
      *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-03-01 13:46:01
+     *
      * @param string $level_field     层次字段。默认level
      * @param string $node_field      节点字段。默认node
      * @param string $parent_id_field 父id字段。默认paretn_id
@@ -210,11 +212,11 @@ class BaseController extends Yaf_Controller_Abstract {
      * @return bool true成功设置，否则false
      */
     protected function _setLevelAndNode($level_field = 'level', $node_field = 'node', $parent_id_field = 'parent_id') {
-        $cache_data   = $this->_getCache();
         $pk_field     = $this->_model->getPk();//主键
         $pk_value     = $this->_model->$pk_field;//主键值
         $parent_id    = $this->_model->$parent_id_field;//所属父类id
         $insert_id    = $this->_model->insert_id;//最后插入id
+        //$parent_info  = $this->_model->find($pk_field = );
 
         if ($parent_id && !isset($cache_data[$parent_id])) {//未设置父类
             return false;
