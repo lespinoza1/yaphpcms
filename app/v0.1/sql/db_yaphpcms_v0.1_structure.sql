@@ -79,6 +79,22 @@ CREATE TABLE `tb_area` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='国家地区表 by mashanling on 2012-12-27 11:35:41';
 
+/*tb_category博客分类表*/
+CREATE TABLE `tb_category` (
+  `cate_id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `cate_name` varchar(30) NOT NULL DEFAULT '' COMMENT '分类名称',
+  `en_name` varchar(15) NOT NULL DEFAULT '' COMMENT 'url英文名',
+  `parent_id` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
+  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1显示;0不显示。默认1',
+  `sort_order` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '排序，越小越靠前。默认其id',
+  `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
+  `node` varchar(20) NOT NULL DEFAULT '' COMMENT '节点',
+  seo_keywords varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
+  seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
+  PRIMARY KEY (`cate_id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客分类表 by mashanling on 2013-03-18 15:09:25';
+
 /*tb_comments留言评论表*/
 CREATE TABLE `tb_comments` (
   `comment_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
