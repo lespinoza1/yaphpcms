@@ -119,7 +119,7 @@ CREATE TABLE `tb_field` (
 /*tb_guestbook留言表*/
 CREATE TABLE `tb_guestbook` (
   `comments_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE,
+  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='留言表 by mashanling on 2013-02-26 16:02:11';
 
 /*tb_log系统日志表*/
@@ -176,17 +176,17 @@ CREATE TABLE `tb_session` (
 
 /*管理员表role_id系统角色id*/
 ALTER TABLE `tb_admin`
-ADD CONSTRAINT `tb_admin_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `tb_admin_role` (`role_id`) ON DELETE CASCADE;
+ADD CONSTRAINT `tb_admin_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `tb_admin_role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*管理员登陆历史表admin_id管理员id*/
 ALTER TABLE `tb_admin_login_history`
-ADD CONSTRAINT `tb_admin_login_history_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `tb_admin` (`admin_id`) ON DELETE CASCADE;
+ADD CONSTRAINT `tb_admin_login_history_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `tb_admin` (`admin_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*系统角色权限表role_id系统角色id及menu_id菜单id*/
 ALTER TABLE `tb_admin_role_priv`
-ADD CONSTRAINT `tb_admin_role_priv_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `tb_admin_role` (`role_id`) ON DELETE CASCADE,
-ADD CONSTRAINT `tb_admin_role_priv_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE;
+ADD CONSTRAINT `tb_admin_role_priv_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `tb_admin_role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `tb_admin_role_priv_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*表单域表menu_id菜单id*/
 ALTER TABLE `tb_field`
-ADD CONSTRAINT `tb_field_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE;
+ADD CONSTRAINT `tb_field_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE;
