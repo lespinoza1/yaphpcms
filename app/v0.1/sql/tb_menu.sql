@@ -3,22 +3,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES */;
 /*!40103 SET SQL_NOTES='ON' */;
 
-DROP TABLE IF EXISTS `tb_menu`;
-CREATE TABLE `tb_menu` (
-  `menu_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
-  `menu_name` char(30) NOT NULL DEFAULT '' COMMENT '菜单名称',
-  `controller` char(20) NOT NULL DEFAULT '' COMMENT '控制器',
-  `action` char(20) NOT NULL DEFAULT '' COMMENT '操作',
-  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否显示',
-  `sort_order` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
-  `node` char(20) NOT NULL DEFAULT '' COMMENT '节点',
-  `memo` char(60) NOT NULL DEFAULT '' COMMENT '备注',
-  PRIMARY KEY (`menu_id`),
-  KEY `controller` (`controller`),
-  KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=gbk COMMENT='后台管理菜单表 by mashanling on 2012-12-27 12:44:04';
 
 INSERT INTO `tb_menu` VALUES (1,24,'菜单管理','menu','#',1,0,2,'24,1','');
 INSERT INTO `tb_menu` VALUES (2,1,'添加菜单','menu','add',1,1,3,'24,1,2','');
@@ -66,6 +50,20 @@ INSERT INTO `tb_menu` VALUES (78,42,'验证码设置','system','verifycode',1,78
 INSERT INTO `tb_menu` VALUES (79,24,'模块设置','module','#',1,79,2,'24,79','');
 INSERT INTO `tb_menu` VALUES (80,79,'管理员模块','module','admin',1,80,3,'24,79,80','');
 INSERT INTO `tb_menu` VALUES (81,0,'mrmsl','test','test',0,81,1,'81','');
+INSERT INTO `tb_menu` VALUES (82,25,'事务回滚SQL','log','rollbackSql',1,82,3,'24,25,82','');
+INSERT INTO `tb_menu` VALUES (83,85,'留言管理','guestbook','list',1,83,2,'85,83','');
+INSERT INTO `tb_menu` VALUES (84,79,'留言模块','module','guestbook',1,84,3,'24,79,84','');
+INSERT INTO `tb_menu` VALUES (85,0,'内容管理','content','#',1,85,1,'85','');
+INSERT INTO `tb_menu` VALUES (86,85,'博客管理','blog','#',1,86,2,'85,86','');
+INSERT INTO `tb_menu` VALUES (87,86,'博客列表','blog','list',1,87,3,'85,86,87','');
+INSERT INTO `tb_menu` VALUES (88,86,'添加博客','blog','add',1,88,3,'85,86,88','');
+INSERT INTO `tb_menu` VALUES (89,85,'博客分类管理','category','#',1,89,2,'85,89','');
+INSERT INTO `tb_menu` VALUES (90,89,'分类列表','category','list',1,90,3,'85,89,90','');
+INSERT INTO `tb_menu` VALUES (91,89,'添加分类','category','add',1,91,3,'85,89,91','');
+INSERT INTO `tb_menu` VALUES (92,85,'评论管理','comment','list',1,92,2,'85,92','');
+INSERT INTO `tb_menu` VALUES (93,85,'微博管理','miniblog','#',1,93,2,'85,93','');
+INSERT INTO `tb_menu` VALUES (94,93,'微博列表','miniblog','list',1,94,3,'85,93,94','');
+INSERT INTO `tb_menu` VALUES (95,93,'添加微博','miniblog','add',1,95,3,'85,93,95','');
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
