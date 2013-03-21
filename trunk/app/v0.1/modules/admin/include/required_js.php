@@ -22,6 +22,7 @@ return array(
     'store/Yap.store.Role.js',
     'store/Yap.store.Tree.js',
     'store/Yap.store.Area.js',//国家地区 by mrmsl 22:05 2012-7-18
+    'store/Yap.store.Category.js',//博客分类 by mrmsl on 2013-03-21 16:26:55
     'ux/Yap.ux.RoleCombo.js',
     'ux/Yap.ux.TreePicker.js',//下拉树 by mrmsl on 2012-08-02 18:25:52
     'ux/Yap.ux.Form.js',//表单 by mrmsl on 2012-12-11 15:55:54

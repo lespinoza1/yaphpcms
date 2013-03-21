@@ -89,9 +89,11 @@ CREATE TABLE `tb_category` (
   `sort_order` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '排序，越小越靠前。默认其id',
   `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
   `node` varchar(20) NOT NULL DEFAULT '' COMMENT '节点',
-  seo_keywords varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
+  seo_keyword varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
   seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
   PRIMARY KEY (`cate_id`),
+  UNIQUE KEY(`cate_name`),
+  UNIQUE KEY(`en_name`),
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客分类表 by mashanling on 2013-03-18 15:09:25';
 
