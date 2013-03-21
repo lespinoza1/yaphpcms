@@ -136,8 +136,8 @@ CREATE TABLE `tb_field` (
 
 /*tb_guestbook留言表*/
 CREATE TABLE `tb_guestbook` (
-  `comments_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  `comment_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='留言表 by mashanling on 2013-02-26 16:02:11';
 
 /*tb_log系统日志表*/
