@@ -126,9 +126,6 @@ Ext.define('Yap.ux.Ueditor', {
             });
             this.editor = UE.getEditor(this.bodyEl.id, this.editorConfig);
             this.editorId = this.editor.id;
-            this.editor.addListener('contentchange', Ext.bind(function() {
-                this.validate();
-            }, this));
         }, this);
     },
 
