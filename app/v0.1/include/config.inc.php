@@ -33,6 +33,7 @@ return array(
     'TMPL_EXCEPTION_FILE'   => VIEW_PATH . 'error/error.phtml',//错误模板
     //smarty 模板设置
     'SMARTY_CONFIG'         => array(
+        'caching'           => true,
         'left_delimiter'    => '{{',
         'right_delimiter'   => '}}',
         'template_dir'      => THEME_PATH,

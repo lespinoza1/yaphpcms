@@ -34,3 +34,4 @@ define('TB_FIELD'              , TB_PREFIX . 'field');          //表单域表 b
 define('TB_SESSION'            , TB_PREFIX . 'session');        //session表 by mrmsl on 2012-09-18 16:16:56
 define('TB_GUESTBOOK'          , TB_PREFIX . 'guestbook');      //留言表 by mrmsl on 2013-02-26 17:46:53
 define('TB_COMMENTS'           , TB_PREFIX . 'comments');       //留言评论表 by mrmsl on 2013-02-27 16:29:14
+define('TB_CATEGORY'           , TB_PREFIX . 'category');       //博客分类表 by mrmsl on 2013-03-21 14:48:58
