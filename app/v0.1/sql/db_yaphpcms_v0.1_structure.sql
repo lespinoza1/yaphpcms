@@ -136,8 +136,7 @@ CREATE TABLE `tb_field` (
 
 /*tb_guestbook留言表*/
 CREATE TABLE `tb_guestbook` (
-  `comment_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `comment_id` smallint(3) unsigned NOT NULL DEFAULT 0 COMMENT 'tb_comments comment_id'
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='留言表 by mashanling on 2013-02-26 16:02:11';
 
 /*tb_log系统日志表*/
@@ -208,3 +207,7 @@ ADD CONSTRAINT `tb_admin_role_priv_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `t
 /*表单域表menu_id菜单id*/
 ALTER TABLE `tb_field`
 ADD CONSTRAINT `tb_field_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+/*留言表comment_id 留言评论id*/
+ALTER TABLE `tb_guestbook`
+ADD CONSTRAINT `tb_guestbook_ibfk_1` FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE;
