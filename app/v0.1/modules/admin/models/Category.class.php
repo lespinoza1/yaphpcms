@@ -43,7 +43,7 @@ class CategoryModel extends BaseModel {
         //seo关键字
         'seo_keyword'      => array('validate' => array('notblank#SEO_KEYWORD', '_checkLength#SEO_KEYWORD#value|6|180')),
         //seo描述
-        'seo_description'  => array('validate' => array('notblank#SEO_DESCRIPTION', '_checkLength#SEO_DESCRIPTION#value|60|300')),
+        'seo_description'  => array('validate' => array('notblank#SEO_DESCRIPTION', '_checkLength#SEO_DESCRIPTION#value|6|300')),
         'is_show'          => array('filter' => 'int'),//是否显示
         'sort_order'       => array('filter' => 'int', 'validate' => 'unsigned#ORDER#-2'),//排序
     );

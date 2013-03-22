@@ -24,7 +24,7 @@ Ext.define('Yap.controller.Category', {
      * @cfg {String}
      * 查询字段
      */
-    queryField: 'column,keyword,match_mode,is_show',//查询字段 by mrmsl on 2012-08-15 11:44:54
+    queryField: 'column,keyword,match_mode,is_show',//查询字段
 
     /**
      * 获取表单域
@@ -63,7 +63,7 @@ Ext.define('Yap.controller.Category', {
                     folderSort: false,
                     url: this.getActionUrl(false, 'publicCategory', 'unshift&cate_id={0}&parent_id={1}'.format(data[this.idProperty], data.parent_id))
                 }),
-                storeOnLoad: function(store) {//添加指定分类子分类，设置指定分类相关信息 by mrmsl on 2012-08-21 13:44:41
+                storeOnLoad: function(store) {//添加指定分类子分类，设置指定分类相关信息
                     var data = store.proxy.reader.rawData;
 
                     if (data && data.parent_data) {
@@ -84,11 +84,11 @@ Ext.define('Yap.controller.Category', {
             },
             extField.sortOrderField(),//排序
             extField.checkbox('is_show', Ext.valueFrom(data.is_show, 1), 'SHOW'),//是否显示,
-            extField.textarea('seo_keyword', 'PLEASE_ENTER,SEO_KEYWORD', 'SEO_KEYWORD', '', {width: 800, height: 50}),//SEO关键字
-            extField.textareaComment(lang('LT_BYTE').format(lang('BETWEEN_BYTE').format(6, 180))),//SEO关键字提示
-            extField.textarea('seo_description', 'PLEASE_ENTER,SEO_DESCRIPTION', 'SEO_DESCRIPTION', '', {width: 800, height: 70}),//SEO描述
-            extField.textareaComment(lang('BETWEEN_BYTE').format(60, 300)),//SEO描述提示
-            this.btnSubmit()//通用提交按钮 by mrmsl on 2012-08-28 10:21:52
+            extField.textarea('seo_keyword', 'PLEASE_ENTER,SEO_KEYWORD', 'SEO_KEYWORD', '', {width: 800, height: 50, minLength: 6, maxLength: 300}),//SEO关键字
+            extField.textareaComment(lang('BETWEEN_BYTE').format(6, 180)),//SEO关键字提示
+            extField.textarea('seo_description', 'PLEASE_ENTER,SEO_DESCRIPTION', 'SEO_DESCRIPTION', '', {width: 800, height: 70, minLength: 6, maxLength: 300}),//SEO描述
+            extField.textareaComment(lang('BETWEEN_BYTE').format(6, 300)),//SEO描述提示
+            this.btnSubmit()//通用提交按钮
         ];
     },//end formField
 
@@ -113,19 +113,11 @@ Ext.define('Yap.controller.Category', {
             dataIndex: this.idProperty,
             sortable: false
         }, {
-            header: lang('CONTROLLER'),//控制器
-            width: 120,
-            dataIndex: 'controller',
+            header: lang('CATEGORY_EN_NAME'),//url英文名
+            width: 80,
+            dataIndex: 'en_name',
             renderer: function(v) {
-                return me.searchReplaceRenderer(v, 'model');
-            },
-            sortable: false
-        }, {
-            header: lang('ACTION'),//操作方法
-            dataIndex: 'action',
-            width: 120,
-            renderer: function(v) {
-                return me.searchReplaceRenderer(v, 'view');
+                return me.searchReplaceRenderer(v, 'en_name');
             },
             sortable: false
         }, {
@@ -172,7 +164,7 @@ Ext.define('Yap.controller.Category', {
         data.keyword = data.keyword || '';
         data.column = data.column || this.nameColumn;
         data.match_mode = data.match_mode || 'eq';//匹配模式
-        data.is_show = Ext.valueFrom(data.is_show, '-1');//是否显示 by mrmsl on 2012-09-15 12:20:18
+        data.is_show = Ext.valueFrom(data.is_show, '-1');//是否显示
 
         var me = this, options = {
             xtype: 'treepanel',
@@ -190,9 +182,6 @@ Ext.define('Yap.controller.Category', {
     loadEditDataSuccess: function(form, action) {
         var data = action.result.data;
         form.findField('_parent_name').setRawValue(data.parent_name);
-        var field = form.findField('_priv');
-        field.setRawValue(data.priv);//setValue => setRawValue by mrmsl on 2012-08-21 13:48:14
-        field.selectValue = data._priv_id.split(',');//设置已选中值
     },
 
     /**
@@ -210,7 +199,7 @@ Ext.define('Yap.controller.Category', {
         var url = this.getActionUrl(false, 'list', queryData);
 
         if (!this._store) {//未创建
-            this._store = Ext.create('Yap.store.Tree', {
+            this._store = Ext.create('Yap.store.Category', {
                 url: url
             });
 
@@ -220,7 +209,7 @@ Ext.define('Yap.controller.Category', {
                 });
             });
 
-            this.setTreeStoreOnLoad(this._store);//设置总数信息 by mrmsl on 2012-08-13 14:12:06
+            this.setTreeStoreOnLoad(this._store);//设置总数信息
 
         }
 
@@ -244,7 +233,7 @@ Ext.define('Yap.controller.Category', {
             items: [{
                 text: lang('OPERATE'),
                 itemId: 'btn',
-                cate: [this.deleteItem(), {
+                menu: [this.deleteItem(), {
                     text: lang('SHOW'),
                     handler: function() {
                         var selection = me.hasSelect(me._listgrid, ['is_show', 0]);
@@ -257,19 +246,20 @@ Ext.define('Yap.controller.Category', {
                         selection.length && me.setOneOrZero(selection[0], 0, 'is_show', lang('YOU_CONFIRM,HIDE,SELECTED,RECORD'), selection[1]);
                     }
                 }]//end button cate
-            }, '-', Yap.Field.combo().show(),//显示状态 by mrmsl on 2012-09-15 12:06:44
+            }, '-', Yap.Field.combo().show(),//显示状态
             {
                 xtype: 'combobox',//搜索字段
                 width: 70,
                 itemId: 'column',
                 store: [
                     [this.nameColumn, lang('MODULE_NAME_CATEGORY,NAME')],
-                    ['model', lang('CONTROLLER')],
-                    ['view', lang('ACTION')]
+                    ['en_name', lang('CATEGORY_EN_NAME')],
+                    ['seo_keyword', lang('SEO_KEYWORD')],
+                    ['SEO_DESCRIPTION', lang('SEO_DESCRIPTION')]
                 ],
                 value: data.column,
                 editable: false
-            }, Yap.Field.combo().matchMode(),//匹配模式 by mrmsl on 2012-07-28 17:59:23
+            }, Yap.Field.combo().matchMode(),//匹配模式
             Yap.Field.field().keywordField(data.keyword),//关键字输入框
             this.btnSearch(function() {
                 var ownerCt = this.ownerCt;

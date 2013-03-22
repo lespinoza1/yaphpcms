@@ -76,7 +76,7 @@ class CategoryController extends BaseController {
      * {@inheritDoc}
      */
     protected function _infoCallback(&$info) {
-        $this->_treeInfoCallback($info);
+        $this->_treeInfoCallback($info, $this->_name_column);
     }
 
     /**
@@ -131,12 +131,9 @@ class CategoryController extends BaseController {
             $keyword     = Filter::string('keyword', 'get');//搜索关键字
             $is_show     = Filter::int('is_show', 'get');//是否显示 by mrmsl on 2012-09-15 12:14:57
 
-            if (-1 != $is_show) {
-                $this->_queryTreeWhere = array('is_show' => array('eq', $is_show));
-                $this->_queryTree($column_arr, $keyword);
-            }
+            -1 != $is_show && $this->_queryTreeWhere = array('is_show' => array('eq', $is_show));
 
-            $keyword && $this->_queryTree($column, $keyword);
+            $this->_queryTree($column, $keyword);
         }
         elseif ($cate_id) {
             $this->_ajaxReturn(true, '', $this->_getTreeData($cate_id, false));
