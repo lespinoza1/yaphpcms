@@ -79,6 +79,33 @@ CREATE TABLE `tb_area` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='国家地区表 by mashanling on 2012-12-27 11:35:41';
 
+/*tb_blog博客表*/
+CREATE TABLE `tb_blog` (
+  `blog_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `title` varchar(60) NOT NULL DEFAULT '' COMMENT '标题',
+  `cate_id` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '分类id',
+  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+   update_time int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+   status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布;2已删除',
+  `sort_order` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '排序，越小越靠前。默认其id',
+  `hits` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
+  `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
+  seo_keyword varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
+  seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
+  `content` text NOT NULL COMMENT '内容',
+  PRIMARY KEY (`blog_id`),
+  UNIQUE KEY(`title`),
+  FOREIGN KEY (`cate_id`) REFERENCES `tb_category` (`cate_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客表 by mashanling on 2013-03-22 15:56:41';
+
+/*tb_blog_comments博客评论表*/
+CREATE TABLE `tb_blog_comments` (
+  `blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '微博id',
+  `comment_id` smallint(3) unsigned NOT NULL DEFAULT 0 COMMENT 'tb_comments comment_id',
+  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客评论表 by mashanling on 2013-03-22 17:34:52';
+
 /*tb_category博客分类表*/
 CREATE TABLE `tb_category` (
   `cate_id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
@@ -172,6 +199,24 @@ CREATE TABLE `tb_menu` (
   KEY `action` (`action`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='菜单表 by mashanling on 2012-12-27 12:44:04';
 
+/*tb_miniblog微博表*/
+CREATE TABLE `tb_miniblog` (
+  `blog_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `hits` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
+  `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
+  `content` text NOT NULL COMMENT '内容',
+  PRIMARY KEY (`blog_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='微博表 by mashanling on 2013-03-22 17:10:34';
+
+/*tb_miniblog_comments微博评论表*/
+CREATE TABLE `tb_miniblog_comments` (
+  `blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '微博id',
+  `comment_id` smallint(3) unsigned NOT NULL DEFAULT 0 COMMENT 'tb_comments comment_id',
+  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`blog_id`) REFERENCES `tb_miniblog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='微博评论表 by mashanling on 2013-02-26 16:02:11';
+
 /*tb_session session表*/
 CREATE TABLE `tb_session` (
   `session_id` varchar(32) NOT NULL DEFAULT '' COMMENT 'session id',
@@ -187,6 +232,15 @@ CREATE TABLE `tb_session` (
   PRIMARY KEY (`session_id`),
   KEY `last_time` (`last_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='session管理表 by mashanling on 2012-09-18 14:50:30';
+
+/*tb_tags标签表*/
+CREATE TABLE `tb_tag` (
+  `tag_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `blog_id` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '博客id',
+  tag char(20) NOT NULL DEFAULT '' COMMENT '标签',
+  PRIMARY KEY(tag_id)
+  FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='标签表 by mashanling on 2013-03-22 17:07:22';
 
 
 /*外键约束*/
