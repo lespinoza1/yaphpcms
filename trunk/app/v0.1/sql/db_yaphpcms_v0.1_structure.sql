@@ -238,7 +238,7 @@ CREATE TABLE `tb_tag` (
   `tag_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `blog_id` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '博客id',
   tag char(20) NOT NULL DEFAULT '' COMMENT '标签',
-  PRIMARY KEY(tag_id)
+  PRIMARY KEY(tag_id),
   FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='标签表 by mashanling on 2013-03-22 17:07:22';
 
