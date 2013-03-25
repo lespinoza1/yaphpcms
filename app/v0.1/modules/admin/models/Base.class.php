@@ -390,6 +390,15 @@ class BaseModel extends Model {
                     break;
             }//end switch
         }//end if
+        else {
+            $validate = join('#', $validate);
+
+            foreach ($this->_auto_validate_map as $k => $v) {//MUST_VALIDATE => self::MUST_VALIDATE
+                $validate = strpos($validate, $k) ? str_replace($k, $v, $validate) : $validate;
+            }
+
+            $validate = explode('#', $validate);
+        }
 
         array_unshift($validate, $field_name);
 
@@ -481,6 +490,15 @@ class BaseModel extends Model {
      * @return void 无返回值
      */
     public function __construct() {
+
+        $this->_auto_validate_map = array(//验证key/value by mrmsl on 2013-03-23 14:19:38
+            'MODEL_INSERT'      => self::MODEL_INSERT,
+            'MODEL_UPDATE'      => self::MODEL_UPDATE,
+            'MODEL_BOTH'        => self::MODEL_BOTH,
+            'EXISTS_VALIDATE'   => self::EXISTS_VALIDATE,
+            'MUST_VALIDATE'     => self::MUST_VALIDATE,
+            'VALUE_VALIDATE'    => self::VALUE_VALIDATE,
+        );
 
         if ($this->_db_fields) {//字段
             $db_fields = array();
