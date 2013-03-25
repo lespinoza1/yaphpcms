@@ -29,8 +29,6 @@ return array(
     'CN_SHUOMING'               => '说明',//by mrmsl 2013-02-04 13:53:36
     'CN_SUOYOU'                 => '所有',//by mrmsl on 2012-08-20 10:37:05
     'CN_TO_BYTE'                => '一个汉字三个字节',
-    'CN_WEI'                    => '未',//by mrmsl on 2012-09-15 11:19:15
-    'CN_YI'                     => '已',//by mrmsl on 2012-09-15 11:19:23
     'COLLAPSE'                  => '折叠',
     'CONFIRM_DELETE'            => '您确定要删除{0}？',
     'CONFLICT'                  => '冲突',//by mrmsl on 2012-09-13 11:46:58

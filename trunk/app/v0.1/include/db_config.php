@@ -35,3 +35,8 @@ define('TB_SESSION'            , TB_PREFIX . 'session');        //session表 by 
 define('TB_GUESTBOOK'          , TB_PREFIX . 'guestbook');      //留言表 by mrmsl on 2013-02-26 17:46:53
 define('TB_COMMENTS'           , TB_PREFIX . 'comments');       //留言评论表 by mrmsl on 2013-02-27 16:29:14
 define('TB_CATEGORY'           , TB_PREFIX . 'category');       //博客分类表 by mrmsl on 2013-03-21 14:48:58
+define('TB_BLOG'               , TB_PREFIX . 'blog');           //博客表 by mrmsl on 2013-03-23 13:31:47
+define('TB_BLOG_REVIEW'        , TB_PREFIX . 'blog_review');    //博客评论表 by mrmsl on 2013-03-23 13:31:51
+define('TB_MINIBLOG'           , TB_PREFIX . 'miniblog');       //微博表 by mrmsl on 2013-03-23 13:31:57
+define('TB_MINIBLOG_REVIEW'    , TB_PREFIX . 'miniblog_review');//微博评论表 by mrmsl on 2013-03-23 13:32:00
+define('TB_TAG'                , TB_PREFIX . 'tag');            //标签表 by mrmsl on 2013-03-21 14:48:58
