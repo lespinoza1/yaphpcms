@@ -1291,13 +1291,14 @@ class Model {
      * 查询数据
      *
      * @author          liu21st <liu21st@gmail.com>
-     * @lastmodify      2013-01-21 15:09:01 by mrmsl
+     * @lastmodify      2013-03-26 10:56:13 by mrmsl
      *
-     * @param mixed $options 表达式参数
+     * @param mixed $options            表达式参数
+     * @param bool  $set_data_property  true设置$this->_data = $result;。默认false
      *
      * @return mixed 查询成功，如果有数据，返回该数据数组，否则返回空数组。查询失败则返回false
      */
-    public function find($options = array()) {
+    public function find($options = array(), $set_data_property = false) {
 
         if (is_numeric($options) || is_string($options)) {
             $where[$this->getPk()] = $options;
@@ -1314,6 +1315,10 @@ class Model {
         }
         elseif (empty($result_set)) {//查询结果为空
             return array();
+        }
+        //不需要设置$this->_data。如果true，在添加时，有调用->find()时，原来已经验证好的$_POST数据将被覆盖，造成添加数据不一致 by mrmsl on 2013-03-26 10:56:04
+        elseif (!$set_data_property) {
+            return $result_set[0];
         }
 
         $this->_data = $result_set[0];
