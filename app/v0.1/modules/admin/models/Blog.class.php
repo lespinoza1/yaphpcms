@@ -43,7 +43,7 @@ class BlogModel extends BaseModel {
         //所属分类id
         'cate_id'          => array('filter' => 'int', 'validate' => '_checkCateId#PLEASE_SELECT,BELONG_TO_CATEGORY#data'),
 
-        //用户名
+        //标题
         'title'            => array('validate' => array('notblank#TITLE', 'title#{%TITLE,EXIST}#VALUE_VALIDATE#unique', '_checkLength#TITLE#value|0|60')),
 
         //seo关键字

@@ -26,9 +26,7 @@ class BlogController extends BaseController {
      * {@inheritDoc}
      */
     protected function _infoCallback(&$cate_info) {
-        unset($cate_info['password']);
-        $cate_info['lock_start_time'] = $cate_info['lock_start_time'] ? new_date(sys_config('sys_timezone_datetime_format'), $cate_info['lock_start_time']) : '';
-        $cate_info['lock_end_time'] = $cate_info['lock_end_time'] ? new_date(sys_config('sys_timezone_datetime_format'), $cate_info['lock_end_time']) : '';
+        $cate_info['add_time'] = new_date(sys_config('sys_timezone_datetime_format'), $cate_info['add_time']);
     }
 
     /**
@@ -47,7 +45,6 @@ class BlogController extends BaseController {
 
         $pk_field  = $this->_pk_field;//主键
         $pk_value  = $this->_model->$pk_field;//博客id
-
         $data      = $this->_model->getProperty('_data');//数据，$model->data 在save()或add()后被重置为array()
         $diff_key  = 'title,cate_name,status,seo_keyword,seo_descriptions,sort_order';//比较差异字段
         $msg       = L($pk_value ? 'EDIT' : 'ADD');//添加或编辑
@@ -72,7 +69,7 @@ class BlogController extends BaseController {
             $blog_info['cate_name'] = $cate_info['cate_name'];//所属分类名
 
             $diff = $this->_dataDiff($blog_info, $data, $diff_key);//差异
-            var_dump($blog_info, $data);
+
             $this->_model->addLog($msg . L('MODULE_NAME_BLOG')  . "{$blog_info['title']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
@@ -87,6 +84,18 @@ class BlogController extends BaseController {
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
     }//end addAction
+
+    /**
+     * 获取博客具体信息
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-03-26 12:14:15
+     *
+     * @return $this->_info()结果
+     */
+    function infoAction() {
+        return $this->_info(false);
+    }
 
     /**
      * 管理员列表
@@ -133,7 +142,7 @@ class BlogController extends BaseController {
             $where['a.lock_end_time'] = array('ELT', APP_NOW_TIME);
         }
         elseif ($is_lock == 1) {//未锁定 by mrmsl on 2012-09-15 11:26:44
-            $where['a.lock_start_time'] = array('ELT', APP_NOW_TIME);
+            $where['a.add_time'] = array('ELT', APP_NOW_TIME);
             $where['a.lock_end_time'] = array('EGT', APP_NOW_TIME);
         }
 
@@ -158,11 +167,11 @@ class BlogController extends BaseController {
         }
 
         $now       = APP_NOW_TIME;
-        $fields    = str_replace(array(',a.password', ',a.mac_address', ',a.lock_start_time', ',a.lock_end_time', ',a.lock_memo'), '', join(',a.', $db_fields));
+        $fields    = str_replace(array(',a.password', ',a.mac_address', ',a.add_time', ',a.lock_end_time', ',a.lock_memo'), '', join(',a.', $db_fields));
         $page_info = Filter::page($total);
         $data      = $this->_model->alias('a')
         ->join('JOIN ' . TB_BLOG_ROLE . ' AS r ON a.cate_id=r.cate_id')
-        ->where($where)->field($fields . ',r.role_name,' . ("(a.lock_start_time AND a.lock_start_time<{$now} AND a.lock_end_time AND a.lock_end_time>{$now}) AS is_lock"))
+        ->where($where)->field($fields . ',r.role_name,' . ("(a.add_time AND a.add_time<{$now} AND a.lock_end_time AND a.lock_end_time>{$now}) AS is_lock"))
         ->limit($page_info['limit'])
         ->order(($sort == 'is_lock' ? 'is_lock' : 'a.' .$sort) . ' ' . $order)->select();
 
