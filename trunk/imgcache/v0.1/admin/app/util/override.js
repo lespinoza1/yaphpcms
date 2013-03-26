@@ -13,6 +13,7 @@ Ext.Loader.setConfig({//路径
     paths: {
         Yap: System.sys_base_admin_imgcache + 'app',
         'Yap.ux.TabPanel': System.sys_base_admin_imgcache + 'app/ux/Yap.ux.TabPanel.js',
+        'Yap.ux.Ueditor': System.sys_base_admin_imgcache + 'app/ux/Yap.ux.Ueditor.js',
         'Yap#container': System.sys_base_admin_imgcache + 'app/container/',
         'Yap#controller': System.sys_base_admin_imgcache + 'app/controller/',
         'Yap#store': System.sys_base_admin_imgcache + 'app/store/',
