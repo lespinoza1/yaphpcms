@@ -79,14 +79,21 @@ CREATE TABLE `tb_area` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='国家地区表 by mashanling on 2012-12-27 11:35:41';
 
-/*tb_blog博客表*/
+/*tb_blog博客表
+ALTER TABLE tb_blog
+MODIFY status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布',
+ADD COLUMN is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除' AFTER status,
+ADD INDEX status_delete(status, is_delete, cate_id)
+*/
+
 CREATE TABLE `tb_blog` (
   `blog_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `title` varchar(60) NOT NULL DEFAULT '' COMMENT '标题',
   `cate_id` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '分类id',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
    update_time int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-   status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布;2已删除',
+   status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布',
+   is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除',
   `sort_order` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '排序，越小越靠前。默认其id',
   `hits` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
   `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
@@ -95,7 +102,8 @@ CREATE TABLE `tb_blog` (
   `content` text NOT NULL COMMENT '内容',
   PRIMARY KEY (`blog_id`),
   UNIQUE KEY(`title`),
-  FOREIGN KEY (`cate_id`) REFERENCES `tb_category` (`cate_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`cate_id`) REFERENCES `tb_category` (`cate_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY status_delete(status, is_delete, cate_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客表 by mashanling on 2013-03-22 15:56:41';
 
 /*tb_blog_comments博客评论表*/
