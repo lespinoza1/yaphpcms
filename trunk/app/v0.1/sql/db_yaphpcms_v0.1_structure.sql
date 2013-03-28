@@ -83,7 +83,8 @@ CREATE TABLE `tb_area` (
 ALTER TABLE tb_blog
 MODIFY status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布',
 ADD COLUMN is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除' AFTER status,
-ADD INDEX status_delete(status, is_delete, cate_id)
+ADD COLUMN origin varchar(200) NOT NULL DEFAULT '' COMMENT '来源',
+ADD INDEX status_delete(status, is_delete)
 */
 
 CREATE TABLE `tb_blog` (
