@@ -81,10 +81,11 @@ CREATE TABLE `tb_area` (
 
 /*tb_blog博客表
 ALTER TABLE tb_blog
-MODIFY status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布',
-ADD COLUMN is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除' AFTER status,
-ADD COLUMN origin varchar(200) NOT NULL DEFAULT '' COMMENT '来源',
-ADD INDEX status_delete(status, is_delete)
+MODIFY status is_issue tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布',
+ADD COLUMN is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除' AFTER is_issue,
+ADD COLUMN from_name varchar(200) NOT NULL DEFAULT '' COMMENT '来源名称',
+ADD COLUMN from_url varchar(200) NOT NULL DEFAULT '' COMMENT '来源url',
+ADD INDEX issue_delete(is_issue, is_delete)
 */
 
 CREATE TABLE `tb_blog` (
@@ -93,18 +94,20 @@ CREATE TABLE `tb_blog` (
   `cate_id` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '分类id',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
    update_time int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-   status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布',
+   is_issue tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未发布;1已发布',
    is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除',
   `sort_order` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '排序，越小越靠前。默认其id',
   `hits` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
   `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
-  seo_keyword varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
-  seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
+   seo_keyword varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
+   seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
   `content` text NOT NULL COMMENT '内容',
+  from_name varchar(200) NOT NULL DEFAULT '' COMMENT '来源名称',
+  from_url varchar(200) NOT NULL DEFAULT '' COMMENT '来源url',
   PRIMARY KEY (`blog_id`),
   UNIQUE KEY(`title`),
   FOREIGN KEY (`cate_id`) REFERENCES `tb_category` (`cate_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  KEY status_delete(status, is_delete, cate_id)
+  KEY issue_delete(is_issue, is_delete)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客表 by mashanling on 2013-03-22 15:56:41';
 
 /*tb_blog_comments博客评论表*/
