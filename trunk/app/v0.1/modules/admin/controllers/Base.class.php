@@ -960,7 +960,7 @@ class BaseController extends Yaf_Controller_Abstract {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-08-24 14:41:18
-     * @lastmodify      2013-01-21 16:48:08 by mrmsl
+     * @lastmodify      2013-03-28 12:16:42 by mrmsl
      *
      * @param string $field 字段。默认is_show
      *
@@ -970,10 +970,12 @@ class BaseController extends Yaf_Controller_Abstract {
         $status_arr = array(
             'is_show'     => array(0 => 'HIDE', 1 => 'SHOW'),//显示与隐藏
             'is_enable'   => array(0 => 'DISABLED', 1 => 'ENABLE'),//启用与禁用
+            'isDelete'    => array(0 => 'CN_WEI,DELETE', 1 => 'CN_YI,DELETE'),//删除与未删除
+            'is_issue'    => array(0 => 'CN_WEI,ISSUE',  1 => 'CN_YI,ISSUE'),//发布与未发布
         );
 
         $value = Filter::int($field) ? 1 : 0;
-        $this->_setField($field, $value, L($status_arr[$field][$value]));
+        $this->_setField('isDelete' == $field ? 'is_delete' : $field, $value, L($status_arr[$field][$value]));
     }
 
     /**
