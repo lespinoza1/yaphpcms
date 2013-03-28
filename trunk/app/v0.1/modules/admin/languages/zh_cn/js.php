@@ -30,6 +30,7 @@ return array(
     'CN_SUOYOU'                 => '所有',//by mrmsl on 2012-08-20 10:37:05
     'CN_TO_BYTE'                => '一个汉字三个字节',
     'COLLAPSE'                  => '折叠',
+    'COMMENTS'                  => '评论数',
     'CONFIRM_DELETE'            => '您确定要删除{0}？',
     'CONFLICT'                  => '冲突',//by mrmsl on 2012-09-13 11:46:58
     'CONTENT'                   => '内容',
@@ -42,6 +43,7 @@ return array(
     'FOR'                       => '为',//by mrmsl on 2012-09-20 10:37:59
     'FOR_EXAMPLE'               => '比如',
     'HEIGHT'                    => '高度',//by mrmsl on 2012-09-22 14:00:17
+    'HITS'                      => '点击数',
     'KEEP_BLANK'                => '留空',//by mrmsl on 2012-09-27 14:25:55
     'KEEP_BLANK_NOT_MODIFY_PASSWORD' => '不修改密码请留空',
     'KEYWORD'                   => '关键字',
