@@ -910,16 +910,19 @@ Ext.define('Yap.controller.Base', {
             is_show: ['HIDE', 'SHOW'],//显示与隐藏
             is_enable: ['DISABLED', 'ENABLE'],//启用与禁用
             is_restrict: ['RELEASE,CN_BANGDING,LOGIN', 'CN_BANGDING,LOGIN'],//绑定与不绑定登陆管理员
-            is_lock: ['RELEASE,LOCK', 'LOCK']//锁定与不锁定管理员
+            is_lock: ['RELEASE,LOCK', 'LOCK'],//锁定与不锁定管理员
+            is_delete: ['CN_WEI,DELETE', 'CN_YI,DELETE'],//删除与未删除
+            is_issue: ['CN_WEI,ISSUE', 'CN_YI,ISSUE']//发布与未发布
         };
-        var data = {};
+        var data = {}, a = field.indexOf('is_') == 0 ? field.substr(3) : field;
         data[this.idProperty] = pkValue;
         data[field] = val;
         var setted = {};
+
         setted[field] = val;
 
         var options = {
-            action: this.getActionUrl(false, field.indexOf('is_') == 0 ? field.substr(3) : field),
+            action: this.getActionUrl(false, 'delete' == a ? 'isDelete' : a),
             data: data,
             confirmText: confirmText,
             failedMsg: lang(fieldMap[field][val]) + lang('FAILURE'),
