@@ -283,7 +283,15 @@ class BaseModel extends Model {
                 case 'get_user_id'://用户id array('user_id', 'get_user_id', Model::MODEL_BOTH, 'function')
                 case 'get_client_ip'://用户ip  array('admin_ip', 'get_client_ip', Model::MODEL_INSERT, 'function', '1'),
                 case 'time'://时间戳array('last_time', 'time', Model::MODEL_BOTH, 'function'),
-                    $auto  = array($method, $params == 'insert' ? Model::MODEL_INSERT : Model::MODEL_BOTH, 'function');
+
+                    if ('insert' == $params) {
+                        $when = Model::MODEL_INSERT;
+                    }
+                    else {
+                        $when = isset($this->_auto_validate_map[$params]) ? $this->_auto_validate_map[$params] : Model::MODEL_BOTH;
+                    }
+
+                    $auto  = array($method, $when, 'function');
                     isset($params) ? $auto[] = $params : '';
                     break;
 
@@ -303,7 +311,6 @@ class BaseModel extends Model {
 
         array_unshift($auto, $field_name);
         $this->_auto[$field_name] = $auto;
-
         return $this;
     }//end _setAutoOperate
 
@@ -532,6 +539,7 @@ class BaseModel extends Model {
             foreach ($auto as $field => $v) {
                 $this->_setAutoOperate($field, $v);
             }
+
         }
 
         parent::__construct();

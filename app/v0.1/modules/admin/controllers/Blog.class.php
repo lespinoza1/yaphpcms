@@ -19,14 +19,25 @@ class BlogController extends BaseController {
     protected $_priv_map           = array(
         'delete'   => 'add',//删除
         'info'     => 'add',//具体信息
-        'show'     => 'add',//显示隐藏
+        'issue'    => 'add',//发布状态
+        'isdelete' => 'add',//删除状态
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function _beforeExec(&$pk_id, &$log) {
+        $log = join(', ', $pk_id);//操作日志
+
+        return null;
+    }
 
     /**
      * {@inheritDoc}
      */
     protected function _infoCallback(&$cate_info) {
         $cate_info['add_time'] = new_date(sys_config('sys_timezone_datetime_format'), $cate_info['add_time']);
+        $cate_info['cate_name'] = $this->_getCache($cate_info['cate_id'] . '.cate_name', 'Category');
     }
 
     /**
@@ -46,7 +57,7 @@ class BlogController extends BaseController {
         $pk_field  = $this->_pk_field;//主键
         $pk_value  = $this->_model->$pk_field;//博客id
         $data      = $this->_model->getProperty('_data');//数据，$model->data 在save()或add()后被重置为array()
-        $diff_key  = 'title,cate_name,status,seo_keyword,seo_descriptions,sort_order';//比较差异字段
+        $diff_key  = 'title,content,cate_name,is_issue,seo_keyword,seo_description,sort_order,is_delete';//比较差异字段
         $msg       = L($pk_value ? 'EDIT' : 'ADD');//添加或编辑
         $log_msg   = $msg . L('MODULE_NAME_BLOG,FAILURE');//错误日志
         $error_msg = $msg . L('FAILURE');//错误提示信息
@@ -98,6 +109,30 @@ class BlogController extends BaseController {
     }
 
     /**
+     * 删除状态
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-03-21 13:32:41
+     *
+     * @return void 无返回值
+     */
+    public function isDeleteAction() {
+        $this->_setOneOrZero('isDelete');
+    }
+
+    /**
+     * 发布状态
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-03-21 13:32:41
+     *
+     * @return void 无返回值
+     */
+    public function issueAction() {
+        $this->_setOneOrZero('is_issue');
+    }
+
+    /**
      * 管理员列表
      *
      * @author          mrmsl <msl-138@163.com>
@@ -108,9 +143,8 @@ class BlogController extends BaseController {
      */
     public function listAction() {
         $db_fields      = $this->_getDbFields();//表字段
-        $db_fields      = array_filter($db_fields, create_function('$v', 'return strpos($v, "_") !== 0;'));//过滤_开头
         $sort           = Filter::string('sort', 'get', $this->_pk_field);//排序字段
-        $sort           = in_array($sort, $db_fields) || $sort == 'is_lock' ? $sort : $this->_pk_field;
+        $sort           = in_array($sort, $db_fields) ? $sort : $this->_pk_field;
         $order          = empty($_GET['dir']) ? Filter::string('order', 'get') : Filter::string('dir', 'get');//排序
         $order          = toggle_order($order);
         $keyword        = Filter::string('keyword', 'get');//关键字
@@ -118,46 +152,39 @@ class BlogController extends BaseController {
         $date_end       = Filter::string('date_end', 'get');//注册结束时间
         $cate_id        = Filter::int('cate_id', 'get');//所属管理组
         $column         = Filter::string('column', 'get');//搜索字段
-        $is_lock        = Filter::int('is_lock', 'get');//锁定
-        $is_restrict    = Filter::int('is_restrict', 'get');//绑定登陆 by mrmsl on 2012-09-15 11:53:58
+        $is_delete      = Filter::int('is_delete', 'get');//删除
+        $is_issue       = Filter::int('is_issue', 'get');//状态
         $where          = array();
 
-        if ($keyword !== '' && in_array($column, array('username', 'realname'))) {
-            $where['a.' . $column] = $this->_buildMatchQuery('a.' . $column, $keyword, Filter::string('match_mode', 'get'));
+        if ($keyword !== '' && in_array($column, array('title', 'seo_keyword', 'seo_description', 'content', 'from_name', 'from_url'))) {
+            $where['' . $column] = $this->_buildMatchQuery('' . $column, $keyword, Filter::string('match_mode', 'get'));
         }
 
         if ($date_start && ($date_start = local_strtotime($date_start))) {
-            $where['a.add_time'][] = array('EGT', $date_start);
+            $where['add_time'][] = array('EGT', $date_start);
         }
 
         if ($date_end && ($date_end = local_strtotime($date_end))) {
-            $where['a.add_time'][] = array('ELT', $date_end);
+            $where['add_time'][] = array('ELT', $date_end);
         }
 
-        if (isset($where['a.add_time']) && count($where['a.add_time']) == 1) {
-            $where['a.add_time'] = $where['a.add_time'][0];
+        if (isset($where['add_time']) && count($where['add_time']) == 1) {
+            $where['add_time'] = $where['add_time'][0];
         }
 
-        if ($is_lock == 0) {//未锁定 by mrmsl on 2012-09-15 11:26:36
-            $where['a.lock_end_time'] = array('ELT', APP_NOW_TIME);
+        if (-1 != $is_delete) {//删除
+            $where['is_delete'] = $is_delete;
         }
-        elseif ($is_lock == 1) {//未锁定 by mrmsl on 2012-09-15 11:26:44
-            $where['a.add_time'] = array('ELT', APP_NOW_TIME);
-            $where['a.lock_end_time'] = array('EGT', APP_NOW_TIME);
+
+        if (-1 != $is_issue) {//状态
+            $where['is_issue'] = $is_issue;
         }
 
         if ($cate_id) {
-            $where['a.cate_id'] = $cate_id;
+            $where['cate_id'] = $cate_id;
         }
 
-        if ($is_restrict == 0) {
-            $where['a.is_restrict'] = $is_restrict;
-        }
-        elseif ($is_restrict == 1) {
-            $where['a.is_restrict'] = $is_restrict;
-        }
-
-        $total      = $this->_model->alias('a')->where($where)->count();
+        $total      = $this->_model->where($where)->count();
 
         if ($total === false) {//查询出错
             $this->_sqlErrorExit(L('QUERY,MODULE_NAME_BLOG') . L('TOTAL_NUM,ERROR'));
@@ -166,27 +193,20 @@ class BlogController extends BaseController {
             $this->_ajaxReturn(true, '', null, $total);
         }
 
-        $now       = APP_NOW_TIME;
-        $fields    = str_replace(array(',a.password', ',a.mac_address', ',a.add_time', ',a.lock_end_time', ',a.lock_memo'), '', join(',a.', $db_fields));
         $page_info = Filter::page($total);
-        $data      = $this->_model->alias('a')
-        ->join('JOIN ' . TB_BLOG_ROLE . ' AS r ON a.cate_id=r.cate_id')
-        ->where($where)->field($fields . ',r.role_name,' . ("(a.add_time AND a.add_time<{$now} AND a.lock_end_time AND a.lock_end_time>{$now}) AS is_lock"))
+        $data      = $this->_model
+        ->where($where)->field('content', true)
         ->limit($page_info['limit'])
-        ->order(($sort == 'is_lock' ? 'is_lock' : 'a.' .$sort) . ' ' . $order)->select();
+        ->order(('' .$sort) . ' ' . $order)->select();
 
         $data === false && $this->_sqlErrorExit(L('QUERY,MODULE_NAME_BLOG') . L('LIST,ERROR'));//出错
 
+        $cate_arr = $this->_getCache(false, 'Category');
+
+        foreach($data as &$v) {
+            $v['cate_name'] = $cate_arr[$v['cate_id']]['cate_name'];
+        }
+
         $this->_ajaxReturn(true, '', $data, $total);
     }//end listAction
-
-    /**
-     * 显示/隐藏
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-03-21 13:32:41void 无返回值
-     */
-    public function showAction() {
-        $this->_setOneOrZero();
-    }
 }

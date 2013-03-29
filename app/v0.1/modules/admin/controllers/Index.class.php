@@ -42,7 +42,7 @@ class IndexController extends BaseController {//继承BaseController by mrmsl on
      *
      * @author          mrmsl
      * @date            2012-07-02 11:12:49
-     * @lastmodify      2013-01-22 10:34:14 by mrmsl
+     * @lastmodify      2013-03-29 15:58:41 by mrmsl
      *
      * @return void 无返回值。如果未登陆跳转至登陆页
      */
@@ -59,6 +59,7 @@ class IndexController extends BaseController {//继承BaseController by mrmsl on
         $css_file .= css('extjs/v4.1.1a//resources/css/ext-all-gray.css,extjs/v4.1.1a/resources/css/ext-patch.css', COMMON_IMGCACHE);
         $css_file .= css('app.css', ADMIN_IMGCACHE . 'css/');
         $js_file   = $this->_loadTimeScript('LOAD_CSS_TIME');
+        $js_file  .= js('sea-1.3.1.js', false, COMMON_IMGCACHE . 'js/seajs/');//增加seajs by mrmsl on 2013-03-29 15:58:35
         $js_file  .= js('', true, COMMON_IMGCACHE . 'extjs/v4.1.1a/');
         $js_file  .= $this->_loadTimeScript('LOAD_EXT_TIME');
         $js_file  .= js('System.js', false, '/static/js/');
@@ -74,6 +75,8 @@ class IndexController extends BaseController {//继承BaseController by mrmsl on
         else {
             $js_file .= js('app/pack/app.js', false);
         }
+
+        //$js_file  .= js('editor_config.js', false, COMMON_IMGCACHE . 'ueditor/v1.2.5/');
 
         $js_file  .= $this->_loadTimeScript('LOAD_JS_TIME');
 
