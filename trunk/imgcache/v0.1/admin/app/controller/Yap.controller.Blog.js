@@ -19,30 +19,36 @@ Ext.define('Yap.controller.Blog', {
      * @cfg {String}
      * 查询字段
      */
-    queryField: 'sort,order,date_start,date_end,column,keyword,cate_id,status,page,match_mode',//查询字段
+    queryField: 'sort,order,date_start,date_end,column,keyword,cate_id,is_issue,is_delete,page,match_mode',//查询字段
+
+    constructor: function() {//构造函数
+        this.defineModel().defineStore();
+    },
 
     /**
      * @inheritdoc Yap.controller.Base#addAction
      */
     addAction: function (data) {
-        var callParent = this.callParent;
-        Ext.require('Yap.ux.Ueditor', function() {
-            var me = this,
-            options = {
-                listeners: {
-                    submitsuccess: function (form, action) {
-                        if (me.getEditRecord()) {
-                            //设置cate_name以form.updateRecord()更新所属分类
-                            form.findField('cate_name').setValue(form.findField('cate_id').getDisplayValue());
-                        }
-
-                        me._listgrid && form.findField(me.idProperty).getValue() == 0 && me.store().load();//新增
-                    }
+        var me = this,
+        options = {
+            listeners: {
+                submitsuccess: function (form, action) {
+                    form.findField('cate_name').setValue(form.findField('_picker_cate_name').getRawValue());
+                    me._listgrid && form.findField(me.idProperty).getValue() == 0 && me.store().load();//新增
                 }
-            };
+            }
+        };
 
-            callParent([data, options]);
-        }, this);
+        if (this.ueditor) {
+            return me.superclass.addAction.apply(this, [data, options]);
+        }
+
+        seajs.use([UEDITOR_HOME_URL + 'editor_config', UEDITOR_HOME_URL + 'ueditor.min'], function() {
+            Ext.require('Yap.ux.Ueditor', function () {
+                me.ueditor = true;
+                me.superclass.addAction.apply(this, [data, options]);
+            }, me);
+        });
     },
 
     /**
@@ -66,12 +72,21 @@ Ext.define('Yap.controller.Blog', {
             ]]),
             extField.fieldContainer('ADD,TIME', [//添加时间
                 extField.dateField({name: 'add_time'}),
-            ]), {
+            ]),
+            extField.fieldContainer(['FROM_NAME', [//来源名称
+                [null, 'from_name', '', false, '', {width: 400}],
+                lang('LT_BYTE').format(20)
+            ]]),
+            extField.fieldContainer(['FROM_URL', [//来源url
+                [null, 'from_url', '', false, '', {width: 400}],
+                lang('LT_BYTE').format(200)
+            ]]),
+            extField.hiddenField('cate_id'),//cate_id
+            {
                 xtype: 'treepicker',
                 fieldLabel: TEXT.red() + lang('BELONG_TO_CATEGORY'),
-                name: '_parent_name',
+                name: '_picker_cate_name',
                 value: data.cate_id,
-                singleSelectValueField: 'parent_id',
                 emptyText: lang('BELONG_TO_CATEGORY'),
                 displayField: 'cate_name',
                 pickerIdProperty: 'cate_id',
@@ -84,35 +99,39 @@ Ext.define('Yap.controller.Blog', {
 
                     if (data && data.parent_data) {
                         data = data.parent_data;
-                         var form = this.up('form').getForm();
-                         /*form.setValues({
-                             cate_id: data[me.idProperty]//父级id
-                         });*/
-                         me.loadEditDataSuccess(form, {//其它信息，包括父级名称，及初始化权限
-                             result: {
-                                 data: data
-                             }
-                         });
+                        this.setRawValue(data.parent_name);
                      }
                 }
             },
-            extCombo.base({//发布状态
-                width: 170,
-                fieldLabel: lang('ISSUE,STATUS'),
-                itemId: 'status',
-                value: '1',
-                store: [
-                    ['0', lang('CN_WEI,ISSUE')],
-                    ['1', lang('CN_YI,ISSUE')],
-                    ['2', lang('CN_YI,DELETE')]
-                ]
-            }),
+            //发布状态
+            extField.fieldContainer('ISSUE,STATUS', [
+                 extField.checkbox('is_issue', '', '', 'CN_WEI,ISSUE', '0', '', {xtype: 'radio'}),
+                 extField.checkbox('is_issue', '', '', 'CN_YI,ISSUE', '1', '', {xtype: 'radio', style: 'margin-left: 15px'})
+                ], true, {
+                value: {is_issue: Ext.valueFrom(data.is_issue, '1')},
+                xtype: 'radiogroup'
+           }),
+            //删除状态
+            extField.fieldContainer('DELETE,STATUS', [
+                 extField.checkbox('is_delete', '', '', 'CN_WEI,DELETE', '0', '', {xtype: 'radio'}),
+                 extField.checkbox('is_delete', '', '', 'CN_YI,DELETE', '1', '', {xtype: 'radio', style: 'margin-left: 15px'})
+                ], true, {
+                value: {is_delete: Ext.valueFrom(data.is_delete, '0')},
+                xtype: 'radiogroup'
+           }),
+            extField.sortOrderField(),//排序
             extField.textarea('seo_keyword', 'PLEASE_ENTER,SEO_KEYWORD', 'SEO_KEYWORD', '', {width: 800, height: 50, minLength: 6, maxLength: 300}),//SEO关键字
             extField.textareaComment(lang('BETWEEN_BYTE').format(6, 180)),//SEO关键字提示
             extField.textarea('seo_description', 'PLEASE_ENTER,SEO_DESCRIPTION', 'SEO_DESCRIPTION', '', {width: 800, height: 70, minLength: 6, maxLength: 300}),//SEO描述
             extField.textareaComment(lang('BETWEEN_BYTE').format(6, 300)),//SEO描述提示
+            {
+                xtype: 'ueditor',
+                name: 'content',
+                value: lang('PLEASE_ENTER,CONTENT'),
+                fieldLabel: lang('CONTENT')
+            },
             extField.hiddenField(),//blog_id
-            extField.hiddenField('cate_name'), //增加cate_name以form.updateRecord()更新所属分类
+            extField.hiddenField('cate_nane'),
             this.btnSubmit()//通用提交按钮
         ]
     },
@@ -126,24 +145,16 @@ Ext.define('Yap.controller.Blog', {
         var me = this;
 
         return [{
-            text: lang('USER') + 'id',//用户id
+            text: lang('MODULE_NAME_BLOG') + 'id',//博客id
             width: 60,
             dataIndex: this.idProperty
         }, {
-            header: lang('USERNAME'),//用户名
-            width: 120,
-            dataIndex: 'username',
+            header: lang('TITLE'),//标题
+            width: 300,
+            dataIndex: 'title',
             renderer: function(v) {
-                return me.searchReplaceRenderer(v, 'username');
+                return me.searchReplaceRenderer(v, 'title');
             }
-        }, {
-            header: lang('REALNAME'),//真实姓名
-            width: 100,
-            dataIndex: 'realname',
-            renderer: function(v) {
-                return me.searchReplaceRenderer(v, 'realname');
-            },
-            sortable: false
         }, {
             header: lang('BELONG_TO_CATEGORY'),//所属分类
             width: 120,
@@ -155,41 +166,75 @@ Ext.define('Yap.controller.Blog', {
             width: 140,
             renderer: this.renderDatetime
         }, {
-            header: lang('LAST,LOGIN,TIME'),//最后登陆时间
-            dataIndex: 'last_login_time',
-            width: 140,
-            renderer: this.renderDatetime
-        }, {
-            header: lang('LAST,LOGIN') + 'ip',//最后登陆ip
-            dataIndex: 'last_login_ip',
+            header: lang('FROM_NAME'),//来源名称
+            dataIndex: 'from_name',
+            //flex: 1,
             width: 120,
+            renderer: function(v) {
+                return me.searchReplaceRenderer(v, 'from_name');
+            },
+            hidden: true,
             sortable: false
         }, {
-            header: lang('LOGIN,CN_CISHU'),//登陆次数
-            dataIndex: 'login_num',
+            header: lang('FROM_URL'),//来源url
+            dataIndex: 'from_url',
+            //flex: 1,
+            width: 200,
+            renderer: function(v) {
+                return me.searchReplaceRenderer(v, 'from_url');
+            },
+            hidden: true,
+            sortable: false
+        }/*, {
+            header: lang('SEO_KEYWORD'),//seo关键字
+            dataIndex: 'seo_keyword',
+            //flex: 1,
+            width: 200,
+            renderer: function(v) {
+                return me.searchReplaceRenderer(v, 'seo_keyword');
+            },
+            hidden: true,
+            sortable: false
+        }, {
+            header: lang('SEO_DESCRIPTION'),//SEO描述
+            dataIndex: 'seo_description',
+            //flex: 1,
+            minWidth: 200,
+            renderer: function(v) {
+                return me.searchReplaceRenderer(v, 'seo_description');
+            },
+            hidden: true,
+            sortable: false
+        }*/, {
+            header: lang('HITS'),//点击次数
+            dataIndex: 'hits',
             width: 80
         }, {
-            header: lang('CN_BANGDING,LOGIN'),//绑定登陆
+            header: lang('COMMENTS'),//点击次数
+            dataIndex: 'comments',
+            width: 80
+        }, {
+            header: lang('ISSUE'),//发布
             align: 'center',
-            dataIndex: 'is_restrict',
+            dataIndex: 'is_issue',
             width: 80,
             renderer: function(v) {
-                return me.renderYesNoImg(v, 'is_restrict');
+                return me.renderYesNoImg(v, 'is_issue');
             }
         }, {
-            header: lang('LOCK'),//锁定
+            header: lang('DELETE'),//锁定
             align: 'center',
-            dataIndex: 'is_lock',
+            dataIndex: 'is_delete',
             width: 60,
             renderer: function(v) {
-                return me.renderYesNoImg(v, 'is_lock');
+                return me.renderYesNoImg(v, 'is_delete');
             }
         }, {//操作列
             flex: 1,
             xtype: 'appactioncolumn',
             items: [{//编辑
                 renderer: function(v, meta, record) {
-                    return record.get(me.idProperty) == ADMIN_ID && ADMIN_INFO.id != ADMIN_ID ? '' : '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('EDIT') + '</span>';
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('EDIT') + '</span>';
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
@@ -197,11 +242,11 @@ Ext.define('Yap.controller.Blog', {
                 }
             }, {//删除
                 renderer: function(v, meta, record) {
-                    return record.get(me.idProperty) == ADMIN_ID ? '' : '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE') + '</span>';
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE') + '</span>';
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
-                    me['delete'](record, '<span class="font-red">{0}</span>(<span class="font-bold font-666">{1}</span>)'.format(htmlspecialchars(record.get('username')), htmlspecialchars(record.get('realname'))));
+                    me['delete'](record, '<span class="font-red">{0}</span>'.format(htmlspecialchars(record.get('title'))));
                 }
             }]
         }];
@@ -219,16 +264,16 @@ Ext.define('Yap.controller.Blog', {
         data.date_end = data.date_end || '';
         data.keyword = data.keyword || '';
         data.cate_id = data.cate_id || '';
-        data.column = data.column || 'username';
+        data.column = data.column || 'title';
         data.match_mode = data.match_mode || 'eq';//匹配模式
-        data.is_lock = Ext.valueFrom(data.is_lock, '-1');//锁定状态
-        data.is_restrict = Ext.valueFrom(data.is_restrict, '-1');//绑定登陆状态
+        data.is_delete = Ext.valueFrom(data.is_delete, '-1');//删除
+        data.is_issue = Ext.valueFrom(data.is_issue, '-1');//发布
         data.page = intval(data.page) || 1;//页
 
         var options = {
             onItemClick: function(view, record, element, index, event) {//列表点击事件
-                me.listitemclick(record, event, 'is_restrict');
-                me.listitemclick(record, event, 'is_lock');//锁定
+                me.listitemclick(record, event, 'is_delete');
+                me.listitemclick(record, event, 'is_issue');
             }
         };
         this.callParent([data, options]);//通用列表
@@ -238,8 +283,7 @@ Ext.define('Yap.controller.Blog', {
      * @inheritdoc Yap.controller.Field#loadEditDataSuccess
      */
     loadEditDataSuccess: function(form, action) {
-        var data = action.result.data;
-        form.findField('_parent_name').setRawValue(data.parent_name);
+        form.findField('_picker_cate_name').setRawValue(action.result.data.cate_name);
     },
 
     /**
@@ -284,7 +328,7 @@ Ext.define('Yap.controller.Blog', {
                  * @return {void} 无返回值
                  */
                 change: function(grid, pageData) {
-                    if (!isNaN(pageData.pageCount) && this.changed) {//保证经过beforechange
+                    if (pageData && !isNaN(pageData.pageCount) && this.changed) {//保证经过beforechange
                         data = {
                             page: pageData.currentPage,
                             sort: data.sort,
@@ -299,18 +343,19 @@ Ext.define('Yap.controller.Blog', {
     },//end pagingBar
 
     /**
-     * 列表页store
-     *
-     * @return {Object} Ext.data.Store
+     * @inheritdoc Yap.controller.Admin#store
      */
     store: function(data) {
 
-        this._store = this._store || Ext.create('Yap.store.Admin');
+        if (!this._store) {//未创建
+
+            this._store = Ext.create('Yap.store.Blog');
+        }
 
         if (data) {
             var sorters = this._store.sorters.getAt(0);//排序
 
-            //排序不一致，重新设置
+            //排序不一致，重新设置 by mrmsl on 2012-07-27 15:45:18
             if (sorters.property != data.sort || sorters.direction != data.order) {
                 this._store.sorters.clear();
                 this._store.sorters.add(new Ext.util.Sorter({
@@ -341,77 +386,86 @@ Ext.define('Yap.controller.Blog', {
                 text: lang('OPERATE'),
                 itemId: 'btn',
                 menu: [this.deleteItem(), {
-                    text: lang('CN_BANGDING,LOGIN'),
+                    text: lang('CN_WEI,ISSUE'),
                     handler: function() {
-                        var selection = me.hasSelect(me.selectModel, ['is_restrict', 0]);
-                        selection.length && me.setOneOrZero(selection[0], 1, 'is_restrict', lang('YOU_CONFIRM,CN_BANGDING,LOGIN,SELECTED,RECORD'), selection[1]);
+                        var selection = me.hasSelect(me.selectModel, ['is_issue', 1]);
+                        selection.length && me.setOneOrZero(selection[0], 0, 'issue', lang('YOU_CONFIRM,CN_WEI,ISSUE,SELECTED,RECORD'), selection[1]);
                     }
                 }, {
-                    text: lang('RELEASE,CN_BANGDING,LOGIN'),
+                    text: lang('CN_YI,ISSUE'),
                     handler: function() {
-                        var selection = me.hasSelect(me.selectModel, ['is_restrict', 1]);
-                        selection.length && me.setOneOrZero(selection[0], 0, 'is_restrict', lang('YOU_CONFIRM,RELEASE,CN_BANGDING,LOGIN,SELECTED,RECORD'), selection[1]);
+                        var selection = me.hasSelect(me.selectModel, ['is_issue', 0]);
+                        selection.length && me.setOneOrZero(selection[0], 1, 'issue', lang('YOU_CONFIRM,RELEASE,CN_YI,ISSUE,SELECTED,RECORD'), selection[1]);
                     }
                 }, {
                     text: lang('MOVE'),
                     menu: {
                         items: {
-                            xtype: 'rolecombo',
-                            listeners: {
-                                select: function(combo, record) {
-                                    this.ownerCt.parentMenu.hide();//隐藏菜单
-                                    record = record[0];
-                                    var selection = me.hasSelect(me.selectModel, me.idProperty);
+                            xtype: 'treepicker',
+                            width: 200,
+                            value: data.cate_id,
+                            emptyText: lang('BELONG_TO_CATEGORY'),
+                            displayField: 'cate_name',
+                            pickerIdProperty: 'cate_id',
+                            store: Ext.create('Yap.store.Category', {
+                                folderSort: false,
+                                url: this.getActionUrl('category', 'publicCategory', 'unshift&parent_id={0}'.format(data.cate_id))
+                            }),
+                            storeOnLoad: function(store) {//添加指定分类子分类，设置指定分类相关信息
+                                var data = store.proxy.reader.rawData;
 
-                                    if (selection) {
-                                        me.myConfirm({
-                                            action: me.getActionUrl(false, 'move'),
-                                            data: {
-                                                blog_id: selection[0],
-                                                cate_id: record.get('cate_id')
-                                            },
-                                            confirmText: lang('YOU_CONFIRM,MOVE,SELECTED,RECORD,TO') + '<strong style="font-weight: bold; color: red">' + record.get('cate_name') + '</strong>',
-                                            failedMsg: lang('MOVE,FALIURE'),
-                                            scope: me,
-                                            store: me.store()
-                                        });
-                                    }
-                                }
+                                if (data && data.parent_data) {
+                                    this.setRawValue(data.parent_data.parent_name);
+                                 }
                             }
                         }
                     }
                 }]
             }, '-', lang('ADD,TIME,CN_CONG'),
             extField.dateField({itemId: 'date_start'}), lang('TO'),
-            extField.dateField({itemId: 'date_end'}), '-', lang('BELONG_TO_CATEGORY'), {
-                xtype: 'rolecombo',
-                url: this.getActionUrl('role', 'list', 'unshift'),
-                value: data.cate_id
-            }, extCombo.base({//绑定登陆状态
+            extField.dateField({itemId: 'date_end'}), '-', lang('BELONG_TO_CATEGORY'),
+            extField.textField('cate_id', {hidden: true}),//cate_id 搜索item.isXType('textfield)
+            {
+                xtype: 'treepicker',
+                width: 150,
+                name: 'cate_name',
+                value: data.cate_id,
+                emptyText: lang('BELONG_TO_CATEGORY'),
+                displayField: 'cate_name',
+                pickerIdProperty: 'cate_id',
+                store: Ext.create('Yap.store.Category', {
+                    folderSort: false,
+                    url: this.getActionUrl('category', 'publicCategory', 'unshift&parent_id={0}'.format(data.cate_id))
+                })
+            }, extCombo.base({//发布状态
                 width: 80,
-                itemId: 'is_restrict',
+                itemId: 'is_issue',
                 value: '-1',
                 store: [
-                    ['-1', lang('CN_BANGDING,STATUS')],
-                    ['0', lang('CN_WEI,CN_BANGDING')],
-                    ['1', lang('CN_YI,CN_BANGDING')]
+                    ['-1', lang('ISSUE,STATUS')],
+                    ['0', lang('CN_WEI,ISSUE')],
+                    ['1', lang('CN_YI,ISSUE')]
                 ]
             }), extCombo.base({//锁定状态
                 width: 80,
-                itemId: 'is_lock',
+                itemId: 'is_delete',
                 value: '-1',
                 store: [
-                    ['-1', lang('LOCK,STATUS')],
-                    ['0', lang('CN_WEI,LOCK')],
-                    ['1', lang('CN_YI,LOCK')]
+                    ['-1', lang('DELETE,STATUS')],
+                    ['0', lang('CN_WEI,DELETE')],
+                    ['1', lang('CN_YI,DELETE')]
                 ]
             }), {
                 xtype: 'combobox',//搜索字段
                 width: 80,
                 itemId: 'column',
                 store: [
-                    ['username', lang('USERNAME')],
-                    ['realname', lang('REALNAME')]
+                    ['title', lang('TITLE')],
+                    ['seo_keyword', lang('SEO_KEYWORD')],
+                    ['seo_description', lang('SEO_DESCRIPTION')],
+                    ['content', lang('CONTENT')],
+                    ['from_name', lang('FROM_NAME')],
+                    ['from_url', lang('FROM_URL')]
                 ],
                 value: data.column,
                 editable: false
@@ -429,7 +483,86 @@ Ext.define('Yap.controller.Blog', {
                 me.store(me.setHistory(data)).loadPage(1);
             })]
         };
-    }//end tbar
+    },//end tbar
+
+    //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Blog或Yap.model.Blog
+    /**
+     * @inheritdoc Yap.controller.Field#defineModel
+     */
+    defineModel: function() {
+        /**
+         * 博客数据模型
+         */
+        Ext.define('Yap.model.Blog', {
+            extend: 'Ext.data.Model',
+            /**
+             * @cfg {Array}
+             * 字段
+             */
+            fields: [this.idProperty, 'content', 'add_time', 'title', 'cate_name', 'is_issue', 'is_delete', 'sort_order','from_name', 'from_url', 'hits', 'comments', 'seo_keyword', 'seo_description'],
+            /**
+             * @cfg {String}
+             * 主键
+             */
+            idProperty: this.idProperty
+        });
+
+        return this;
+    },
+
+    /**
+     * @inheritdoc Yap.controller.Field#defineStore
+     * @member Yap.controller.Blog
+     */
+    defineStore: function() {
+        /**
+         * 博客数据容器
+         */
+        Ext.define('Yap.store.Blog', {
+            extend: 'Ext.data.Store',
+            /**
+             * @cfg {Boolean}
+             * 自动消毁
+             */
+            autoDestroy: true,
+            /**
+             * @cfg {Boolean}
+             * 服务器端排序
+             */
+            remoteSort: true,
+            /**
+             * @cfg {Object/String}
+             * 模型
+             */
+            model: 'Yap.model.Blog',
+            /**
+             * @cfg {Object}
+             * proxy
+             */
+            proxy: {
+                type: C.dataType,
+                url: this.getActionUrl(false, 'list'),
+                reader: C.dataReader(),
+                listeners: exception(),//捕获异常 by mrmsl on 2012-07-08 21:44:36
+                messageProperty: 'msg',
+                simpleSortMode: true
+            },
+            //增加排序，以防点击列表头部排序时，多余传参，出现不必要的错误 by mrmsl on 2012-07-27 16:21:54
+            /**
+             * @cfg {Object}
+             * sorters
+             */
+            sorters: {
+                property : this.idProperty,
+                direction: 'DESC'
+            },
+            constructor: function(config) {//构造函数
+                this.callParent([config || {}]);
+            }
+        });
+
+        return this;
+    }//end defineStore
 });
 
 //放到最后，以符合生成jsduck类说明

@@ -8,6 +8,8 @@
  * @lastmodify      $Date$ $Author$
  */
 
+window.UEDITOR_HOME_URL = System.sys_base_website + 'v0.1/static/js/ueditor/v1.2.5/';//百度ueditor路径
+
 //常用配置
 var C = {
     dataType: 'ajax',//'jsonp'

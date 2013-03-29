@@ -26,7 +26,8 @@ class BlogModel extends BaseModel {
      */
     protected $_auto = array(
         'add_time'   => 'time#insert',//添加时间
-        'status'     => '_getCheckboxValue',//发布状态
+        'update_time'=> 'time#update',//添加时间
+        'is_issue'   => '_getCheckboxValue',//发布状态
     );
     /**
      * @var array $_db_fields
@@ -45,13 +46,19 @@ class BlogModel extends BaseModel {
 
         //标题
         'title'            => array('validate' => array('notblank#TITLE', 'title#{%TITLE,EXIST}#VALUE_VALIDATE#unique', '_checkLength#TITLE#value|0|60')),
+        'content'         	=> array('filter' => 'raw', 'validate' => 'notblank#CONTENT'),
 
         //seo关键字
         'seo_keyword'      => array('validate' => array('notblank#SEO_KEYWORD', '_checkLength#SEO_KEYWORD#value|6|180')),
         //seo描述
         'seo_description'  => array('validate' => array('notblank#SEO_DESCRIPTION', '_checkLength#SEO_DESCRIPTION#value|6|300')),
-        'status'           => array('filter' => 'int', 'validate' => array('0,1,2#{%ISSUE,STATUS,MUST,IN,CN_WEI,ISSUE,、,CN_YI,ISSUE,、,CN_YI,DELETE}#MUST_VALIDATE#in')),//是否显示
+        'is_issue'         => array('filter' => 'int', 'validate' => array('0,1#{%ISSUE,STATUS,MUST,IN,CN_WEI,ISSUE,、,CN_YI,ISSUE}#MUST_VALIDATE#in')),//是否显示
+        'is_delete'        => array('filter' => 'int', 'validate' => array('0,1#{%DELETE,STATUS,MUST,IN,CN_WEI,DELETE,、,CN_YI,DELETE}#MUST_VALIDATE#in')),//是否显示
         'sort_order'       => array('filter' => 'int', 'validate' => 'unsigned#ORDER#-2'),//排序
+        'from_name'        => array('validate' => '_checkLength#FROM_NAME#value|0|200'),//来源名称
+        'from_url'         => array('validate' => '_checkLength#FROM_URL#value|0|200'),//来源url
+        'add_time'         => null,
+        'update_time'      => array('filter' => 'int', 'validate' => array('_checkLength#UPDATE,TIME,DATA#value|0')),
     );
 
     /**
