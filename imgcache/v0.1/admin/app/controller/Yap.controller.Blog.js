@@ -388,7 +388,7 @@ Ext.define('Yap.controller.Blog', {
             items: [{
                 text: lang('OPERATE'),
                 itemId: 'btn',
-                menu: [this.deleteItem(), {
+                menu: [this.deleteItem('COMPLETELY_DELETE'), {
                     text: lang('CN_WEI,ISSUE'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['is_issue', 1]);
