@@ -31,6 +31,7 @@ return array(
     'CN_TO_BYTE'                => '一个汉字三个字节',
     'COLLAPSE'                  => '折叠',
     'COMMENTS'                  => '评论数',
+    'COMPLETELY_DELETE'         => '彻底删除',
     'CONFIRM_DELETE'            => '您确定要删除{0}？',
     'CONFLICT'                  => '冲突',//by mrmsl on 2012-09-13 11:46:58
     'CONTENT'                   => '内容',

@@ -280,6 +280,31 @@ Ext.define('Yap.controller.Base', {
     },
 
     /**
+     * tbar通用删除item
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2012-08-22 22:28:08
+     * @lastmodify      2013-01-14 10:34:02 by mrmsl
+     *
+     * @protected
+     *
+     * @param {String} [text=DELETE] 删除文字语言包。默认DELETE
+     *
+     * @return {Object} tbar menuitem 配置
+     */
+    deleteItem: function(text) {
+        var me = this;
+
+        return {
+            text: lang(text || 'DELETE'),
+            handler: function() {
+                var pkValue = me.hasSelect(me.selectModel || me._listgrid);
+                pkValue && me['delete'](pkValue);
+            }
+        }
+    },
+
+    /**
      * 编辑操作
      *
      * @author          mrmsl <msl-138@163.com>
@@ -303,29 +328,6 @@ Ext.define('Yap.controller.Base', {
             extraParam: extraParam ? '&' + extraParam : '',
             back: encodeURIComponent(Ext.History.getToken())
         }));
-    },
-
-    /**
-     * tbar通用删除item
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2012-08-22 22:28:08
-     * @lastmodify      2013-01-14 10:34:02 by mrmsl
-     *
-     * @protected
-     *
-     * @return {Object} tbar menuitem 配置
-     */
-    deleteItem: function() {
-        var me = this;
-
-        return {
-            text: lang('DELETE'),
-            handler: function() {
-                var pkValue = me.hasSelect(me.selectModel || me._listgrid);
-                pkValue && me['delete'](pkValue);
-            }
-        }
     },
 
     /**
