@@ -79,7 +79,7 @@ Ext.define('Yap.controller.Blog', {
                 lang('LT_BYTE').format(200)
             ], true]),
             extField.fieldContainer('ADD,TIME', [//添加时间
-                extField.dateField({name: 'add_time'}),
+                extField.dateField({name: 'add_time', value: new Date()}),
             ]),
             extField.hiddenField('cate_id'),//cate_id
             {

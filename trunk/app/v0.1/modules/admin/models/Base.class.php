@@ -428,7 +428,7 @@ class BaseModel extends Model {
      * @return 转化成功，返回转化的时间戳，否则返回0
      */
     protected function _strtotime($datetime = '') {
-        return $datetime && ($datetime = local_strtotime($datetime)) ? $datetime : 0;
+        return $datetime && ($datetime = strtotime($datetime)) ? $datetime : 0;
     }
 
     /**
