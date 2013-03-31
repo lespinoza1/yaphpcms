@@ -87,6 +87,8 @@ Ext.define('Yap.controller.Blog', {
                 fieldLabel: TEXT.red() + lang('BELONG_TO_CATEGORY'),
                 name: '_picker_cate_name',
                 value: data.cate_id,
+                allowBlank: false,
+                blankText: lang('PLEASE_SELECT,BELONG_TO_CATEGORY'),
                 emptyText: lang('BELONG_TO_CATEGORY'),
                 displayField: 'cate_name',
                 pickerIdProperty: 'cate_id',
