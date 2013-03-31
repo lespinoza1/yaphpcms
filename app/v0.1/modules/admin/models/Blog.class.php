@@ -25,7 +25,7 @@ class BlogModel extends BaseModel {
      * @var array $_auto 自动填充
      */
     protected $_auto = array(
-        'add_time'   => 'time#insert',//添加时间
+        'add_time'   => '_strtotime#insert',//添加时间
         'update_time'=> 'time#update',//添加时间
         'is_issue'   => '_getCheckboxValue',//发布状态
     );
