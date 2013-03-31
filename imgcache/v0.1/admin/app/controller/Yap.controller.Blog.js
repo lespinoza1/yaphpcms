@@ -33,7 +33,7 @@ Ext.define('Yap.controller.Blog', {
         options = {
             listeners: {
                 submitsuccess: function (form, action) {
-                    form.findField('cate_name').setValue(form.findField('_picker_cate_name').getRawValue());
+                    form.findField('cate_name').setValue(form.findField('_picker_cate_name').rawValue);
                     me._listgrid && form.findField(me.idProperty).getValue() == 0 && me.store().load();//新增
                 }
             }
@@ -70,17 +70,17 @@ Ext.define('Yap.controller.Blog', {
                 [null, 'title', 'PLEASE_ENTER,TITLE', false, '', {width: 400}],
                 lang('LT_BYTE').format(60) + '，' + lang('CN_TO_BYTE')
             ]]),
-            extField.fieldContainer('ADD,TIME', [//添加时间
-                extField.dateField({name: 'add_time'}),
-            ]),
             extField.fieldContainer(['FROM_NAME', [//来源名称
                 [null, 'from_name', '', false, '', {width: 400}],
-                lang('LT_BYTE').format(20)
-            ]]),
+                lang('LT_BYTE').format(200)
+            ], true]),
             extField.fieldContainer(['FROM_URL', [//来源url
                 [null, 'from_url', '', false, '', {width: 400}],
                 lang('LT_BYTE').format(200)
-            ]]),
+            ], true]),
+            extField.fieldContainer('ADD,TIME', [//添加时间
+                extField.dateField({name: 'add_time'}),
+            ]),
             extField.hiddenField('cate_id'),//cate_id
             {
                 xtype: 'treepicker',
@@ -131,7 +131,7 @@ Ext.define('Yap.controller.Blog', {
                 fieldLabel: lang('CONTENT')
             },
             extField.hiddenField(),//blog_id
-            extField.hiddenField('cate_nane'),
+            extField.hiddenField('cate_name'),
             this.btnSubmit()//通用提交按钮
         ]
     },

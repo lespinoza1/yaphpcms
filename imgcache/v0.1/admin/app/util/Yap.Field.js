@@ -233,7 +233,7 @@ Ext.define('Yap.Field', {
                 var cfg = {
                     xtype: 'datefield',
                     format: System.sys_timezone_datetime_format,
-                    maxValue: date(),
+                    //maxValue: date(),
                     showToday: false
                 };
 
