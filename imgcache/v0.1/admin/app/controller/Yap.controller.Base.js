@@ -509,7 +509,7 @@ Ext.define('Yap.controller.Base', {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-07-28 14:47:13
-     * @lastmodify      2013-01-14 10:49:12 by mrmsl
+     * @lastmodify      2013-03-31 19:00:05 by mrmsl
      *
      * @protected
      *
@@ -522,7 +522,7 @@ Ext.define('Yap.controller.Base', {
         Ext.each(tbar.items.items, function(item) {
 
             if (item.isXType('textfield')) {
-                data[item.itemId] = item.getSubmitValue();//getSubmitValue() by mrmsl on 2012-09-08 23:17:13
+                data[item.itemId || item.name] = item.getSubmitValue();//getSubmitValue() by mrmsl on 2012-09-08 23:17:13
             }
         });
 
