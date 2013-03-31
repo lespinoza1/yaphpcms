@@ -27,9 +27,18 @@ class BlogController extends BaseController {
      * {@inheritDoc}
      */
     protected function _beforeExec(&$pk_id, &$log) {
-        $log = join(', ', $pk_id);//操作日志
+        $pk_field   = $this->_pk_field;
+        $data       = $this->_model->where(array($pk_field => array('IN', $pk_id)))->field($pk_field . ',title')->select();
+        $log        = '';
 
-        return null;
+        if (false !== $data) {
+
+            foreach ($data as $v) {
+                $log .= $v['title'] . "({$v[$pk_field]}),";
+            }
+        }
+
+        return $log ? substr($log, 0, -1) : null;
     }
 
     /**
