@@ -435,7 +435,7 @@ Ext.define('Yap.controller.Blog', {
                 pickerIdProperty: 'cate_id',
                 store: Ext.create('Yap.store.Category', {
                     folderSort: false,
-                    url: this.getActionUrl('category', 'publicCategory', 'unshift&parent_id={0}'.format(data.cate_id))
+                    url: this.getActionUrl('category', 'publicCategory', 'unshift&parent_id={0}&emptyText={1}'.format(data.cate_id, lang('BELONG_TO_CATEGORY')))
                 })
             }, extCombo.base({//发布状态
                 width: 80,
