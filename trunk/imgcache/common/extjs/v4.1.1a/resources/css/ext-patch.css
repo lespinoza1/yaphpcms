@@ -58,3 +58,7 @@ table.x-datepicker-inner th { font-size: 12px; }
 .x-menu-item-active-tab-contextmenu .x-menu-item-link { background: #2f6ac4; }
 .x-menu-item-active-tab-contextmenu .x-menu-item-link .x-menu-item-text{ color: #fff; }
 .tab-contextmenu .x-menu-item-icon { top: 2px; }
+
+/*toolbar overflow by mrmsl on 2013-03-31 13:42:48*/
+.x-vertical-box-overflow-body .x-menu-item-link { padding-left: 20px; }
+.x-vertical-box-overflow-body .x-menu-item-icon { top: 4px; }

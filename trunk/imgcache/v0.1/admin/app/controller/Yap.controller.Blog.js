@@ -381,6 +381,9 @@ Ext.define('Yap.controller.Blog', {
 
         return {
             xtype: 'toolbar',
+            layout: {
+                overflowHandler: 'Menu'
+            },
             dock: 'top',
             items: [{
                 text: lang('OPERATE'),
