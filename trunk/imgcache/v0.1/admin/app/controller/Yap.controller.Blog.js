@@ -424,7 +424,7 @@ Ext.define('Yap.controller.Blog', {
             }, '-', lang('ADD,TIME,CN_CONG'),
             extField.dateField({itemId: 'date_start'}), lang('TO'),
             extField.dateField({itemId: 'date_end'}), '-', lang('BELONG_TO_CATEGORY'),
-            extField.textField('cate_id', {hidden: true}),//cate_id 搜索item.isXType('textfield)
+            extField.textField('cate_id', false, false, false, {hidden: true}),//cate_id 搜索item.isXType('textfield)
             {
                 xtype: 'treepicker',
                 width: 150,
