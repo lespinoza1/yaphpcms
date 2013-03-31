@@ -35,6 +35,7 @@ class CategoryController extends BaseController {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-03-21 13:42:41
+     * @lastmodify      2013-03-31 13:17:48 by mrmsl
      *
      * @param $data 初始数据。默认array()，读分类树缓存
      *
@@ -42,6 +43,11 @@ class CategoryController extends BaseController {
      */
     private function _getCategory($data = array()) {
         $data = $data ? $data : $this->_getCache(0, MODULE_NAME . '_tree');
+
+        if (!$data) {//无分类缓存，直接返回
+            return array();
+        }
+
         $tree = array();
         $k    = 0;
 
