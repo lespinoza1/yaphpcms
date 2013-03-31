@@ -392,13 +392,13 @@ Ext.define('Yap.controller.Blog', {
                     text: lang('CN_WEI,ISSUE'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['is_issue', 1]);
-                        selection.length && me.setOneOrZero(selection[0], 0, 'issue', lang('YOU_CONFIRM,CN_WEI,ISSUE,SELECTED,RECORD'), selection[1]);
+                        selection.length && me.setOneOrZero(selection[0], 0, 'is_issue', lang('YOU_CONFIRM,CN_WEI,ISSUE,SELECTED,RECORD'), selection[1]);
                     }
                 }, {
                     text: lang('CN_YI,ISSUE'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['is_issue', 0]);
-                        selection.length && me.setOneOrZero(selection[0], 1, 'issue', lang('YOU_CONFIRM,RELEASE,CN_YI,ISSUE,SELECTED,RECORD'), selection[1]);
+                        selection.length && me.setOneOrZero(selection[0], 1, 'is_issue', lang('YOU_CONFIRM,RELEASE,CN_YI,ISSUE,SELECTED,RECORD'), selection[1]);
                     }
                 }, {
                     text: lang('MOVE'),
@@ -441,7 +441,7 @@ Ext.define('Yap.controller.Blog', {
                     url: this.getActionUrl('category', 'publicCategory', 'unshift&parent_id={0}&emptyText={1}'.format(data.cate_id, lang('BELONG_TO_CATEGORY')))
                 })
             }, extCombo.base({//发布状态
-                width: 80,
+                width: 70,
                 itemId: 'is_issue',
                 value: '-1',
                 store: [
@@ -450,7 +450,7 @@ Ext.define('Yap.controller.Blog', {
                     ['1', lang('CN_YI,ISSUE')]
                 ]
             }), extCombo.base({//锁定状态
-                width: 80,
+                width: 70,
                 itemId: 'is_delete',
                 value: '-1',
                 store: [
@@ -460,7 +460,7 @@ Ext.define('Yap.controller.Blog', {
                 ]
             }), {
                 xtype: 'combobox',//搜索字段
-                width: 80,
+                width: 70,
                 itemId: 'column',
                 store: [
                     ['title', lang('TITLE')],
