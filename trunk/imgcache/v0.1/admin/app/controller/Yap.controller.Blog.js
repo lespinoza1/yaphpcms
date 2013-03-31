@@ -406,7 +406,6 @@ Ext.define('Yap.controller.Blog', {
                         items: {
                             xtype: 'treepicker',
                             width: 200,
-                            value: data.cate_id,
                             emptyText: lang('BELONG_TO_CATEGORY'),
                             displayField: 'cate_name',
                             pickerIdProperty: 'cate_id',
@@ -414,12 +413,25 @@ Ext.define('Yap.controller.Blog', {
                                 folderSort: false,
                                 url: this.getActionUrl('category', 'publicCategory', 'unshift&parent_id={0}'.format(data.cate_id))
                             }),
-                            storeOnLoad: function(store) {//添加指定分类子分类，设置指定分类相关信息
-                                var data = store.proxy.reader.rawData;
+                            listeners: {
+                                select: function(picker, record) {//移动
+                                    var cateId = this.getValue(), selection = me.hasSelect(me.selectModel, me.idProperty);
+                                    this.ownerCt.parentMenu.hide();//隐藏菜单
 
-                                if (data && data.parent_data) {
-                                    this.setRawValue(data.parent_data.parent_name);
-                                 }
+                                    if (cateId && selection) {
+                                        me.myConfirm({
+                                            action: me.getActionUrl(false, 'move'),
+                                            data: {
+                                                blog_id: selection[0],
+                                                cate_id: cateId
+                                            },
+                                            confirmText: lang('YOU_CONFIRM,MOVE,SELECTED,RECORD,TO') + '<strong style="font-weight: bold; color: red">' + record.get('cate_name') + '</strong>',
+                                            failedMsg: lang('MOVE,FALIURE'),
+                                            scope: me,
+                                            store: me.store()
+                                        });
+                                    }
+                                }
                             }
                         }
                     }
