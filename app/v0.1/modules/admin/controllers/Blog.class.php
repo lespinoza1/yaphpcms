@@ -137,7 +137,7 @@ class BlogController extends BaseController {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-12-26 14:22:09
-     * @lastmodify      2013-01-21 15:46:28 by mrmsl
+     * @lastmodify      2013-03-31 19:03:13 by mrmsl
      *
      * @return void 无返回值
      */
@@ -160,11 +160,11 @@ class BlogController extends BaseController {
             $where['' . $column] = $this->_buildMatchQuery('' . $column, $keyword, Filter::string('match_mode', 'get'));
         }
 
-        if ($date_start && ($date_start = local_strtotime($date_start))) {
+        if ($date_start && ($date_start = strtotime($date_start))) {
             $where['add_time'][] = array('EGT', $date_start);
         }
 
-        if ($date_end && ($date_end = local_strtotime($date_end))) {
+        if ($date_end && ($date_end = strtotime($date_end))) {
             $where['add_time'][] = array('ELT', $date_end);
         }
 
