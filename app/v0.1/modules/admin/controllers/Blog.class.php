@@ -209,4 +209,38 @@ class BlogController extends BaseController {
 
         $this->_ajaxReturn(true, '', $data, $total);
     }//end listAction
+
+    /**
+     * 移动所属分类
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-03-31 19:27:28
+     *
+     * @return void 无返回值
+     */
+    function moveAction() {
+        $field       = 'cate_id';//定段
+        $cate_id     = Filter::int($field);//所属分类id
+        $msg         = L('MOVE');//提示
+        $log_msg     = $msg . L('MODULE_NAME_BLOG,FAILURE');//错误日志
+        $error_msg   = $msg . L('FAILURE');//错误提示信息
+
+        if ($cate_id) {//分类id
+            $cate_info = $this->_getCache($cate_id, 'Category');
+
+            if (!$cate_info) {//分类不存在
+                $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,BELONG_TO_CATEGORY,%{$field}({$cate_id}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
+                $this->_ajaxReturn(false, $error_msg);
+            }
+
+            $cate_name = $cate_info['cate_name'];
+        }
+        else {
+            //非法参数
+            $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%: {$field},IS_EMPTY"), LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(false, $error_msg);
+        }
+
+        $this->_setField($field, $cate_id, $msg, L('TO') . $cate_name);
+    }//end moveAction
 }
