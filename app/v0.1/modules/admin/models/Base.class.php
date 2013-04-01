@@ -31,6 +31,22 @@ class BaseModel extends Model {
     protected $_module = null;
 
     /**
+     * 添加时间自动完成回调
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-01 11:15:23
+     *
+     * @param string $datetime 时间表达式
+     *
+     * @return 转化成功，返回转化的时间戳，否则返回当前时间戳
+     */
+    protected function _addtime($datetime = '') {
+        $v = $this->_strtotime($datetime);
+
+        return $v ? $v : time();
+    }
+
+    /**
      * 新增数据后，将排序设为该记录自动增长id
      *
      * @author          mrmsl <msl-138@163.com>
@@ -274,7 +290,8 @@ class BaseModel extends Model {
             switch($method) {
                 case '_setPassword'://密码array('password', 'setPassword', Model::MODEL_BOTH, 'callback', 'data')
                 case '_unsigned'://unsigned类型array('sort_order', 'unsigned', Model::MODEL_BOTH, 'callback', 'data'),
-                case '_getCheckboxValue': //复选框array('is_restrict', '_getCheckboxValue', Model::MODEL_BOTH, 'callback')
+                case '_getCheckboxValue': //复选框array('is_restrict', '_getCheckboxValue', Model::MODEL_BOTH, 'callback'
+                case '_addtime'://strtotime array('add_time', 'add_time', Model::MODEL_BOTH, 'callback')
                 case '_strtotime'://strtotime array('lock_start_time', 'strtotime', Model::MODEL_BOTH, 'callback')
                     $auto  = array($method, Model::MODEL_BOTH, 'callback');
                     isset($params) ? $auto[] = $params : '';
