@@ -19,7 +19,7 @@ Ext.define('Yap.controller.Blog', {
      * @cfg {String}
      * 查询字段
      */
-    queryField: 'sort,order,date_start,date_end,column,keyword,cate_id,is_issue,is_delete,page,match_mode',//查询字段
+    queryField: 'sort,order,date_start,date_end,column,keyword,cate_id,cate_name,is_issue,is_delete,page,match_mode',//查询字段
 
     constructor: function() {//构造函数
         this.defineModel().defineStore();
@@ -441,11 +441,11 @@ Ext.define('Yap.controller.Blog', {
             }, '-', lang('ADD,TIME,CN_CONG'),
             extField.dateField({itemId: 'date_start'}), lang('TO'),
             extField.dateField({itemId: 'date_end'}), '-', lang('BELONG_TO_CATEGORY'),
-            extField.textField('cate_id', false, false, false, {hidden: true}),//cate_id 搜索item.isXType('textfield)
+            extField.hiddenField('cate_id'),//cate_id
             {
                 xtype: 'treepicker',
                 width: 150,
-                name: 'cate_name',
+                itemId: 'cate_name',
                 value: data.cate_id,
                 emptyText: lang('BELONG_TO_CATEGORY'),
                 displayField: 'cate_name',

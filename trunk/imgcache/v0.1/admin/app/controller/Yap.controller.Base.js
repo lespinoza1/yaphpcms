@@ -523,7 +523,7 @@ Ext.define('Yap.controller.Base', {
     getQueryData: function(tbar, data) {
         Ext.each(tbar.items.items, function(item) {
 
-            if (item.isXType('textfield')) {
+            if (item.isXType('textfield') || item.isXType('hiddenfield')) {
                 data[item.itemId || item.name] = item.getSubmitValue();//getSubmitValue() by mrmsl on 2012-09-08 23:17:13
             }
         });
@@ -953,7 +953,10 @@ Ext.define('Yap.controller.Base', {
         field = Ext.isArray(field) ? field : field.split(',');
         Ext.each(field, function(itemId) {
             var component = tbar.getComponent(itemId);
-            component && component.setValue(data[itemId]);
+
+            if (component) {
+                'treepicker' == component.getXType() ? component.setRawValue(data[itemId]) : component.setValue(data[itemId]);
+            }
         });
     },
 
