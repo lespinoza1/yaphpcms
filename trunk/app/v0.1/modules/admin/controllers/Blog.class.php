@@ -72,11 +72,6 @@ class BlogController extends BaseController {
         $error_msg = $msg . L('FAILURE');//错误提示信息
         $cate_info = $this->_getCache($cate_id = $this->_model->cate_id, 'Category');//所属分类
 
-        if (!$this->_model->add_time) {//处理添加时间
-            $this->_model->add_time = strtotime($this->_model->add_time);
-            $this->_model->add_time = $this->_model->add_time ? $this->_model->add_time : time();
-        }
-
         $data['cate_name'] = $cate_info['cate_name'];//所属分类名称
 
         if ($pk_value) {//编辑
