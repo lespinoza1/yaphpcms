@@ -190,7 +190,14 @@ class BlogController extends BaseController {
         }
 
         if ($cate_id) {
-            $where['cate_id'] = $cate_id;
+            $cate_arr = $this->_getCache($cate_id, 'Category');
+
+            if (!$cate_arr) {
+                $this->_model->addLog(L("INVALID_PARAM,%:,BELONG_TO_CATEGORY,%cate_id({$cate_id}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
+                $this->_ajaxReturn(true);
+            }
+
+            $where['cate_id'] = array('IN', $this->_getChildrenIds($cate_id, true, true, 'Category'));
         }
 
         $total      = $this->_model->where($where)->count();
