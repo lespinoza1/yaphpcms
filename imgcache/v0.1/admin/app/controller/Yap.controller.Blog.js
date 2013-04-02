@@ -81,7 +81,7 @@ Ext.define('Yap.controller.Blog', {
             extField.fieldContainer('ADD,TIME', [//添加时间
                 extField.dateField({name: 'add_time', value: new Date()}),
             ]),
-            extField.hiddenField('cate_id'),//cate_id
+            extField.hiddenField('cate_id', {value: data.cate_id}),//cate_id
             {
                 xtype: 'treepicker',
                 fieldLabel: TEXT.red() + lang('BELONG_TO_CATEGORY'),

@@ -145,10 +145,10 @@ Ext.define('Yap.controller.Category', {
                     me.edit(record, false, '{0}=0&parent_id={1}'.format(me.idProperty, record.get(me.idProperty)));
                 }
             }, {
-                text: lang('ADD,MODULE_NAME_FIELD'),//添加表彰域 by mrmsl on
+                text: lang('ADD,MODULE_NAME_BLOG'),//添加博客 by mrmsl on
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
-                    me.edit(record, false, me.getAction('field', 'add') + '&{0}=0&parent_id={1}'.format(me.idProperty, record.get(me.idProperty)));
+                    me.edit(record, false, me.getAction('blog', 'add') + '&{0}=0&cate_id={1}'.format(me.idProperty, record.get(me.idProperty)));
                 }
             },
             this.editColumnItem(true),//编辑
