@@ -29,6 +29,7 @@ return array(
     'JSONP_CALLBACK'        => JSONP_CALLBACK,//jsonp 回调参数名
 
     //模板设置
+    'HTML_SUFFIX'           => '.shtml',//静态文件名后缀
     'TEMPLATE_SUFFIX'       => '.phtml',//模板后缀
     'TMPL_EXCEPTION_FILE'   => VIEW_PATH . 'error/error.phtml',//错误模板
     //smarty 模板设置

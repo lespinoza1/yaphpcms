@@ -15,6 +15,7 @@
 //use Yap\Func;
 
 //核心配置
+define('YABLOG_FRONT_MODULE_NAME', 'yablog');//前台模块名称
 define('DS'                 , '/');      //路径分割符
 
 define('ADMIN_ID'           , 1);        //不可删除站长id
