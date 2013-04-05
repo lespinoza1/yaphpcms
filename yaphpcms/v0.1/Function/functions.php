@@ -1698,21 +1698,9 @@ function sys_config($key = '', $cache_name = '', $default = '',  $cache_path = M
  * @return string 编译后模板文件名
  */
 function template($controller, $action, $theme_path = '') {
-    $template     = $theme_path . $controller . '/' . $action . C('TEMPLATE_SUFFIX');
-    $compile_dir  = $theme_path . "templates_c/{$controller}/";
-    $compile_file = $compile_dir . $action . '.php';
+    $template = get_instance_of('Misc_Template');
 
-    !is_dir($compile_dir) && mkdir($compile_dir, 0755, true);
-
-    if (!is_file($template)) {
-        throw new Exception(L('_TEMPLATE_NOT_EXIST_') . "($template)");
-    }
-    elseif(!is_file($compile_file) || filemtime($template) > filemtime($compile_file)) {
-        $template = get_instance_of('Misc_Template');
-        $template->compile($controller, $action, $theme_path);
-    }else {echo $compile_file;}
-
-    return $compile_file;
+    return $template->compile($controller, $action, $theme_path);
 }
 
 /**

@@ -12,37 +12,33 @@
  * @lastmodify      $Date$ $Author$
  */
 class Misc_Template {
-    private $_caching  = false;
+    private $_caching  = true;
     private $_cache_id = '';
     private $_ttl      = 3600;
 
+    /**
+     * 编译文件
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-05 22:02:21
+     *
+     * @return string 编译后文件路径名
+     */
     public function compile($controller, $action, $theme_path = '') {
-
+        $theme_path    = $theme_path ? $theme_path : FRONT_THEME_PATH;
         $template_file = $theme_path . $controller . '/' . $action . C('TEMPLATE_SUFFIX');
-        $theme_path    = $theme_path = FRONT_THEME_PATH ? FRONT_THEME_PATH ?
         $compile_dir   = $theme_path . "templates_c/{$controller}/";
         $compile_file  = $compile_dir . $action . '.php';
-        $cache_file    = $theme_path . "templates_d/{$controller}/{$action}.{$this->_cache_id}" . C('HTML_SUFFIX');
 
         !is_dir($compile_dir) && mkdir($compile_dir, 0755, true);
 
         if (!is_file($template_file)) {
             throw new Exception(L('_TEMPLATE_NOT_EXIST_') . "($template_file)");
         }
-        elseif(is_file($compile_file) && filemtime($template_file) < filemtime($compile_file)) {//未编译或编译已过期
-
-            if ($this->_caching) {//缓存
-
-                if (is_file($cache_file) && filemtime($cache_file) > time() - $this->_ttl)) {//缓存未过期
-                    return $cache_file;
-                }
-            }
-            else {
-                return $compile_file;
-            }
+        elseif(is_file($compile_file) && filemtime($template_file) < filemtime($compile_file)) {//已编译并且自上次编译后模板文件未修改
+            return $compile_file;
         }
-
-        if(!is_file($template_file)) {
+        elseif(!is_file($template_file)) {
             throw new Exception(L('_TEMPLATE_NOT_EXIST_') . "($template_file)");
         }
 
@@ -91,38 +87,40 @@ class Misc_Template {
         $source = preg_replace('#\{\$(\w+)\}#', '<?php echo \\1;?>', $source);
         $source = "<?php\n!defined('YAP_PATH') && exit('Access Denied'); ?>" . $source;
 
-        !is_dir($v = $theme_path . "templates_c/{$controller}/") && mkdir($v, 0755, true);
-
-        file_put_contents($v . $action . '.php', $source);
+        file_put_contents($compile_file, $source);
 
         return $compile_file;
     }//end compile
 
     public function fetch($controller, $action, $theme_path = '', $return = true) {
-        $compile_file = $this->compile($controller, $action, $theme_path, true);
+        $theme_path   = $theme_path ? $theme_path : FRONT_THEME_PATH;
+        $compile_file = $this->compile($controller, $action, $theme_path);
 
         if ($this->_caching) {
-            $cache_file = $theme_path . "templates_d/{$controller}/{$action}.{$this->_cache_id}" . C('HTML_SUFFIX');
+            $cache_dir = $theme_path . "templates_d/{$controller}/";
 
-            if (is_file($cache_file) && filemtime($cache_file) > time() - $this->_ttl)) {//缓存未过期
+            !is_dir($cache_dir) && mkdir($cache_dir, 0755, true);
+
+            $cache_file = $cache_dir . $action . $this->_cache_id . C('HTML_SUFFIX');
+
+            if (is_file($cache_file) && filemtime($cache_file) > time() - $this->_ttl) {//缓存未过期
 
                 if ($return) {
                     return file_get_contents($cache_file);
                 }
-
-                $compile_file = $cache_file;
             }
         }
 
         ob_start();
 
-        require($this->_caching ? $cache_file : $compile_file);
+        require($compile_file);
 
         if ($return || $this->_caching) {
             $content = ob_get_contents();
+
             ob_end_clean();
 
-            $this->_caching && file_put_contents($cache_file);
+            $this->_caching && file_put_contents($cache_file, $content);
 
             return $content;
         }
