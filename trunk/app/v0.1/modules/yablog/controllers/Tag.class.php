@@ -27,5 +27,6 @@ class TagController extends BaseController {
      * @return void 无返回值。如果未登陆跳转至登陆页
      */
     public function indexAction() {
+        $this->_display();
     }
 }
