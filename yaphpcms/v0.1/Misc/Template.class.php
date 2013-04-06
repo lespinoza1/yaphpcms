@@ -48,6 +48,11 @@ class Misc_Template {
     private $_compile_path = null;
 
     /**
+     * @var array $_tpl_vars 模板变量。默认array()
+     */
+    private $_tpl_vars = array();
+
+    /**
      * 获取本类实例
      *
      * @author          mrmsl <msl-138@163.com>
@@ -92,18 +97,27 @@ class Misc_Template {
     }
 
     /**
-     * 魔术方法，设置配置
+     * 赋值
      *
      * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-06 12:57:35
+     * @date            2013-04-06 16:00:41
      *
-     * @param string $k 配置项
-     * @param mixed  $v 配置值
+     * @param mixed $key 变量名称或一组变量数组
+     * @param mixed $val 变量值。默认null
      *
      * @return object 本类实例
      */
-    public function __set($k, $v) {
-        $this->$k = $v;
+    public function assign($key, $value = null) {
+
+        if (is_array($key)) {
+
+            foreach ($key as $k => $v) {
+                $this->assign($k, $v);
+            }
+        }
+        else {
+            $this->_tpl_vars[$key] = $value;
+        }
 
         return $this;
     }
@@ -137,46 +151,46 @@ class Misc_Template {
         $source = file_get_contents($template_file);
 
         if (false !== strpos($source, '{template')) {//template()
-            $source = preg_replace('#\{template\s+(.+)\}#', '<?php require(template(\\1)); ?>', $source);
+            $source = preg_replace('#\{template\s+(.+)\}#', '<?php require(template($1)); ?>', $source);
         }
 
         if (false !== strpos($source, '{require')) {//require()
-            $source = preg_replace('#\{include\s+(.+)\}#', '<?php include(\\1); ?>', $source);
+            $source = preg_replace('#\{include\s+(.+)\}#', '<?php include($1); ?>', $source);
         }
 
         if (false !== strpos($source, '{php')) {//php
-            $source = preg_replace('#\{php\s+(.+)\}#', '<?php \\1?>', $source);
+            $source = preg_replace('#\{php\s+(.+)\}#', '<?php $1?>', $source);
         }
 
         if (false !== strpos($source, '{echo')) {//echo
-            $source = preg_replace('#\{echo\s+(.+)\}#', '<?php echo \\1; ?>', $source);
+            $source = preg_replace('#\{echo\s+(.+)\}#', '<?php echo $1; ?>', $source);
         }
 
         //if
         if (false !== strpos($source, '{if')) {
-            $source = preg_replace('#\{if\s+(.+?)\}#', '<?php if(\\1) { ?>', $source);
+            $source = preg_replace('#\{if\s+(.+?)\}#', '<?php if($1) { ?>', $source);
             $source = preg_replace('#\{/if\}#', '<?php } ?>', $source);
         }
         if (false !== strpos($source, '{else')) {
             $source = preg_replace('#\{else\}#', '<?php } else { ?>', $source);
-            $source = preg_replace('#\{elseif\s+(.+?)\}#', '<?php } elseif (\\1) { ?>', $source);
-        }
-
-        //for 循环
-        if (false !== strpos($source, '{for')) {
-            $source = preg_replace('#\{for\s+(.+?)\}#','<?php for(\\1) { ?>', $source);
-            $source = preg_replace('#\{/for\}#','<?php } ?>', $source);
+            $source = preg_replace('#\{elseif\s+(.+?)\}#', '<?php } elseif ($1) { ?>', $source);
         }
 
         //foreach
         if (false !== strpos($source, '{foreach')) {
-            $source = preg_replace('#\{foreach\s+(\S+)\s+(\S+)\}#', '<?php \$n=1;if(is_array(\\1)) { foreach(\\1 as \\2) { ?>', $source);
-            $source = preg_replace('#\{foreach\s+(\S+)\s+(\S+)\s+(\S+)\}#', '<?php \$n=1; if(is_array(\\1)) { foreach(\\1 as \\2 => \\3) { ?>', $source);
-            $source = preg_replace('#\{/foreach\}#', '<?php \$n++; } unset(\$n); ?>', $source);
+            $source = preg_replace('#\{foreach\s+(\S+)\s+(\S+)\}#', '<?php \$n=1;if(is_array($1)) { foreach($1 as $2) { ?>', $source);
+            $source = preg_replace('#\{foreach\s+(\S+)\s+(\S+)\s+(\S+)\}#', '<?php \$n=1; if(is_array($1)) { foreach($1 as $2 => $3) { ?>', $source);
+            $source = preg_replace('#\{/foreach\}#', '<?php \$n++; }} unset(\$n); ?>', $source);
         }
 
-        $source = preg_replace('#\{(\w+)\}#', '<?php echo \\1;?>', $source);//{CONSTANT
-        $source = preg_replace('#\{\$(\w+)\}#', '<?php echo \\1;?>', $source);//{$var
+        //for 循环
+        if (false !== strpos($source, '{for')) {
+            $source = preg_replace('#\{for\s+(.+?)\}#','<?php for($1) { ?>', $source);
+            $source = preg_replace('#\{/for\}#','<?php } ?>', $source);
+        }
+
+        $source = preg_replace('#\{(\w+)\}#', '<?php echo $1;?>', $source);//{CONSTANT
+        $source = preg_replace('#\{(\$\w+)\}#', '<?php echo $1;?>', $source);//{$var
         $source = "<?php\n!defined('YAP_PATH') && exit('Access Denied'); ?>" . $source;
 
         file_put_contents($compile_file, $source);
@@ -230,6 +244,8 @@ class Misc_Template {
         }
 
         ob_start();
+
+        extract($this->_tpl_vars, EXTR_OVERWRITE);
 
         require($compile_file);
 
