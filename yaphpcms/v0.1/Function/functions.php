@@ -1695,12 +1695,15 @@ function sys_config($key = '', $cache_name = '', $default = '',  $cache_path = M
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-04-05 18:33:48
  *
- * @return string 编译后模板文件名
+ * @param string $controller 控制器
+ * @param string $action     操作方法
+ *
+ * @return string 编译后文件路径
  */
-function template($controller, $action, $theme_path = '') {
-    $template = get_instance_of('Misc_Template');
+function template($controller, $action) {
+    $template = Misc_Template::getInstance();
 
-    return $template->compile($controller, $action, $theme_path);
+    return $template->compile($controller, $action);
 }
 
 /**
