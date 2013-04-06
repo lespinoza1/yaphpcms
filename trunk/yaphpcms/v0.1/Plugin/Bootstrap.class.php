@@ -118,8 +118,9 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
             cookie('theme', null);
         }
 
-        define('THEME'      , $theme);
-        define('THEME_PATH' , VIEW_PATH . THEME . '/');
+        define('THEME'           , $theme);
+        define('THEME_PATH'      , VIEW_PATH . THEME . '/');
+        define('FRONT_THEME_PATH', str_replace('modules/admin/', 'modules/' . YABLOG_FRONT_MODULE_NAME . '/', THEME_PATH));
     }//end _initLangTheme
 
     /**
