@@ -28,6 +28,10 @@
 
 class BaseController extends Yaf_Controller_Abstract {
     /**
+     * @var object $_obj_compile 模板编译对象。默认null
+     */
+    protected $_obj_compile           = null;
+    /**
      * @var bool $_init_model true实例对应模型。默认true
      */
     protected $_init_model           = false;
@@ -113,6 +117,22 @@ class BaseController extends Yaf_Controller_Abstract {
     }//end _ajaxReturn
 
     /**
+     * 渲染模板
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-06 17:32:39
+     *
+     * @param string $controller 控制器。默认MODULE_NAME
+     * @param string $action     操作方法。默认MODULE_NAME
+     *
+     * @return void 无返回值
+     */
+    protected function _display($controller = MODULE_NAME, $action = MODULE_NAME) {
+        $o = Misc_Template::getInstance();
+        $o->display($controller, $action);
+    }
+
+    /**
      * 获取当前控制器名称
      *
      * @author            mrmsl <msl-138@163.com>
@@ -158,28 +178,6 @@ class BaseController extends Yaf_Controller_Abstract {
      */
     protected function _getRefererUrl() {
         return REFERER_PAGER;
-    }
-
-    /**
-     * 设置Smarty基础变量
-     *
-     * @author      mrmsl <msl-138@163.com>
-     * @date        2013-02-18 15:00:30
-     *
-     * @return mixed 获取成功，将返回包含字段名的数组，否则false
-     */
-    protected function _setSmartyBaseVars() {
-        $base_vars = array(
-            'SITE_URL'          => SITE_URL,//网站网址，不以/结尾
-            'WEB_SITE_URL'      => WEB_SITE_URL,//网站网址，以/结尾
-            'COMMON_IMGCACHE'   => COMMON_IMGCACHE,
-            'IMGCACHE_JS'       => IMGCACHE_JS,
-            'IMGCACHE_CSS'      => IMGCACHE_CSS,
-            'IMGCACHE_IMG'      => IMGCACHE_IMG,
-            'SYS_CONFIG'        => sys_config()
-        );
-
-        $this->getView()->assign($base_vars);
     }
 
     /**
@@ -309,6 +307,8 @@ class BaseController extends Yaf_Controller_Abstract {
             $this->_pk_field = $this->_model->getPk();//主键字段
         }
 
+        $this->_obj_compile = Misc_Template::getInstance();
+
         if (defined('APP_INIT')) {//跨模块，直接返回
             return true;
         }
@@ -316,11 +316,6 @@ class BaseController extends Yaf_Controller_Abstract {
         define('APP_INIT' , true);   //跨模块调用时，不再往下
 
         L('MODULE_NAME', L('MODULE_NAME_' .  $this->_getControllerName()));//C => L
-
-        if (Yaf_Registry::has('smarty')) {
-            $this->getView()->setConfig(C('SMARTY_CONFIG'));
-            $this->_setSmartyBaseVars();
-        }
 
         return true;
     }//end init
