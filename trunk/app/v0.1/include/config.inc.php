@@ -41,4 +41,10 @@ return array(
         'compile_dir'       => THEME_PATH . 'templates_c/',
         'cache_dir'         => THEME_PATH . 'templates_d/',
     ),
+    'TEMPLATE_CONFIG'       => array(//模板配置
+        '_templates_path'   => FRONT_THEME_PATH,
+        '_compile_path'     => FRONT_THEME_PATH . 'templates_c/',
+        '_cache_path'       => FRONT_THEME_PATH . 'templates_d/',
+        '_caching'          => !IS_LOCAL,
+    ),
 );
