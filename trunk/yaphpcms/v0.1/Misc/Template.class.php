@@ -12,9 +12,101 @@
  * @lastmodify      $Date$ $Author$
  */
 class Misc_Template {
-    private $_caching  = true;
+    /**
+     * @var array $_instance 缓存实例。默认array()
+     */
+    static private $_instance = array();
+
+    /**
+     * @var bool $_caching true开启模板缓存。默认false
+     */
+    private $_caching = false;
+
+    /**
+     * @var string $_cache_lifetime 缓存时间，单位秒。默认3600
+     */
+    private $_cache_lifetime = 3600;
+
+    /**
+     * @var string $_cache_id 缓存标识id。默认''
+     */
     private $_cache_id = '';
-    private $_ttl      = 3600;
+
+    /**
+     * @var string $_cache_path 编译缓存路径。默认null，自定义路径
+     */
+    private $_cache_path = null;
+
+    /**
+     * @var string $_templates_path 模板路径。默认
+     */
+    private $_templates_path = null;
+
+    /**
+     * @var string $_compile_path 编译路径。默认null，自定义路径
+     */
+    private $_compile_path = null;
+
+    /**
+     * 获取本类实例
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-06 12:55:37
+     *
+     * @param array $config 配置。默认null，C('TEMPLATE_CONFIG')
+     *
+     * @return object 本类实例
+     */
+    static public function getInstance($config = null) {
+
+        if (null === $config && ($v = C('TEMPLATE_CONFIG'))) {
+            $config = $v;
+        }
+
+        $config = $config ? $config : array();
+
+        $identify = to_guid_string($config);
+
+        if (!isset(self::$_instance[$identify])) {
+            self::$_instance[$identify] = new Misc_Template($config);
+        }
+
+        return self::$_instance[$identify];
+    }
+
+    /**
+     * 获取本类实例
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-06 12:57:06
+     *
+     * @param array $config 配置
+     *
+     * @return object 本类实例
+     */
+    public function __construct($config = array()) {
+
+        foreach($config as $k => $v) {
+            $this->$k = $v;
+        }
+    }
+
+    /**
+     * 魔术方法，设置配置
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-06 12:57:35
+     *
+     * @param string $k 配置项
+     * @param mixed  $v 配置值
+     *
+     * @return object 本类实例
+     */
+    public function __set($k, $v) {
+        $this->$k = $v;
+
+        return $this;
+    }
 
     /**
      * 编译文件
@@ -22,12 +114,15 @@ class Misc_Template {
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-04-05 22:02:21
      *
+     * @param string $controller 控制器
+     * @param string $action     操作方法
+     *
+     * @throw Exception 调用模板不存在
      * @return string 编译后文件路径名
      */
-    public function compile($controller, $action, $theme_path = '') {
-        $theme_path    = $theme_path ? $theme_path : FRONT_THEME_PATH;
-        $template_file = $theme_path . $controller . '/' . $action . C('TEMPLATE_SUFFIX');
-        $compile_dir   = $theme_path . "templates_c/{$controller}/";
+    public function compile($controller, $action) {
+        $template_file = $this->_templates_path . $controller . '/' . $action . C('TEMPLATE_SUFFIX');
+        $compile_dir   = $this->_compile_path . $controller . '/';
         $compile_file  = $compile_dir . $action . '.php';
 
         !is_dir($compile_dir) && mkdir($compile_dir, 0755, true);
@@ -38,9 +133,6 @@ class Misc_Template {
         elseif(is_file($compile_file) && filemtime($template_file) < filemtime($compile_file)) {//已编译并且自上次编译后模板文件未修改
             return $compile_file;
         }
-        elseif(!is_file($template_file)) {
-            throw new Exception(L('_TEMPLATE_NOT_EXIST_') . "($template_file)");
-        }
 
         $source = file_get_contents($template_file);
 
@@ -48,7 +140,7 @@ class Misc_Template {
             $source = preg_replace('#\{template\s+(.+)\}#', '<?php require(template(\\1)); ?>', $source);
         }
 
-        if (false !== strpos($source, '{require')) {//include()
+        if (false !== strpos($source, '{require')) {//require()
             $source = preg_replace('#\{include\s+(.+)\}#', '<?php include(\\1); ?>', $source);
         }
 
@@ -56,7 +148,7 @@ class Misc_Template {
             $source = preg_replace('#\{php\s+(.+)\}#', '<?php \\1?>', $source);
         }
 
-        if (false !== strpos($source, '{echo')) {//php
+        if (false !== strpos($source, '{echo')) {//echo
             $source = preg_replace('#\{echo\s+(.+)\}#', '<?php echo \\1; ?>', $source);
         }
 
@@ -83,8 +175,8 @@ class Misc_Template {
             $source = preg_replace('#\{/foreach\}#', '<?php \$n++; } unset(\$n); ?>', $source);
         }
 
-        $source = preg_replace('#\{(\w+)\}#', '<?php echo \\1;?>', $source);
-        $source = preg_replace('#\{\$(\w+)\}#', '<?php echo \\1;?>', $source);
+        $source = preg_replace('#\{(\w+)\}#', '<?php echo \\1;?>', $source);//{CONSTANT
+        $source = preg_replace('#\{\$(\w+)\}#', '<?php echo \\1;?>', $source);//{$var
         $source = "<?php\n!defined('YAP_PATH') && exit('Access Denied'); ?>" . $source;
 
         file_put_contents($compile_file, $source);
@@ -92,18 +184,44 @@ class Misc_Template {
         return $compile_file;
     }//end compile
 
-    public function fetch($controller, $action, $theme_path = '', $return = true) {
-        $theme_path   = $theme_path ? $theme_path : FRONT_THEME_PATH;
-        $compile_file = $this->compile($controller, $action, $theme_path);
+    /**
+     * 渲染模板
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-06 09:33:01
+     *
+     * @param string $controller 控制器
+     * @param string $action     操作方法
+     *
+     * @return void 无返回值
+     */
+    public function display($controller, $action) {
+        echo $this->fetch($controller, $action, true);
+    }
 
-        if ($this->_caching) {
-            $cache_dir = $theme_path . "templates_d/{$controller}/";
+    /**
+     * 编译并获取编译文件内容
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-06 09:20:43
+     *
+     * @param string $controller 控制器
+     * @param string $action     操作方法
+     * @param bool   $return     true返回编译文件内容。默认true
+     *
+     * @return string|true $return=true返回编译文件内容，否则true
+     */
+    public function fetch($controller, $action, $return = true) {
+        $compile_file = $this->compile($controller, $action);
+
+        if ($this->_caching) {//缓存
+            $cache_dir = $this->_cache_path . $controller . '/';
 
             !is_dir($cache_dir) && mkdir($cache_dir, 0755, true);
 
             $cache_file = $cache_dir . $action . $this->_cache_id . C('HTML_SUFFIX');
 
-            if (is_file($cache_file) && filemtime($cache_file) > time() - $this->_ttl) {//缓存未过期
+            if (is_file($cache_file) && filemtime($cache_file) > time() - $this->_cache_lifetime) {//缓存未过期
 
                 if ($return) {
                     return file_get_contents($cache_file);
@@ -115,18 +233,15 @@ class Misc_Template {
 
         require($compile_file);
 
-        if ($return || $this->_caching) {
+        if ($return || $this->_caching) {//返回内容或写入缓存
             $content = ob_get_contents();
-
             ob_end_clean();
 
             $this->_caching && file_put_contents($cache_file, $content);
 
             return $content;
         }
-    }
 
-    public function display($controller, $action, $theme_path = '') {
-        echo $this->fetch($controller, $action, $theme_path, true);
-    }
+        return true;
+    }//end fetch
 }
