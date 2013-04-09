@@ -12,5 +12,5 @@
  * @lastmodify      $Date$ $Author$
  */
 
-define('APP_NAME'       , 'yablog');//项目名称
+define('APP_NAME'       , 'yablog');//项目名称 
 require(__DIR__ . '/bootstrap.php');
