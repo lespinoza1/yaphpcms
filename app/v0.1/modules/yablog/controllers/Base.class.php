@@ -128,7 +128,7 @@ class BaseController extends Yaf_Controller_Abstract {
      * @return void 无返回值
      */
     protected function _display($controller = MODULE_NAME, $action = ACTION_NAME) {
-        $o = Misc_Template::getInstance();
+        $o = Misc_YapTemplate::getInstance();
         $o->display($controller, $action);
     }
 
