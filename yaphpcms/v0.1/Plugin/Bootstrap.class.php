@@ -121,7 +121,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
         define('THEME'           , $theme);
         define('THEME_PATH'      , VIEW_PATH . THEME . '/');
 
-        !defined('FRONT_THEME_PATH', $v = str_replace('modules/admin/', 'modules/' . YABLOG_FRONT_MODULE_NAME . '/', THEME_PATH)) && define('FRONT_THEME_PATH', $v);
+        !defined('FRONT_THEME_PATH') && define('FRONT_THEME_PATH', str_replace('modules/admin/', 'modules/' . YABLOG_FRONT_MODULE_NAME . '/', THEME_PATH));
     }//end _initLangTheme
 
     /**
