@@ -165,7 +165,7 @@ class BaseController extends Yaf_Controller_Abstract {
      * @return string 当前页面url
      */
     protected function _getPageUrl() {
-        return REQUEST_METHOD . ' ' . to_website_url(REQUEST_URI);
+        return REQUEST_METHOD . ' ' . SITE_URL . REQUEST_URI;
     }
 
     /**

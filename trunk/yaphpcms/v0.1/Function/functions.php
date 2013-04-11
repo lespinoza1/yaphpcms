@@ -1720,7 +1720,7 @@ function template($controller, $action) {
 function to_website_url($path) {
     $path = 0 === strpos($path, DS) ? substr($path, 1) : $path;
 
-    return WEB_SITE_URL . WEB_BASE_PATH . $path;
+    return BASE_SITE_URL . $path;
 }
 
 /**
