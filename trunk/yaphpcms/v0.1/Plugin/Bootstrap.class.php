@@ -170,6 +170,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
      */
     public function routerStartup(Yaf_Request_Abstract $request, Yaf_Response_Abstract $response) {
         Yaf_Loader::getInstance(APP_PATH . 'library', YAP_PATH);//注册项目及全局类库路径
+        Yaf_Dispatcher::getInstance()->disableView();//禁用自动渲染模板输出
         $this->_init();
     }
 
