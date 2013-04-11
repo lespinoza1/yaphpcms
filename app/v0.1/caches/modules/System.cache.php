@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-04-11 18:25:04
+//最后更新时间:2013-04-11 21:21:56
 
 return array (
   'sys_base_domain' => 'www.yaphpcms.com',
@@ -17,7 +17,7 @@ return array (
   'sys_base_admin_imgcache' => 'http://imgcache.yaphpcms.com/v0.1/admin/',
   'sys_base_js_url' => 'http://imgcache.yaphpcms.com/v0.1/yablog/js/',
   'sys_base_css_url' => 'http://imgcache.yaphpcms.com/v0.1/yablog/css/',
-  'sys_base_img_url' => 'http://imgcache.yaphpcms.com/v0.1/yablog/images',
+  'sys_base_img_url' => 'http://imgcache.yaphpcms.com/v0.1/yablog/images/',
   'sys_seo_description' => 'seo描述',
   'sys_base_closed' => '1',
   'sys_base_closed_reason' => '<div style="color: red">网站关闭了</div>',

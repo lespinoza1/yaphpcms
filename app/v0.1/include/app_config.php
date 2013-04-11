@@ -47,10 +47,11 @@ define('WEB_COOKIE_DOMAIN'     , '@domain' == ($cookie_domain = sys_config('sys_
 //session cookie domain
 define('WEB_SESSION_COOKIE_DOMAIN' , '@domain' == ($session_cookie_domain = sys_config('sys_session_cookie_domain')) ? WEB_DOMAIN_SCOPE : $session_cookie_domain);
 define('WEB_HTTP_PROTOCOL'     , sys_config('sys_base_http_protocol'));//http协议
+define('WEB_BASE_PATH'         , sys_config('sys_base_wwwroot'));////网站相对根目录
 define('SITE_URL'              , WEB_HTTP_PROTOCOL . '://' . WEB_DOMAIN);//网站网址，不以/结束
 define('WEB_SITE_URL'          , SITE_URL . '/');//网站网址，以/结束
-define('WEB_BASE_PATH'         , sys_config('sys_base_wwwroot'));////网站相对根目录
-define('WEB_ADMIN_ENTRY'       , 0 === strpos('http://', $v = sys_config('sys_base_admin_entry')) ? $v : WEB_SITE_URL . WEB_BASE_PATH . $v);//管理员入口
+define('BASE_SITE_URL'         , WEB_SITE_URL . WEB_BASE_PATH);//网站网址，包括网站根目录
+define('WEB_ADMIN_ENTRY'       , 0 === strpos('http://', $v = sys_config('sys_base_admin_entry')) ? $v : BASE_SITE_URL . $v);//管理员入口
 define('WEB_JS_PATH'           , WWWROOT . sys_config('sys_base_js_path'));//js物理路径
 define('WEB_JS_LANG_PATH'      , WEB_JS_PATH . 'lang/');//js语言包物理路径
 define('WEB_CSS_PATH'          , WWWROOT . sys_config('sys_base_css_path'));//css物理路径

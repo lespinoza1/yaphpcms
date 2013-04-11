@@ -13,6 +13,8 @@
  */
 
 return array(
+    'ABSOLUTE'                  => '绝对',
+    'ADDRESS'                   => '地址',
     'ALL'                       => '全部',
     'AVAILABILITY'              => '有效',//by mrmsl on 2012-09-18 09:49:35
     'AVOID'                     => '避免',
