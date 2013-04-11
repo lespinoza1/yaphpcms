@@ -15,4 +15,5 @@
 return array(
     'BELONG_TO_CATEGORY'    => '所属分类',
     'MODULE_NAME_BLOG'      => '博客',
+    'SUMMARY_TIP'           => '留空默认取内容前{0}字节',
 );
