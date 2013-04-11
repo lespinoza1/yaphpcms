@@ -404,7 +404,10 @@ Ext.define('Yap.controller.Base', {
         if (this._formpanel) {
             var form = this._formpanel.getForm();
 
-            if (form.findField(this.idProperty).getValue() != pkValue) {//主键值不等
+            if (data.clone) {//复制 by mrmsl on 2013-04-11 20:25:22
+                destroy = true;
+            }
+            else if (form.findField(this.idProperty).getValue() != pkValue) {//主键值不等
                 destroy = true;
             }
             //父级id不等
