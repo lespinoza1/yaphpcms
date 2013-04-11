@@ -15,17 +15,4 @@
 //namespace Yap\Module\Admin\Bootstrap;
 
 class Bootstrap extends Yaf_Bootstrap_Abstract {
-    /**
-     * 启动方法
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-01-23 15:46:29
-     *
-     * @param object $dispatcher Yaf_Dispatcher实例
-     *
-     * @return void 无返回值
-     */
-    private function _initRun(Yaf_Dispatcher $dispatcher) {
-        Yaf_Dispatcher::getInstance()->disableView();
-    }
 }
