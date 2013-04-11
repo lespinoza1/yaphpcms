@@ -307,7 +307,7 @@ class BaseController extends Yaf_Controller_Abstract {
             $this->_pk_field = $this->_model->getPk();//主键字段
         }
 
-        $this->_obj_compile = Misc_Template::getInstance();
+        $this->_obj_compile = Misc_YapTemplate::getInstance();
 
         if (defined('APP_INIT')) {//跨模块，直接返回
             return true;

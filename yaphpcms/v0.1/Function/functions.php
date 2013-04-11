@@ -1701,7 +1701,7 @@ function sys_config($key = '', $cache_name = '', $default = '',  $cache_path = M
  * @return string 编译后文件路径
  */
 function template($controller, $action) {
-    $template = Misc_Template::getInstance();
+    $template = Misc_YapTemplate::getInstance();
 
     return $template->compile($controller, $action);
 }
