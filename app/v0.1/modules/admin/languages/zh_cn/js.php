@@ -96,6 +96,7 @@ return array(
     'SUBMIT_TIP'                => '可按ctrl+enter提交',//by mrmsl on 2012-09-07 09:12:17
     'SUFFIX'                    => '后缀',//by mrmsl on 2012-09-13 2012-09-13 11:32:33
     'SUGGEST'                   => '建议',//by mrmsl on 2012-09-13 11:04:23
+    'SUMMARY'                   => '摘要',
     'SYSTEM_INFOMATION'         => '系统提示',
     'TO_BE_REPLACED'            => '将被替换为',
     'TO_EDIT_TIP'               => '<span class="font-red">填写后，请毋轻易修改</span>',//by mrmsl on 2012-09-05 11:11:31

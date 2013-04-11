@@ -85,6 +85,7 @@ MODIFY status is_issue tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;
 ADD COLUMN is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除' AFTER is_issue,
 ADD COLUMN from_name varchar(200) NOT NULL DEFAULT '' COMMENT '来源名称',
 ADD COLUMN from_url varchar(200) NOT NULL DEFAULT '' COMMENT '来源url',
+ADD COLUMN summary text COMMENT '摘要'
 ADD INDEX issue_delete(is_issue, is_delete)
 */
 
@@ -101,7 +102,8 @@ CREATE TABLE `tb_blog` (
   `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
    seo_keyword varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
    seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
-  `content` text NOT NULL COMMENT '内容',
+  `content` text COMMENT '内容',
+  summary text COMMENT '摘要',
   from_name varchar(200) NOT NULL DEFAULT '' COMMENT '来源名称',
   from_url varchar(200) NOT NULL DEFAULT '' COMMENT '来源url',
   PRIMARY KEY (`blog_id`),

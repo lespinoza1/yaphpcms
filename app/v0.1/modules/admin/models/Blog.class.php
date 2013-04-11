@@ -47,6 +47,7 @@ class BlogModel extends BaseModel {
         //标题
         'title'            => array('validate' => array('notblank#TITLE', 'title#{%TITLE,EXIST}#VALUE_VALIDATE#unique', '_checkLength#TITLE#value|0|60')),
         'content'         	=> array('filter' => 'raw', 'validate' => 'notblank#CONTENT'),
+        'summary'         	=> array('filter' => 'raw'),//摘要
 
         //seo关键字
         'seo_keyword'      => array('validate' => array('notblank#SEO_KEYWORD', '_checkLength#SEO_KEYWORD#value|6|180')),
@@ -60,6 +61,16 @@ class BlogModel extends BaseModel {
         'add_time'         => null,
         'update_time'      => array('filter' => 'int', 'validate' => array('_checkLength#UPDATE,TIME,DATA#value|0')),
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function _beforeWrite(&$data) {
+
+        if (empty($data['summary'])) {//摘要为空，默认取内容前300字节
+            $data['summary'] = substr(strip_tags($data['content']), 0, 300);
+        }
+    }
 
     /**
      * 验证所属分类
