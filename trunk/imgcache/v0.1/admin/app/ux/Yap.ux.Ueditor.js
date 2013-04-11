@@ -122,7 +122,8 @@ Ext.define('Yap.ux.Ueditor', {
             Ext.apply(this.editorConfig, {
                 initialFrameWidth: this.width || '100%',
                 initialFrameHeight: this.height || '100%',
-                initialContent: this.value || ''
+                initialContent: this.value || '',
+                initialStyle: this.initialStyle || 'body{font-size: 12px}'
             });
             this.editor = UE.getEditor(this.bodyEl.id, this.editorConfig);
             this.editorId = this.editor.id;
