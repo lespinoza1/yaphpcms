@@ -46,5 +46,6 @@ return array(
         '_compile_path'     => FRONT_THEME_PATH . 'templates_c/',
         '_cache_path'       => FRONT_THEME_PATH . 'templates_d/',
         '_caching'          => !IS_LOCAL,
+        '_force_compile'    => APP_DEBUG,
     ),
 );

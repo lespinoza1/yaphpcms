@@ -53,6 +53,11 @@ class Misc_YapTemplate {
     private $_tpl_vars = array();
 
     /**
+     * @var bool $_force_compile true强制每次都需要编译。默认false
+     */
+    private $_force_compile = false;
+
+    /**
      * 获取本类实例
      *
      * @author          mrmsl <msl-138@163.com>
@@ -97,6 +102,37 @@ class Misc_YapTemplate {
     }
 
     /**
+     * 魔术方法__get，获取属性
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-12 15:41:06
+     *
+     * @param mixed $key 属性
+     *
+     * @return mixed 属性值
+     */
+    public function __get($key) {
+        return $this->$key;
+    }
+
+    /**
+     * 魔术方法__set，设置属性
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-12 15:39:06
+     *
+     * @param mixed $key 属性名
+     * @param mixed $val 属性值
+     *
+     * @return object 本类实例
+     */
+    public function __set($key, $val) {
+        $this->$key = $val;
+
+        return $this;
+    }
+
+    /**
      * 赋值
      *
      * @author          mrmsl <msl-138@163.com>
@@ -123,6 +159,46 @@ class Misc_YapTemplate {
     }
 
     /**
+     * 清除编译缓存
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-12 15:16:23
+     *
+     * @param string $controller 控制器。默认CONTROLLER_NAME。如果为空，则清除全部编译文件
+     * @param string $action     操作方法。默认ACTION_NAME。如果为空，则清除$controller所有编译文件
+     *
+     * @return void 无返回值
+     */
+    public function clearCache($controller = CONTROLLER_NAME, $action = ACTION_NAME, $cache_id =  '') {
+        $compile_dir = $this->_compile_path . $controller . '/';
+        $cache_dir   = $this->_cache_path . $controller . '/';
+
+        if ($action) {
+            is_file($filename = $compile_dir . "{$action}.php") && unlink($filename);//编译文件
+
+            is_file($filename = $cache_dir . $action . $cache_id . C('HTML_SUFFIX')) && unlink($filename);//缓存文件
+
+            if ($cache_id && strpos($cache_id, ',')) {//同时清除多个
+
+                foreach (explode(',', $cache_id) as $v) {
+
+                    is_file($filename = $cache_dir . $action . $v . C('HTML_SUFFIX')) && unlink($filename);
+                }
+            }
+        }
+        else {
+
+            foreach(glob($compile_dir . '*') as $v) {//编译文件
+                is_file($filename = $compile_dir . $v) && unlink($filename);
+            }
+
+            foreach(blog($cache_dir . '*') as $v) {//缓存文件
+                is_file($filename = $cache_dir . $v) && unlink($filename);
+            }
+        }
+    }
+
+    /**
      * 编译文件
      *
      * @author          mrmsl <msl-138@163.com>
@@ -144,7 +220,7 @@ class Misc_YapTemplate {
         if (!is_file($template_file)) {
             throw new Exception(L('_TEMPLATE_NOT_EXIST_') . "($template_file)");
         }
-        elseif(is_file($compile_file) && filemtime($template_file) < filemtime($compile_file)) {//已编译并且自上次编译后模板文件未修改
+        elseif(!$this->_force_compile && is_file($compile_file) && filemtime($template_file) < filemtime($compile_file)) {//已编译并且自上次编译后模板文件未修改
             return $compile_file;
         }
 
@@ -206,11 +282,12 @@ class Misc_YapTemplate {
      *
      * @param string $controller 控制器
      * @param string $action     操作方法
+     * @param string $cache_id   缓存标识。默认''
      *
      * @return void 无返回值
      */
-    public function display($controller, $action) {
-        echo $this->fetch($controller, $action, true);
+    public function display($controller, $action, $cache_id = '') {
+        echo $this->fetch($controller, $action, $cache_id, true);
     }
 
     /**
@@ -221,19 +298,20 @@ class Misc_YapTemplate {
      *
      * @param string $controller 控制器
      * @param string $action     操作方法
+     * @param string $cache_id   缓存标识。默认''
      * @param bool   $return     true返回编译文件内容。默认true
      *
      * @return string|true $return=true返回编译文件内容，否则true
      */
-    public function fetch($controller, $action, $return = true) {
+    public function fetch($controller, $action, $cache_id = '', $return = true) {
         $compile_file = $this->compile($controller, $action);
 
-        if ($this->_caching) {//缓存
+        if (!$this->_force_compile && $this->_caching) {//缓存
             $cache_dir = $this->_cache_path . $controller . '/';
 
             !is_dir($cache_dir) && mkdir($cache_dir, 0755, true);
 
-            $cache_file = $cache_dir . $action . $this->_cache_id . C('HTML_SUFFIX');
+            $cache_file = $cache_dir . $action . ($cache_id ? $cache_id : $this->_cache_id) . C('HTML_SUFFIX');
 
             if (is_file($cache_file) && filemtime($cache_file) > time() - $this->_cache_lifetime) {//缓存未过期
 
@@ -253,7 +331,9 @@ class Misc_YapTemplate {
             $content = ob_get_contents();
             ob_end_clean();
 
-            $this->_caching && file_put_contents($cache_file, $content);
+            if (!$this->_force_compile && $this->_caching) {
+                file_put_contents($cache_file, $content);
+            }
 
             return $content;
         }
