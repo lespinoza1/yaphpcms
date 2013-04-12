@@ -22,10 +22,26 @@ class BlogController extends BaseController {
         'issue'    => 'add',//发布状态
         'isdelete' => 'add',//删除状态
     );
-
     /**
      * {@inheritDoc}
      */
+    protected function _afterSetField($field, $value, $pk_id) {
+
+        if (1 == $value) {
+
+            if ($field == 'issue') {//发布
+
+            }
+        }
+        else {
+
+            if ($field == 'issue') {//取消发布
+
+            }
+        }
+    }
+
+
     protected function _beforeExec(&$pk_id, &$log) {
         $pk_field   = $this->_pk_field;
         $data       = $this->_model->where(array($pk_field => array('IN', $pk_id)))->field($pk_field . ',title')->select();
@@ -73,6 +89,8 @@ class BlogController extends BaseController {
         $cate_info = $this->_getCache($cate_id = $this->_model->cate_id, 'Category');//所属分类
 
         $data['cate_name'] = $cate_info['cate_name'];//所属分类名称
+        $summary           = strip_tags($data['summary']);
+        $data['summary']   = $summary ? $data['summary'] : substr(strip_tags($data['content']), 0, 300);//摘要，默认取内容前300字节 by mrmsl on 2013-04-12 14:56:41
 
         if ($pk_value) {//编辑
 

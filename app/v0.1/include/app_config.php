@@ -15,7 +15,6 @@
 //use Yap\Func;
 
 //核心配置
-define('YABLOG_FRONT_MODULE_NAME', 'yablog');//前台模块名称
 define('DS'                 , '/');      //路径分割符
 
 define('ADMIN_ID'           , 1);        //不可删除站长id
@@ -37,6 +36,10 @@ define('MODULE_CACHE_PATH'  , CACHE_PATH . 'modules/');     //系统模块信息
 define('LANG_PATH'          , APP_PATH . 'languages/');     //项目语言包目录
 define('VIEW_PATH'          , APP_PATH . 'views/');         //模板目录
 define('APP_FORWARD'        , 'APP_FORWARD');               //Yaf_Controller_Abstract::forward标识
+
+//博客设置
+define('YABLOG_FRONT_MODULE_NAME', 'yablog');//前台模块名称
+define('BLOG_HTML_PATH'     , WWWROOT . 'blog/' . date('Y/m/d/'));//博客html路径
 
 //网站配置定义
 define('SESSION_ADMIN_KEY'     , '__admin__');//管理员session key

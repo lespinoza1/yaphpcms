@@ -28,6 +28,10 @@
 
 class BaseController extends Yaf_Controller_Abstract {
     /**
+     * @var object $_view_template 模板编译对象。默认null
+     */
+    protected $_view_template           = null;
+    /**
      * @var array $_admin_info 管理员信息
      */
     protected $_admin_info           = array();
@@ -73,6 +77,39 @@ class BaseController extends Yaf_Controller_Abstract {
     protected $_priv_map             = array(
         'info'         => 'add',//获取信息
     );
+
+    /**
+     * 设置某一字段值后置操作，如博客，设置发布后，生博客静态页
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-12 14:34:45
+     *
+     * @param string $field  字段名
+     * @param string $valule 字段值
+     * @param string $pk_id  主键值
+     *
+     * @return void 无返回值
+     */
+    protected function _afterSetField($field, $value, $pk_id) {
+    }
+
+    /**
+     * 生成静态页
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-12 15:01:54
+     *
+     * @param string $dir      保存路径
+     * @param string $filename 文件名
+     * @param string $content  文件内容
+     *
+     * @return void 无返回值
+     */
+    protected function _buildHtml($dir, $filename, $content) {
+        !is_dir($dir) && mkdir($dir, 0755, true);
+
+        file_put_contents($dir . $filename, $content);
+    }
 
     /**
      * 检测登陆
@@ -173,6 +210,23 @@ class BaseController extends Yaf_Controller_Abstract {
         $this->_controller_name = $this->_controller_name ? $this->_controller_name : substr(get_class($this), 0, -10);
 
         return $this->_controller_name;
+    }
+
+    /**
+     * 获取视图模板引擎实例
+     *
+     * @author            mrmsl <msl-138@163.com>
+     * @data              2013-04-12 15:36:13
+     *
+     * @return object 视图模板引擎实例
+     */
+    protected function _getViewTemplate() {
+
+        if (!$this->_view_template) {
+            $this->_view_template = Misc_YapTemplate::getInstance();
+        }
+
+        return $this->_view_template;
     }
 
     /**
@@ -856,6 +910,8 @@ class BaseController extends Yaf_Controller_Abstract {
             if (!empty($this->_after_exec_cache) && isset($data)) {
                 $this->_setCache($data);//生成缓存
             }
+
+            method_exists($this, '_afterSetField') && $this->_afterSetField($field, $value, $pk_id);
 
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
