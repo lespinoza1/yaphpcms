@@ -28,9 +28,9 @@
 
 class BaseController extends Yaf_Controller_Abstract {
     /**
-     * @var object $_obj_compile 模板编译对象。默认null
+     * @var object $_view_template 模板编译对象。默认null
      */
-    protected $_obj_compile           = null;
+    protected $_view_template           = null;
     /**
      * @var bool $_init_model true实例对应模型。默认true
      */
@@ -128,8 +128,7 @@ class BaseController extends Yaf_Controller_Abstract {
      * @return void 无返回值
      */
     protected function _display($controller = MODULE_NAME, $action = ACTION_NAME) {
-        $o = Misc_YapTemplate::getInstance();
-        $o->display($controller, $action);
+        $this->_getViewTemplate()->display($controller, $action);
     }
 
     /**
@@ -178,6 +177,23 @@ class BaseController extends Yaf_Controller_Abstract {
      */
     protected function _getRefererUrl() {
         return REFERER_PAGER;
+    }
+
+    /**
+     * 获取视图模板引擎实例
+     *
+     * @author            mrmsl <msl-138@163.com>
+     * @data              2013-04-12 15:41:29
+     *
+     * @return object 视图模板引擎实例
+     */
+    protected function _getViewTemplate() {
+
+        if (!$this->_view_template) {
+            $this->_view_template = Misc_YapTemplate::getInstance();
+        }
+
+        return $this->_view_template;
     }
 
     /**
@@ -306,8 +322,6 @@ class BaseController extends Yaf_Controller_Abstract {
             $this->_model->setProperty('_module', $this);
             $this->_pk_field = $this->_model->getPk();//主键字段
         }
-
-        $this->_obj_compile = Misc_YapTemplate::getInstance();
 
         if (defined('APP_INIT')) {//跨模块，直接返回
             return true;

@@ -63,16 +63,6 @@ class BlogModel extends BaseModel {
     );
 
     /**
-     * {@inheritDoc}
-     */
-    protected function _beforeWrite(&$data) {
-
-        if (empty($data['summary'])) {//摘要为空，默认取内容前300字节
-            $data['summary'] = substr(strip_tags($data['content']), 0, 300);
-        }
-    }
-
-    /**
      * 验证所属分类
      *
      * @author          mrmsl <msl-138@163.com>
