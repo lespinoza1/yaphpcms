@@ -98,6 +98,18 @@ class CategoryController extends BaseController {
     }
 
     /**
+     * 生成分类静态页
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-12 22:01:02
+     *
+     * @return void 无返回值
+     */
+    public function buildAction($cate_id) {
+        //Logger::record(var_export($cate_id, true), 'debug');exit;
+    }
+
+    /**
      * 生成缓存
      *
      * @author          mrmsl <msl-138@163.com>
