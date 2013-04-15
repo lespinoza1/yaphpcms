@@ -95,9 +95,11 @@ class MiniblogController extends BaseController {
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-04-15 11:01:54
      *
+     * @param array $blog_id 微博id数组。forward要求参数为数组形式
+     *
      * @return void 无返回值
      */
-    function buildAction($blog_id) {
+    public function buildAction($blog_id) {
         $o = $this->_getViewTemplate('build_html');
 
         foreach($blog_id as $v) {
@@ -113,7 +115,7 @@ class MiniblogController extends BaseController {
      *
      * @return $this->_info()结果
      */
-    function infoAction() {
+    public function infoAction() {
         return $this->_info(false);
     }
 
