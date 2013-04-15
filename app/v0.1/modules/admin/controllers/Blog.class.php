@@ -26,18 +26,30 @@ class BlogController extends BaseController {
      * {@inheritDoc}
      */
     protected function _afterSetField($field, $value, $pk_id) {
+        $o = $this->_getViewTemplate();
 
-        if (1 == $value) {
-
-            if ($field == 'issue') {//发布
-
-            }
+        if (IS_LOCAL) {
+            $o->_force_compile = false;
+            $o->_caching = true;
         }
-        else {
 
-            if ($field == 'issue') {//取消发布
+        if (($value && 'is_issue' == $field) || (!$value && 'is_delete' == $field)) {//已发布、未删除
 
+                foreach ($pk_id as $v) {
+                    $o->fetch('Blog', 'detail', $v);
+                }
+
+                C(APP_FORWARD, true);
+                $this->forward($this->getModuleName(), 'Category', 'build', array('cate_id' => $pk_id));//菜单缓存
+        }
+        elseif (($value && 'is_delete' == $field) || (!$value && 'is_issue' == $field)) {//未发布、已删除
+
+            foreach ($pk_id as $v) {
+                $o->clearCache('Blog', 'detail', $v);
             }
+
+            C(APP_FORWARD, true);
+            $this->forward($this->getModuleName(), 'Category', 'build', array('cate_id' => $pk_id));//菜单缓存
         }
     }
 
