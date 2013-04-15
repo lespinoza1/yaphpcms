@@ -217,13 +217,31 @@ class BaseController extends Yaf_Controller_Abstract {
      *
      * @author            mrmsl <msl-138@163.com>
      * @data              2013-04-12 15:36:13
+     * @lastmodify        2013-04-15 17:05:13 by mrmsl
+     *
+     * @param mixed $config 模板引擎配置。默认null.为build_html生成静态页时，$config = array('_caching' => true, '_force_compile' => false);
      *
      * @return object 视图模板引擎实例
      */
-    protected function _getViewTemplate() {
+    protected function _getViewTemplate($config = null) {
 
         if (!$this->_view_template) {
             $this->_view_template = Misc_YapTemplate::getInstance();
+
+            if (null !== $config) {//属性
+
+                if ('build_html' === $config && IS_LOCAL) {//生成静态页
+                    $config = array(
+                        '_caching'          => true,
+                        '_force_compile'    => false,
+                    );
+                }
+
+                foreach($config as $k => $v) {
+                    $this->_view_template->$k = $v;
+
+                }
+            }
         }
 
         return $this->_view_template;
