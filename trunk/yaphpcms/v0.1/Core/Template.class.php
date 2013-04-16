@@ -174,7 +174,10 @@ class Template {
         $cache_dir   = $this->_cache_path . $controller . '/';
 
         if ($action) {
-            is_file($filename = $compile_dir . "{$action}.php") && unlink($filename);//编译文件
+
+            if (C('CLEAR_COMPILE_FILE') && is_file($filename = $compile_dir . "{$action}.php")) {//编译文件
+                unlink($filename);
+            }
 
             is_file($filename = $cache_dir . $action . $cache_id . C('HTML_SUFFIX')) && unlink($filename);//缓存文件
 
@@ -188,15 +191,17 @@ class Template {
         }
         else {
 
-            foreach(glob($compile_dir . '*') as $v) {//编译文件
-                is_file($filename = $compile_dir . $v) && unlink($filename);
+            if (C('CLEAR_COMPILE_FILE')) {
+                foreach(glob($compile_dir . '*') as $v) {//编译文件
+                    is_file($filename = $compile_dir . $v) && unlink($filename);
+                }
             }
 
             foreach(blog($cache_dir . '*') as $v) {//缓存文件
                 is_file($filename = $cache_dir . $v) && unlink($filename);
             }
         }
-    }
+    }//end clearCache
 
     /**
      * 编译文件
