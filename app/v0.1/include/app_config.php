@@ -39,7 +39,7 @@ define('APP_FORWARD'        , 'APP_FORWARD');               //Yaf_Controller_Abs
 
 //博客设置
 define('YABLOG_FRONT_MODULE_NAME', 'yablog');//前台模块名称
-define('BLOG_HTML_PATH'     , WWWROOT . 'blog/' . date('Y/m/d/'));//博客html路径
+define('BLOG_HTML_PATH'     , WWWROOT . 'blog/' . date('Ymd/'));//博客html路径
 
 //网站配置定义
 define('SESSION_ADMIN_KEY'     , '__admin__');//管理员session key

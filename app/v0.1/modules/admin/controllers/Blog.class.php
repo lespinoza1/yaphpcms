@@ -22,38 +22,27 @@ class BlogController extends BaseController {
         'issue'    => 'add',//发布状态
         'isdelete' => 'add',//删除状态
     );
+
     /**
      * {@inheritDoc}
      */
     protected function _afterSetField($field, $value, $pk_id) {
-        $o = $this->_getViewTemplate();
-
-        if (IS_LOCAL) {
-            $o->_force_compile = false;
-            $o->_caching = true;
-        }
 
         if (($value && 'is_issue' == $field) || (!$value && 'is_delete' == $field)) {//已发布、未删除
-
-                foreach ($pk_id as $v) {
-                    $o->fetch('Blog', 'detail', $v);
-                }
-
+                $this->buildHtmlAction($pk_id);
                 C(APP_FORWARD, true);
                 $this->forward($this->getModuleName(), 'Category', 'build', array('cate_id' => $pk_id));//菜单缓存
         }
         elseif (($value && 'is_delete' == $field) || (!$value && 'is_issue' == $field)) {//未发布、已删除
-
-            foreach ($pk_id as $v) {
-                $o->clearCache('Blog', 'detail', $v);
-            }
-
+            $this->_getViewTemplate('build_html')->clearCache($this->_getControllerName(), 'detail', $pk_id);
             C(APP_FORWARD, true);
             $this->forward($this->getModuleName(), 'Category', 'build', array('cate_id' => $pk_id));//菜单缓存
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     protected function _beforeExec(&$pk_id, &$log) {
         $pk_field   = $this->_pk_field;
         $data       = $this->_model->where(array($pk_field => array('IN', $pk_id)))->field($pk_field . ',title')->select();
@@ -94,6 +83,7 @@ class BlogController extends BaseController {
         $pk_field  = $this->_pk_field;//主键
         $pk_value  = $this->_model->$pk_field;//博客id
         $data      = $this->_model->getProperty('_data');//数据，$model->data 在save()或add()后被重置为array()
+        $to_build  = $data['is_issue'] && !$data['is_delete'];
         $diff_key  = 'title,content,cate_name,is_issue,seo_keyword,seo_description,sort_order,is_delete';//比较差异字段
         $msg       = L($pk_value ? 'EDIT' : 'ADD');//添加或编辑
         $log_msg   = $msg . L('MODULE_NAME_BLOG,FAILURE');//错误日志
@@ -121,19 +111,39 @@ class BlogController extends BaseController {
             $diff = $this->_dataDiff($blog_info, $data, $diff_key);//差异
 
             $this->_model->addLog($msg . L('MODULE_NAME_BLOG')  . "{$blog_info['title']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+
+            if ($to_build) {//生成静态页
+                $this->buildHtmlAction(array($pk_value));
+            }
+            else {
+                $this->_afterSetField('is_delete', 1, array($pk_value));
+
+            }
+
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
         else {
             $data = $this->_dataDiff($data, false, $diff_key);//数据
 
-            if (false === $this->_model->add()) {//插入出错
+            if (false === ($insert_id =$this->_model->add())) {//插入出错
                 $this->_sqlErrorExit($msg . L('MODULE_NAME_BLOG') . $data . L('FAILURE'), $error_msg);
             }
 
             $this->_model->addLog($msg . L('MODULE_NAME_BLOG') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+            $to_build && $this->buildHtmlAction(array($insert_id));//生成静态页
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
     }//end addAction
+
+    public function buildHtmlAction($blog_id = array()) {
+        $o      = $this->_getViewTemplate('build_html');
+        $suffix = C('HTML_SUFFIX');
+
+        foreach ($blog_id as $v) {
+            $content = $o->fetch($this->_getControllerName(), 'detail', $v);
+            $this->_buildHtml(BLOG_HTML_PATH, $v . $suffix, $content);
+        }
+    }
 
     /**
      * 获取博客具体信息

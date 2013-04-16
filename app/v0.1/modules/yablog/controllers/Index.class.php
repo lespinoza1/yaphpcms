@@ -43,5 +43,6 @@ class IndexController extends BaseController {
      */
     function indexAction() {
         $this->getView()->assign('name', 'mrmsl');
+        $this->_display();
     }//end indexAction
 }
