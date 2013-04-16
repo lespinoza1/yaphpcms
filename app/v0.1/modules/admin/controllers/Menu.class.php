@@ -198,7 +198,7 @@ class MenuController extends BaseController {
         }
 
         array_walk($data, array($this, '_explodePriv'));
-        $tree_data = Misc_Tree::array2tree($data, $this->_pk_field);//树形式
+        $tree_data = Tree::array2tree($data, $this->_pk_field);//树形式
 
         return $this->_setCache($data)->_setCache($tree_data, $this->_getControllerName() . '_tree');
     }

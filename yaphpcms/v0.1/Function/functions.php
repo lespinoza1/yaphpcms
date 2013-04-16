@@ -12,9 +12,6 @@
  * @lastmodify      $Date$ $Author$
  */
 
-//use Yap\Log\Logger as Logger;
-//use Yap\Module\Admin\Model;
-
 /**
  * 获取或设置配置值
  *
@@ -166,34 +163,6 @@ function D($name) {
 }
 
 /**
- * 将数组转化成xml格式字符串
- *
- * @author          liu21st <liu21st@gmail.com>
- * @lastmodify      2013-01-22 16:50:55 by mrmsl
- *
- * @param array $data 数据
- *
- * @return string xml格式字符串
- */
-function data_to_xml($data) {
-    $xml = '';
-
-    foreach ($data as $key => $val) {
-
-        is_numeric($key) && $key = "item id=\"{$key}\"";
-
-        $xml .= "<$key>";
-        $xml .= is_array($val) || is_object($val) ? data_to_xml($val) : $val;
-
-        list($key, ) = explode(' ', $key);
-
-        $xml .= "</$key>";
-    }
-
-    return $xml;
-}
-
-/**
  * 开始区间调试
  *
  * @author          liu21st <liu21st@gmail.com>
@@ -252,7 +221,7 @@ function debug_end($label = 'global', $echo = false) {
 function F($name, $value = '', $path = CACHE_PATH, $reload = false) {
     static $_cache = array();
 
-    $filename = $path . $name . '.cache'. '.php';
+    $filename = $path . $name . '.cache.php';
 
     if ('' !== $value) {
         if (is_null($value)) {//删除缓存
@@ -478,27 +447,6 @@ function N($key, $step = 0) {
     }
     else {
         $_num[$key] = $_num[$key] + $step;
-    }
-}
-
-/**
- * 字符串命名风格转换
- *
- * @author          liu21st <liu21st@gmail.com>
- * @lastmodify      2013-01-22 16:58:35 by mrmsl
- *
- * @param string $name 待转换字符串
- * @param int    $type 转换格式，0 => user_action => userAction, 1=> UserAction => user_action。默认0
- *
- * @return string 转换后字符串
- */
-function parse_name($name, $type = 0) {
-
-    if ($type) {//user_action => userAction
-        return ucfirst(preg_replace('/_([a-zA-Z])/e', "strtoupper('\\1')", $name));
-    }
-    else {//UserAction => user_action
-        return strtolower(trim(preg_replace('/[A-Z]/', '_\\0', $name), '_'));
     }
 }
 
@@ -837,26 +785,6 @@ function to_guid_string($mix) {
     return md5($mix);
 }
 
-/**
- * xml编码,将数组转化成xml格式字符串
- *
- * @author          liu21st <liu21st@gmail.com>
- * @lastmodify      2013-01-22 17:05:26 by mrmsl
- *
- * @param array  $data     数据
- * @param string $encoding 编码。默认utf-8
- * @param string $root     根元素名称。默认think
- *
- * @return string xml格式字符串
- */
-function xml_encode($data, $encoding = 'utf-8', $root = 'think') {
-    $xml  = '<?xml version="1.0" encoding="' . $encoding . '"?>';
-    $xml .= '<' . $root . '>';
-    $xml .= data_to_xml($data);
-    $xml .= '</' . $root . '>';
-    return $xml;
-}
-
 //以下函数不是核心文件函数 by mrmsl on 2012-06-11 08:59:06
 
 /**
@@ -937,7 +865,13 @@ function array2js($data, $varname, $filename) {
 }
 
 function autoload($class) {
-    var_dump($class);
+    $autoload = C('AUTOLOAD');
+
+    if (isset($autoload[$class])) {
+        return require_cache($autoload[$class]);
+    }
+
+    return false;
 }
 
 /**
@@ -1069,7 +1003,7 @@ function clear_verifycoe($module) {
  *
  * @return string 去掉注释及空白后php代码
  */
-function compileFile($filename) {
+function compile_file($filename) {
     $content = substr(php_strip_whitespace($filename), 7);
 
     if (strpos($content, '?>') && '?>' == substr($content = rtrim($content), -2)) {//php关闭标签
@@ -1701,7 +1635,7 @@ function sys_config($key = '', $cache_name = '', $default = '',  $cache_path = M
  * @return string 编译后文件路径
  */
 function template($controller, $action) {
-    $template = Misc_YapTemplate::getInstance();
+    $template = Template::getInstance();
 
     return $template->compile($controller, $action);
 }

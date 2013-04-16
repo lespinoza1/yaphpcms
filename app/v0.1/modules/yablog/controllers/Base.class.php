@@ -190,7 +190,7 @@ class BaseController extends Yaf_Controller_Abstract {
     protected function _getViewTemplate() {
 
         if (!$this->_view_template) {
-            $this->_view_template = Misc_YapTemplate::getInstance();
+            $this->_view_template = Template::getInstance();
         }
 
         return $this->_view_template;
