@@ -59,7 +59,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
         set_error_handler('error_handler');
         set_exception_handler('exception_handler');
         register_shutdown_function('fatal_error');
-        //spl_autoload_register('autoload');
+        spl_autoload_register('autoload');
 
         ob_get_level() != 0 && ob_end_clean();
 

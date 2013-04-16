@@ -14,9 +14,6 @@
 
 //namespace Yap;
 
-//use Yap\Module\Admin\Bootstrap\Bootstrap as Bootstrap;
-//use Yap\Module\Admin\Model;
-
 /**
  * Yaphpcms类
  *
@@ -59,12 +56,12 @@ class Yaphpcms {
         $this->_defineConstants(false);
 
         $require_files = array(
-            YAP_PATH . 'Plugin/Bootstrap.' . APP_EXT,//启动插件类
-            YAP_PATH . 'Filter/Filter.' . APP_EXT,//参数验证及过滤类
-            YAP_PATH . 'Db/Db.' . APP_EXT,//Db类
-            YAP_PATH . 'Db/Db' . ucfirst(DB_TYPE) . '.' . APP_EXT,//数据库驱动类
-            YAP_PATH . 'Model/Model.' . APP_EXT,//模型类
-            YAP_PATH . 'Log/Logger.' . APP_EXT,//日志类
+            YAP_PATH  . 'Plugin/Bootstrap.' . APP_EXT,//启动插件类
+            CORE_PATH . 'Model.' . APP_EXT,//模型类
+            CORE_PATH . 'Logger.' . APP_EXT,//日志类
+            CORE_PATH . 'Filter.' . APP_EXT,//参数验证及过滤类
+            CORE_PATH . 'Db.' . APP_EXT,//Db类
+            YAP_PATH  . 'Driver/Db/Db' . ucfirst(DB_TYPE) . '.' . APP_EXT,//数据库驱动类
         );
 
         if (is_file($filename = APP_PATH . 'controllers/Base.' . APP_EXT)) {//项目底层控制器类
@@ -87,7 +84,7 @@ class Yaphpcms {
             foreach ($require_files as $file) {
                 require($file);
                 $filesize += filesize($file);
-                $compile  .= compileFile($file);
+                $compile  .= compile_file($file);
             }
 
             file_put_contents(RUNTIME_FILE, $compile);
@@ -99,7 +96,7 @@ class Yaphpcms {
     }//end _buildRuntimeFile
 
     /**
-     * 检查运行环境，必须要满足：1、加载yaf扩展；2、yaf.use//namespace=on；3、PHP版本大于5.3
+     * 检查运行环境，必须要满足：1、加载yaf扩展；2、yaf.use_spl_autoload=on；3、PHP版本大于5.3
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-01-22 14:38:13
@@ -108,7 +105,7 @@ class Yaphpcms {
      */
     private function _checkRuntimeRequirements() {
         !extension_loaded('yaf') && exit('yaf extension required!');
-        //!ini_get('yaf.use_//namespace') && exit('yaf.use_//namespace=on required!');
+        !ini_get('yaf.use_spl_autoload') && exit('yaf.use_spl_autoload=on required!');
         !version_compare(PHP_VERSION, '5.3', '>') && exit('php5.3 or higher required!');
     }
 
@@ -126,12 +123,12 @@ class Yaphpcms {
     private function _defineConstants($is_yap = true) {
 
         if ($is_yap) {
-            define('Yap\VERSION'            , '0.1');         //yaphpcms版本
-            define('Yap\RELEASE'            , '20130122');      //yaphpcms版本发布日期
+            define('Yap_VERSION'            , '0.1');         //yaphpcms版本
+            define('Yap_RELEASE'            , '20130122');      //yaphpcms版本发布日期
             define('YAP_PATH'               , __DIR__ . '/');  //yaphpcms框架路径
-            !defined($v = 'VENDOR_PATH')    && define($v, YAP_PATH . 'Vendor/');//Vendor第三方框架目录
-            !defined($v = 'SMARTY_DIR')     && define($v, VENDOR_PATH . 'Smarty-3.1.13/');//Smarty目录
-            !defined($v = 'SMARTY_SYSPLUGINS_DIR')     && define($v, SMARTY_DIR . 'sysplugins/');//Smarty sysplugins目录
+            define('CORE_PATH'              , YAP_PATH . 'Core/');//yaphpcms核心文件路径
+            define('EXTEND_PATH'            , YAP_PATH . 'Extend/');//yaphpcms扩展文件路径
+            define('VENDOR_PATH'            , YAP_PATH . 'Vendor/');//Vendor第三方框架目录
         }
         else {
             !defined($v = 'BOOTSTRAP_FILE')   && define($v, YAP_PATH . 'Bootstrap.php');//运行时文件

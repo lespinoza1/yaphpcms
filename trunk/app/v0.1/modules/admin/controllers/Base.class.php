@@ -226,7 +226,7 @@ class BaseController extends Yaf_Controller_Abstract {
     protected function _getViewTemplate($config = null) {
 
         if (!$this->_view_template) {
-            $this->_view_template = Misc_YapTemplate::getInstance();
+            $this->_view_template = Template::getInstance();
 
             if (null !== $config) {//属性
 
@@ -406,7 +406,7 @@ class BaseController extends Yaf_Controller_Abstract {
             }
         }
 
-        return Misc_Tree::array2tree($data, $this->_pk_field);
+        return Tree::array2tree($data, $this->_pk_field);
     }
 
     /**
@@ -797,7 +797,7 @@ class BaseController extends Yaf_Controller_Abstract {
             }
         }
 
-        $data = Misc_Tree::array2tree($data, $this->_pk_field);
+        $data = Tree::array2tree($data, $this->_pk_field);
 
         return $include_total ? array('data' => $data, 'total' => $total) : $data;
     }

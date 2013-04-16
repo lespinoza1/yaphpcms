@@ -158,7 +158,7 @@ class PackerController extends BaseController {
      * @return void 无返回值
      */
     private function _packFile($filename) {
-        $packer = new Misc_JavascriptPacker(file_get_contents($filename));
+        $packer = new JavascriptPacker(file_get_contents($filename));
         $packed = $packer->pack();
         file_put_contents(PACKER_JS_PATH . 'pack/' . basename($filename, '.js') . '.pack.js', $packed);
 
