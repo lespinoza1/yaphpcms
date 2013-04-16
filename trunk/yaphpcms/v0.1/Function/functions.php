@@ -864,6 +864,16 @@ function array2js($data, $varname, $filename) {
     file_put_contents($filename, sprintf(AUTO_CREATE_COMMENT, new_date()) . "var {$varname} = {$data};");
 }
 
+/**
+ * 自动加载类库
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-04-16 16:21:50
+ *
+ * @param string $class 类名
+ *
+ * @return bool true
+ */
 function autoload($class) {
     $autoload = C('AUTOLOAD');
 
@@ -871,7 +881,7 @@ function autoload($class) {
         return require_cache($autoload[$class]);
     }
 
-    return false;
+    return true;
 }
 
 /**
