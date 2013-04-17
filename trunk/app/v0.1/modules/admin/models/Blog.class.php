@@ -60,7 +60,23 @@ class BlogModel extends BaseModel {
         'from_url'         => array('validate' => '_checkLength#FROM_URL#value|0|200'),//来源url
         'add_time'         => null,
         'update_time'      => array('filter' => 'int', 'validate' => array('_checkLength#UPDATE,TIME,DATA#value|0')),
+        'link_url'         => null,
     );
+
+    /**
+     * 新增数据后，将设置博客链接
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-17 11:13:00
+     *
+     * @param $data     插入数据
+     * @param $options  查询表达式
+     *
+     * @return void 无返回值
+     */
+    protected function _afterInsert($data, $options) {
+        $this->save(array($this->_pk_field => $data[$tihs->_pk_field], 'link_url' => BASE_SITE_URL . 'blog/' . date('Ymd/', $data['add_time']) . $data[$this->_pk_field] . C('HTML_SUFFIX')));
+    }
 
     /**
      * 验证所属分类
@@ -84,4 +100,6 @@ class BlogModel extends BaseModel {
 
         return $this->_getCache($cate_id, 'Category') ? true : L('BELONG_TO_CATEGORY,NOT_EXIST');
     }
+
+
 }
