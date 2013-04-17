@@ -219,7 +219,7 @@ class BaseController extends Yaf_Controller_Abstract {
      * @data              2013-04-12 15:36:13
      * @lastmodify        2013-04-15 17:05:13 by mrmsl
      *
-     * @param mixed $config 模板引擎配置。默认null.为build_html生成静态页时，$config = array('_caching' => true, '_force_compile' => false);
+     * @param mixed $config 模板引擎配置。默认null.为build_html生成静态页时，$config = array('_caching' => false, '_force_compile' => false);
      *
      * @return object 视图模板引擎实例
      */
@@ -227,20 +227,20 @@ class BaseController extends Yaf_Controller_Abstract {
 
         if (!$this->_view_template) {
             $this->_view_template = Template::getInstance();
+        }
 
-            if (null !== $config) {//属性
+        if (null !== $config) {//属性
 
-                if ('build_html' === $config && IS_LOCAL) {//生成静态页
-                    $config = array(
-                        '_caching'          => true,
-                        '_force_compile'    => false,
-                    );
-                }
+            if ('build_html' === $config && IS_LOCAL) {//生成静态页
+                $config = array(
+                    '_caching'          => false,
+                    '_force_compile'    => false,
+                );
+            }
 
-                foreach($config as $k => $v) {
-                    $this->_view_template->$k = $v;
+            foreach($config as $k => $v) {
+                $this->_view_template->$k = $v;
 
-                }
             }
         }
 

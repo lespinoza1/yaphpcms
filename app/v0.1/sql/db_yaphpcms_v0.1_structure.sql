@@ -85,6 +85,7 @@ MODIFY status is_issue tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;
 ADD COLUMN is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除' AFTER is_issue,
 ADD COLUMN from_name varchar(200) NOT NULL DEFAULT '' COMMENT '来源名称',
 ADD COLUMN from_url varchar(200) NOT NULL DEFAULT '' COMMENT '来源url',
+ADD COLUMN link_url varchar(150) NOT NULL DEFAULT '' COMMENT '博客链接',
 ADD COLUMN summary text COMMENT '摘要'
 ADD INDEX issue_delete(is_issue, is_delete)
 */

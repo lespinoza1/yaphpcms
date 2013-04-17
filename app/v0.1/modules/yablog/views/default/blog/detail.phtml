@@ -6,21 +6,19 @@
             <div class="panel-header"><span class="icon-home"></span> 您现在的位置： <a href="#">首页</a> <span class="divider">/</span> <a href="miniblog.php">微博</a> <span class="divider">/</span> 微博详情</div>
             <div class="panel-body">
                 <div class="blog-detail">
-                    <h1>关于Yaf的一些说明</h1>
+                    <h1>{$blog_info.title}</h1>
                     <p class="blog-meta">
-                        <span>2013-02-21 15:33:00</span>
+                        <span>{echo new_date(null, $blog_info['add_time'])}</span>
                         <span>来源：<a href="">nodejs.org</a></span>
                         <span>阅读：0</span>
                         <span>评论：暂无评论</span>
                     </p>
                 <div class="blog-content">
-				<p>最早的时候,  我记得是去年我刚加入开发组的时候,  神仙同学曾经提过, 问我是否可以考虑为PHP实现yield. 我当时做过尝试, 但是最后发现需要大改zend executor,  而当时的我还没有那么大的魄力(因为我记得当时我的第一个RFC刚刚被拒绝)认为我能说服那么多人接受这个变动,  所以后来就不了了之了.</p>
-<p>    但, 现在Nikita Popov,  完整的实现了这个<a href="https://wiki.php.net/rfc/generators">RFC: Generators</a>,  并且已经提供了一个可用的<a href="https://github.com/nikic/php-src/tree/addGeneratorsSupport">实现</a>,  目前这个RFC在投票阶段, 投票形式也比较乐观,  所以如果不出大问题,  PHP5.5将会引入这一新特性.</p>
-<p>    我就这里为大家简单介绍下, 这个新特性.</p>
+                    {$blog_info.content}
     			             <p><span class="icon-tags"></span>标签：<a href="#">php</a>,<a href="#">js</a>,<a href="#">jquery</a></p>
     			             <p class="text-center"><a class="label label-inverse"><span class="icon-thumbs-up icon-white"></span> 顶一个</a></p>
 
-			</div>
+			             </div>
 
     			             <p>
     			                <span class="pull-right">

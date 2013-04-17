@@ -124,11 +124,12 @@ class BaseController extends Yaf_Controller_Abstract {
      *
      * @param string $controller 控制器。默认MODULE_NAME
      * @param string $action     操作方法。默认MODULE_NAME
+     * @param string $cache_id   缓存标识。默认''
      *
      * @return void 无返回值
      */
-    protected function _display($controller = MODULE_NAME, $action = ACTION_NAME) {
-        $this->_getViewTemplate()->display($controller, $action);
+    protected function _display($controller = MODULE_NAME, $action = ACTION_NAME, $cache_id = '') {
+        $this->_getViewTemplate('build_html')->display($controller ? $controller : MODULE_NAME, $action ? $action : ACTION_NAME, $cache_id);
     }
 
     /**
@@ -183,14 +184,32 @@ class BaseController extends Yaf_Controller_Abstract {
      * 获取视图模板引擎实例
      *
      * @author            mrmsl <msl-138@163.com>
-     * @data              2013-04-12 15:41:29
+     * @data              2013-04-12 15:36:13
+     * @lastmodify        2013-04-15 17:05:13 by mrmsl
+     *
+     * @param mixed $config 模板引擎配置。默认null.为build_html生成静态页时，$config = array('_caching' => true, '_force_compile' => false);
      *
      * @return object 视图模板引擎实例
      */
-    protected function _getViewTemplate() {
+    protected function _getViewTemplate($config = null) {
 
         if (!$this->_view_template) {
             $this->_view_template = Template::getInstance();
+        }
+
+        if (null !== $config) {//属性
+
+            if ('build_html' === $config && IS_LOCAL) {//生成静态页
+                $config = array(
+                    '_caching'          => false,
+                    '_force_compile'    => false,
+                );
+            }
+
+            foreach($config as $k => $v) {
+                $this->_view_template->$k = $v;
+
+            }
         }
 
         return $this->_view_template;

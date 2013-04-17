@@ -16,7 +16,7 @@ class BlogController extends BaseController {
     /**
      * @var bool $_init_model true实例对应模型。默认false
      */
-    protected $_init_model      = false;
+    protected $_init_model      = true;
 
     /**
      * 管理中心。如果未登陆，跳转至登陆页
@@ -43,5 +43,19 @@ class BlogController extends BaseController {
      * @return void 无返回值
      */
     public function detailAction() {
+        $blog_id = Filter::int($this->_pk_field, 'get');
+
+        if ($blog_id && ($blog_info = $this->_model->find($blog_id))) {
+            $filename = str_replace(BASE_SITE_URL, WWWROOT, $blog_info['link_url']);
+            new_mkdir(dirname($filename));
+            $o = $this->_getViewTemplate('build_html');
+            $o->assign('blog_info', $blog_info);
+            $content = $o->fetch(CONTROLLER_NAME, 'detail');
+            file_put_contents($filename, $content);
+            echo $content;
+
+        }
+        else {
+        }
     }
 }
