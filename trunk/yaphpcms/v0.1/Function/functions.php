@@ -1051,6 +1051,33 @@ function css($files, $base_url = '') {
 }
 
 /**
+ * 取字符串前N位作为目录
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-04-17 09:08:23
+ *
+ * @param string $str  待取字符串
+ * @param string $base 基路径。默认WWWROOT，网站根目录
+ * @param int    $n    前N位
+ *
+ * @return string 路径
+ */
+function get_substr_dir($str, $base = WWWROOT, $n = 4) {
+    $dir  = $base;
+
+    if ('/' != substr($dir, -1)) {
+        $dir .= '/';
+    }
+
+    $dir .= strlen($str) > $n ? substr($str, 0, $n) : $str;
+    $dir .= '/';
+
+    new_mkdir($dir);
+
+    return $dir;
+}
+
+/**
  * 日期函数
  *
  * @author          mrmsl <msl-138@163.com>
@@ -1067,6 +1094,21 @@ function new_date($format = null, $time = null) {
     $format = null === $format ? sys_config('sys_timezone_datetime_format') : $format;
 
     return date($format, $time);
+}
+
+/**
+ * 循环创建目录
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-04-17 09:03:59
+ *
+ * @param string $path 路径
+ * @param int    $mode 权限。默认0755
+ *
+ * @return bool true创建成功，否则false
+ */
+function new_mkdir($path, $mode = 0755) {
+    return is_dir($path) ? true : mkdir($path, $mode, true);
 }
 
 /**
