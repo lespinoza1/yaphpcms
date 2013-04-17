@@ -9,9 +9,9 @@
                     <h1>{$blog_info.title}</h1>
                     <p class="blog-meta">
                         <span>{echo new_date(null, $blog_info['add_time'])}</span>
-                        <span>来源：<a href="">nodejs.org</a></span>
-                        <span>阅读：0</span>
-                        <span>评论：暂无评论</span>
+                        <span>来源：<a href="{$blog_info.from_url}">{$blog_info.from_name}</a></span>
+                        <span>阅读：{$blog_info.hits}</span>
+                        <span>评论：{$blog_info.comments}</span>
                     </p>
                 <div class="blog-content">
                     {$blog_info.content}
