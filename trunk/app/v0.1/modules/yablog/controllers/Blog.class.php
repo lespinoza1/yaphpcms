@@ -28,6 +28,7 @@ class BlogController extends BaseController {
      * @return void 无返回值。如果未登陆跳转至登陆页
      */
     public function indexAction() {
+        $cate_name = Filter::string('name', 'get');var_dump($cate_name);
     }
     public function pagenotfoundAction() {
         var_dump('Page Not Found');
@@ -43,7 +44,7 @@ class BlogController extends BaseController {
      * @return void 无返回值
      */
     public function detailAction() {
-        $blog_id = Filter::int($this->_pk_field, 'get');
+        $blog_id = Filter::int('id', 'get');
 
         if ($blog_id && ($blog_info = $this->_model->find($blog_id))) {
             $filename = str_replace(BASE_SITE_URL, WWWROOT, $blog_info['link_url']);
@@ -56,6 +57,7 @@ class BlogController extends BaseController {
 
         }
         else {
+            exit('not exists');
         }
     }
 }
