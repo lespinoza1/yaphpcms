@@ -130,9 +130,6 @@ class BaseController extends Yaf_Controller_Abstract {
      */
     protected function _display($controller = MODULE_NAME, $action = ACTION_NAME, $cache_id = '') {
         $this->_getViewTemplate()
-        ->assign(sys_config())
-        ->assign('L', L())
-        ->assign('C', C())
         ->display($controller ? $controller : MODULE_NAME, $action ? $action : ACTION_NAME, $cache_id);
     }
 
@@ -227,6 +224,9 @@ class BaseController extends Yaf_Controller_Abstract {
 
         if (!$this->_view_template) {
             $this->_view_template = Template::getInstance();
+            $this->_view_template->assign(sys_config())
+            ->assign('L', L())
+            ->assign('C', C());
         }
 
         if (null !== $config) {//属性
