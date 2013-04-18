@@ -129,7 +129,11 @@ class BaseController extends Yaf_Controller_Abstract {
      * @return void 无返回值
      */
     protected function _display($controller = MODULE_NAME, $action = ACTION_NAME, $cache_id = '') {
-        $this->_getViewTemplate('build_html')->display($controller ? $controller : MODULE_NAME, $action ? $action : ACTION_NAME, $cache_id);
+        $this->_getViewTemplate()
+        ->assign(sys_config())
+        ->assign('L', L())
+        ->assign('C', C())
+        ->display($controller ? $controller : MODULE_NAME, $action ? $action : ACTION_NAME, $cache_id);
     }
 
     /**
