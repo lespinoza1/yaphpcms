@@ -2,24 +2,24 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>留言 | yablog,一个关注web开发的博客</title>
+    <title>{echo isset($WEB_TITLE) ? $WEB_TITLE : '';} | {$sys_base_web_title}{php echo 3;}{php echo 4;}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="keywords" content="php,yaf,nodejs,blog" />
-    <meta name="description" content="yet another blog,是的,又一个博客,一个关注web开发的博客" />
+    <meta name="keywords" content="{echo isset($seo_keywords) ? $seo_keywords : '';}" />
+    <meta name="description" content="{echo isset($seo_description) ? $seo_description : '';}" />
     <meta name="author" content="mrmsl" />
-    {echo css('yablog.css', IMGCACHE_CSS) }
+    {echo css('yablog.css', IMGCACHE_CSS); }
 </head>
 <body>
 <div id="wrap">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <a class="brand" href="yablog.php">yablog</a>
+                <a class="brand" href="{BASE_SITE_URL}">{$sys_base_web_name}</a>
                 <ul class="nav">
-                    <li class="active"><a href="/v0.1/yabindex.php">首页</a></li>
-                    <li><a href="/v0.1/yabindex.php/miniblog">微博</a></li>
+                    <li class="active"><a href="{BASE_SITE_URL}">{L HOME}</a></li>
+                    <li><a href="/v0.1/yabindex.php/miniblog">{L HOME}</a></li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="blog.php">网文<span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="{BASE_SITE_URL}blog/">{L CN_WANGWEN}<span class="caret"></span></a>
                         <ul class="dropdown-menu" id="swatch-menu">
                             <li class="dropdown-submenu">
                                 <a href="/v0.1/yabindex.php/blog">开发语言</a>
@@ -47,10 +47,10 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="/v0.1/yabindex.php/tag">标签</a></li>
-                    <li><a href="/v0.1/yabindex.php/guestbook">留言</a></li>
-                    <li><a href="/v0.1/yabindex.php/about">关于</a></li>
-                    <li><a href="/v0.1/yabindex.php/about/contact">联系</a></li>
+                    <li><a href="{BASE_SITE_URL}tag.shtml">{L TAG}</a></li>
+                    <li><a href="{BASE_SITE_URL}guestbook.shtml">{L GUESTBOOK}</a></li>
+                    <!--<li><a href="/v0.1/yabindex.php/about">关于</a></li>
+                    <li><a href="/v0.1/yabindex.php/about/contact">联系</a></li>-->
                 </ul>
             </div>
         </div>
