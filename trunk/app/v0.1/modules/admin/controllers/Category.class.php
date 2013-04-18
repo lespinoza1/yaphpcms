@@ -31,6 +31,33 @@ class CategoryController extends BaseController {
     );
 
     /**
+     * 添加/编辑后置操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-18 10:49:04
+     *
+     * @return void 无返回值
+     */
+    protected function _afterCommonAddTreeData() {
+        $this->_model->cate_id && $this->deleteHtmlAction(array(array($this->_pk_field => $this->_model->cate_id)));
+    }
+
+    /**
+     * 删除后置操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-18 11:05:45
+     *
+     * @param array $pk_id 主键值
+     *
+     * @return void 无返回值
+     */
+    protected function _afterDelete($pk_id) {
+        Logger::record(var_export($this->_model->where(array('cate_id' => array('IN', $pk_id)))->table(TB_BLOG), true), 'debug');
+        $this->deleteHtmlAction();
+    }
+
+    /**
      * 获取分类树数据
      *
      * @author          mrmsl <msl-138@163.com>
@@ -98,15 +125,41 @@ class CategoryController extends BaseController {
     }
 
     /**
-     * 生成分类静态页
+     * 删除分类静态页
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-04-12 22:01:02
      *
      * @return void 无返回值
      */
-    public function buildAction($cate_id) {
-        //Logger::record(var_export($cate_id, true), 'debug');exit;
+    public function deleteHtmlAction($build_info = null) {
+        $cate_arr   = $this->_getCache();
+        $build_info = null === $build_info ? C('HTML_BUILD_INFO') : $build_info;
+        $set_arr    = array();
+
+        foreach($build_info as $item) {
+            $cate_id = $item[$this->_pk_field];
+
+            if (!isset($cate_arr[$cate_id]) || isset($set_arr[$cate_id])) {
+                continue;
+            }
+            else {
+                $cate_info = $cate_arr[$cate_id];
+                $node_arr  = explode(',', $cate_info['node']);
+
+                foreach($node_arr as $v) {
+
+                    if (isset($set_arr[$v])) {
+                        continue;
+                    }
+                    else {
+                        $filename = str_replace(BASE_SITE_URL, WWWROOT, $cate_arr[$v]['link_url']);
+                        is_file($filename) && unlink($filename);
+                        $set_arr[$v] = true;
+                    }
+                }
+            }
+        }
     }
 
     /**

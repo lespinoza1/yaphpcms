@@ -607,6 +607,10 @@ class BaseController extends Yaf_Controller_Abstract {
                 $this->_ajaxReturn(false, $error_msg);
             }
 
+            if ('Category' == MODULE_NAME) {//分类
+                $data['link_url'] = BASE_SITE_URL . 'category/' . $data['en_name'] . C('HTML_SUFFIX');
+            }
+
             if ($parent_id) {
                 $node_arr = explode(',', $parent_info['node']);
                 in_array($pk_value, $node_arr) && $this->_ajaxReturn(false, L('SAME_AS_SELF'));//不能作为自己的子类
@@ -657,7 +661,11 @@ class BaseController extends Yaf_Controller_Abstract {
         unset($data);
         $this->_setLevelAndNode();
         $this->_model->commit()->addLog($log_msg, LOG_TYPE_ADMIN_OPERATE);//日志信息
-        $this->createAction()->_ajaxReturn(true, $msg . L('SUCCESS'));
+        $this->createAction();
+
+        method_exists($this, '_afterCommonAddTreeData') && $this->_afterCommonAddTreeData();
+
+        $this->_ajaxReturn(true, $msg . L('SUCCESS'));
     }//end _commonAddTreeData
 
     /**
