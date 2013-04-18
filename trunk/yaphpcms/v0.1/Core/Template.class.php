@@ -240,11 +240,11 @@ class Template {
         }
 
         if (false !== strpos($source, '{php')) {//php
-            $source = preg_replace('#\{php\s+(.+)\}#', '<?php $1?>', $source);
+            $source = preg_replace('#\{php\s+([^\}]+)\}#', '<?php $1 ?>', $source);
         }
 
         if (false !== strpos($source, '{echo')) {//echo
-            $source = preg_replace('#\{echo\s+(.+)\}#', '<?php echo $1; ?>', $source);
+            $source = preg_replace('#\{echo\s+([^\}]+)\}#', '<?php echo $1 ?>', $source);
         }
 
         //if
