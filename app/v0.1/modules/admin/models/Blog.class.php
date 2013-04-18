@@ -75,7 +75,7 @@ class BlogModel extends BaseModel {
      * @return void 无返回值
      */
     protected function _afterInsert($data, $options) {
-        $this->save(array($this->_pk_field => $data[$tihs->_pk_field], 'link_url' => BASE_SITE_URL . 'blog/' . date('Ymd/', $data['add_time']) . $data[$this->_pk_field] . C('HTML_SUFFIX')));
+        $this->save(array($this->_pk_field => $data[$this->_pk_field], 'link_url' => BASE_SITE_URL . 'blog/' . date('Ymd/', $data['add_time']) . $data[$this->_pk_field] . C('HTML_SUFFIX')));
     }
 
     /**
