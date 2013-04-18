@@ -10,14 +10,6 @@
 return array(
     //项目设置
     'DEFAULT_AJAX_RETURN'   => 'JSON',  // 默认AJAX 数据返回格式,可选JSON XML ...
-    'AUTOLOAD'              => array(//自动加载类库,yaf对于FOO_BAR必须对应FOO_BAR类，不是很爽的类名 by mrmsl on 2013-04-16 15:53:55
-        'Template'          => YAP_PATH . 'Core/Template.class.php',//模板编译类
-        'Tree'              => YAP_PATH . 'Library/Tree.class.php',//树及数组转化类
-        'JavascriptPacker'  => YAP_PATH . 'Library/JavascriptPacker.class.php',//js加密类
-        'Image'             => YAP_PATH . 'Library/Images/Image.class.php',//图片处理类
-        'Upload'            => YAP_PATH . 'Library/Images/Upload.class.php',//上传类
-        'Verifycode'        => YAP_PATH . 'Library/Images/Verifycode.class.php',//验证码类
-    ),
 
     //数据库配置
     'DB_TYPE'               => DB_TYPE,      //数据库类型
