@@ -59,7 +59,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
         set_error_handler('error_handler');
         set_exception_handler('exception_handler');
         register_shutdown_function('fatal_error');
-        spl_autoload_register('autoload');
+        //spl_autoload_register('autoload');
 
         ob_get_level() != 0 && ob_end_clean();
 
@@ -169,7 +169,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
      * @return void 无返回值
      */
     public function routerStartup(Yaf_Request_Abstract $request, Yaf_Response_Abstract $response) {
-        Yaf_Loader::getInstance(APP_PATH . 'library', YAP_PATH);//注册项目及全局类库路径
+        Yaf_Loader::getInstance(APP_PATH . 'library', YAP_PATH . 'Library');//注册项目及全局类库路径
         Yaf_Dispatcher::getInstance()->disableView();//禁用自动渲染模板输出
         $this->_init();
     }

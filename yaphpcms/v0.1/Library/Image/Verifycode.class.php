@@ -25,7 +25,7 @@
  * @date            2013-01-17 15:23:46
  * @lastmodify      $Date: 2013-01-26 15:13:52 +0800 (周六, 26 一月 2013) $ $Author: msl-138@163.com $
  */
-class Verifycode extends Image {
+class Image_Verifycode extends Image_Image {
 
     /**
      * 产生随机字符串

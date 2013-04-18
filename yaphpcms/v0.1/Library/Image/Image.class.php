@@ -26,7 +26,7 @@
  * @date            2012-02-25 16:29:24
  * @lastmodify      $Date: 2013-01-26 15:13:52 +0800 (周六, 26 一月 2013) $ $Author: msl-138@163.com $
  */
-class Image {
+class Image_Image {
 
     /**
      * @var string $_position 水印位置，如果不为下面九种，则为随机。默认br

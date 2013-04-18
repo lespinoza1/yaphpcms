@@ -107,7 +107,7 @@ class LoginController extends BaseController {
      * @return void 无返回值
      */
     public function verifyCodeAction() {
-        $img = new Verifycode();
+        $img = new Image_Verifycode();
         $img->buildVerifyImage();
     }
 }

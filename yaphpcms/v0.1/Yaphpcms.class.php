@@ -56,7 +56,8 @@ class Yaphpcms {
         $this->_defineConstants(false);
 
         $require_files = array(
-            YAP_PATH  . 'Plugin/Bootstrap.' . APP_EXT,//启动插件类
+            CORE_PATH . 'Bootstrap.' . APP_EXT,//启动插件类
+            CORE_PATH . 'Template.' . APP_EXT,//启动插件类
             CORE_PATH . 'Model.' . APP_EXT,//模型类
             CORE_PATH . 'Logger.' . APP_EXT,//日志类
             CORE_PATH . 'Filter.' . APP_EXT,//参数验证及过滤类
