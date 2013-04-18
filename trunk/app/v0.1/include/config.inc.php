@@ -14,9 +14,9 @@ return array(
         'Template'          => YAP_PATH . 'Core/Template.class.php',//模板编译类
         'Tree'              => YAP_PATH . 'Library/Tree.class.php',//树及数组转化类
         'JavascriptPacker'  => YAP_PATH . 'Library/JavascriptPacker.class.php',//js加密类
-        'Image'             => YAP_PATH . 'Library/Image/Image.class.php',//图片处理类
-        'Upload'            => YAP_PATH . 'Library/Image/Upload.class.php',//上传类
-        'Verifycode'        => YAP_PATH . 'Library/Image/Verifycode.class.php',//验证码类
+        'Image'             => YAP_PATH . 'Library/Images/Image.class.php',//图片处理类
+        'Upload'            => YAP_PATH . 'Library/Images/Upload.class.php',//上传类
+        'Verifycode'        => YAP_PATH . 'Library/Images/Verifycode.class.php',//验证码类
     ),
 
     //数据库配置
