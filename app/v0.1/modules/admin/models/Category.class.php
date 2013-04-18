@@ -75,6 +75,7 @@ class CategoryModel extends BaseModel {
      * @return void 无返回值
      */
     protected function _afterInsert($data, $options) {
+        $this->execute("UPDATE {$this->_true_table_name} SET link_url='" . BASE_SITE_URL . "category/{$data['en_name']}" . C('HTML_SUFFIX') . "'");
         $this->_afterInserted($data, $options);
     }
 

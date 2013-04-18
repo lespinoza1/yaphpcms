@@ -121,7 +121,10 @@ CREATE TABLE `tb_blog_comments` (
   FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客评论表 by mashanling on 2013-03-22 17:34:52';
 
-/*tb_category博客分类表*/
+/*tb_category博客分类表
+ALTER TABLE tb_category
+ADD COLUMN link_url varchar(150) NOT NULL DEFAULT '' COMMENT '分类链接'
+*/
 CREATE TABLE `tb_category` (
   `cate_id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `cate_name` varchar(30) NOT NULL DEFAULT '' COMMENT '分类名称',
@@ -133,6 +136,7 @@ CREATE TABLE `tb_category` (
   `node` varchar(20) NOT NULL DEFAULT '' COMMENT '节点',
   seo_keyword varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
   seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
+  link_url varchar(150) NOT NULL DEFAULT '' COMMENT '分类链接',
   PRIMARY KEY (`cate_id`),
   UNIQUE KEY(`cate_name`),
   UNIQUE KEY(`en_name`),

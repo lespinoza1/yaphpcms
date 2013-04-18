@@ -24,13 +24,29 @@ class BlogController extends BaseController {
     );
 
     /**
+     * 删除后置操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-18 11:05:45
+     *
+     * @param array $pk_id 主键值
+     *
+     * @return void 无返回值
+     */
+    protected function _afterDelete($pk_id) {
+        $this->deleteHtmlAction(null);
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function _afterSetField($field, $value, $pk_id) {
 
         if (($value && 'is_delete' == $field) || (!$value && 'is_issue' == $field)) {//未发布、已删除
             //$this->_getViewTemplate()->clearCache($this->_getControllerName(), 'detail', $pk_id);
-            $this->_deleteHtml(null);//删除静态文件
+            C(APP_FORWARD, true);
+            $this->forward('Category', 'deleteHtml');
+            $this->deleteHtmlAction(null);//删除静态文件
         }
     }
 
@@ -50,7 +66,7 @@ class BlogController extends BaseController {
                 $info[$v[$pk_field]] = array('cate_id' => $v['cate_id'], 'link_url' => $v['link_url']);
             }
 
-            C('BLOG_BUILD_INFO', $info);
+            C('HTML_BUILD_INFO', $info);
         }
 
         return $log ? substr($log, 0, -1) : null;
@@ -66,8 +82,8 @@ class BlogController extends BaseController {
      *
      * @return void 无返回值
      */
-    private function _deleteHtml($build_arr = array()) {
-        $build_arr = null === $build_arr ? C('BLOG_BUILD_INFO') : $build_arr;
+    public function deleteHtmlAction($build_arr = array()) {
+        $build_arr = null === $build_arr ? C('HTML_BUILD_INFO') : $build_arr;
 
         foreach ($build_arr as $blog_id => $item) {
             is_file($filename = str_replace(BASE_SITE_URL, WWWROOT, $item['link_url'])) && unlink($filename);
@@ -130,13 +146,9 @@ class BlogController extends BaseController {
 
             $this->_model->addLog($msg . L('MODULE_NAME_BLOG')  . "{$blog_info['title']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
 
-            /*if ($to_build) {//生成静态页
-                $this->buildHtmlAction(array($pk_value => array()));
-            }*/
-
             if (!$to_build) {
-                C('BLOG_BUILD_INFO', array($pk_value => array('cate_id' => $blog_info['cate_id'] . ',' . $data['cate_id'], 'link_url' => $blog_info['link_url'])));
-                $this->_deleteHtml('is_delete', 1, array($insert_id));
+                C('HTML_BUILD_INFO', array($pk_value => array('cate_id' => $blog_info['cate_id'] . ',' . $data['cate_id'], 'link_url' => $blog_info['link_url'])));
+                $this->deleteHtmlAction(null);
             }
 
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
@@ -149,23 +161,9 @@ class BlogController extends BaseController {
             }
 
             $this->_model->addLog($msg . L('MODULE_NAME_BLOG') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
-            //$to_build && $this->buildHtmlAction(array($insert_id));//生成静态页
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
     }//end addAction
-
-    public function buildHtmlAction($build_arr = array()) {
-        return false;
-
-        $build_arr  = null === $build_arr ? C('BLOG_BUILD_INFO') : $build_arr;var_dump($build_arr);
-        $o          = $this->_getViewTemplate('build_html');
-        $suffix     = C('HTML_SUFFIX');
-
-        foreach ($build_arr as $v) {
-            $content = $o->fetch($this->_getControllerName(), 'detail', $v);
-            $this->_buildHtml(BLOG_HTML_PATH, $v . $suffix, $content);
-        }
-    }
 
     /**
      * 获取博客具体信息
