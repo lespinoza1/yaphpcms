@@ -161,8 +161,8 @@ Ext.define('Yap.controller.Blog', {
             header: lang('TITLE'),//标题
             width: 300,
             dataIndex: 'title',
-            renderer: function(v) {
-                return me.searchReplaceRenderer(v, 'title');
+            renderer: function(v, cls, record) {
+                return '<a href="{0}" target="_blank" class="appactioncolum">{1}'.format(record.get('link_url'), me.searchReplaceRenderer(v, 'title'));
             }
         }, {
             header: lang('BELONG_TO_CATEGORY'),//所属分类
@@ -523,7 +523,7 @@ Ext.define('Yap.controller.Blog', {
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'content', 'add_time', 'title', 'cate_name', 'is_issue', 'is_delete', 'sort_order','from_name', 'from_url', 'hits', 'comments', 'seo_keyword', 'seo_description'],
+            fields: [this.idProperty, 'content', 'add_time', 'title', 'cate_name', 'is_issue', 'is_delete', 'sort_order','from_name', 'from_url', 'hits', 'comments', 'seo_keyword', 'seo_description', 'link_url'],
             /**
              * @cfg {String}
              * 主键
