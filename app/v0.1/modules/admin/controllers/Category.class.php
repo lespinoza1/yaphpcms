@@ -53,8 +53,25 @@ class CategoryController extends BaseController {
      * @return void 无返回值
      */
     protected function _afterDelete($pk_id) {
-        Logger::record(var_export($this->_model->where(array('cate_id' => array('IN', $pk_id)))->table(TB_BLOG), true), 'debug');
-        $this->deleteHtmlAction();
+
+        if (!$pk_id) {
+            return;
+        }
+
+        $data = array();
+
+        foreach($pk_id as $v) {//转化为array('cate_id' => $cate_id)形式
+            $data[] = array($this->_pk_field => $v);
+        }
+
+        $this->deleteHtmlAction($data);//删除分类静态文件
+        $this->createAction();//重新生成缓存
+
+        $blog_arr = $this->_model->table(TB_BLOG)->field('link_url')->where(array('cate_id' => array('IN', $pk_id)))->select();//博客
+        $this->_model->table(TB_BLOG)->where(array('cate_id' => array('IN', $pk_id)))->delete();//删除
+        C('HTML_BUILD_INFO', $blog_arr);
+        C(APP_FORWARD, true);
+        $this->forward('Blog', 'deleteHtml', array('build_arr' => null));//删除博客静态文件
     }
 
     /**
