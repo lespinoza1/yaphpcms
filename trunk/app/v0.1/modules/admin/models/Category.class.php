@@ -57,13 +57,6 @@ class CategoryModel extends BaseModel {
     protected $_true_table_name = TB_CATEGORY;//表
 
     /**
-     * {@inheritDoc}
-     */
-    protected function _afterDelete($data, $options = array()) {
-        $this->_module->createAction();
-    }
-
-    /**
      * 新增数据后，将排序设为该记录自动增长id
      *
      * @author          mrmsl <msl-138@163.com>
