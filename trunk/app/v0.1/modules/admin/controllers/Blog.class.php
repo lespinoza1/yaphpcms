@@ -42,7 +42,7 @@ class BlogController extends BaseController {
      */
     protected function _afterSetField($field, $value, $pk_id) {
 
-        if (($value && 'is_delete' == $field) || (!$value && 'is_issue' == $field)) {//未发布、已删除
+        if ('cate_id' == $field || ($value && 'is_delete' == $field) || (!$value && 'is_issue' == $field)) {//转移分类、未发布、已删除
             //$this->_getViewTemplate()->clearCache($this->_getControllerName(), 'detail', $pk_id);
             C(APP_FORWARD, true);
             $this->forward('Category', 'deleteHtml');
