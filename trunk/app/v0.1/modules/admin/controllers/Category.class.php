@@ -185,7 +185,7 @@ class CategoryController extends BaseController {
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-03-21 13:38:34
      *
-     * @return object this
+     * @return object $this
      */
     public function createAction() {
         $data      = $this->_model
@@ -197,7 +197,21 @@ class CategoryController extends BaseController {
             $this->_ajaxReturn(false, L('CREATE_CATEGORY_CACHE,FAILURE'), 'EXIT');
         }
 
+        new_mkdir($ssi_path = WWWROOT . 'ssi/category/');
+
+        foreach($data as $v) {//生成分类ssi导航
+            $html = '';
+
+            foreach (explode(',', $v['node']) as $item) {
+                $info  = $data[$item];
+                $html .= '<a href="' . $info['link_url'] . '">' . $info['cate_name'] . '</a> <span class="divider">/</span> ';
+            }
+
+            file_put_contents($ssi_path . 'nav' . $v[$this->_pk_field] . C('HTML_SUFFIX'), $html);
+        }
+
         $tree_data = Tree::array2tree($data, $this->_pk_field);//树形式
+
 
         return $this->_setCache($data)->_setCache($tree_data, $this->_getControllerName() . '_tree');
     }
