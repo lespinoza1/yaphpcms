@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span9 panel">
-            <div class="panel-header"><span class="icon-home"></span> 您现在的位置： <a href="#">首页</a> <span class="divider">/</span> <a href="miniblog.php">微博</a> <span class="divider">/</span> 微博详情</div>
+            <div class="panel-header"><span class="icon-home"></span> 您现在的位置： <a href="{BASE_SITE_URL}">首页</a> <span class="divider">/</span> <!--#include virtual="/v0.1/ssi/category/nav{$blog_info.cate_id}.shtml"--></div>
             <div class="panel-body">
                 <div class="blog-detail">
                     <h1>{$blog_info.title}</h1>
