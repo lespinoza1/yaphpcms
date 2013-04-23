@@ -1,0 +1,14 @@
+{template 'include', 'header'}
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <img src="{COMMON_IMGCACHE}images/ok.gif" alt="" />
+        {if isset($msg_content)}
+        {$msg_content}
+        {else}
+        {L MESSAGE_CONTENT}
+        {/if}
+    </div><!--end row-fluid-->
+</div><!--end container-fluid-->
+
+{template 'include', 'footer'}
