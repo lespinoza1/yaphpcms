@@ -358,6 +358,44 @@ class BaseController extends Yaf_Controller_Abstract {
     }//end _setLevelAndNode
 
     /**
+     * 提示信息
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-23 13:40:58
+     *
+     * @param mixed $message     提示信息。三种格式：null(取C('MSG_CONTENT'))；string(提示字符串)；数组(array('msg_content' => '提示信息', ...)
+     * @param array $link_url    显示链接数组。格式:array(array(text,link)...)或text,link
+     * @param int   $status_code http状态码。默认null
+     *
+     * @return void 无返回值
+     */
+    protected function _showMessage($message, $link_url = array(), $status_code = null) {
+        null !== $status_code && send_http_status($status_code);
+
+        $template = $this->_getViewTemplate();
+
+        if (is_string($link_url)) {//text,link
+            $template->assign('link_url', is_string($link_url) ? explode(',', $link_url));
+        }
+        else {
+            $template->assign('link_url', $link_url ? $link_url : array());
+        }
+
+        if (null === $message && is_array($v = C('MSG_CONTENT'))) {
+            $template->assign($v);
+        }
+        elseif (is_string($message)) {
+            $template->assign(array('msg_content' => $message));
+        }
+        elseif (is_array($message)) {
+            $template->assign($message);
+        }
+
+        $this->_display('Msg', 'msg');
+        exit();
+    }
+
+    /**
      * 启动方法，Yaf自动调用
      *
      * @author          mrmsl <msl-138@163.com>
