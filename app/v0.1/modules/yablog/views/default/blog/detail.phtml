@@ -3,20 +3,20 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span9 panel">
-            <div class="panel-header"><span class="icon-home"></span> 您现在的位置： <a href="{BASE_SITE_URL}">首页</a> <span class="divider">/</span> <!--#include virtual="/v0.1/ssi/category/nav{$blog_info.cate_id}.shtml"--></div>
+            <div class="panel-header"><span class="icon-home"></span> {L NOW_POSITION}： <a href="{BASE_SITE_URL}">{L HOME}</a> <span class="divider">/</span> <!--#include virtual="/v0.1/ssi/category/nav{$blog_info.cate_id}.shtml"--></div>
             <div class="panel-body">
                 <div class="blog-detail">
                     <h1>{$blog_info.title}</h1>
                     <p class="blog-meta">
                         <span>{echo new_date(null, $blog_info['add_time']);}</span>
-                        <span>来源：<a href="{$blog_info.from_url}">{$blog_info.from_name}</a></span>
-                        <span>阅读：{$blog_info.hits}</span>
-                        <span>评论：{$blog_info.comments}</span>
+                        <span>{L FROM_NAME}：<a href="{$blog_info.from_url}">{$blog_info.from_name}</a></span>
+                        <span>{L READS}：{$blog_info.hits}</span>
+                        <span>{L COMMENTS}：{$blog_info.comments}</span>
                     </p>
                 <div class="blog-content">
                     {$blog_info.content}
-                    <p><span class="icon-tags"></span>标签：<a href="#">php</a>,<a href="#">js</a>,<a href="#">jquery</a></p>
-                    <p class="text-center"><a class="label label-inverse"><span class="icon-thumbs-up icon-white"></span> 顶一个</a></p>
+                    <p><span class="icon-tags"></span>{L TAG}：<a href="#">php</a>,<a href="#">js</a>,<a href="#">jquery</a></p>
+                    <p class="text-center"><a class="label label-inverse"><span class="icon-thumbs-up icon-white"></span> {L DIGG_ONE}</a></p>
 
                 </div>
 
@@ -24,19 +24,19 @@
                        {if $next_blog}
                            <span class="pull-right">
                                <span class="icon-circle-arrow-right"></span>
-                               下一篇：<a href="{$next_blog.link_url}">{$next_blog.title}</a>
+                               {L NEXT_BLOG}：<a href="{$next_blog.link_url}">{$next_blog.title}</a>
                            </span>
                        {/if}
                        {if $prev_blog}
                            <span class="icon-circle-arrow-left"></span>
-                           上一篇：<a href="{$prev_blog.link_url}">{$prev_blog.title}</a>
+                           {L PREV_BLOG}：<a href="{$prev_blog.link_url}">{$prev_blog.title}</a>
                        {/if}
                     </p>
                 </div>
                 <hr />
                 <div class="row ml-10">
                 <div class="span5">
-                <div class="separation separation-guest-like"><span class="icon-heart"></span> 猜您喜欢</div>
+                <div class="separation separation-guest-like"><span class="icon-heart"></span> {L GUEST_YOU_LIKE}</div>
                 <ul>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
@@ -47,7 +47,7 @@
                     <li><a href="#">标题标题</a></li>
                 </ul>
                 </div>
-                <div class="span5 pull-right">
+                <!--<div class="span5 pull-right">
                 <div class="separation separation-also-read"><span class="icon-eye-open"></span> 阅读过此文的朋友还阅读了...</div>
                 <ul>
                     <li><a href="#">标题标题</a></li>
@@ -58,9 +58,9 @@
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                 </ul>
+                </div>-->
                 </div>
-                </div>
-                <div class="separation-comment">评论列表</div>
+                <div class="separation-comment">{L COMMENTS,LIST}</div>
                 {template 'include', 'comments'}
             </div>
         </div><!--end span9-->
