@@ -19,20 +19,24 @@ class BlogController extends BaseController {
     protected $_init_model      = true;
 
     /**
-     * 管理中心。如果未登陆，跳转至登陆页
+     * 根据指定博客id获取上、下一篇博客标题及链接
      *
-     * @author          mrmsl
-     * @date            2012-07-02 11:12:49
-     * @lastmodify      2013-01-22 10:34:14 by mrmsl
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-02-21 15:26:00
      *
-     * @return void 无返回值。如果未登陆跳转至登陆页
+     * @param int $blog_id 当前博客id
+     *
+     * @return array 上、下一篇博客
      */
-    public function indexAction() {
-        $cate_name = Filter::string('name', 'get');var_dump($cate_name);
-    }
-    public function pagenotfoundAction() {
-        var_dump('Page Not Found');
-        return false;
+    private function _getNextAndPrevBlog($blog_id) {
+        $next_id   = $blog_id + 1;
+        $prev_id   = $blog_id - 1;
+        $data      = $this->_model->field('blog_id,title,link_url')->key_column('blog_id')->select();
+
+        return array(
+            'next_blog' => isset($data[$next_id = $blog_id + 1]) ? $data[$next_id] : false,
+            'prev_blog' => isset($data[$prev_id = $blog_id - 1]) ? $data[$prev_id] : false,
+        );
     }
 
     /**
@@ -40,24 +44,40 @@ class BlogController extends BaseController {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-02-21 15:26:00
+     * @lastmodify      2013-04-23 14:32:00 by mrmsl
      *
      * @return void 无返回值
      */
     public function detailAction() {
         $blog_id = Filter::int('id', 'get');
+        $date    = Filter::int('date', 'get');
 
-        if ($blog_id && ($blog_info = $this->_model->find($blog_id))) {
+        if (!$blog_id || !$date) {//非法参数
+            Logger::record(L('INVALID_PARAM') . "date=({$date}),id=($blog_id)", CONTROLLER_NAME);
+            $this->_showMessage('error' . $blog_id . $date, null, 404);
+        }
+
+        if ($blog_info = $this->_model->find($blog_id)) {
+
+            if (date('Ymd', $blog_info['add_time']) != $date) {//日期与id不匹配
+                Logger::record(L('INVALID_PARAM') . "date=({$date}),id=($blog_id)", CONTROLLER_NAME);
+                $this->_showMessage('error' . $blog_id . $date, null, 404);
+            }
+
             $filename = str_replace(BASE_SITE_URL, WWWROOT, $blog_info['link_url']);
             new_mkdir(dirname($filename));
-            $o = $this->_getViewTemplate('build_html');
-            $o->assign('blog_info', $blog_info);
+
+            $o = $this->_getViewTemplate('build_html')
+            ->assign($this->_getNextAndPrevBlog($blog_id))//上下篇
+            ->assign('blog_info', $blog_info);//博客内容
+
             $content = $o->fetch(CONTROLLER_NAME, 'detail');
             file_put_contents($filename, $content);
             echo $content;
 
         }
-        else {
-            exit('not exists');
+        else {//博客不存在
+            $this->_showMessage(L('BLOG,NOT_EXIST'), null, 404);
         }
     }
 }
