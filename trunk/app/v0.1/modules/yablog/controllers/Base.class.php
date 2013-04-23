@@ -375,7 +375,7 @@ class BaseController extends Yaf_Controller_Abstract {
         $template = $this->_getViewTemplate();
 
         if (is_string($link_url)) {//text,link
-            $template->assign('link_url', is_string($link_url) ? explode(',', $link_url));
+            $template->assign('link_url', explode(',', $link_url));
         }
         else {
             $template->assign('link_url', $link_url ? $link_url : array());
