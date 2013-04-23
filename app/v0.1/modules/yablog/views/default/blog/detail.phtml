@@ -15,47 +15,51 @@
                     </p>
                 <div class="blog-content">
                     {$blog_info.content}
-    			             <p><span class="icon-tags"></span>标签：<a href="#">php</a>,<a href="#">js</a>,<a href="#">jquery</a></p>
-    			             <p class="text-center"><a class="label label-inverse"><span class="icon-thumbs-up icon-white"></span> 顶一个</a></p>
+                    <p><span class="icon-tags"></span>标签：<a href="#">php</a>,<a href="#">js</a>,<a href="#">jquery</a></p>
+                    <p class="text-center"><a class="label label-inverse"><span class="icon-thumbs-up icon-white"></span> 顶一个</a></p>
 
-			             </div>
+                </div>
 
-    			             <p>
-    			                <span class="pull-right">
-    			                    <span class="icon-circle-arrow-right"></span>
-    			                    下一篇：<a href="#">php高级技巧</a>
-    			                </span>
-    			                <span class="icon-circle-arrow-left"></span>
-    			                上一篇：<a href="#">php高级技巧</a>
-    			             </p>
-			             </div>
-			             <hr />
-			             <div class="row ml-10">
-			             <div class="span5">
-			             <div class="separation separation-guest-like"><span class="icon-heart"></span> 猜您喜欢</div>
-			             <ul>
-			                 <li><a href="#">标题标题</a></li>
+                    <p>
+                       {if $next_blog}
+                           <span class="pull-right">
+                               <span class="icon-circle-arrow-right"></span>
+                               下一篇：<a href="{$next_blog.link_url}">{$next_blog.title}</a>
+                           </span>
+                       {/if}
+                       {if $prev_blog}
+                           <span class="icon-circle-arrow-left"></span>
+                           上一篇：<a href="{$prev_blog.link_url}">{$prev_blog.title}</a>
+                       {/if}
+                    </p>
+                </div>
+                <hr />
+                <div class="row ml-10">
+                <div class="span5">
+                <div class="separation separation-guest-like"><span class="icon-heart"></span> 猜您喜欢</div>
+                <ul>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
-			             </ul>
-			             </div>
-			             <div class="span5 pull-right">
-			             <div class="separation separation-also-read"><span class="icon-eye-open"></span> 阅读过此文的朋友还阅读了...</div>
-			             <ul>
-			                 <li><a href="#">标题标题</a></li>
+                    <li><a href="#">标题标题</a></li>
+                </ul>
+                </div>
+                <div class="span5 pull-right">
+                <div class="separation separation-also-read"><span class="icon-eye-open"></span> 阅读过此文的朋友还阅读了...</div>
+                <ul>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
                     <li><a href="#">标题标题</a></li>
-			             </ul>
-			             </div>
-			             </div>
+                    <li><a href="#">标题标题</a></li>
+                </ul>
+                </div>
+                </div>
                 <div class="separation-comment">评论列表</div>
                 {template 'include', 'comments'}
             </div>
