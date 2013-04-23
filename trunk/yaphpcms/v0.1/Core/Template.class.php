@@ -272,7 +272,7 @@ class Template {
 
         //L()
         if (false !== strpos($source, '{L ')) {
-            $source = preg_replace('#\{L\s+(\w+)\}#', '<?php echo L(\'$1\');?>', $source);
+            $source = preg_replace('#\{L\s+([\w,]+)\}#', '<?php echo L(\'$1\');?>', $source);
         }
 
         //C()
