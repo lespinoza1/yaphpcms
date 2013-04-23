@@ -69,7 +69,12 @@ class BlogController extends BaseController {
 
             $o = $this->_getViewTemplate('build_html')
             ->assign($this->_getNextAndPrevBlog($blog_id))//上下篇
-            ->assign('blog_info', $blog_info);//博客内容
+            ->assign('blog_info', $blog_info)//博客内容
+            ->assign(array(
+                'WEB_TITLE'         => $blog_info['title'],
+                'seo_keywords'      => $blog_info['seo_keyword'],
+                'seo_description'   => $blog_info['seo_description'],
+            ));
 
             $content = $o->fetch(CONTROLLER_NAME, 'detail');
             file_put_contents($filename, $content);
