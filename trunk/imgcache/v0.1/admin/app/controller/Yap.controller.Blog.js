@@ -68,7 +68,7 @@ Ext.define('Yap.controller.Blog', {
         return [
             extField.fieldContainer(['TITLE', [//标题
                 [null, 'title', 'PLEASE_ENTER,TITLE', false, '', {width: 400}],
-                lang('LT_BYTE').format(60) + '，' + lang('CN_TO_BYTE')
+                lang('LT_BYTE').format(90) + '，' + lang('CN_TO_BYTE')
             ]]),
             extField.fieldContainer(['FROM_NAME', [//来源名称
                 [null, 'from_name', '', false, '', {width: 400}],
