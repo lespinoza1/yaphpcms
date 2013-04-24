@@ -210,6 +210,43 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
+     * 获取指定分类下所有子类id
+     *
+     * @param int    $item_id      分类id
+     * @param bool   $include_self true包含本身。默认true
+     * @param bool   $return_array true返回数组形式。默认false
+     * @param string $filename     缓存文件名。默认nulll，当前模块名
+     * @param string $level_field  层次字段。默认level
+     * @param string $node_field   节点字段。默认node
+     *
+     * @return string 所有子类id，如果没有子类，返回空字符串或空数组
+     */
+    protected function _getChildrenIds($item_id, $include_self = true, $return_array = false, $filename = null, $level_field = 'level', $node_field = 'node') {
+        $filename      = $filename ? $filename : $this->_getControllerName();
+        $cache_data    = $this->_getCache(0, $filename);
+
+        if (!isset($cache_data[$item_id])) {
+            return $return_array ? array() : '';
+        }
+
+        $item_info     = $cache_data[$item_id];
+        $item_node     = $item_info[$node_field];
+        $item_level    = $item_info[$level_field];
+        $children_ids  = $include_self ? $item_id : '';
+
+        foreach ($cache_data as $k => $v) {
+
+            if (strpos($v[$node_field], $item_node . ',') === 0 && $v[$level_field] > $item_level && $k != $item_id) {
+                $children_ids .= ',' . $k;
+            }
+        }
+
+        $children_ids = trim($children_ids, ',');
+
+        return $return_array ? explode(',', $children_ids) : $children_ids;
+    }
+
+    /**
      * 获取视图模板引擎实例
      *
      * @author            mrmsl <msl-138@163.com>
@@ -226,7 +263,8 @@ class BaseController extends Yaf_Controller_Abstract {
             $this->_view_template = Template::getInstance();
             $this->_view_template->assign(sys_config())
             ->assign('L', L())
-            ->assign('C', C());
+            ->assign('C', C())
+            ->assign('me', $this);
         }
 
         if (null !== $config) {//属性
@@ -396,6 +434,37 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
+     *
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-23 13:40:58
+     *
+     * @param mixed $message     提示信息。三种格式：null(取C('MSG_CONTENT'))；string(提示字符串)；数组(array('msg_content' => '提示信息', ...)
+     * @param array $link_url    显示链接数组。格式:array(array(text,link)...)或text,link
+     * @param int   $status_code http状态码。默认null
+     *
+     * @return void 无返回值
+     */
+    public function tags($tags, $return_tags_array = false) {
+        $html = '';
+
+        if ($tags = trim($tags)) {
+            $arr    = explode(strpos($tags, ' ') ? ' ' : ',', $tags);
+            $arr    = array_unique($arr);
+
+            if ($return_tags_array) {
+                return $arr;
+            }
+
+            foreach ($arr as $v) {
+                $html .= sprintf(',<a href="%s.shtml">%s</a>', BASE_SITE_URL . 'tag/' . urlencode($v), $v);
+            }
+        }
+
+        return $html ? substr($html, 1) : '';
+    }
+
+    /**
      * 启动方法，Yaf自动调用
      *
      * @author          mrmsl <msl-138@163.com>
@@ -463,6 +532,10 @@ class BaseController extends Yaf_Controller_Abstract {
 
         foreach(explode(',', $info['node']) as $item) {
             $nav[] = $data[$item][$name_field];
+        }
+
+        if (' | ' == $separator) {
+            return join(' | ', array_reverse($nav));
         }
 
         return join($separator, $nav);

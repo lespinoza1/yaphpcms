@@ -16,6 +16,7 @@ return array(
     'CN_WANGWEN'        => '网文',
     'COME_FROM'         => '来源',
     'COMMENTS'          => '评论',
+    'DIGG_ONE'          => '顶一个',
     'GUESTBOOK'         => '留言',
     'HOME'              => '首页',
     'LIST'              => '列表',
