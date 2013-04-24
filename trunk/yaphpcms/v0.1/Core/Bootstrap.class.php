@@ -150,7 +150,8 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
         );
 
         if (!isset($_SERVER['argv'])) {
-            function_exists('ob_gzhandler') ? ob_start('ob_gzhandler') : ob_start();
+            //function_exists('ob_gzhandler') ? ob_start('ob_gzhandler') : ob_start();
+            ob_start();
             session($config);
             Yaf_Registry::set(SESSION_ADMIN_KEY, session(SESSION_ADMIN_KEY));//管理员信息
         }

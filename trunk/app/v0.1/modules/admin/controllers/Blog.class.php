@@ -108,6 +108,24 @@ class BlogController extends BaseController {
      * @return void 无返回值
      */
     public function addAction() {
+        /*$tags      = $this->_model->field('seo_keyword,blog_id,title')->select();
+$values = '';
+        foreach ($tags as $v) {
+
+            if ($t = trim($v['seo_keyword'])) {
+                $id = $v['blog_id'];
+                $arr = explode(strpos($t, ' ') ? ' ' : ',', $t);
+                $arr = array_unique($arr);
+                foreach ($arr as $a) {
+                    $values .= $a ? ",({$id},'" . addslashes($a) . "')" : '';
+                }
+            }
+        }
+
+        if ($values) {
+            var_dump($this->_model->execute('INSERT INTO ' . TB_TAG . '(blog_id,tag) VALUES ' . substr($values, 1)));
+        }
+exit;*/
         $check     = $this->_model->checkCreate();//自动创建数据
 
         $check !== true && $this->_ajaxReturn(false, $check);//未通过验证
@@ -143,6 +161,8 @@ class BlogController extends BaseController {
             $blog_info['cate_name'] = $cate_info['cate_name'];//所属分类名
 
             $diff = $this->_dataDiff($blog_info, $data, $diff_key);//差异
+
+            strpos($diff, 'seo_keyword') && $this->_model->addTags($pk_value, $data['seo_keyword']);
 
             $this->_model->addLog($msg . L('MODULE_NAME_BLOG')  . "{$blog_info['title']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
 

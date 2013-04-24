@@ -45,7 +45,7 @@ class BlogModel extends BaseModel {
         'cate_id'          => array('filter' => 'int', 'validate' => '_checkCateId#PLEASE_SELECT,BELONG_TO_CATEGORY#data'),
 
         //标题
-        'title'            => array('validate' => array('notblank#TITLE', 'title#{%TITLE,EXIST}#VALUE_VALIDATE#unique', '_checkLength#TITLE#value|0|60')),
+        'title'            => array('validate' => array('notblank#TITLE', 'title#{%TITLE,EXIST}#VALUE_VALIDATE#unique', '_checkLength#TITLE#value|0|90')),
         'content'         	=> array('filter' => 'raw', 'validate' => 'notblank#CONTENT'),
         'summary'         	=> array('filter' => 'raw'),//摘要
 
@@ -76,6 +76,8 @@ class BlogModel extends BaseModel {
      */
     protected function _afterInsert($data, $options) {
         $this->save(array($this->_pk_field => $data[$this->_pk_field], 'link_url' => BASE_SITE_URL . 'blog/' . date('Ymd/', $data['add_time']) . $data[$this->_pk_field] . C('HTML_SUFFIX')));
+        $this->addTags($data[$this->_pk_field], $data['seo_keyword']);
+
     }
 
     /**
@@ -101,5 +103,31 @@ class BlogModel extends BaseModel {
         return $this->_getCache($cate_id, 'Category') ? true : L('BELONG_TO_CATEGORY,NOT_EXIST');
     }
 
+    /**
+     * 添加关键字至标签表
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-24 10:30:52
+     *
+     * @param int    $blog_id 博客id
+     * @param string $data    关键字
+     *
+     * @return void 无返回值
+     */
+    public function addTags($blog_id, $tags) {
 
+        if ($tags = trim($tags)) {
+            $this->execute('DELETE FROM ' . TB_TAG . ' WHERE blog_id=' . $blog_id);//先删
+
+            $values = '';
+            $arr    = explode(strpos($tags, ' ') ? ' ' : ',', $tags);
+            $arr    = array_unique($arr);
+
+            foreach ($arr as $v) {
+                $values .= $v ? ",({$blog_id},'" . addslashes($v) . "')" : '';
+            }
+
+            $values && $this->execute('INSERT INTO ' . TB_TAG . '(blog_id,tag) VALUES ' . substr($values, 1));
+        }
+    }
 }

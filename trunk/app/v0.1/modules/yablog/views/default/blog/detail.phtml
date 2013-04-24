@@ -3,21 +3,26 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span9 panel">
-            <div class="panel-header"><span class="icon-home"></span> {L NOW_POSITION}： <a href="{BASE_SITE_URL}">{L HOME}</a> <span class="divider">/</span> <!--#include virtual="/v0.1/ssi/category/nav{$blog_info.cate_id}.shtml"--></div>
+            <div class="panel-header">
+                <span class="icon-home"></span>
+                {L NOW_POSITION}：<a href="{BASE_SITE_URL}">{L HOME}</a>
+                <span class="divider">/</span>
+                <!--#include virtual="/v0.1/ssi/category/nav{$blog_info.cate_id}.shtml"-->
+                {$blog_info.title}
+            </div>
             <div class="panel-body">
                 <div class="blog-detail">
                     <h1>{$blog_info.title}</h1>
                     <p class="blog-meta">
                         <span>{echo new_date(null, $blog_info['add_time']);}</span>
-                        <span>{L FROM_NAME}：<a href="{$blog_info.from_url}">{$blog_info.from_name}</a></span>
+                        <span>{L ORIGIN}：<a href="{$blog_info.from_url}">{$blog_info.from_name}</a></span>
                         <span>{L READS}：{$blog_info.hits}</span>
                         <span>{L COMMENTS}：{$blog_info.comments}</span>
                     </p>
                 <div class="blog-content">
                     {$blog_info.content}
-                    <p><span class="icon-tags"></span>{L TAG}：<a href="#">php</a>,<a href="#">js</a>,<a href="#">jquery</a></p>
+                    {if $tags}<p><span class="icon-tags"></span>{L TAG}：{$tags}</p>{/if}
                     <p class="text-center"><a class="label label-inverse"><span class="icon-thumbs-up icon-white"></span> {L DIGG_ONE}</a></p>
-
                 </div>
 
                     <p>
@@ -35,18 +40,16 @@
                 </div>
                 <hr />
                 <div class="row ml-10">
+                {if $relative_blog}
                 <div class="span5">
                 <div class="separation separation-guest-like"><span class="icon-heart"></span> {L GUEST_YOU_LIKE}</div>
                 <ul>
-                    <li><a href="#">标题标题</a></li>
-                    <li><a href="#">标题标题</a></li>
-                    <li><a href="#">标题标题</a></li>
-                    <li><a href="#">标题标题</a></li>
-                    <li><a href="#">标题标题</a></li>
-                    <li><a href="#">标题标题</a></li>
-                    <li><a href="#">标题标题</a></li>
+                    {foreach $relative_blog $v}
+                    <li><a href="{$v.link_url}">{$v.title}</a></li>
+                    {/foreach}
                 </ul>
                 </div>
+                {/if}
                 <!--<div class="span5 pull-right">
                 <div class="separation separation-also-read"><span class="icon-eye-open"></span> 阅读过此文的朋友还阅读了...</div>
                 <ul>
@@ -65,48 +68,9 @@
             </div>
         </div><!--end span9-->
         <div class="span3">
-            <div class="panel">
-                <div class="panel-header"><h3>热门网文</h3></div>
-                <div class="panel-body">
-                    <ul class="unstyled">
-                        <li><a href="#">标题标题</a></li>
-                        <li><a href="#">标题标题</a></li>
-                        <li><a href="#">标题标题</a></li>
-                        <li><a href="#">标题标题</a></li>
-                        <li><a href="#">标题标题</a></li>
-                        <li><a href="#">标题标题</a></li>
-                        <li><a href="#">标题标题</a></li>
-                        <li><a href="#">标题标题</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="panel">
-                <div class="panel-header"><h3>网文标签</h3></div>
-                <div class="panel-body">
-                    <ul class="unstyled">
-                        <li><a href="#">php</a></li>
-                        <li><a href="#">javascript</a></li>
-                        <li><a href="#">nodejs</a></li>
-                        <li><a href="#">mongodb</a></li>
-                        <li><a href="#">php</a></li>
-                        <li><a href="#">javascript</a></li>
-                        <li><a href="#">nodejs</a></li>
-                        <li><a href="#">mongodb</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="panel">
-                <div class="panel-header"><h3>最新留言</h3></div>
-                <div class="panel-body">
-                    <ul class="unstyled">
-                        <li><strong>mrmsl</strong>: 内容合并一个或多个数组，2为，获取内容表及内容附属表内容，3为，除2的内容外，增加统计信息</li>
-                        <li><strong>mrmsl</strong>: 内容合并一个或多个数组，2为，获取内容表及内容附属表内容，3为，除2的内容外，增加统计信息</li>
-                        <li><strong>mrmsl</strong>: 内容合并一个或多个数组，2为，获取内容表及内容附属表内容，3为，除2的内容外，增加统计信息</li>
-                        <li><strong>mrmsl</strong>: 内容合并一个或多个数组，2为，获取内容表及内容附属表内容，3为，除2的内容外，增加统计信息</li>
-                        <li><strong>mrmsl</strong>: 内容合并一个或多个数组，2为，获取内容表及内容附属表内容，3为，除2的内容外，增加统计信息</li>
-                    </ul>
-                </div>
-            </div>
+            <!--#include virtual="/v0.1/ssi/hot_blogs.shtml"-->
+            <!--#include virtual="/v0.1/ssi/tags.shtml"-->
+            <!--#include virtual="/v0.1/ssi/new_guestbooks.shtml"-->
         </div><!--end  span3-->
     </div><!--end row-fluid-->
 </div><!--end container-fluid-->

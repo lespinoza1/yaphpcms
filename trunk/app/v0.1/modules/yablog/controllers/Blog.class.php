@@ -40,6 +40,41 @@ class BlogController extends BaseController {
     }
 
     /**
+     * 根据指定博客id
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-24 11:34:18
+     *
+     * @param int $blog_id 当前博客id
+     *
+     * @return array 上、下一篇博客
+     */
+    private function _getRelativeBlog($blog_id, $tags) {
+        $tags = $this->tags($tags, true);
+
+        if (!$tags) {
+            return array();
+        }
+
+        $t = '';
+
+        foreach($tags as $v) {
+            $t .= ",'" . addslashes($v) . "'";
+        }
+
+        $data = $this->_model
+        ->alias('b')
+        ->field('b.title,b.link_url')
+        ->join('JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
+        ->where(array('t.tag' => array('IN', $tags), 't.blog_id' => array('NEQ', $blog_id)))
+        ->limit(5)
+        ->order('b.hits DESC')
+        ->select();
+
+        return $data;
+    }
+
+    /**
      * 详请
      *
      * @author          mrmsl <msl-138@163.com>
@@ -71,13 +106,15 @@ class BlogController extends BaseController {
             ->assign($this->_getNextAndPrevBlog($blog_id))//上下篇
             ->assign('blog_info', $blog_info)//博客内容
             ->assign(array(
-                'WEB_TITLE'         => $blog_info['title'],
+                'web_title'         => $blog_info['title'] . ' | ' . $this->nav($blog_info['cate_id'], 'cate_name', 'Category', ' | '),
                 'seo_keywords'      => $blog_info['seo_keyword'],
                 'seo_description'   => $blog_info['seo_description'],
+                'tags'              => $this->tags($blog_info['seo_keyword']),
+                'relative_blog'     => $this->_getRelativeBlog($blog_id, $blog_info['seo_keyword']),
             ));
 
             $content = $o->fetch(CONTROLLER_NAME, 'detail');
-            file_put_contents($filename, $content);
+            //file_put_contents($filename, $content);
             echo $content;
 
         }

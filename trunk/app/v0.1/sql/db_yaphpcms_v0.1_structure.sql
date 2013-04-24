@@ -92,7 +92,7 @@ ADD INDEX issue_delete(is_issue, is_delete)
 
 CREATE TABLE `tb_blog` (
   `blog_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `title` varchar(60) NOT NULL DEFAULT '' COMMENT '标题',
+  `title` varchar(90) NOT NULL DEFAULT '' COMMENT '标题',
   `cate_id` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '分类id',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
    update_time int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
@@ -254,10 +254,9 @@ CREATE TABLE `tb_session` (
 
 /*tb_tags标签表*/
 CREATE TABLE `tb_tag` (
-  `tag_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `blog_id` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '博客id',
   tag char(20) NOT NULL DEFAULT '' COMMENT '标签',
-  PRIMARY KEY(tag_id),
+  PRIMARY KEY(tag,blog_id),
   FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='标签表 by mashanling on 2013-03-22 17:07:22';
 
