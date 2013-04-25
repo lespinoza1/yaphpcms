@@ -52,8 +52,9 @@ class CategoryController extends BaseController {
         ->table(TB_BLOG)
         ->where($where)
         ->count();
-        $page       = Filter::int('page', 'get', 1);
-        $page_info  = Filter::page($total, 'page', PAGE_SIZE);
+        $page_info  = Filter::page($total, 'page', PAGE_SIZE);var_dump($page_info);exit;
+        $page       = $page_info['page'];
+        $page_one   = $page < 2;
         $blog_arr   = $this->_model
         ->table(TB_BLOG)
         ->where($where)
@@ -62,17 +63,26 @@ class CategoryController extends BaseController {
         ->field('title,link_url,cate_id,add_time,summary,seo_keyword')
         ->select();
 
-        $o = $this->_getViewTemplate($page ? null : 'build_html')
+        $paging = new Paging(array(
+            '_url_tpl'      => str_replace('.shtml', '/page/\\1.shtml', $cate_info['link_url']),
+            '_total_page'   => $page_info['total_page'],
+            '_now_page'     => $page,
+            '_page_size'    => PAGE_SIZE,
+        ));
+
+        $o = $this->_getViewTemplate($page_one ? 'build_html' : null)
         ->assign(array(
             'web_title' => $this->nav($cate_id, 'cate_name', null, ' | '),
             'blog_arr'  => $blog_arr,
             'cate_arr'  => $cate_arr,
             'cate_info' => $cate_info,
-            'tag'       => ''
+            'tag'       => '',
+            'paging'    => $paging->getHtml(),
+            'page'      => $page_one ? '' : $page,
         ));
         $content = $o->fetch(MODULE_NAME, ACTION_NAME, $cate_id . '-' . $page);
 
-        if ($page < 2) {
+        if ($page_one) {
             $filename = str_replace(BASE_SITE_URL, WWWROOT, $cate_info['link_url']);
             new_mkdir(dirname($filename));
             //file_put_contents($filename, $content);
