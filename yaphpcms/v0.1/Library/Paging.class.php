@@ -47,7 +47,7 @@ class Paging {
      * 1: 首页 上一页 1 ... 5 6 7 ... 26 下一页 尾页 ...加链接
      * 2：总显示$this->_show_pages_num页 上一页 2 3 4 5 6 7 下一页
      */
-    private $_mode = 2;
+    private $_mode = 0;
     /**
      * @var string $_next_page_text 下一页文字。默认下一页
      */
