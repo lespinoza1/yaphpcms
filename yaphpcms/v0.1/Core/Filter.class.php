@@ -46,7 +46,7 @@ class Filter {
     static private $_input_type = array(
         'get'         => INPUT_GET,
         'post'        => INPUT_POST,
-        'cookie'	     => INPUT_COOKIE,
+        'cookie'      => INPUT_COOKIE,
         'server'      => INPUT_SERVER,
         'env'         => INPUT_ENV
     );
@@ -109,7 +109,7 @@ class Filter {
         return call_user_func_array('self::string', $args);
     }
 
-	   /**
+    /**
      * 布尔值过滤
      *
      * @param string $var_name            参数名
@@ -231,16 +231,18 @@ class Filter {
      * @return array 包含了当前页、总页数、偏移量数组
      */
     static public function page($count, $page = 'page', $page_size = 'limit') {
-        $page_size  = is_int($page_size) ? $page_size : self::int($page_size, 'get', PAGE_SIZE);
-        $total_page = ceil($count / $page_size);
-        $page       = is_numeric($page) ? $page : self::int($page, 'get', 1);
-        $page       = $page > $total_page ? $total_page : $page;
-        $limit      = ($page - 1) * $page_size . ',' . $page_size;
+        $page_size      = is_int($page_size) ? $page_size : self::int($page_size, 'get', PAGE_SIZE);
+        $total_page     = ceil($count / $page_size);
+        $origin_page    = is_numeric($page) ? $page : self::int($page, 'get', 1);//未处理过页数
+        $page           = $origin_page < 1 ? 1 : $origin_page;
+        $page           = $page > $total_page ? $total_page : $page;
+        $limit          = ($page - 1) * $page_size . ',' . $page_size;
 
         return array(
-        	   'page'       => $page,
-            'total_page' => $total_page,
-            'limit'      => $limit
+            'origin_page'   => $origin_page,
+            'page'          => $page,
+            'total_page'    => $total_page,
+            'limit'         => $limit
         );
     }
 
@@ -274,7 +276,7 @@ class Filter {
         return '' === $value ? $default : $value;
     }
 
-	   /**
+    /**
      * 正则过滤
      *
      * @param string $var_name            参数名
@@ -314,7 +316,7 @@ class Filter {
         return '' === $string ? $default : $string;
     }
 
-	   /**
+    /**
      * url过滤
      *
      * @author       mrmsl <msl-138@163.com>
