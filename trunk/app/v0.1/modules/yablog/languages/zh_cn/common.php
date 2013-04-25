@@ -21,6 +21,7 @@ return array(
     'HOME'              => '首页',
     'LIST'              => '列表',
     'NOW_POSITION'      => '您现在的位置',
+    'N_PAGES'           => '第%d页',
     'READS'             => '阅读',
     'TAG'               => '标签',
 );
