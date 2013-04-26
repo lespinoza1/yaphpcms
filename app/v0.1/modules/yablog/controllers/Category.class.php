@@ -52,7 +52,7 @@ class CategoryController extends BaseController {
         ->table(TB_BLOG)
         ->where($where)
         ->count();
-        $page_info  = Filter::page($total, 'page', PAGE_SIZE);var_dump($page_info);exit;
+        $page_info  = Filter::page($total, 'page', PAGE_SIZE);
         $page       = $page_info['page'];
         $page_one   = $page < 2;
         $blog_arr   = $this->_model
