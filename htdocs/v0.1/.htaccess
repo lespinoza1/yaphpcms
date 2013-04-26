@@ -1,16 +1,16 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /v0.1/
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} ^.*\.(gif|jpg|jpeg|png|swf)$
+RewriteRule .? - [S=3]
 
 #category.shtml,miniblog/page/2.shtml...
-RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(category|miniblog|tag|guestbook)(/page/([2-9]|[1-9]\d+))?\.shtml$ yabindex\.php/$1/index?page=$3 [L]
 
 #cagegory/php.shtml,tag/seo/page/2.shtml...
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(blog|category|tag)/([^/]+)(/page/([2-9]|[1-9]\d+))?\.shtml$ yabindex\.php/$1/index?name=$2&page=$4 [L]
+RewriteRule ^(category|tag)/([^/]+)(/page/([2-9]|[1-9]\d+))?\.shtml$ yabindex\.php/$1/index?name=$2&page=$4 [L]
 
 #blog/20130417/100.shtml,miniblog/20130417/100.shtml
-RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(blog|miniblog)/(201[3-9]\d{2}\d{2})/([1-9]\d*)\.shtml$ yabindex\.php/$1/detail?date=$2&id=$3 [L]
 </IfModule>
