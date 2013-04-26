@@ -27,7 +27,38 @@ class MiniblogController extends BaseController {
      * @return void 无返回值
      */
     public function indexAction() {
-        $this->_display();
+        $total      = $this->_model
+        ->count();
+        $page_info  = Filter::page($total, 'page', PAGE_SIZE);
+        $page       = $page_info['page'];
+        $page_one   = $page < 2;
+        $blog_arr   = $this->_model
+        ->order('blog_id DESC')
+        ->limit($page_info['limit'])
+        ->select();
+
+        $paging = new Paging(array(
+            '_url_tpl'      => BASE_SITE_URL . 'miniblog/page/\\1.shtml',
+            '_total_page'   => $page_info['total_page'],
+            '_now_page'     => $page,
+            '_page_size'    => PAGE_SIZE,
+        ));
+
+        $o = $this->_getViewTemplate($page_one ? 'build_html' : null)
+        ->assign(array(
+            'web_title' => L('MINIBLOG'),
+            'blog_arr'  => $blog_arr,
+            'paging'    => $paging->getHtml(),
+            'page'      => $page_one ? '' : $page,
+        ));
+        $content = $o->fetch(MODULE_NAME, ACTION_NAME, $page);
+
+        if ($page_one) {
+            $filename =  WWWROOT . 'miniblog.shtml';
+            //file_put_contents($filename, $content);
+        }
+
+        echo $content;
     }
 
     /**
