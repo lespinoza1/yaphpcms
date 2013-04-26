@@ -37,8 +37,24 @@ class MiniblogModel extends BaseModel {
      * @see BaseModel.class.php __construct()方法设置自动验证字段_validate
      */
     protected $_db_fields = array (
-        'blog_id'          => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,DATA,INVALID'),//自增主键
-        'content'         	=> array('filter' => 'raw', 'validate' => 'notblank#CONTENT'),
-        'add_time'         => null,
+        'blog_id'           => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,DATA,INVALID'),//自增主键
+        'content'           => array('filter' => 'raw', 'validate' => 'notblank#CONTENT'),
+        'add_time'          => null,
+        'link_url'          => null
     );
+
+    /**
+     * 新增数据后，将设置微博链接
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-26 21:33:10
+     *
+     * @param $data     插入数据
+     * @param $options  查询表达式
+     *
+     * @return void 无返回值
+     */
+    protected function _afterInsert($data, $options) {
+        $this->save(array($this->_pk_field => $data[$this->_pk_field], 'link_url' => BASE_SITE_URL . 'miniblog/' . date('Ymd/', $data['add_time']) . $data[$this->_pk_field] . C('HTML_SUFFIX')));
+    }
 }

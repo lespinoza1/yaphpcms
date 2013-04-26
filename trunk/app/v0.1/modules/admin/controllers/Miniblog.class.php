@@ -22,10 +22,32 @@ class MiniblogController extends BaseController {
     );
 
     /**
+     * 删除后置操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-26 22:04:00
+     *
+     * @param array $pk_id 主键值
+     *
+     * @return void 无返回值
+     */
+    protected function _afterDelete($pk_id) {
+        $this->deleteHtmlAction(null);
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function _beforeExec(&$pk_id, &$log) {
         $log = join(', ', $pk_id);//操作日志
+
+        $data       = $this->_model
+        ->where(array($this->_pk_field => array('IN', $pk_id)))
+        ->key_column($this->_pk_field)
+        ->field($this->_pk_field . ',link_url')
+        ->select();
+
+        C('HTML_BUILD_INFO', $data);
 
         return null;
     }
@@ -71,9 +93,9 @@ class MiniblogController extends BaseController {
             }
 
             $diff = $this->_dataDiff($blog_info, $data, $diff_key);//差异
-
+            C('HTML_BUILD_INFO', array('link_url' => $blog_info['link_url']));
+            $this->deleteHtmlAction(null);
             $this->_model->addLog($msg . L('MODULE_NAME_MINIBLOG')  . "{$blog_info['content']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
-            $this->buildAction(array($pk_value));
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
         else {
@@ -84,26 +106,29 @@ class MiniblogController extends BaseController {
             }
 
             $this->_model->addLog($msg . L('MODULE_NAME_MINIBLOG') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
-            $this->buildAction(array($insert_id));
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
     }//end addAction
 
     /**
-     * 生成微博静态页
+     * 删除静态文件
      *
      * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-15 11:01:54
+     * @date            2013-04-26 22:05:03
      *
-     * @param array $blog_id 微博id数组。forward要求参数为数组形式
+     * @param $build_arr array|null 已修改微博信息
      *
      * @return void 无返回值
      */
-    public function buildAction($blog_id) {
-        $o = $this->_getViewTemplate('build_html');
+    public function deleteHtmlAction($build_arr = array()) {
+        $build_arr = null === $build_arr ? C('HTML_BUILD_INFO') : $build_arr;
 
-        foreach($blog_id as $v) {
-            $o->fetch($this->_getControllerName(), 'detail', $v);
+        if (!$build_arr) {
+            return;
+        }
+
+        foreach ($build_arr as $item) {
+            is_file($filename = str_replace(BASE_SITE_URL, WWWROOT, $item['link_url'])) && unlink($filename);
         }
     }
 
