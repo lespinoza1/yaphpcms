@@ -30,23 +30,27 @@ class BaseController extends Yaf_Controller_Abstract {
     /**
      * @var object $_view_template 模板编译对象。默认null
      */
-    protected $_view_template           = null;
+    protected $_view_template = null;
     /**
      * @var bool $_init_model true实例对应模型。默认true
      */
-    protected $_init_model           = false;
+    protected $_init_model = false;
     /**
      * @var object $_model 对应模型实例。默认null
      */
-    protected $_model                = null;
+    protected $_model = null;
+    /**
+     * @var string $_model_name 对应模型名称。默认null
+     */
+    protected $_model_name = null;
     /**
      * @var array $_controller_name 控制器名称。默认null
      */
-    protected $_controller_name      = null;
+    protected $_controller_name = null;
     /**
      * @var string $_pk_field 数据表主键字段。默认null
      */
-    protected $_pk_field             = null;
+    protected $_pk_field = null;
 
     /**
      * ajax方式返回数据到客户端
@@ -476,7 +480,7 @@ class BaseController extends Yaf_Controller_Abstract {
     protected function init() {
 
         if ($this->_init_model) {//实例对应模型
-            $this->_model = D($this->_getControllerName());//模型
+            $this->_model = D($this->_model_name? $this->_model_name : $this->_getControllerName());//模型
             $this->_model->setProperty('_module', $this);
             $this->_pk_field = $this->_model->getPk();//主键字段
         }
