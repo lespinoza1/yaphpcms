@@ -93,7 +93,7 @@ class MiniblogController extends BaseController {
             }
 
             $diff = $this->_dataDiff($blog_info, $data, $diff_key);//差异
-            C('HTML_BUILD_INFO', array('link_url' => $blog_info['link_url']));
+            C('HTML_BUILD_INFO', array(array('link_url' => $blog_info['link_url'])));
             $this->deleteHtmlAction(null);
             $this->_model->addLog($msg . L('MODULE_NAME_MINIBLOG')  . "{$blog_info['content']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
