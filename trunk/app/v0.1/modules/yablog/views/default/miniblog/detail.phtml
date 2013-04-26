@@ -3,7 +3,14 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span9 panel">
-            <div class="panel-header"><span class="icon-home"></span> 您现在的位置： <a href="#">首页</a> <span class="divider">/</span> <a href="miniblog.php">微博</a> <span class="divider">/</span> 微博详情</div>
+            <div class="panel-header">
+                <span class="icon-home"></span>
+                {L NOW_POSITION}：<a href="{BASE_SITE_URL}">{L HOME}</a>
+                <span class="divider">/</span>
+                <a href="{BASE_SITE_URL}miniblog.shtml">{L MINIBLOG}</a>
+                <span class="divider">/</span>
+                {L MINIBLOG,DETAIL}
+            </div>
             <div class="panel-body">
                 <div class="panel-list media panel-miniblog">
                     <img class="media-object pull-left avatar" alt="图像" src="{COMMON_IMGCACHE}images/guest.png" />
