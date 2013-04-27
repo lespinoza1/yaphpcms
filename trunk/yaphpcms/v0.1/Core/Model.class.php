@@ -372,6 +372,10 @@ class Model {
                 return isset($data[$val[0]]) && isset($data[$val[1]]) && $data[$val[0]] == $data[$val[1]];
                 break;
 
+            case 'url' : //url 通过Filter类验证链接地址 by mrmsl on 2013-04-27 10:38:35
+                return !empty($data[$val[0]]) && strlen($data[$val[0]]) > 9 && Filter::filterVar($data[$val[0]], 'url') && preg_match('#^http://[a-z0-9]+\.[a-z0-9]+#i', $data[$val[0]]);
+                break;
+
             case 'unique' : //验证某个值是否唯一
 
                 if (is_string($val[0]) && strpos($val[0], ',')) {
