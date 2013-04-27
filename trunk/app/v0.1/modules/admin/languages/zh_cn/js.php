@@ -92,8 +92,6 @@ return array(
     'SESSION_USE_ONLY_COOKIES_TIP'  => '指定是否在客户端仅仅使用 cookie 来存放会话 ID',
     'SESSION_USE_TRANS_ID_TIP'  => '是否启用透明 SID 支持',
     'STRONG'                    => '强烈',//by mrmsl on 2012-09-13 11:06:54
-    'SUBMIT'                    => '提交',
-    'SUBMIT_TIP'                => '可按ctrl+enter提交',//by mrmsl on 2012-09-07 09:12:17
     'SUFFIX'                    => '后缀',//by mrmsl on 2012-09-13 2012-09-13 11:32:33
     'SUGGEST'                   => '建议',//by mrmsl on 2012-09-13 11:04:23
     'SUMMARY'                   => '摘要',
