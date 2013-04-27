@@ -17,6 +17,10 @@ class GuestbookController extends BaseController {
      * @var bool $_init_model true实例对应模型。默认false
      */
     protected $_init_model      = true;
+    /**
+     * @var string $_model_name 对应模型名称。默认Comments
+     */
+    protected $_model_name = 'Comments';
 
     /**
      * 首页
@@ -27,6 +31,7 @@ class GuestbookController extends BaseController {
      * @return void 无返回值
      */
     public function indexAction() {
+        $this->_display();
     }
 
     /**

@@ -17,9 +17,9 @@ class GuestbookModel extends BaseModel {
      * @var array $_auto 自动填充
      */
     protected $_auto = array(
-        'add_time'     => 'time',
-        'last_reply_time' => 'time',
-        'user_ip'      => 'get_client_ip#1',
+        'add_time'          => 'time',
+        'last_reply_time'   => 'time',
+        'user_ip'           => 'get_client_ip#1',
     );
     /**
      * @var array $_db_fields 表字段
