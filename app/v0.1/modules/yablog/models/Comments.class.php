@@ -34,7 +34,7 @@ class CommentsModel extends BaseModel {
         'user_ip'        => array('filter' => 'int'),//用户ip
         'level'          => array('filter' => 'int', 'validate' => array('_checkLength#LEVEL,DATA#value|0')),
         'node'           => array('filter' => 'int', 'validate' => array('_checkLength#NODE,DATA#value|0')),
-        'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50'))
+        'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50')),
         'user_pic'       => array('filter' => 'url'),
     );
     /**
