@@ -143,12 +143,18 @@ CREATE TABLE `tb_category` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客分类表 by mashanling on 2013-03-18 15:09:25';
 
-/*tb_comments留言评论表*/
+/*tb_comments留言评论表
+ALTER TABLE tb_comments
+ADD COLUMN user_homepage varchar(50) NOT NULL DEFAULT '' COMMENT '用户主页url' AFTER user_ip
+ADD COLUMN user_pic varchar(50) NOT NULL DEFAULT '' COMMENT '用户头像url' AFTER user_ip
+*/
 CREATE TABLE `tb_comments` (
   `comment_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
   `username` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名',
   `user_ip` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ip,ip2long',
+  user_homepage varchar(50) NOT NULL DEFAULT '' COMMENT '用户主页url',
+  user_pic varchar(50) NOT NULL DEFAULT '' COMMENT '用户头像url',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
    last_reply_time int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复时间',
   `is_admin` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0管理员;1用户.默认0',
@@ -156,6 +162,7 @@ CREATE TABLE `tb_comments` (
   `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
   `node` varchar(24) NOT NULL DEFAULT '' COMMENT '节点',
   `content` text NOT NULL COMMENT '内容',
+  ALTER TABLE tb_miniblog ADD COLUMN link_url varchar(100) NOT NULL DEFAULT '' COMMENT '微博链接'
   PRIMARY KEY (`comment_id`),
   KEY (parent_id),
   KEY (status),
