@@ -11,47 +11,4 @@
 </head>
 <body>
 <div id="wrap">
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="brand" href="{BASE_SITE_URL}">{$sys_base_web_name}</a>
-                <ul class="nav">
-                    <li class="active"><a href="{BASE_SITE_URL}">{L HOME}</a></li>
-                    <li><a href="/v0.1/yabindex.php/miniblog">{L HOME}</a></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="{BASE_SITE_URL}blog/">{L CN_WANGWEN}<span class="caret"></span></a>
-                        <ul class="dropdown-menu" id="swatch-menu">
-                            <li class="dropdown-submenu">
-                                <a href="/v0.1/yabindex.php/blog">开发语言</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">php</a></li>
-                                    <li class="dropdown-submenu">
-                                        <a href="#">js</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">javascript</a></li>
-                                            <li><a href="#">jQuery</a></li>
-                                            <li><a href="#">Extjs</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">nodejs</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown-submenu">
-                                <a href="#">数据库</a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="#">mysql</a>
-                                        <a href="#">mongodb</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="{BASE_SITE_URL}tag.shtml">{L TAG}</a></li>
-                    <li><a href="{BASE_SITE_URL}guestbook.shtml">{L GUESTBOOK}</a></li>
-                    <!--<li><a href="/v0.1/yabindex.php/about">关于</a></li>
-                    <li><a href="/v0.1/yabindex.php/about/contact">联系</a></li>-->
-                </ul>
-            </div>
-        </div>
-    </div>
+    <!--#include virtual="/v0.1/ssi/navbar.shtml"-->
