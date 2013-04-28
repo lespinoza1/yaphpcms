@@ -40,10 +40,6 @@ class BaseController extends Yaf_Controller_Abstract {
      */
     protected $_model = null;
     /**
-     * @var string $_model_name 对应模型名称。默认null
-     */
-    protected $_model_name = null;
-    /**
      * @var array $_controller_name 控制器名称。默认null
      */
     protected $_controller_name = null;
@@ -553,7 +549,14 @@ class BaseController extends Yaf_Controller_Abstract {
     protected function init() {
 
         if ($this->_init_model) {//实例对应模型
-            $this->_model = D($this->_model_name? $this->_model_name : $this->_getControllerName());//模型
+
+            if (is_file(APP_PATH . 'models/ . ' . $this->_getControllerName() . 'Model.' . APP_EXT)) {
+                $this->_model = D($this->_getControllerName());//模型
+            }
+            else {
+                $this->_model = D('Base');//模型
+            }
+
             $this->_model->setProperty('_module', $this);
             $this->_pk_field = $this->_model->getPk();//主键字段
         }
