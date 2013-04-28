@@ -31,10 +31,6 @@ class IndexController extends BaseController {
      * @var bool $_init_model true实例对应模型。默认true
      */
     protected $_init_model = true;
-    /**
-     * @var string $_model_name 对应模型名称。默认Base
-     */
-    protected $_model_name = 'Base';
 
     /**
      * 获取首页博客
