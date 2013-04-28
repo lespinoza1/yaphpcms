@@ -53,6 +53,26 @@ class BaseController extends Yaf_Controller_Abstract {
     protected $_pk_field = null;
 
     /**
+     * 获取评论回复
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-28 12:47:13
+     *
+     * @param int $comment_id 评论id
+     *
+     * @return string $this->getRecurrsiveComments()返回html
+     */
+    private function _getReplyComments($comment_id) {
+        $data = $this->_model
+        ->table(TB_COMMENTS)
+        ->where('parent_id=' . $comment_id)
+        ->order('comment_id')
+        ->select();
+
+        return $this->_getRecurrsiveComments($data);
+    }
+
+    /**
      * ajax方式返回数据到客户端
      *
      * @author          liu21st <liu21st@gmail.com>
@@ -166,6 +186,43 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
+     * 获取指定分类下所有子类id
+     *
+     * @param int    $item_id      分类id
+     * @param bool   $include_self true包含本身。默认true
+     * @param bool   $return_array true返回数组形式。默认false
+     * @param string $filename     缓存文件名。默认nulll，当前模块名
+     * @param string $level_field  层次字段。默认level
+     * @param string $node_field   节点字段。默认node
+     *
+     * @return string 所有子类id，如果没有子类，返回空字符串或空数组
+     */
+    protected function _getChildrenIds($item_id, $include_self = true, $return_array = false, $filename = null, $level_field = 'level', $node_field = 'node') {
+        $filename      = $filename ? $filename : $this->_getControllerName();
+        $cache_data    = $this->_getCache(0, $filename);
+
+        if (!isset($cache_data[$item_id])) {
+            return $return_array ? array() : '';
+        }
+
+        $item_info     = $cache_data[$item_id];
+        $item_node     = $item_info[$node_field];
+        $item_level    = $item_info[$level_field];
+        $children_ids  = $include_self ? $item_id : '';
+
+        foreach ($cache_data as $k => $v) {
+
+            if (strpos($v[$node_field], $item_node . ',') === 0 && $v[$level_field] > $item_level && $k != $item_id) {
+                $children_ids .= ',' . $k;
+            }
+        }
+
+        $children_ids = trim($children_ids, ',');
+
+        return $return_array ? explode(',', $children_ids) : $children_ids;
+    }
+
+    /**
      * 获取当前控制器名称
      *
      * @author            mrmsl <msl-138@163.com>
@@ -202,6 +259,59 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
+     * 循环获取评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-28 12:47:13
+     *
+     * @param array $comments 评论数组
+     *
+     * @return string 评论html
+     */
+    protected function _getRecurrsiveComments($comments) {
+
+        if (!$comments) {
+            return '';
+        }
+
+        $html = '';
+
+        foreach ($comments as $item) {
+            $html .= '
+            <div class="panel-list media panel-miniblog">
+                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="图像" src="' . $item['user_pic'] . '" />
+                <div class="media-body">
+                    <div class="popover right">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                            <span class="muted">';
+
+            if ($item['user_homepage']) {
+                $html .= '      <a href="' . $item['user_homepage'] . '" rel="nofollow">' . $item['username'] . '</a>';
+            }
+            else {
+                $html .= $item['username'];
+            }
+
+            $html .=' | ' . new_date(null, $item['add_time']);
+            $html .=        '</span>';
+            $html .= $item['content'];
+            $html .= '      <p class="text-right actions"><a href="#" class="muted"><span class="icon-share-alt icon-gray"></span>回复</a></p>';
+
+            if ($item['last_reply_time'] > $item['add_time'] && $item['level'] < 5) {
+                $html .= $this->_getReplyComments($item['comment_id']);
+            }
+
+            $html .= '  </div>
+                    </div>
+                </div>
+            </div>';
+        }
+
+        return $html;
+    }//end _getRecurrsiveComments
+
+    /**
      * 获取来路页面url
      *
      * @author          mrmsl <msl-138@163.com>
@@ -211,43 +321,6 @@ class BaseController extends Yaf_Controller_Abstract {
      */
     protected function _getRefererUrl() {
         return REFERER_PAGER;
-    }
-
-    /**
-     * 获取指定分类下所有子类id
-     *
-     * @param int    $item_id      分类id
-     * @param bool   $include_self true包含本身。默认true
-     * @param bool   $return_array true返回数组形式。默认false
-     * @param string $filename     缓存文件名。默认nulll，当前模块名
-     * @param string $level_field  层次字段。默认level
-     * @param string $node_field   节点字段。默认node
-     *
-     * @return string 所有子类id，如果没有子类，返回空字符串或空数组
-     */
-    protected function _getChildrenIds($item_id, $include_self = true, $return_array = false, $filename = null, $level_field = 'level', $node_field = 'node') {
-        $filename      = $filename ? $filename : $this->_getControllerName();
-        $cache_data    = $this->_getCache(0, $filename);
-
-        if (!isset($cache_data[$item_id])) {
-            return $return_array ? array() : '';
-        }
-
-        $item_info     = $cache_data[$item_id];
-        $item_node     = $item_info[$node_field];
-        $item_level    = $item_info[$level_field];
-        $children_ids  = $include_self ? $item_id : '';
-
-        foreach ($cache_data as $k => $v) {
-
-            if (strpos($v[$node_field], $item_node . ',') === 0 && $v[$level_field] > $item_level && $k != $item_id) {
-                $children_ids .= ',' . $k;
-            }
-        }
-
-        $children_ids = trim($children_ids, ',');
-
-        return $return_array ? explode(',', $children_ids) : $children_ids;
     }
 
     /**
@@ -518,59 +591,6 @@ class BaseController extends Yaf_Controller_Abstract {
         $log_model->add($data);
         $log_model->commit();
     }
-
-    /**
-     * 循环获取评论
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-28 12:47:13
-     *
-     * @param array $comments 评论数组
-     *
-     * @return string 评论html
-     */
-    public function getRecurrsiveComments($comments) {
-
-        if (!$comments) {
-            return '';
-        }
-
-        $html = '';
-
-        foreach ($comments as $item) {
-            $html .= '
-            <div class="panel-list media panel-miniblog">
-                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="图像" src="' . $item['user_pic'] . '" />
-                <div class="media-body">
-                    <div class="popover right">
-                        <div class="arrow"></div>
-                        <div class="popover-content">
-                            <span class="muted">';
-
-            if ($item['user_homepage']) {
-                $html .= '      <a href="' . $item['user_homepage'] . '" rel="nofollow">' . $item['username'] . '</a>';
-            }
-            else {
-                $html .= $item['username'];
-            }
-
-            $html .=' | ' . new_date(null, $item['add_time']);
-            $html .=        '</span>';
-            $html .= $item['content'];
-            $html .= '      <p class="text-right actions"><a href="#" class="muted"><span class="icon-share-alt icon-gray"></span>回复</a></p>';
-
-            if ($item['last_reply_time'] > $item['add_time'] && $item['level'] < 5) {
-                $html .= $this->_getReplyComments($item['comment_id']);
-            }
-
-            $html .= '  </div>
-                    </div>
-                </div>
-            </div>';
-        }
-
-        return $html;
-    }//end getRecurrsiveComments
 
     /**
      * 获取不带链接的类似面包屑导航，如菜单管理»添加菜单
