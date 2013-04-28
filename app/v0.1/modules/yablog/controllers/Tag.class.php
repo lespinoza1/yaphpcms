@@ -16,17 +16,51 @@ class TagController extends BaseController {
     /**
      * @var bool $_init_model true实例对应模型。默认false
      */
-    protected $_init_model      = false;
+    protected $_init_model      = true;
 
     /**
      * 首页
      *
      * @author          mrmsl <msl-138@163.com>
-     * @date            2013-02-21 13:44:11
+     * @date            2013-04-28 17:14:18
      *
-     * @return void 无返回值。如果未登陆跳转至登陆页
+     * @return void 无返回值
      */
     public function indexAction() {
-        $this->_display();
-    }
+        $page_size  = 60;
+        $total      = $this->_model
+        ->table(TB_BLOG)
+        ->alias('b')
+        ->join(' JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
+        //->where($where)
+        ->count('DISTINCT t.tag');
+        $page_info      = Filter::page($total, 'page', $page_size);
+        $page           = $page_info['page'];
+        $page_one       = $page < 2;
+        $tag_arr        = $this->_model
+        ->table(TB_BLOG)
+        ->alias('b')
+        ->join(' JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
+        ->order('t.blog_id')
+        ->field('DISTINCT t.tag')
+        ->limit($page_info['limit'])
+        ->select();
+
+        $paging = new Paging(array(
+            '_url_tpl'      => BASE_SITE_URL . 'tag/page/\\1.shtml',
+            '_total_page'   => $page_info['total_page'],
+            '_now_page'     => $page,
+            '_page_size'    => $page_size,
+        ));
+
+        $o = $this->_getViewTemplate()
+        ->assign(array(
+            'web_title'     => L('TAG'),
+            'tag_arr'       => $tag_arr,
+            'paging'        => $paging->getHtml(),
+            'page'          => $page_one ? '' : $page,
+        ));
+
+        $this->_display(null, null, $page);
+    }//end indexAction
 }
