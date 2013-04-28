@@ -23,6 +23,26 @@ class GuestbookController extends BaseController {
     protected $_model_name = 'Comments';
 
     /**
+     * 获取评论回复
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-28 12:47:13
+     *
+     * @param int $comment_id 评论id
+     *
+     * @return string $this->getRecurrsiveComments()返回html
+     */
+    protected function _getReplyComments($comment_id) {
+        $data = $this->_model
+        ->table(TB_COMMENTS)
+        ->where('parent_id=' . $comment_id)
+        ->order('comment_id')
+        ->select();
+
+        return $this->getRecurrsiveComments($data);
+    }
+
+    /**
      * 首页
      *
      * @author          mrmsl <msl-138@163.com>
@@ -31,8 +51,47 @@ class GuestbookController extends BaseController {
      * @return void 无返回值
      */
     public function indexAction() {
-        $this->_display();
-    }
+        $total      = $this->_model
+        ->table(TB_GUESTBOOK)
+        ->alias('g')
+        ->join(' JOIN ' . TB_COMMENTS . ' AS c ON g.comment_id=c.comment_id')
+        ->where('c.parent_id=0')
+        ->count();
+        $page_info      = Filter::page($total, 'page', PAGE_SIZE);
+        $page           = $page_info['page'];
+        $page_one       = $page < 2;
+        $guestbook_arr  = $this->_model
+        ->table(TB_GUESTBOOK)
+        ->alias('g')
+        ->join(' JOIN ' . TB_COMMENTS . ' AS c ON g.comment_id=c.comment_id')
+        ->where('c.parent_id=0')
+        ->order('g.comment_id DESC')
+        ->limit($page_info['limit'])
+        ->select();
+
+        $paging = new Paging(array(
+            '_url_tpl'      => BASE_SITE_URL . 'guestbook/page/\\1.shtml',
+            '_total_page'   => $page_info['total_page'],
+            '_now_page'     => $page,
+            '_page_size'    => PAGE_SIZE,
+        ));
+
+        $o = $this->_getViewTemplate($page_one ? 'build_html' : null)
+        ->assign(array(
+            'web_title'     => L('GUESTBOOK'),
+            'guestbook_arr' => $guestbook_arr,
+            'paging'        => $paging->getHtml(),
+            'page'          => $page_one ? '' : $page,
+        ));
+        $content = $o->fetch(MODULE_NAME, ACTION_NAME, $page);
+
+        if ($page_one) {
+            $filename =  WWWROOT . 'guestbook.shtml';
+            //file_put_contents($filename, $content);
+        }
+
+        echo $content;
+    }//end indexAction
 
     /**
      * 添加留言

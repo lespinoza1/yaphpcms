@@ -520,6 +520,59 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
+     * 循环获取评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-28 12:47:13
+     *
+     * @param array $comments 评论数组
+     *
+     * @return string 评论html
+     */
+    public function getRecurrsiveComments($comments) {
+
+        if (!$comments) {
+            return '';
+        }
+
+        $html = '';
+
+        foreach ($comments as $item) {
+            $html .= '
+            <div class="panel-list media panel-miniblog">
+                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="图像" src="' . $item['user_pic'] . '" />
+                <div class="media-body">
+                    <div class="popover right">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                            <span class="muted">';
+
+            if ($item['user_homepage']) {
+                $html .= '      <a href="' . $item['user_homepage'] . '" rel="nofollow">' . $item['username'] . '</a>';
+            }
+            else {
+                $html .= $item['username'];
+            }
+
+            $html .=' | ' . new_date(null, $item['add_time']);
+            $html .=        '</span>';
+            $html .= $item['content'];
+            $html .= '      <p class="text-right actions"><a href="#" class="muted"><span class="icon-share-alt icon-gray"></span>回复</a></p>';
+
+            if ($item['last_reply_time'] > $item['add_time'] && $item['level'] < 5) {
+                $html .= $this->_getReplyComments($item['comment_id']);
+            }
+
+            $html .= '  </div>
+                    </div>
+                </div>
+            </div>';
+        }
+
+        return $html;
+    }//end getRecurrsiveComments
+
+    /**
      * 获取不带链接的类似面包屑导航，如菜单管理»添加菜单
      *
      * @param int    $id         id字段值

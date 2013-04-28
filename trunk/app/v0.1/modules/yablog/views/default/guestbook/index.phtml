@@ -10,63 +10,9 @@
                 {L GUESTBOOK}
             </div>
             <div class="panel-body">
-            <div class="panel-list media panel-miniblog">
-    <img class="media-object pull-left avatar" alt="图像" src="{COMMON_IMGCACHE}images/guest.png" />
-    <div class="media-body">
-        <div class="popover right">
-            <div class="arrow"></div>
-            <div class="popover-content">
-                <span class="muted">2013-02-15 13:27:03</span>
-                <a href="miniblog-detail.php">微博详情</a>
-                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                <p class="text-right actions"><a href="#" class="muted"><span class="icon-share-alt icon-gray"></span>回复</a></p>
-                <div class="panel-list media panel-miniblog">
-                    <img class="media-object pull-left avatar" alt="图像" src="{COMMON_IMGCACHE}images/guest.png" />
-                    <div class="media-body">
-                        <div class="popover right">
-                            <div class="arrow"></div>
-                            <div class="popover-content">
-                                <span class="muted">2013-02-15 13:27:03</span>
-                                <a href="miniblog-detail.php">微博详情</a>
-                                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                                <p class="text-right actions"><a href="#" class="muted"><span class="icon-share-alt icon-gray"></span>回复</a></p>
-                                <div class="panel-list media panel-miniblog">
-                                    <img class="media-object pull-left avatar" alt="图像" src="{COMMON_IMGCACHE}images/guest.png" />
-                                    <div class="media-body">
-                                        <div class="popover right">
-                                            <div class="arrow"></div>
-                                            <div class="popover-content">
-                                                <span class="muted">2013-02-15 13:27:03</span>
-                                                <a href="miniblog-detail.php">微博详情</a>
-                                                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                                                <p class="text-right actions"><a href="#" class="muted"><span class="icon-share-alt icon-gray"></span>回复</a></p>
-                                                <div class="panel-list media panel-miniblog">
-                                                <img class="media-object pull-left avatar" alt="图像" src="{COMMON_IMGCACHE}images/guest.png" />
-                                                <div class="media-body">
-                                                    <div class="popover right">
-                                                        <div class="arrow"></div>
-                                                        <div class="popover-content">
-                                                            <span class="muted">2013-02-15 13:27:03</span>
-                                                            <a href="miniblog-detail.php">微博详情</a>
-                                                            <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-                                                            <p class="text-right actions"><a href="#" class="muted"><span class="icon-share-alt icon-gray"></span>回复</a></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {echo $me->getRecurrsiveComments($guestbook_arr);}
             </div>
-        </div>
-    </div>
-</div></div>
-            { $paging }
+            {$paging}
         </div><!--end span9-->
         <div class="span3">
             <!--#include virtual="/v0.1/ssi/hot_blogs.shtml"-->
