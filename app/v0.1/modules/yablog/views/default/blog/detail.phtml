@@ -63,8 +63,10 @@
                 </ul>
                 </div>-->
                 </div>
+                {if $comments_html}
                 <div class="separation-comment">{L COMMENTS,LIST}</div>
-                {template 'include', 'comments'}
+                {$comments_html}
+                {/if}
             </div>
         </div><!--end span9-->
         <div class="span3">
