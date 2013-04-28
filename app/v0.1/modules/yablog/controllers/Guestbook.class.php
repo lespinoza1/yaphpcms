@@ -23,26 +23,6 @@ class GuestbookController extends BaseController {
     protected $_model_name = 'Comments';
 
     /**
-     * 获取评论回复
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-28 12:47:13
-     *
-     * @param int $comment_id 评论id
-     *
-     * @return string $this->getRecurrsiveComments()返回html
-     */
-    protected function _getReplyComments($comment_id) {
-        $data = $this->_model
-        ->table(TB_COMMENTS)
-        ->where('parent_id=' . $comment_id)
-        ->order('comment_id')
-        ->select();
-
-        return $this->getRecurrsiveComments($data);
-    }
-
-    /**
      * 首页
      *
      * @author          mrmsl <msl-138@163.com>
@@ -79,7 +59,7 @@ class GuestbookController extends BaseController {
         $o = $this->_getViewTemplate($page_one ? 'build_html' : null)
         ->assign(array(
             'web_title'     => L('GUESTBOOK'),
-            'guestbook_arr' => $guestbook_arr,
+            'guestbook_html' => $this->_getRecurrsiveComments($guestbook_arr),
             'paging'        => $paging->getHtml(),
             'page'          => $page_one ? '' : $page,
         ));
