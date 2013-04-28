@@ -19,6 +19,29 @@ class MiniblogController extends BaseController {
     protected $_init_model = true;
 
     /**
+     * 根据指定微博id获取评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-28 15:16:54
+     *
+     * @param int $blog_id 当前微博id
+     *
+     * @return string 评论html
+     */
+    private function _getBlogComments($blog_id) {
+        $comments = $this->_model
+        ->table(TB_MINIBLOG_COMMENTS)
+        ->field('c.*')
+        ->alias('a')
+        ->join(' JOIN ' . TB_COMMENTS . ' AS c ON a.comment_id=c.comment_id')
+        ->where('c.parent_id=0 AND a.blog_id=' . $blog_id)
+        ->order('c.comment_id DESC')
+        ->select();
+
+        return $this->_getRecurrsiveComments($comments);
+    }
+
+    /**
      * 首页
      *
      * @author          mrmsl <msl-138@163.com>
@@ -93,6 +116,7 @@ class MiniblogController extends BaseController {
             ->assign('blog_info', $blog_info)//微博内容
             ->assign(array(
                 'web_title'         => L('MINIBLOG,DETAIL') . ' | ' . L('MINIBLOG'),
+                'comments_html'     => $this->_getBlogComments($blog_id),
                 //'seo_keywords'      => $blog_info['seo_keyword'],
                 //'seo_description'   => $blog_info['seo_description'],
                 //'tags'              => $this->tags($blog_info['seo_keyword']),
