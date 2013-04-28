@@ -19,6 +19,29 @@ class BlogController extends BaseController {
     protected $_init_model      = true;
 
     /**
+     * 根据指定博客id获取评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-28 14:56:35
+     *
+     * @param int $blog_id 当前博客id
+     *
+     * @return string 评论html
+     */
+    private function _getBlogComments($blog_id) {
+        $comments = $this->_model
+        ->table(TB_BLOG_COMMENTS)
+        ->field('c.*')
+        ->alias('b')
+        ->join(' JOIN ' . TB_COMMENTS . ' AS c ON b.comment_id=c.comment_id')
+        ->where('c.parent_id=0 AND b.blog_id=' . $blog_id)
+        ->order('c.comment_id DESC')
+        ->select();
+
+        return $this->_getRecurrsiveComments($comments);
+    }
+
+    /**
      * 根据指定博客id获取上、下一篇博客标题及链接
      *
      * @author          mrmsl <msl-138@163.com>
@@ -40,14 +63,14 @@ class BlogController extends BaseController {
     }
 
     /**
-     * 根据指定博客id
+     * 根据指定博客id获取相关博客
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-04-24 11:34:18
      *
      * @param int $blog_id 当前博客id
      *
-     * @return array 上、下一篇博客
+     * @return array 相关博客
      */
     private function _getRelativeBlog($blog_id, $tags) {
         $tags = $this->tags($tags, true);
@@ -111,6 +134,7 @@ class BlogController extends BaseController {
                 'seo_description'   => $blog_info['seo_description'],
                 'tags'              => $this->tags($blog_info['seo_keyword']),
                 'relative_blog'     => $this->_getRelativeBlog($blog_id, $blog_info['seo_keyword']),
+                'comments_html'     => $this->_getBlogComments($blog_id),
             ));
 
             $content = $o->fetch(CONTROLLER_NAME, 'detail');
