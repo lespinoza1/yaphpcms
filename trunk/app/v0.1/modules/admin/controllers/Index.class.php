@@ -63,7 +63,7 @@ class IndexController extends BaseController {//继承BaseController by mrmsl on
         $js_file  .= js('', true, COMMON_IMGCACHE . 'extjs/v4.1.1a/');
         $js_file  .= $this->_loadTimeScript('LOAD_EXT_TIME');
         $js_file  .= js('System.js', false, '/static/js/');
-        $js_file  .= js(LANG . '.js', false, '/static/js/lang/') .
+        $js_file  .= js(APP_NAME . '.' . LANG . '.js', false, '/static/js/lang/') .
         //ext语言包
         ('en' != LANG ? js('ext-lang-' . LANG . '.js', false, '/static/js/lang/') : '');
 
