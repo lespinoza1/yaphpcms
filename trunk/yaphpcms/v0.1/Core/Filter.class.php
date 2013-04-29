@@ -236,6 +236,7 @@ class Filter {
         $origin_page    = is_numeric($page) ? $page : self::int($page, 'get', 1);//未处理过页数
         $page           = $origin_page < 1 ? 1 : $origin_page;
         $page           = $page > $total_page ? $total_page : $page;
+        $page           = $page < 1 ? 1 : $page;
         $limit          = ($page - 1) * $page_size . ',' . $page_size;
 
         return array(
