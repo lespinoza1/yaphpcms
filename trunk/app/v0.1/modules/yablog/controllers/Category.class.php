@@ -42,6 +42,7 @@ class CategoryController extends BaseController {
             ->alias('b')
             ->where($where)
             ->count();
+            $this->_model->alias('b');//b.title
         }
         else {//标签
             $is_tag     = true;
