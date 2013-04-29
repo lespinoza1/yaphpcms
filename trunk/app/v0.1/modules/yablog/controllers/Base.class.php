@@ -550,7 +550,7 @@ class BaseController extends Yaf_Controller_Abstract {
 
         if ($this->_init_model) {//实例对应模型
 
-            if (is_file(APP_PATH . 'models/ . ' . $this->_getControllerName() . 'Model.' . APP_EXT)) {
+            if (is_file(APP_PATH . 'models/' . $this->_getControllerName() . '.' . APP_EXT)) {
                 $this->_model = D($this->_getControllerName());//模型
             }
             else {
