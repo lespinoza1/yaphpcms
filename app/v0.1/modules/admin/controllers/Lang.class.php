@@ -44,16 +44,25 @@ class LangController extends BaseController {
     public function createAction() {
         require(YAP_PATH . 'Function/dir.php');
         create_dir(WEB_JS_LANG_PATH);
-        $lang_arr = scand_dir(LANG_PATH);//语言包
 
-        foreach ($lang_arr as $k => $v) {
-            $lang     = is_file($filename = SYS_LANG_PATH . $k . '.php') ? include($filename) : array();
+        $loop_arr = array(
+            APP_NAME => LANG_PATH,
+            str_replace('modules/admin/', 'modules/' . YABLOG_FRONT_MODULE_NAME . '/', LANG_PATH),
+        );
 
-            foreach ($v as $file) {
-                $lang = array_merge($lang, array_change_key_case(include($file), CASE_UPPER));
+        foreach($loop_arr as $key => $item) {
+
+            $lang_arr = scand_dir($item);//语言包
+
+            foreach ($lang_arr as $k => $v) {
+                $lang     = is_file($filename = SYS_LANG_PATH . $k . '.php') ? include($filename) : array();
+
+                foreach ($v as $file) {
+                    $lang = array_merge($lang, array_change_key_case(include($file), CASE_UPPER));
+                }
+
+                array2js($lang, 'L', WEB_JS_LANG_PATH . (is_string($key) ? $key . '.' : '') . $k . '.js');
             }
-
-            array2js($lang, 'L', WEB_JS_LANG_PATH . $k . '.js');
         }
     }
 }
