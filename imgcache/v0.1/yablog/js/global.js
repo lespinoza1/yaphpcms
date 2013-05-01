@@ -24,9 +24,9 @@
             dropdowns = me.find(opts.dropdownClass);
 
             me.hover(function() {
-                dropdowns.fadeIn();
+                dropdowns.show();
             }, function() {
-                dropdowns.fadeOut();
+                dropdowns.hide();
             });
         });
     }
