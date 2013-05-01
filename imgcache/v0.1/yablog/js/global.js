@@ -49,3 +49,19 @@ function showMiniblogDetailLink() {
         });
     }
 }
+
+/**
+ * 鼠标滑过留言评论，显示回复
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-01 22:20:05
+ *
+ * @return void 无返回值
+ */
+function showCommentsReply() {
+    $('.comments-detail').hover(function() {console.log($(this).find('.reply:first'));
+        $(this).find('.reply:first').toggle();
+    }, function() {
+        $(this).find('.reply:first').toggle();
+    });
+}
