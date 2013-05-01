@@ -59,7 +59,7 @@ function showMiniblogDetailLink() {
  * @return void 无返回值
  */
 function showCommentsReply() {
-    $('.comments-detail').hover(function() {console.log($(this).find('.reply:first'));
+    $('.comments-detail').hover(function() {
         $(this).find('.reply:first').toggle();
     }, function() {
         $(this).find('.reply:first').toggle();
