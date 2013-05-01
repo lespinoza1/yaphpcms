@@ -124,7 +124,7 @@ class MiniblogController extends BaseController {
             ));
 
             $content = $o->fetch(CONTROLLER_NAME, 'detail');
-            file_put_contents($filename, $content);
+            //file_put_contents($filename, $content);
             echo $content;
 
         }
