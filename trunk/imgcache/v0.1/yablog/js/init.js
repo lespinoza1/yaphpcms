@@ -10,6 +10,9 @@
 
 seajs.config({
     plugins: ['shim'],
+    map: [
+        ['.js', '.js?' + new Date().getTime()]
+    ],
     alias: {
         lang: {//语言包
             src: System.sys_base_site_url + 'static/js/lang/zh_cn.js'
@@ -38,6 +41,7 @@ seajs.use(['jquery', 'global'], bootstrap);
  * @return void 无返回值
  */
 function bootstrap() {
-    $('li.dropdown').dropdown();//下拉菜单
+    navDropdown();//下拉菜单
 
+    $('#nav-' + NAV_ID).addClass('active');//高亮导航
 }

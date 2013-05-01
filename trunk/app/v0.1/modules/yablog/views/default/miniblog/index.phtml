@@ -10,29 +10,8 @@
                 {L MINIBLOG}
             </div>
             <div class="panel-body">
-                {foreach $blog_arr $item}
-                <div class="panel-list media panel-miniblog">
-                    <img class="media-object pull-left avatar" alt="图像" src="{COMMON_IMGCACHE}images/guest.png" />
-                    <div class="media-body">
-                        <div class="popover right">
-                            <div class="arrow"></div>
-                            <div class="popover-content">
-                                {$item.content}
-                                <p class="text-right muted">
-                                    <span class="actions">
-                                        <span class="icon-time icon-gray"></span>{echo new_date(null, $item['add_time']);}
-                                        <span class="icon-zoom-in icon-gray ml-10"></span>0
-                                        <a href="#" class="muted">
-                                            <span class="icon-thumbs-up icon-gray"></span>
-                                            <span class="counter">0</span>
-                                        </a>
-                                        <a href="#" class="muted"><span class="icon-comment icon-gray"></span><span class="counter">0</span></a>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {foreach $blog_arr $miniblog_info}
+                {template 'include', 'miniblog-tpl'}
                 {/foreach}
                 {$paging}
             </div>

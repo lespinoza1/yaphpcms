@@ -8,26 +8,21 @@
  * @lastmodify      $Date$ $Author$
  */
 
-//下拉菜单插件
-(function($) {
+/**
+ * 导航菜单下拉
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-04-30 21:34:20
+ *
+ * @return void 无返回值
+ */
+function navDropdown() {
+    var me = $('#nav-category'),
+    dropdowns = me.find(' > ul.dropdown-menu');
 
-    $.fn.dropdown = function(options) {
-
-        var defaults = {
-            dropdownClass: ' > ul.dropdown-menu',
-            hoverClass: 'open'
-        },
-        opts = $.extend({}, defaults, options);
-
-        return this.each(function() {
-            var me = $(this),
-            dropdowns = me.find(opts.dropdownClass);
-
-            me.hover(function() {
-                dropdowns.show();
-            }, function() {
-                dropdowns.hide();
-            });
-        });
-    }
-})(jQuery);
+    me.hover(function() {
+        dropdowns.show();
+    }, function() {
+        dropdowns.hide();
+    });
+}

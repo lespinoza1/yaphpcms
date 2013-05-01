@@ -2,10 +2,10 @@
         <div class="navbar-inner">
             <div class="container-fluid">
                 <a class="brand" href="http://www.yaphpcms.com/v0.1/">yablog</a>
-                <ul class="nav">
-                    <li class="active"><a href="http://www.yaphpcms.com/v0.1/">首页</a></li>
-                    <li><a href="http://www.yaphpcms.com/v0.1/miniblog.shtml">微博</a></li>
-                    <li class="dropdown">
+                <ul class="nav" id="nav-bar">
+                    <li id="nav-index"><a href="http://www.yaphpcms.com/v0.1/">首页</a></li>
+                    <li id="nav-miniblog"><a href="http://www.yaphpcms.com/v0.1/miniblog.shtml">微博</a></li>
+                    <li id="nav-category" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="http://www.yaphpcms.com/v0.1/category.shtml">网文<span class="caret"></span></a>
                         <ul class="dropdown-menu" id="swatch-menu">
                             <li class="dropdown-submenu">
@@ -34,8 +34,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="http://www.yaphpcms.com/v0.1/tag.shtml">标签</a></li>
-                    <li><a href="http://www.yaphpcms.com/v0.1/guestbook.shtml">留言</a></li>
+                    <li id="nav-tag"><a href="http://www.yaphpcms.com/v0.1/tag.shtml">标签</a></li>
+                    <li id="nav-guestbook"><a href="http://www.yaphpcms.com/v0.1/guestbook.shtml">留言</a></li>
                     <!--<li><a href="/v0.1/yabindex.php/about">关于</a></li>
                     <li><a href="/v0.1/yabindex.php/about/contact">联系</a></li>-->
                 </ul>
