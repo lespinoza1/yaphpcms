@@ -36,6 +36,7 @@ return array(
     'DATA'              => '数据',
     'DELETE'            => '删除',
     'DENY_ACCESS_CONTROLLER' => '禁止直接访问控制器：%s',
+    'DETAIL'            => '详情',
     'END'               => '结束',
     'END_WITH'          => '以%s结束',
     'EQ'				            => '等于',
