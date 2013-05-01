@@ -38,6 +38,7 @@ define('VIEW_PATH'          , APP_PATH . 'views/');         //模板目录
 define('APP_FORWARD'        , 'APP_FORWARD');               //Yaf_Controller_Abstract::forward标识
 
 //博客设置
+define('YABLOG_APP_PATH'    , SYS_APP_PATH . 'modules/yablog/');//模块app路径
 define('YABLOG_FRONT_MODULE_NAME', 'yablog');//前台模块名称
 define('BLOG_HTML_PATH'     , WWWROOT . 'blog/' . date('Ymd/'));//博客html路径
 

@@ -1,7 +1,7 @@
 </div><!--end #wrap-->
 
 <!--#include virtual="/v0.1/ssi/footer.shtml"-->
-{echo js('js/jquery/jquery-1.9.1.min.js', false, COMMON_IMGCACHE); }
-{echo js('js/bootstrap.min.js', false, COMMON_IMGCACHE); }
+{echo js('System.js', false, BASE_SITE_URL . 'static/js/'); }
+<script src="{COMMON_IMGCACHE}js/seajs/sea-2.0.1.js" id="seajsnode" data-main="{IMGCACHE_JS}init"></script>
 </body>
 </html>
