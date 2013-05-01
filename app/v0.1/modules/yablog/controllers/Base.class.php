@@ -337,7 +337,8 @@ class BaseController extends Yaf_Controller_Abstract {
             $this->_view_template->assign(sys_config())
             ->assign('L', L())
             ->assign('C', C())
-            ->assign('me', $this);
+            ->assign('me', $this)
+            ->assign('nav_id', strtolower(CONTROLLER_NAME));
         }
 
         if (null !== $config) {//属性
