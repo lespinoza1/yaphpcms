@@ -204,6 +204,7 @@ class FieldController extends BaseController {
 
         $js_data['IS_LOCAL'] = IS_LOCAL;
         $js_data['sys_base_website'] = $system_data['sys_base_website'];//网站url
+        $js_data['sys_base_site_url'] = $system_data['sys_base_website'] . $system_data['sys_base_wwwroot'];//网站url
         $js_data['sys_base_admin_entry'] = $system_data['sys_base_website'] . $system_data['sys_base_wwwroot'] . $system_data['sys_base_admin_entry'];//后台管理入口
         $js_data['sys_base_domain_scope'] = $system_data['sys_base_domain_scope'];//cookie作用域
         $js_data['sys_cookie_domain'] = $system_data['sys_cookie_domain'] == '@domain' ? $system_data['sys_base_domain_scope'] : $system_data['sys_cookie_domain'];//cookie域名
