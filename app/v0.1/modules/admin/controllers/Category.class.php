@@ -204,7 +204,7 @@ class CategoryController extends BaseController {
 
             foreach (explode(',', $v['node']) as $item) {
                 $info  = $data[$item];
-                $html .= '<a href="' . $info['link_url'] . '">' . $info['cate_name'] . '</a> <span class="divider">/</span> ';
+                $html .= '<a href="' . $info['link_url'] . '">' . $info['cate_name'] . '</a> <span class="divider">&raquo;</span> ';
             }
 
             file_put_contents($ssi_path . 'nav' . $v[$this->_pk_field] . C('HTML_SUFFIX'), $html);
