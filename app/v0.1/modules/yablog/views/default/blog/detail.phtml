@@ -1,5 +1,5 @@
 {template 'include', 'header'}
-
+{php $meta_info_arr['blog'] = $blog_info['blog_id'] . '|' . $blog_info['add_time']; }
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span9 panel">
@@ -16,9 +16,9 @@
                     <p class="blog-meta">
                         <span>{echo new_date(null, $blog_info['add_time']);}</span>
                         <span>{L ORIGIN}：<a href="{$blog_info.from_url}">{$blog_info.from_name}</a></span>
-                        <span>{L READS}：<span class="counter blog-hits-{$blog_info.blog_id}">{$blog_info.hits}</span></span>
-                        <span>{L COMMENTS}：<span class="counter blog-comments-{$blog_info.blog_id}">{$blog_info.comments}</span></span>
-                        <span>{L DIGG}：<span class="counter blog-diggs-{$blog_info.blog_id}">{$blog_info.comments}</span></span>
+                        <span>{L READS}：<small class="counter blog-hits-{$blog_info.blog_id}">{$blog_info.hits}</small></span>
+                        <span>{L COMMENTS}：<small class="counter blog-comments-{$blog_info.blog_id}">{$blog_info.comments}</small></span>
+                        <span>{L DIGG}：<small class="counter blog-diggs-{$blog_info.blog_id}">{$blog_info.comments}</small></span>
                     </p>
                 <div class="blog-content">
                     {$blog_info.content}
