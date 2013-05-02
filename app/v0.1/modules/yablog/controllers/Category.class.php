@@ -66,7 +66,7 @@ class CategoryController extends BaseController {
         ->where($where)
         ->order('b.blog_id')
         ->limit($page_info['limit'])
-        ->field('b.title,b.link_url,b.cate_id,b.add_time,b.summary,b.seo_keyword')
+        ->field('b.blog_id,b.title,b.link_url,b.cate_id,b.add_time,b.summary,b.seo_keyword')
         ->select();
 
         $paging = new Paging(array(

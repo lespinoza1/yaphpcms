@@ -3,6 +3,9 @@
 <!--#include virtual="/v0.1/ssi/footer.shtml"-->
 <script>
     var NAV_ID = '{echo isset($nav_id) ? $nav_id : "index"; }';
+    {if isset($meta_info_arr)}
+    var META_INFO = {php echo json_encode($meta_info_arr);};
+    {/if}
 </script>
 {echo js('System.js', false, BASE_SITE_URL . 'static/js/'); }
 <script src="{COMMON_IMGCACHE}js/seajs/sea-2.0.1.js" id="seajsnode" data-main="{IMGCACHE_JS}init"></script>

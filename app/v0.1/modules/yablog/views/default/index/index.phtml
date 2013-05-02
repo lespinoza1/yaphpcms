@@ -1,5 +1,5 @@
 {template 'include', 'header'}
-
+{php $meta_info_arr = array('blog' => ''); }
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span9 panel noborder">
@@ -7,24 +7,30 @@
                 <!--start 微博  -->
                 {if $miniblog}
                 {php $miniblog_info = $miniblog; }
+                {php $meta_info_arr['miniblog'] = $miniblog_info['blog_id'] . '|' . $miniblog_info['add_time']; }
                 {template 'include', 'miniblog-tpl'}
                 {/if}
                 <!--end 微博-->
 
                 <!--start 网文-->
                 {foreach $blog_arr $item}
+                {php $meta_info_arr['blog'] .= ',' . $item['blog_id'] . '|' . $item['add_time'];}
                 <div class="panel-list">
                     <h3><a href="{$item.link_url}">{$item.title}</a></h3>
                     {$item.summary}
                     <p class="text-right muted">
                         <span class="actions">
                             <span class="icon-time icon-gray"></span>{echo new_date(null, $item['add_time']);}
-                            <span class="icon-zoom-in icon-gray ml-10"></span>0
-                            <a href="#" class="muted">
+                            <span class="icon-zoom-in icon-gray ml-10"></span>
+                            <span class="counter blog-hits-{$item.blog_id}">0</span>
+                            <a href="javascript: void(0)" rel="nofollow" class="blog-diggs muted">
                                 <span class="icon-thumbs-up icon-gray"></span>
-                                <span class="counter">0</span>
+                                <span class="counter blog-diggs-{$item.blog_id}">0</span>
                             </a>
-                            <a href="#" class="muted"><span class="icon-comment icon-gray"></span><span class="counter">0</span></a>
+                            <a href="javascript: void(0)" rel="nofollow" class="muted blog-comments">
+                                <span class="icon-comment icon-gray"></span>
+                                <span class="counter blog-comments-{$item.blog_id}">0</span>
+                            </a>
                         </span>
                     </p>
                 </div>
