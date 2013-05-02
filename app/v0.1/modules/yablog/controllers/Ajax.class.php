@@ -90,6 +90,15 @@ class AjaxController extends BaseController {
      * @return void 无返回值
      */
     public function metaInfoAction() {
+
+        /*foreach (array(TB_BLOG, TB_MINIBLOG) as $table) {
+
+            foreach($this->_model->table($table)->select() as $v) {
+                $sql = sprintf('UPDATE %s SET hits=%d,comments=%d,diggs=%d WHERE blog_id=%d', $table, rand(1, 1000), rand(1, 50), rand(1, 20), $v['blog_id']);
+                $this->_model->execute($sql);
+            }
+        }*/
+
         $blog       = Filter::string('blog');
         $miniblog   = Filter::string('miniblog');
 
