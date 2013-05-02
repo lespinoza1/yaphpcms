@@ -88,6 +88,7 @@ ADD COLUMN from_url varchar(200) NOT NULL DEFAULT '' COMMENT '来源url',
 ADD COLUMN link_url varchar(150) NOT NULL DEFAULT '' COMMENT '博客链接',
 ADD COLUMN summary text COMMENT '摘要'
 ADD INDEX issue_delete(is_issue, is_delete)
+ADD COLUMN `diggs` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '顶数' AFTER hits
 */
 
 CREATE TABLE `tb_blog` (
@@ -100,6 +101,7 @@ CREATE TABLE `tb_blog` (
    is_delete tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0未删除;1已删除',
   `sort_order` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '排序，越小越靠前。默认其id',
   `hits` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
+  `diggs` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '顶数'
   `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
    seo_keyword varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
    seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
@@ -226,12 +228,15 @@ CREATE TABLE `tb_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='菜单表 by mashanling on 2012-12-27 12:44:04';
 
 /*tb_miniblog微博表
-ALTER TABLE tb_miniblog ADD COLUMN link_url varchar(100) NOT NULL DEFAULT '' COMMENT '微博链接'
+ALTER TABLE tb_miniblog
+ADD COLUMN link_url varchar(100) NOT NULL DEFAULT '' COMMENT '微博链接'
+ADD COLUMN `diggs` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '顶数' AFTER hits
 */
 CREATE TABLE `tb_miniblog` (
   `blog_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
   `hits` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
+  `diggs` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '顶数'
   `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
   `content` text NOT NULL COMMENT '内容',
   link_url varchar(100) NOT NULL DEFAULT '' COMMENT '微博链接'
