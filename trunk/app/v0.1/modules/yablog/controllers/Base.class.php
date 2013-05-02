@@ -606,7 +606,7 @@ class BaseController extends Yaf_Controller_Abstract {
      *
      * @return string 面包屑导航
      */
-    public function nav($id, $name_field, $filename = null, $separator = '»') {
+    public function nav($id, $name_field, $filename = null, $separator = '&raquo;') {
         $nav  = array();
         $data = $this->_getCache(0, $filename ? $filename : $this->_getControllerName());
         $info = $data[$id];
