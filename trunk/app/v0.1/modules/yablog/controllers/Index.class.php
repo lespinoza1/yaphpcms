@@ -44,9 +44,9 @@ class IndexController extends BaseController {
         $blog_arr   = $this->_model
         ->table(TB_BLOG)
         //->where($where)
-        ->order('blog_id')
+        ->order('blog_id DESC')
         ->limit(10)
-        ->field('title,link_url,add_time,summary')
+        ->field('blog_id,title,link_url,add_time,summary')
         ->select();
 
         return $blog_arr;
@@ -63,7 +63,7 @@ class IndexController extends BaseController {
     private function _getLatesttMiniblog() {
         $miniblog = $this->_model
         ->table(TB_MINIBLOG)
-        ->field('link_url,add_time,content')
+        ->field('blog_id,link_url,add_time,content')
         ->order('blog_id DESC')
         ->find();
 

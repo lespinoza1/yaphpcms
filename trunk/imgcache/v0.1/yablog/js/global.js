@@ -28,6 +28,71 @@ function navDropdown() {
 }
 
 /**
+ * 获取博客,微博元数据,包括点击量,评论数等
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-02 16:23:34
+ *
+ * @return void 无返回值
+ */
+function getMetaInfo() {
+
+    if ('undefined' == typeof(META_INFO)) {
+        return;
+    }
+
+    $.ajax({
+        dataType: 'json',
+        url: System.sys_base_site_url + 'ajax/metainfo.shtml',
+        data: $.param(META_INFO),
+        method: 'post',
+        success: setMetaInfo
+    });
+}
+
+/**
+ * 获取博客,微博元数据,包括点击量,评论数等
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-02 16:23:34
+ *
+ * @return void 无返回值
+ */
+function setMetaInfo(data) {
+
+    if (data && data.success) {
+
+        $.each(data.blog, function(index, item) {
+            $('.blog-diggs-' + index).text(item.diggs);
+            $('.blog-hits-' + index).text(item.hits);
+            $('.blog-comments-' + index).text(item.comments);
+        });
+
+        $.each(data.miniblog, function(index, item) {
+            $('.miniblog-diggs-' + index).text(item.diggs);
+            $('.miniblog-hits-' + index).text(item.hits);
+            $('.miniblog-comments-' + index).text(item.comments);
+        });
+    }
+}
+
+/**
+ * 鼠标滑过留言评论，显示回复
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-01 22:20:05
+ *
+ * @return void 无返回值
+ */
+function showCommentsReply() {
+    $('.comments-detail').hover(function() {
+        $(this).find('.reply:first').toggle();
+    }, function() {
+        $(this).find('.reply:first').toggle();
+    });
+}
+
+/**
  * 非微博详情页，鼠标滑过微博，显示微博详情入口，同时隐藏添加时间
  *
  * @author          mrmsl <msl-138@163.com>
@@ -48,20 +113,4 @@ function showMiniblogDetailLink() {
             me.find('.link').toggle();
         });
     }
-}
-
-/**
- * 鼠标滑过留言评论，显示回复
- *
- * @author          mrmsl <msl-138@163.com>
- * @date            2013-05-01 22:20:05
- *
- * @return void 无返回值
- */
-function showCommentsReply() {
-    $('.comments-detail').hover(function() {
-        $(this).find('.reply:first').toggle();
-    }, function() {
-        $(this).find('.reply:first').toggle();
-    });
 }

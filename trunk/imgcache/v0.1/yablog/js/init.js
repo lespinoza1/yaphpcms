@@ -44,6 +44,9 @@ function bootstrap() {
     navDropdown();//下拉菜单
     showMiniblogDetailLink();//非微博详情页，鼠标滑过微博，显示微博详情入口，同时隐藏添加时间
     showCommentsReply();//鼠标滑过留言评论，显示回复
+    getMetaInfo();//获取博客,微博元数据,包括点击量,评论数等
 
     $('#nav-' + NAV_ID).addClass('active');//高亮导航
+
+
 }
