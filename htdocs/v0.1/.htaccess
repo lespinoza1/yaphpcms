@@ -3,10 +3,13 @@ RewriteEngine On
 RewriteBase /v0.1/
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} ^.*\.(gif|jpg|jpeg|png|swf)$
-RewriteRule .? - [S=4]
+RewriteRule .? - [S=5]
 
 #index.shtml
 RewriteRule ^$ yabindex\.php [L]
+
+#ajax/metainfo.shtml ajax/digg.shtml ...
+RewriteRule ^ajax/([a-z]+)\.shtml$ yabindex\.php/ajax/$1 [L]
 
 #category.shtml,miniblog/page/2.shtml...
 RewriteRule ^(index|category|miniblog|tag|guestbook)(/page/([2-9]|[1-9]\d+))?\.shtml$ yabindex\.php/$1/index?page=$3 [L]
