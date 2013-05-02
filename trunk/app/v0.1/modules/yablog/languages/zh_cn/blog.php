@@ -13,6 +13,7 @@
  */
 
 return array(
+    'CN_MEI_YOU_LE'     => '没有了',
     'GUEST_YOU_LIKE'    => '猜您喜欢',
     'MODULE_NAME_BLOG'  => '博客',
     'NEXT_BLOG'         => '下一篇',
