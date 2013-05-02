@@ -1133,7 +1133,6 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars = '') {
     }
 
     if ($log_level = C('LOG_LEVEL')) {//通过trigger_error触发
-        $log_filename = C('LOG_FILENAME');
         C(array('LOG_LEVEL' => false, 'LOG_FILENAME' => false));
 
         if (strpos(sys_config('sys_log_level'), $log_level) === false) {
@@ -1141,7 +1140,7 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars = '') {
         }
 
         $errno = $log_level;
-    };
+    }
 
     $quit_arr = array(
         E_ERROR              => 'PHP Error',
@@ -1183,10 +1182,10 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars = '') {
     $error      .= defined('REQUEST_URI') ? REQUEST_URI : (empty($_SERVER['REQUEST_URI']) ? '': urldecode($_SERVER['REQUEST_URI'])) . EOL_LF;
 
     if (in_array($errno, $user_errors)) {
-        $error .= EOL_LF . var_export($vars, true);
+        //$error .= EOL_LF . var_export($vars, true);
     }
 
-    Logger::record($error, empty($log_filename) ? '' : $log_filename);
+    Logger::record($error, C('LOG_FILENAME'));
 
     if (isset($quit_arr[$errno])) {
         $trace = $vars && is_string($vars) && 0 === strpos($vars, '__') ? substr($vars, 2) : '';
