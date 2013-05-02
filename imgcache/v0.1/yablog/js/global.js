@@ -85,10 +85,16 @@ function setMetaInfo(data) {
  * @return void 无返回值
  */
 function showCommentsReply() {
-    $('.comments-detail').hover(function() {
-        $(this).find('.reply:first').toggle();
-    }, function() {
-        $(this).find('.reply:first').toggle();
+    $('.comments-detail .popover-content').hover(function(e) {
+
+        $.each($(this).parents('.popover-content'), function(index, item) {
+            $(item).find('.reply:first').hide();
+        });
+
+        $(this).find('.reply:first').show();
+        return false;
+    }, function(e) {
+        $(this).find('.reply:first').hide();
     });
 }
 
@@ -105,12 +111,12 @@ function showMiniblogDetailLink() {
     if ('undefined' == typeof(IS_MINIBLOG_DETAIL)) {
         $('.miniblog-info').hover(function() {
             var me = $(this);
-            me.find('.add_time').toggle();
-            me.find('.link').toggle();
+            me.find('.add_time').hide();
+            me.find('.link').show();
         }, function() {
             var me = $(this);
-            me.find('.add_time').toggle();
-            me.find('.link').toggle();
+            me.find('.add_time').show();
+            me.find('.link').hide();
         });
     }
 }
