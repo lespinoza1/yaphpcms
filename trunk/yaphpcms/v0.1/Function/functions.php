@@ -1132,6 +1132,8 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars = '') {
         return false;
     }
 
+    $log_filename = C('LOG_FILENAME');
+
     if ($log_level = C('LOG_LEVEL')) {//通过trigger_error触发
         C(array('LOG_LEVEL' => false, 'LOG_FILENAME' => false));
 
@@ -1185,7 +1187,7 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars = '') {
         //$error .= EOL_LF . var_export($vars, true);
     }
 
-    Logger::record($error, C('LOG_FILENAME'));
+    Logger::record($error, $log_filename);
 
     if (isset($quit_arr[$errno])) {
         $trace = $vars && is_string($vars) && 0 === strpos($vars, '__') ? substr($vars, 2) : '';
