@@ -31,6 +31,11 @@ class AjaxController extends BaseController {
      */
     private function _getMetaInfo($type = 'blog', $data) {
 
+        if (!$data) {
+            return array();
+        }
+
+
         $table_arr = array(
             'blog'      => TB_BLOG,
             'miniblog'  => TB_MINIBLOG,
@@ -82,10 +87,40 @@ class AjaxController extends BaseController {
     }//end _getMetaInfo
 
     /**
+     * 统计点击量
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-03 08:42:51
+     *
+     * @return void 无返回值
+     */
+    private function _updateHits() {
+        $hits   = Filter::string('hits');//blog,id,add_time | miniblog,id,add_time
+
+        if ($hits) {
+            $hits_arr = explode(',', $hits);
+            $valid    = false;
+
+            if (3 == count($hits_arr) && in_array($hits_arr[0], array('miniblog', 'blog')) && ($id = intval($hits_arr[1])) && ($add_time = intval($hits_arr[2]))) {
+                $this->_model->execute('UPDATE ' . DB_PREFIX . $hits_arr[0] . " SET hits=hits+1 WHERE blog_id={$id} AND add_time={$add_time}");
+                $valid = $this->_model->getDb()->getProperty('_num_rows');
+
+            }
+
+            if (!$valid) {
+                C('LOG_FILENAME', 'ajax');
+                trigger_error($log = __METHOD__ . ',' . L('INVALID_PARAM') . var_export($hits_arr, true), E_USER_ERROR);
+                $this->addLog($log, LOG_TYPE_INVALID_PARAM);
+            }
+        }
+    }
+
+    /**
      * ajax异步获取博客,微博元数据,包括点击量,评论数等
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-05-02 16:21:34
+     * @lastmodify      2013-05-03 08:41:05 by mrmsl
      *
      * @return void 无返回值
      */
@@ -99,6 +134,8 @@ class AjaxController extends BaseController {
             }
         }*/
 
+        $this->_updateHits();//统计点击
+
         $blog       = Filter::string('blog');
         $miniblog   = Filter::string('miniblog');
 
@@ -109,9 +146,9 @@ class AjaxController extends BaseController {
             $this->_ajaxReturn(false);
         }
         $blog           = 0 === strpos($blog, ',') ? substr($blog, 1) : $blog;
-        $blog_arr       = explode(',', $blog);
+        $blog_arr       = $blog ? explode(',', $blog) : array();
         $miniblog       = 0 === strpos($miniblog, ',') ? substr($miniblog, 1) : $miniblog;
-        $miniblog_arr   = explode(',', $miniblog);
+        $miniblog_arr   = $miniblog ? explode(',', $miniblog) : array();
 
         if (($len_1 = count($blog_arr)) > PAGE_SIZE || ($len_2 = count($miniblog_arr)) >PAGE_SIZE) {//长度限制判断
             C('LOG_FILENAME', 'ajax');
