@@ -1,5 +1,6 @@
 {template 'include', 'header'}
 {php $meta_info_arr['miniblog'] = $blog_info['blog_id'] . '|' . $blog_info['add_time']; }
+{php $meta_info_arr['hits'] = 'miniblog,' . $blog_info['blog_id'] . ',' . $blog_info['add_time']; }
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span9 panel">
