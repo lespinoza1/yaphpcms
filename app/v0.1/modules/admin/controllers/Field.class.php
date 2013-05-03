@@ -205,10 +205,14 @@ class FieldController extends BaseController {
         $js_data['IS_LOCAL'] = IS_LOCAL;
         $js_data['sys_base_website'] = $system_data['sys_base_website'];//网站url
         $js_data['sys_base_site_url'] = $system_data['sys_base_website'] . $system_data['sys_base_wwwroot'];//网站url
-        $js_data['sys_base_admin_entry'] = $system_data['sys_base_website'] . $system_data['sys_base_wwwroot'] . $system_data['sys_base_admin_entry'];//后台管理入口
+        //$js_data['sys_base_admin_entry'] = 0 === strpos('http://', $v = $sys_config['sys_base_admin_entry']) ? $v : $js_data['sys_base_site_url'] . $system_data['sys_base_admin_entry'];//后台管理入口
         $js_data['sys_base_domain_scope'] = $system_data['sys_base_domain_scope'];//cookie作用域
         $js_data['sys_cookie_domain'] = $system_data['sys_cookie_domain'] == '@domain' ? $system_data['sys_base_domain_scope'] : $system_data['sys_cookie_domain'];//cookie域名
+
+        unset($js_data['sys_base_admin_entry']);//不暴露后台入口至前台
         array2js($js_data, $cache_key, WWWROOT . $system_data['sys_base_js_path'] . $cache_key . '.js');
+
+        $this->publicDefineSystemConstantsAction($system_data);//生成系统常量
     }//end _saveValueCallbackSystem
 
     /**
@@ -370,6 +374,44 @@ class FieldController extends BaseController {
     }//end listAction
 
     /**
+     * 生成系统常量
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-03 15:15:19
+     *
+     * @param array $sys_config 系统信息。默认array()，取sys_config()
+     *
+     * @return void 无返回值
+     */
+    public function publicDefineSystemConstantsAction($sys_config = array()) {
+        $filename   = INCLUDE_PATH . 'constants.tpl';//常量模板
+        $tpl        = file_get_contents($filename);
+        $sys_config = $sys_config ? $sys_config : sys_config();
+        $content    = preg_replace("#sys_config\('(\w+)'\)#e", '"\'" . addslashes($sys_config["\1"]) . "\'"', $tpl);
+        $find       = array(
+            '@@lastmodify',
+            '@WEB_COOKIE_DOMAIN',
+            '@WEB_SESSION_COOKIE_DOMAIN',
+            '@WEB_ADMIN_ENTRY',
+            '@AUTO_CREATE_COMMENT',
+        );
+        $replace    = array(
+            new_date(),
+            '@domain' == ($cookie_domain = $sys_config['sys_cookie_domain']) ? 'WEB_DOMAIN_SCOPE' : "'{$cookie_domain}'",
+            '@domain' == ($session_cookie_domain = $sys_config['sys_session_cookie_domain']) ? 'WEB_DOMAIN_SCOPE' : "'{$session_cookie_domain}'",
+            0 === strpos('http://', $v = $sys_config['sys_base_admin_entry']) ? "'{$v}'" : "BASE_SITE_URL . '{$v}'",
+            '后台自动生成，请毋修改。最后更新时间: ' . new_date()
+        );
+        $content    = str_replace($find, $replace, $content);
+
+        file_put_contents(INCLUDE_PATH . 'constants.php', $content);//写文件
+
+        if (!APP_DEBUG && is_file(RUNTIME_FILE)) {//constants.php已经包含进运行时文件。干掉
+            unlink(RUNTIME_FILE);
+        }
+    }//end publicDefineSystemConstantsAction
+
+    /**
      * 所属表单
      *
      * @author          mrmsl <msl-138@163.com>
@@ -456,7 +498,7 @@ class FieldController extends BaseController {
         }
     }//end publicFormAction
 
-   /**
+    /**
      * 保存值
      *
      * @author          mrmsl <msl-138@163.com>

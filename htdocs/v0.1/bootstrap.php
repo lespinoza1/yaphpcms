@@ -30,6 +30,7 @@ define('INCLUDE_PATH'   , SYS_APP_PATH . 'include/');//include包含路径
 require(SYS_PATH . 'yaphpcms/' . VERSION_PATH . 'yaphpcms.class.php');
 
 $require_files = array(
+    INCLUDE_PATH . 'constants.php',
     INCLUDE_PATH . 'app_config.php',
     INCLUDE_PATH . 'db_config.php',
 );
