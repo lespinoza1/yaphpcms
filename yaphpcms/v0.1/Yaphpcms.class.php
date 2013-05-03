@@ -49,7 +49,7 @@ class Yaphpcms {
 
             if (defined('APP_DEBUG') && !APP_DEBUG) {
                 $filesize += filesize($file);
-                $compile  .= compileFile($file);
+                $compile  .= compile_file($file);
             }
         }
 
