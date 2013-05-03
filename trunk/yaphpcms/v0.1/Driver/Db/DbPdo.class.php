@@ -233,7 +233,7 @@ class DbPdo extends Db {
             $this->error();
         }
         else {
-            $this->_num_rows = $result;
+            $this->_num_rows = $this->_PDOStatement->rowCount();
 
             $sql = strtoupper(trim($str));
 
