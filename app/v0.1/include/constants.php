@@ -1,7 +1,7 @@
 <?php
 /**
  * 后台修改网站基本信息，项目常量定义模板
- * 后台自动生成，请毋修改。最后更新时间: 2013-05-03 15:07:44
+ * 后台自动生成，请毋修改。最后更新时间: 2013-05-03 15:43:26
  *
  * @file            constants.tpl
  * @package         Yap
@@ -10,7 +10,7 @@
  * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-03 13:35:52
- * @lastmodify      2013-05-03 15:07:44
+ * @lastmodify      2013-05-03 15:43:26
  */
 
 //网站配置定义
@@ -27,7 +27,7 @@ define('WEB_ADMIN_ENTRY'       , BASE_SITE_URL . 'admin.php');//管理员入口
 define('WEB_JS_PATH'           , WWWROOT . 'static/js/');//js物理路径
 define('WEB_JS_LANG_PATH'      , WEB_JS_PATH . 'lang/');//js语言包物理路径
 define('WEB_CSS_PATH'          , WWWROOT . 'static/css/');//css物理路径
-define('COMMON_IMGCACHE'       , 'http://imgcache.yaphpcms.com/\'common/');//imgcache
+define('COMMON_IMGCACHE'       , 'http://imgcache.yaphpcms.com/common/');//imgcache
 define('ADMIN_IMGCACHE'        , 'http://imgcache.yaphpcms.com/v0.1/admin/');//后台imgcache
 define('IMGCACHE_JS'           , 'http://imgcache.yaphpcms.com/v0.1/yablog/js/');//js url
 define('IMGCACHE_CSS'          , 'http://imgcache.yaphpcms.com/v0.1/yablog/css/');//css url
