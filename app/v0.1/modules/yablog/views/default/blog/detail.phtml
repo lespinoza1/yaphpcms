@@ -75,6 +75,25 @@
                 <div class="separation-comment">{L COMMENTS,LIST}</div>
                 {$comments_html}
                 {/if}
+                <div class="separation-add-comment">{L CN_FA_BIAO,MODULE_NAME_COMMENT}</div>
+                <form class="form-horizontal form-comment">
+                    <div class="control-group">
+                        <label class="control-label"><span class="text-error">*</span>{L USERNAME}</label>
+                        <div class="controls">
+                            <input type="text" required />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"><span class="text-error">*</span>{L CONTENT}</label>
+                        <div class="controls">
+                            <textarea rows="3" cols="50" class="input-block-level" required></textarea>
+                        </div>
+                    </div>
+                    <div class="controls text-right">
+                        <button class="btn btn-primary">{L SUBMIT}</button>
+                        <button class="btn">{L CANCEL}</button>
+                    </div>
+                </form>
             </div>
         </div><!--end span9-->
         <div class="span3">
