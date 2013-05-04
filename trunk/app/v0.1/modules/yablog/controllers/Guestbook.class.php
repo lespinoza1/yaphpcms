@@ -35,7 +35,7 @@ class GuestbookController extends BaseController {
         ->table(TB_GUESTBOOK)
         ->alias('g')
         ->join(' JOIN ' . TB_COMMENTS . ' AS c ON g.comment_id=c.comment_id')
-        ->where('c.parent_id=0')
+        ->where('c.parent_id=0 AND c.status=1')
         ->count();
         $page_info      = Filter::page($total, 'page', PAGE_SIZE);
         $page           = $page_info['page'];
