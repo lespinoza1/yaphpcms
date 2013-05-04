@@ -20,6 +20,7 @@ class CommentsModel extends BaseModel {
         'add_time'          => 'time',
         'last_reply_time'   => 'time',
         'user_ip'           => 'get_client_ip#1',
+        'content'           => array('_setContent', Model::MODEL_BOTH, 'callback')
     );
     /**
      * @var array $_db_fields 表字段
@@ -159,4 +160,18 @@ class CommentsModel extends BaseModel {
 
         $this->commit();
     }//end _afterInsert
+
+    /**
+     * html化内容
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-03-01 13:30:52
+     *
+     * @param string $content 内容
+     *
+     * @return html化后的内容
+     */
+    protected function _setContent($content) {
+        return '<p><pre>' . nl2br(str_replace(' ', '&nbsp;', $content), $content) . '</pre></p>';
+    }
 }
