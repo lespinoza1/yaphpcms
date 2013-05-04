@@ -32,20 +32,16 @@ class GuestbookController extends BaseController {
      */
     public function indexAction() {
         $total      = $this->_model
-        ->table(TB_GUESTBOOK)
-        ->alias('g')
-        ->join(' JOIN ' . TB_COMMENTS . ' AS c ON g.comment_id=c.comment_id')
-        ->where('c.parent_id=0 AND c.status=1')
+        ->table(TB_COMMENTS)
+        ->where($where = 'type=0 AND status=1 AND parent_id=0')
         ->count();
         $page_info      = Filter::page($total, 'page', PAGE_SIZE);
         $page           = $page_info['page'];
         $page_one       = $page < 2;
         $guestbook_arr  = $this->_model
-        ->table(TB_GUESTBOOK)
-        ->alias('g')
-        ->join(' JOIN ' . TB_COMMENTS . ' AS c ON g.comment_id=c.comment_id')
-        ->where('c.parent_id=0')
-        ->order('g.comment_id DESC')
+        ->table(TB_COMMENTS)
+        ->where($where)
+        ->order('last_reply_time DESC')
         ->limit($page_info['limit'])
         ->select();
 

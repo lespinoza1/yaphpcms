@@ -36,8 +36,8 @@ class CommentsModel extends BaseModel {
         'node'           => array('filter' => 'int', 'validate' => array('_checkLength#NODE,DATA#value|0')),
         'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50')),
         'user_pic'       => array('filter' => 'url', 'validate' => array('_checkLength#USER_PIC,DATA#value|0')),
-        '_controller'    => array('validate' => array(array('blog,miniblog,guestbook', '{%INVALID_PARAM,_CONTROLLER}', Model::MUST_VALIDATE, 'in'))),
-        '_blog_id'       => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id
+        'type'           => array('filter' => 'int', 'validate' => array(array('0,1,2', '{%INVALID_PARAM,TYPE}', Model::MUST_VALIDATE, 'in'))),
+        'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id
     );
     /**
      * @var string $_pk_field 数据表主键字段名称。默认log_id
@@ -59,20 +59,20 @@ class CommentsModel extends BaseModel {
      * @return true|string true存在，否则错误信息
      */
     protected function _checkBlog($blog_id) {
-        C(array(
-            'T_CONTROLLER'  => $controller = Filter::string('_controller'),
-            'T_TABLE'       => DB_PREFIX . $controller,
-            'T_BLOG_ID'     => $blog_id,
-        ));
+        $table  = array(
+            0 => TB_GUESTBOOK,
+            1 => TB_BLOG,
+            2 => TB_MINIBLOG,
+        );
 
-        if ('guestbook' == $controller) {
-            return true;
-        }
-        elseif (!in_array($controller, array('miniblog', 'blog'))) {
+        if (!isset($table[$type = Filter::int('type')])) {
             return false;
         }
+        elseif (0 == $type) {//留言,blog_id=0
+            return !$blog_id;
+        }
 
-        return $blog_id && $this->table(C('T_TABLE'))->where('blog_id=' . $blog_id)->find();
+        return $blog_id && $this->table($table[$type])->where('blog_id=' . $blog_id)->find();
     }
 
     /**
@@ -157,13 +157,6 @@ class CommentsModel extends BaseModel {
             $this->where($this->_pk_field . '=' . $pk_value)->save($data);//节点关系
         }
 
-        $table = C('T_TABLE');
-
-        if (TB_GUESTBOOK == $table && $this->execute('INSERT INTO ' . $table . "(comment_id) VALUES({$pk_value})")) {//留言表
-            $this->commit();
-        }
-        elseif (($blog_id = C('T_BLOG_ID')) && $this->execute('INSERT INTO ' . $table . "_comments(blog_id,comment_id) VALUES({$blog_id},{$pk_value})")) {//评论
-            $this->commit();
-        }
+        $this->commit();
     }//end _afterInsert
 }
