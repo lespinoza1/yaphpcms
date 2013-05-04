@@ -68,6 +68,9 @@ class CommentsModel extends BaseModel {
         if ('guestbook' == $controller) {
             return true;
         }
+        elseif (!in_array($controller, array('miniblog', 'blog'))) {
+            return false;
+        }
 
         return $blog_id && $this->table(C('T_TABLE'))->where('blog_id=' . $blog_id)->find();
     }
@@ -93,7 +96,15 @@ class CommentsModel extends BaseModel {
         C('T_PARENT_INFO', $parent_info);
 
         if ($parent_info) {
-            return $parent_info['level'] < 5 ? true : L('INVALID,REPLY');
+
+            if (1 == $parent_info['status']) {//已通过
+                return true;
+            }
+
+            C('LOG_FILENAME', CONTROLLER_NAME);
+            trigger_error(__METHOD__ . ',status=0' . var_export($parent_info, true), E_USER_ERROR);
+
+            return L('INVALID,REPLY');
         }
 
         return L('REPLY,NOT_EXIST');
@@ -116,10 +127,23 @@ class CommentsModel extends BaseModel {
         if ($parent_info = C('T_PARENT_INFO')) {//父
             $node_arr = explode(',', $parent_info['node']);
 
+            if (5 == $parent_info['level']) {//最多5层回复
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . ',level>5' . var_export($parent_info, true), E_USER_NOTICE);
+
+                $parent_info['level']--;
+                $parent_info['node'] = substr($parent_info['node'], 0, strrpos($parent_info['node'], ','));
+                $parent_id = $node_arr[3];//父级id取第四个
+            }
+
             $data = array(
                 'level'          => $parent_info['level'] + 1,//层级
                 'node'           => $parent_info['node'] . ',' . $pk_value,//节点关系
             );
+
+            if (!empty($parent_id)) {
+                $data['parent_id'] = $parent_id;
+            }
 
             $this->where($this->_pk_field . '=' . $pk_value)->save($data);
             $this->where($this->_pk_field . '=' . $node_arr[0])->save(array('last_reply_time' => time()));//更新最上层最后回复时间
