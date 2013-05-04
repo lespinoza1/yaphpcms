@@ -17,8 +17,8 @@ class CommentsModel extends BaseModel {
      * @var array $_auto 自动填充
      */
     protected $_auto = array(
-        'add_time'          => 'time',
-        'last_reply_time'   => 'time',
+        'add_time'          => 'time#insert',
+        'last_reply_time'   => 'time#insert',
         'user_ip'           => 'get_client_ip#1',
         'content'           => array('_setContent', Model::MODEL_BOTH, 'callback')
     );
@@ -147,7 +147,7 @@ class CommentsModel extends BaseModel {
             }
 
             $this->where($this->_pk_field . '=' . $pk_value)->save($data);
-            $this->where($this->_pk_field . '=' . $node_arr[0])->save(array('last_reply_time' => time()));//更新最上层最后回复时间
+            $this->where(array($this->_pk_field => array('IN', $node_arr)))->save(array('last_reply_time' => time()));//更新最上层最后回复时间
         }
         else {
 
