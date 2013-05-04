@@ -34,8 +34,8 @@ class MiniblogController extends BaseController {
         ->field('c.*')
         ->alias('a')
         ->join(' JOIN ' . TB_COMMENTS . ' AS c ON a.comment_id=c.comment_id')
-        ->where('c.parent_id=0 AND a.blog_id=' . $blog_id)
-        ->order('c.comment_id DESC')
+        ->where('c.status=1 AND c.parent_id=0 AND a.blog_id=' . $blog_id)
+        ->order('c.last_reply_time DESC')
         ->select();
 
         return $this->_getRecurrsiveComments($comments);
@@ -98,15 +98,17 @@ class MiniblogController extends BaseController {
         $date    = Filter::int('date', 'get');
 
         if (!$blog_id || !$date) {//非法参数
-            Logger::record(L('INVALID_PARAM') . "date=({$date}),id=($blog_id)", CONTROLLER_NAME);
+            C('LOG_FILENAME', CONTROLLER_NAME);
+            trigger_error(__METHOD__ . ',' . "date=({$date}),id=({$blog_id})", E_USER_ERROR);
             $this->_showMessage('error' . $blog_id . $date, null, 404);
         }
 
         if ($blog_info = $this->_model->find($blog_id)) {
 
             if (date('Ymd', $blog_info['add_time']) != $date) {//日期与id不匹配
-                Logger::record(L('INVALID_PARAM') . "date=({$date}),id=($blog_id)", CONTROLLER_NAME);
-                $this->_showMessage('error' . $blog_id . $date, null, 404);
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . ',' . "date=({$date}),id=({$blog_id})", E_USER_ERROR);
+                $this->_showMessage('error' . $blog_id . ',' . $date, null, 404);
             }
 
             $filename = str_replace(BASE_SITE_URL, WWWROOT, $blog_info['link_url']);
