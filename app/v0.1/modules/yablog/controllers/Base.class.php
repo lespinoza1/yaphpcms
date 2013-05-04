@@ -65,7 +65,7 @@ class BaseController extends Yaf_Controller_Abstract {
     private function _getReplyComments($comment_id) {
         $data = $this->_model
         ->table(TB_COMMENTS)
-        ->where('parent_id=' . $comment_id)
+        ->where('status=1 AND parent_id=' . $comment_id)
         ->order('comment_id')
         ->select();
 
@@ -279,7 +279,7 @@ class BaseController extends Yaf_Controller_Abstract {
         foreach ($comments as $item) {
             $html .= '
             <div class="panel-list media panel-miniblog comments-detail">
-                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="图像" src="' . $item['user_pic'] . '" />
+                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="' . ($item['user_pic'] ? $item['user_pid'] : COMMON_IMGCACHE . 'images/guest.png') . '" />
                 <div class="media-body">
                     <div class="popover right">
                         <div class="arrow"></div>
