@@ -32,7 +32,7 @@ class MiniblogController extends BaseController {
      * @return void 无返回值
      */
     protected function _afterDelete($pk_id) {
-        $this->_model->where->(array($this->_pk_field => array('IN', $pk_id)))->delete();
+        $this->_model->table(TB_COMMENTS)->where(array($this->_pk_field => array('IN', $pk_id)))->delete();
         $this->deleteHtmlAction(null);
     }
 
