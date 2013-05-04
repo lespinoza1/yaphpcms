@@ -34,8 +34,8 @@ class BlogController extends BaseController {
         ->field('c.*')
         ->alias('b')
         ->join(' JOIN ' . TB_COMMENTS . ' AS c ON b.comment_id=c.comment_id')
-        ->where('c.parent_id=0 AND b.blog_id=' . $blog_id)
-        ->order('c.comment_id DESC')
+        ->where('c.status=1 AND c.parent_id=0 AND b.blog_id=' . $blog_id)
+        ->order('c.last_reply_time DESC')
         ->select();
 
         return $this->_getRecurrsiveComments($comments);
@@ -52,13 +52,12 @@ class BlogController extends BaseController {
      * @return array 上、下一篇博客
      */
     private function _getNextAndPrevBlog($blog_id) {
-        $next_id   = $blog_id + 1;
-        $prev_id   = $blog_id - 1;
-        $data      = $this->_model->field('blog_id,title,link_url')->key_column('blog_id')->select();
+        $field = 'blog_id,title,link_url';
+        $where = 'is_delete=0 AND is_issue=1';
 
         return array(
-            'next_blog' => isset($data[$next_id = $blog_id + 1]) ? $data[$next_id] : false,
-            'prev_blog' => isset($data[$prev_id = $blog_id - 1]) ? $data[$prev_id] : false,
+            'next_blog' => $this->_model->field($field)->where($where . ' AND blog_id>' . $blog_id)->order('blog_id ASC')->find(),
+            'prev_blog' => $this->_model->field($field)->where($where . ' AND blog_id<' . $blog_id)->order('blog_id DESC')->find(),
         );
     }
 
@@ -89,9 +88,9 @@ class BlogController extends BaseController {
         ->alias('b')
         ->field('b.title,b.link_url')
         ->join('JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
-        ->where(array('t.tag' => array('IN', $tags), 't.blog_id' => array('NEQ', $blog_id)))
+        ->where(array('t.tag' => array('IN', $tags), 't.blog_id' => array('NEQ', $blog_id), 'b.is_delete' => 0, 'b.is_issue' => 1))
         ->limit(5)
-        ->order('b.hits DESC')
+        ->order('b.blog_id DESC')
         ->select();
 
         return $data;
@@ -111,15 +110,23 @@ class BlogController extends BaseController {
         $date    = Filter::int('date', 'get');
 
         if (!$blog_id || !$date) {//非法参数
-            Logger::record(L('INVALID_PARAM') . "date=({$date}),id=($blog_id)", CONTROLLER_NAME);
+            C('LOG_FILENAME', CONTROLLER_NAME);
+            trigger_error(__METHOD__ . ',' . "date=({$date}),id=({$blog_id})", E_USER_ERROR);
             $this->_showMessage('error' . $blog_id . $date, null, 404);
         }
 
         if ($blog_info = $this->_model->find($blog_id)) {
 
             if (date('Ymd', $blog_info['add_time']) != $date) {//日期与id不匹配
-                Logger::record(L('INVALID_PARAM') . "date=({$date}),id=($blog_id)", CONTROLLER_NAME);
-                $this->_showMessage('error' . $blog_id . $date, null, 404);
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . ',' . "date=({$date}),id=({$blog_id})", E_USER_ERROR);
+                $this->_showMessage('error' . $blog_id . ',' . $date, null, 404);
+            }
+
+            if (!$blog_info['is_issue'] || $blog_info['is_delete']) {//未发布或已删除
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . ',' . "is_delete=({$blog_info['is_delete']}),is_issue=({$blog_info['is_issue']})", E_USER_ERROR);
+                $this->_showMessage('error' . $blog_info['is_issue'] . ',' . $blog_info['is_delete'], null, 404);
             }
 
             $filename = str_replace(BASE_SITE_URL, WWWROOT, $blog_info['link_url']);
@@ -145,5 +152,5 @@ class BlogController extends BaseController {
         else {//博客不存在
             $this->_showMessage(L('BLOG,NOT_EXIST'), null, 404);
         }
-    }
+    }//end detailAction
 }
