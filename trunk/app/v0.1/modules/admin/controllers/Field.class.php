@@ -384,7 +384,7 @@ class FieldController extends BaseController {
      * @return void 无返回值
      */
     public function publicDefineSystemConstantsAction($sys_config = array()) {
-        $filename   = INCLUDE_PATH . 'constants.tpl';//常量模板
+        $filename   = INCLUDE_PATH . 'app_config.tpl.php';//常量模板
         $tpl        = file_get_contents($filename);
         $sys_config = $sys_config ? $sys_config : sys_config();
         $content    = preg_replace("#sys_config\('(\w+)'\)#e", '"\'" . addslashes($sys_config["\1"]) . "\'"', $tpl);
@@ -404,7 +404,7 @@ class FieldController extends BaseController {
         );
         $content    = str_replace($find, $replace, $content);
 
-        file_put_contents(INCLUDE_PATH . 'constants.php', $content);//写文件
+        file_put_contents(INCLUDE_PATH . 'app_config.php', $content);//写文件
 
         if (!APP_DEBUG && is_file(RUNTIME_FILE)) {//constants.php已经包含进运行时文件。干掉
             unlink(RUNTIME_FILE);
