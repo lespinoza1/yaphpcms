@@ -38,12 +38,11 @@
                            {/if}
                        </span>
                        <span class="icon-circle-arrow-left"></span>
-                        {if $prev_blog}
-                        {L PREV_BLOG}：<a href="{$prev_blog.link_url}">{$prev_blog.title}</a>
+                        {L PREV_BLOG}：
+                        {if $prev_blog}<a href="{$prev_blog.link_url}">{$prev_blog.title}</a>
                         {else}
                         {L CN_MEI_YOU_LE}
                         {/if}
-                        </span>
                     </p>
                 </div>
                 <hr />
