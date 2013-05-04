@@ -1,6 +1,6 @@
 <?php
 /**
- * 评论模型
+ * 评论留言模型
  *
  * @file            Log.class.php
  * @package         Yap\Module\Yab\Model
@@ -25,17 +25,19 @@ class CommentsModel extends BaseModel {
      * @var array $_db_fields 表字段
      */
     protected $_db_fields = array (
-        'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,REPLY,MODULE_NAME_COMMENT'),//父id
+        'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENT'),//父id
         //用户名
         'username'       => array('validate' => array('_checkLength#USERNAME#value|0|20')),
-        'content'        => array('validate' => array('notblank#MODULE_NAME_COMMENT,CONTENT', '_checkLength#MODULE_NAME_COMMENT,CONTENT#value|0|500')),
-        'add_time'       => array('filter' => 'int'),//添加时间
-        'last_reply_time'=> array('filter' => 'int'),//最后回复时间
-        'user_ip'        => array('filter' => 'int'),//用户ip
+        'content'        => array('validate' => array('notblank#CONTENT')),
+        'add_time'       => array('filter' => 'int', 'validate' => array('_checkLength#ADD_TIME,DATA#value|0')),//添加时间
+        'last_reply_time'=> array('filter' => 'int', 'validate' => array('_checkLength#LAST_REPLY_TIME,DATA#value|0')),//最后回复时间
+        'user_ip'        => array('filter' => 'int', 'validate' => array('_checkLength#USER_IP,DATA#value|0')),//用户ip
         'level'          => array('filter' => 'int', 'validate' => array('_checkLength#LEVEL,DATA#value|0')),
         'node'           => array('filter' => 'int', 'validate' => array('_checkLength#NODE,DATA#value|0')),
         'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50')),
-        'user_pic'       => array('filter' => 'url'),
+        'user_pic'       => array('filter' => 'url', 'validate' => array('_checkLength#USER_PIC,DATA#value|0')),
+        '_controller'    => array('validate' => array(array('blog,miniblog,guestbook', '{%INVALID_PARAM,_CONTROLLER}', Model::MUST_VALIDATE, 'in'))),
+        '_blog_id'       => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id
     );
     /**
      * @var string $_pk_field 数据表主键字段名称。默认log_id
@@ -45,6 +47,30 @@ class CommentsModel extends BaseModel {
      * @var string $_true_table_name 实际数据表名(包含表前缀)。默认TB_GUESTBOOK
      */
     protected $_true_table_name = TB_COMMENTS;//表
+
+    /**
+     * 检查博客或者微博是否存在
+     *
+     * @author      mrmsl <msl-138@163.com>
+     * @date        2013-05-04 12:02:33
+     *
+     * @param int $blog_id 博客id 或 微博id
+     *
+     * @return true|string true存在，否则错误信息
+     */
+    protected function _checkBlog($blog_id) {
+        C(array(
+            'T_CONTROLLER'  => $controller = Filter::string('_controller'),
+            'T_TABLE'       => DB_PREFIX . $controller,
+            'T_BLOG_ID'     => $blog_id,
+        ));
+
+        if ('guestbook' == $controller) {
+            return true;
+        }
+
+        return $blog_id && $this->table(C('T_TABLE'))->where('blog_id=' . $blog_id)->find();
+    }
 
     /**
      * 检查回复回复是否存在
@@ -67,10 +93,10 @@ class CommentsModel extends BaseModel {
         C('T_PARENT_INFO', $parent_info);
 
         if ($parent_info) {
-            return $parent_info['level'] < 5 && (__GET || 1 == $parent_info['status']) ? true : L('INVALID,REPLY,MODULE_NAME_COMMENT');
+            return $parent_info['level'] < 5 ? true : L('INVALID,REPLY');
         }
 
-        return L('REPLY,MODULE_NAME_COMMENT,NOT_EXIST');
+        return L('REPLY,NOT_EXIST');
     }
 
     /**
@@ -107,7 +133,12 @@ class CommentsModel extends BaseModel {
             $this->where($this->_pk_field . '=' . $pk_value)->save($data);//节点关系
         }
 
-        if ($this->execute('INSERT INTO ' . TB_GUESTBOOK . "(comment_id) VALUES({$pk_value})")) {//留言表
+        $table = C('T_TABLE');
+
+        if (TB_GUESTBOOK == $table && $this->execute('INSERT INTO ' . $table . "(comment_id) VALUES({$pk_value})")) {//留言表
+            $this->commit();
+        }
+        elseif (($blog_id = C('T_BLOG_ID')) && $this->execute('INSERT INTO ' . $table . "_comments(blog_id,comment_id) VALUES({$blog_id},{$pk_value})")) {//评论
             $this->commit();
         }
     }//end _afterInsert
