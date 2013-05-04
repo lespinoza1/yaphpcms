@@ -149,10 +149,16 @@ CREATE TABLE `tb_category` (
 ALTER TABLE tb_comments
 ADD COLUMN user_homepage varchar(50) NOT NULL DEFAULT '' COMMENT '用户主页url' AFTER user_ip
 ADD COLUMN user_pic varchar(50) NOT NULL DEFAULT '' COMMENT '用户头像url' AFTER user_ip
+ADD COLUMN `blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '博客id 或者 微博id',
+ADD COLUMN type tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0留言;1博客评论;2微博评论.默认0',
+DROP INDEX status,
+ADD INDEX(blog_id),
+ADD INDEX(type,status)
 */
 CREATE TABLE `tb_comments` (
   `comment_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
+ type tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0留言;1博客评论;2微博评论.默认0'
   `username` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名',
   `user_ip` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ip,ip2long',
   user_homepage varchar(50) NOT NULL DEFAULT '' COMMENT '用户主页url',
@@ -164,11 +170,12 @@ CREATE TABLE `tb_comments` (
   `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
   `node` varchar(24) NOT NULL DEFAULT '' COMMENT '节点',
   `content` text NOT NULL COMMENT '内容',
-  ALTER TABLE tb_miniblog ADD COLUMN link_url varchar(100) NOT NULL DEFAULT '' COMMENT '微博链接'
+`blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '博客id 或者 微博id',
   PRIMARY KEY (`comment_id`),
-  KEY (parent_id),
-  KEY (status),
-  KEY (`last_reply_time`)
+  KEY `parent_id` (`parent_id`),
+  KEY `last_reply_time` (`last_reply_time`),
+  KEY `type` (`type`,`status`),
+  KEY `blog_id` (`blog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='留言评论表 by mashanling on 2013-02-27 11:48:16';
 
 /*tb_field表单域表*/
@@ -267,10 +274,14 @@ CREATE TABLE `tb_session` (
   KEY `last_time` (`last_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='session管理表 by mashanling on 2012-09-18 14:50:30';
 
-/*tb_tags标签表*/
+/*tb_tag标签表
+ALTER TABLE tb_tag
+ADD COLUMN `searches` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '搜索次数'
+*/
 CREATE TABLE `tb_tag` (
   `blog_id` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '博客id',
   tag char(20) NOT NULL DEFAULT '' COMMENT '标签',
+  `searches` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '搜索次数',
   PRIMARY KEY(tag,blog_id),
   FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='标签表 by mashanling on 2013-03-22 17:07:22';

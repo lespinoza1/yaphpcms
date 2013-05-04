@@ -30,12 +30,9 @@ class BlogController extends BaseController {
      */
     private function _getBlogComments($blog_id) {
         $comments = $this->_model
-        ->table(TB_BLOG_COMMENTS)
-        ->field('c.*')
-        ->alias('b')
-        ->join(' JOIN ' . TB_COMMENTS . ' AS c ON b.comment_id=c.comment_id')
-        ->where('c.status=1 AND c.parent_id=0 AND b.blog_id=' . $blog_id)
-        ->order('c.last_reply_time DESC')
+        ->table(TB_COMMENTS)
+        ->where('type=1 AND status=1 AND parent_id=0 AND blog_id=' . $blog_id)
+        ->order('last_reply_time DESC')
         ->select();
 
         return $this->_getRecurrsiveComments($comments);

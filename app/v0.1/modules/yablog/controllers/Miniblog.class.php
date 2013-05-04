@@ -30,12 +30,9 @@ class MiniblogController extends BaseController {
      */
     private function _getBlogComments($blog_id) {
         $comments = $this->_model
-        ->table(TB_MINIBLOG_COMMENTS)
-        ->field('c.*')
-        ->alias('a')
-        ->join(' JOIN ' . TB_COMMENTS . ' AS c ON a.comment_id=c.comment_id')
-        ->where('c.status=1 AND c.parent_id=0 AND a.blog_id=' . $blog_id)
-        ->order('c.last_reply_time DESC')
+        ->table(TB_COMMENTS)
+        ->where('type=2 AND status=1 AND parent_id=0 AND blog_id=' . $blog_id)
+        ->order('last_reply_time DESC')
         ->select();
 
         return $this->_getRecurrsiveComments($comments);

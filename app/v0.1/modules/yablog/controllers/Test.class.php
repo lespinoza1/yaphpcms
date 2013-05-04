@@ -30,7 +30,7 @@ class TestController extends BaseController {
      */
     public function addGuestbookAction() {
         $rand_content = $this->_model->table(TB_COMMENTS)
-        ->field('2228 AS `parent_id`,"blog0" AS `_controller`, 687 AS `_blog_id`,username,content,user_homepage')->order('RAND()')->limit(1)->select();
+        ->field('2224 AS `parent_id`,0 AS `type`, 6807 AS `blog_id`,username,content,user_homepage')->order('RAND()')->limit(1)->select();
         $this->_getViewTemplate()
         ->assign('guestbook', $rand_content);
         $this->_display(CONTROLLER_NAME, 'index');
