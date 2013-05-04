@@ -34,7 +34,7 @@ class CategoryController extends BaseController {
             $is_tag     = false;
             $cate_id    = $cate_info['cate_id'];
             $table      = TB_BLOG;
-            $where      = array('b.cate_id' => array('IN', $this->_getChildrenIds($cate_id)));
+            $where      = array('b.cate_id' => array('IN', $this->_getChildrenIds($cate_id)), 'b.is_delete' => 0, 'b.is_issue' => 1);
             $url_tpl    = str_replace('.shtml', '/page/\\1.shtml', $cate_info['link_url']);
             $cache_flag = $cate_id;
             $total      = $this->_model
@@ -47,7 +47,7 @@ class CategoryController extends BaseController {
         else {//标签
             $is_tag     = true;
             $table      = TB_BLOG . ' AS b JOIN ' . TB_TAG . ' AS t ON t.blog_id=b.blog_id';
-            $where      = array('t.tag' => array('IN', $cate_info));
+            $where      = array('t.tag' => array('IN', $cate_info), 'b.is_delete' => 0, 'b.is_issue' => 1);
             $url_tpl    = BASE_SITE_URL . 'tag/' . urlencode($cate_info) . '/page/\\1.shtml';
             $cache_flag = md5(strtolower($cate_info));
             $total      = $this->_model
@@ -140,36 +140,11 @@ class CategoryController extends BaseController {
         }
 
         if (!isset($cate_info)) {
-            Logger::record($cate_name . ' ' . L('NOT_EXIST'), CONTROLLER_NAME);
+            C('LOG_FILENAME', CONTROLLER_NAME);
+            trigger_error(__METHOD__ . $cate_name . ' ' . L('NOT_EXIST'), E_USER_ERROR);
             $this->_showMessage($cate_name . ' ' . L('NOT_EXIST'), null, 404);
         }
 
         $this->_fetchBlog($cate_info);
     }//end indexAction
-
-    /**
-     * 详请
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-02-21 15:26:00
-     *
-     * @return void 无返回值
-     */
-    public function detailAction() {
-        $blog_id = Filter::int('id', 'get');
-
-        if ($blog_id && ($blog_info = $this->_model->find($blog_id))) {
-            $filename = str_replace(BASE_SITE_URL, WWWROOT, $blog_info['link_url']);
-            new_mkdir(dirname($filename));
-            $o = $this->_getViewTemplate('build_html');
-            $o->assign('blog_info', $blog_info);
-            $content = $o->fetch(CONTROLLER_NAME, 'detail');
-            file_put_contents($filename, $content);
-            echo $content;
-
-        }
-        else {
-            exit('not exists');
-        }
-    }
 }
