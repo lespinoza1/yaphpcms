@@ -12,7 +12,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-IS_LOCAL && exit('Access Denied');
+!IS_LOCAL && exit('Access Denied');
 
 class TestController extends BaseController {
     /**
