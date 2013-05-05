@@ -279,7 +279,7 @@ class BaseController extends Yaf_Controller_Abstract {
         foreach ($comments as $item) {
             $html .= '
             <div class="panel-list media panel-miniblog comments-detail">
-                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="' . ($item['user_pic'] ? $item['user_pid'] : COMMON_IMGCACHE . 'images/guest.png') . '" />
+                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="' . ($item['user_pic'] ? $item['user_pic'] : COMMON_IMGCACHE . 'images/guest.png') . '" />
                 <div class="media-body">
                     <div class="popover right">
                         <div class="arrow"></div>
