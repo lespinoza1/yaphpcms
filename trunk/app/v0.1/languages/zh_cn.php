@@ -13,6 +13,7 @@
  */
 
 return array(
+    'BETWEEN_BYTE'      => '{0}-{1}个字符',
     'BLOG'              => '博客',
     'CALLBACK'          => '回调',
     'CAN'               => '能',
@@ -23,6 +24,7 @@ return array(
     'CN_CISHU'          => '次数',
     'CN_CONG'           => '从',
     'CN_DE'             => '的',
+    'CN_TO_BYTE'        => '一个汉字三个字节',
     'CN_WEI'            => '未',//by mrmsl on 2012-09-15 11:19:15
     'CN_XIUGAI'         => '修改',
     'CN_YI'             => '已',//by mrmsl on 2012-09-15 11:19:23
@@ -52,11 +54,13 @@ return array(
     'HAS_ANY_QUESTRION' => '如有任何疑问',
     'HAS_ERROR'         => '有误',
     'HIDE'              => '隐藏',
+    'HOMEPAGE'          => '主页',
     'IN'                => '在',
     'INFO'              => '信息',
     'INVALID'           => '非法',
     'INVALID_PARAM'     => '非法参数',
     'LAST'              => '最后',
+    'LT_BYTE'           => '{0}个字符以内',
     'LENGTH'            => '长度',
     'LETTER'            => '字母',
     'LIMIT'             => '限制',

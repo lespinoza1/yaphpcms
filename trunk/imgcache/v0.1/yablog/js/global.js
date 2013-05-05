@@ -9,6 +9,23 @@
  */
 
 /**
+ * 添加留言或者评论
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-05 22:13:52
+ *
+ * @return void 无返回值
+ */
+function addComments() {
+    $('.form-comment').submit(function() {
+        $.post(System.sys_base_site_url + 'comments/add.shtml', $(this).serialize(), function (data) {
+            seajs.log(data, 'log');
+        });
+        return false;
+    });
+}
+
+/**
  * 导航菜单下拉
  *
  * @author          mrmsl <msl-138@163.com>
