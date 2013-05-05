@@ -83,7 +83,7 @@ class Paging {
     /**
      * @var string $_now_page_tpl 当前页class名。默认<li class="active">%s</li>
      */
-    private $_now_page_tpl = '<li class="active"><span>%s</span</li>';
+    private $_now_page_tpl = '<li class="active"><span>%s</span></li>';
     /**
      * @var string $_href_tpl a标签模板。默认'<li><a href="%s">%s</a></li>
      */
