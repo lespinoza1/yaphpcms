@@ -18,7 +18,6 @@ return array(
     'ALL'                       => '全部',
     'AVAILABILITY'              => '有效',//by mrmsl on 2012-09-18 09:49:35
     'AVOID'                     => '避免',
-    'BETWEEN_BYTE'              => '{0}-{1}个字符',
     'CACHE'                     => '缓存',//by mrmsl on 2012-09-18 09:57:50
     'CHILD'                     => '子',//by mrmsl on 2013-01-10 12:58:11
     'CLONE'                     => '复制',//by mrmsl on 2012-09-29 12:53:09
@@ -30,7 +29,6 @@ return array(
     'CN_QU'                     => '取',//by mrmsl on 2012-09-18 10:58:50
     'CN_SHUOMING'               => '说明',//by mrmsl 2013-02-04 13:53:36
     'CN_SUOYOU'                 => '所有',//by mrmsl on 2012-08-20 10:37:05
-    'CN_TO_BYTE'                => '一个汉字三个字节',
     'COLLAPSE'                  => '折叠',
     'COMMENTS'                  => '评论数',
     'COMPLETELY_DELETE'         => '彻底删除',
@@ -54,7 +52,6 @@ return array(
     'LOAD'                      => '加载',
     'LOADING'                   => '加载中，请稍后...',
     'LOG'                       => '日志',
-    'LT_BYTE'                   => '{0}个字符以内',
     'MATCH_MODE_EQ'             => '完全匹配',
     'MATCH_MODE_LEQ'            => '左匹配',
     'MATCH_MODE_LIKE'           => '模糊匹配',

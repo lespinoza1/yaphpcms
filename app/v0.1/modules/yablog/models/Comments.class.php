@@ -28,7 +28,7 @@ class CommentsModel extends BaseModel {
     protected $_db_fields = array (
         'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENT'),//父id
         //用户名
-        'username'       => array('validate' => array('_checkLength#USERNAME#value|0|20')),
+        'username'       => array('validate' => array('notblank#USERNAME', '_checkLength#USERNAME#value|0|20')),
         'content'        => array('validate' => array('notblank#CONTENT')),
         'add_time'       => array('filter' => 'int', 'validate' => array('_checkLength#ADD_TIME,DATA#value|0')),//添加时间
         'last_reply_time'=> array('filter' => 'int', 'validate' => array('_checkLength#LAST_REPLY_TIME,DATA#value|0')),//最后回复时间

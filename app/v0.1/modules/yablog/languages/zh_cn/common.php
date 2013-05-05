@@ -13,6 +13,8 @@
  */
 
 return array(
+    'CN_FABIAO'         => '发表',
+    'CN_XUANTIAN'       => '选填',
     'CN_WANGWEN'        => '网文',
     'COME_FROM'         => '来源',
     'COMMENTS'          => '评论',
@@ -20,7 +22,6 @@ return array(
     'DIGG_ONE'          => '顶一个',
     'GUESTBOOK'         => '留言',
     'HOME'              => '首页',
-    'HOMEPAGE'          => '主页',
     'LINK'              => '链接',
     'LIST'              => '列表',
     'MODULE_NAME_COMMENT'  => '评论',

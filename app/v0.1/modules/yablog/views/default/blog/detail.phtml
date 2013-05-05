@@ -74,24 +74,35 @@
                 <div class="separation-comment">{L COMMENTS,LIST}</div>
                 {$comments_html}
                 {/if}
-                <div class="separation-add-comment">{L CN_FA_BIAO,MODULE_NAME_COMMENT}</div>
-                <form class="form-horizontal form-comment">
+                <div class="separation-add-comment">{L CN_FABIAO,MODULE_NAME_COMMENT}</div>
+                <form class="form-horizontal form-comment" method="post" action="{BASE_SITE_URL}comments/add.shtml">
                     <div class="control-group">
                         <label class="control-label"><span class="text-error">*</span>{L USERNAME}</label>
                         <div class="controls">
-                            <input type="text" required />
+                            <input type="text" name="username" required maxlength="20" />
+                            <span class="muted">(<?php echo str_replace('{0}', 20, L('LT_BYTE')) . '，' . L('CN_TO_BYTE'); ?>)</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">{L HOMEPAGE}</label>
+                        <div class="controls">
+                            <input type="url" name="user_homepage" />
+                            <span class="muted">({L CN_XUANTIAN})</span>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label"><span class="text-error">*</span>{L CONTENT}</label>
                         <div class="controls">
-                            <textarea rows="3" cols="50" class="input-block-level" required></textarea>
+                            <textarea name="content" rows="3" cols="50" class="input-block-level" required></textarea>
                         </div>
                     </div>
                     <div class="controls text-right">
                         <button class="btn btn-primary">{L SUBMIT}</button>
                         <button class="btn">{L CANCEL}</button>
                     </div>
+                    <input type="hidden" name="type" value="0" />
+                    <input type="hidden" name="parent_id" value="0" />
+                    <input type="hidden" name="blog_id" value="{$blog_info.blog_id}" />
                 </form>
             </div>
         </div><!--end span9-->
