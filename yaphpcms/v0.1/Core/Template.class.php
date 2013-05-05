@@ -280,7 +280,7 @@ class Template {
             $source = preg_replace('#\{C\s+(\w+)\}#', '<?php echo C(\'$1\');?>', $source);
         }
 
-        $source = preg_replace('#\{(\w+)\}#', '<?php echo $1;?>', $source);//{CONSTANT
+        $source = preg_replace('#\{([a-z_]\w+)\}#i', '<?php echo $1;?>', $source);//{CONSTANT
         $source = preg_replace('#\{((\$\w+)\.(\w+))\}#', '<?php echo $2[\'$3\'];?>', $source);//{$array.key 数组，仅支持一维
         $source = preg_replace('#\{(\$\w+)\}#', '<?php echo $1;?>', $source);//{$var
         $source = "<?php\n!defined('YAP_PATH') && exit('Access Denied'); ?>" . $source;
