@@ -41,6 +41,7 @@ seajs.use(['jquery', 'global'], bootstrap);
  * @return void 无返回值
  */
 function bootstrap() {
+    window.$html = $('html');
     navDropdown();//下拉菜单
     showMiniblogDetailLink();//非微博详情页，鼠标滑过微博，显示微博详情入口，同时隐藏添加时间
     showCommentsReply();//鼠标滑过留言评论，显示回复
