@@ -172,6 +172,6 @@ class CommentsModel extends BaseModel {
      * @return html化后的内容
      */
     protected function _setContent($content) {
-        return '<p><pre>' . nl2br(str_replace(' ', '&nbsp;', $content), $content) . '</pre></p>';
+        return '<p>' . nl2br(str_replace(' ', '&nbsp;', $content), $content) . '</p>';
     }
 }
