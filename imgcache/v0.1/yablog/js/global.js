@@ -22,49 +22,7 @@ function addComments() {
         return;
     }
 
-    if ('blog' == NAV_ID) {
-        var type = 1, blogId = META_INFO.hits.split(',')[1];
-    }
-    else if ('miniblog' == NAV_ID) {
-        var type = 2, blogId = META_INFO.hits.split(',')[1];
-    }
-    else {
-        var type = 0, blogId = 0;
-    }
-
-    var html = [];
-html.push('<form class="form-horizontal form-comment" method="post" action="' + System.sys_base_site_url + 'comments/add.shtml">');
-html.push('    <div class="control-group">');
-html.push('        <label class="control-label"><span class="text-error">*</span>用户名</label>');
-html.push('        <div class="controls">');
-html.push('            <input type="text" name="username" required maxlength="20" />');
-html.push('            <span class="muted">(20个字符以内，一个汉字三个字节)</span>');
-html.push('        </div>');
-html.push('    </div>');
-html.push('    <div class="control-group">');
-html.push('        <label class="control-label">主页</label>');
-html.push('        <div class="controls">');
-html.push('            <input type="url" name="user_homepage" />');
-html.push('            <span class="muted">(选填)</span>');
-html.push('        </div>');
-html.push('    </div>');
-html.push('    <div class="control-group">');
-html.push('        <label class="control-label"><span class="text-error">*</span>内容</label>');
-html.push('        <div class="controls">');
-html.push('            <textarea name="content" rows="3" cols="50" class="input-block-level" required></textarea>');
-html.push('        </div>');
-html.push('    </div>');
-html.push('    <div class="controls text-right">');
-html.push('        <button class="btn btn-primary">提交</button>');
-html.push('        <button class="btn">取消</button>');
-html.push('    </div>');
-html.push('    <input type="hidden" name="type" value="' + type + '" />');
-html.push('    <input type="hidden" name="parent_id" value="0" />');
-html.push('    <input type="hidden" name="blog_id" value="' + blogId + '" />');
-html.push('</form>');
-
-html = html.join('');
-    $('#form-panel').html(html);
+    $('#form-panel').html(getFormHtml());
     $('.form-comment').submit(function() {
         $.post(System.sys_base_site_url + 'comments/add.shtml', $(this).serialize(), function (data) {
             seajs.log(data, 'log');
@@ -72,6 +30,76 @@ html = html.join('');
         return false;
     });
 }
+
+/**
+ * 获取留言或者评论 表单 html
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-06 17:05:32
+ *
+ * @return string 表单html
+ */
+function getFormHtml(type) {
+
+    if (undefined === type) {
+
+        if (undefined === window['_formType']) {
+
+            if ('blog' == NAV_ID) {
+                var type = 1, blogId = META_INFO.hits.split(',')[1];
+            }
+            else if ('miniblog' == NAV_ID) {
+                var type = 2, blogId = META_INFO.hits.split(',')[1];
+            }
+            else {
+                var type = 0, blogId = 0;
+            }
+        }
+        else {
+            var type = window['_formType'];
+        }
+    }
+
+    if (window['_getFormHtml']) {
+        return window['_getFormHtml'];
+    }
+
+    var html = [];
+    html.push('<form class="form-horizontal form-comment" method="post" action="' + System.sys_base_site_url + 'comments/add.shtml">');
+    html.push('    <div class="control-group">');
+    html.push('        <label class="control-label"><span class="text-error">*</span>用户名</label>');
+    html.push('        <div class="controls">');
+    html.push('            <input type="text" name="username" required maxlength="20" />');
+    html.push('            <span class="muted">(20个字符以内，一个汉字三个字节)</span>');
+    html.push('        </div>');
+    html.push('    </div>');
+    html.push('    <div class="control-group">');
+    html.push('        <label class="control-label">主页</label>');
+    html.push('        <div class="controls">');
+    html.push('            <input type="url" name="user_homepage" />');
+    html.push('            <span class="muted">(选填)</span>');
+    html.push('        </div>');
+    html.push('    </div>');
+    html.push('    <div class="control-group">');
+    html.push('        <label class="control-label"><span class="text-error">*</span>内容</label>');
+    html.push('        <div class="controls">');
+    html.push('            <textarea name="content" rows="3" cols="50" class="input-block-level" required></textarea>');
+    html.push('        </div>');
+    html.push('    </div>');
+    html.push('    <div class="controls text-right">');
+    html.push('        <button class="btn btn-primary">提交</button>');
+    html.push('        <button class="btn">取消</button>');
+    html.push('    </div>');
+    html.push('    <input type="hidden" name="type" value="' + type + '" />');
+    html.push('    <input type="hidden" name="parent_id" value="0" />');
+    html.push('    <input type="hidden" name="blog_id" value="' + blogId + '" />');
+    html.push('</form>');
+
+    html = html.join('');
+    window['_getFormHtml'] = html;
+
+    return html;
+}//end getFormHtml
 
 /**
  * 导航菜单下拉
@@ -157,9 +185,27 @@ function showCommentsReply() {
         });
 
         $(this).find('.reply:first').show();
+
         return false;
     }, function(e) {
         $(this).find('.reply:first').hide();
+    }).find('.reply').click(function () {
+        var form = $('#form-reply'), el = $(this).parents('div.popover-content:first');
+
+        if (!form.length) {
+            var html = [];
+            html.push('<div class="popover bottom" id="form-reply">');
+            html.push('    <div class="arrow"></div>');
+            html.push('    <div class="popover-title">回复留言</div>');
+            html.push('    <div class="popover-content">');
+            html.push('        ' + getFormHtml());
+            html.push('    </div>');
+            html.push('</div>');
+            el.append(html.join(''));
+        }
+        else {
+            form.appendTo(el);
+        }
     });
 }
 
