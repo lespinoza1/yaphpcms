@@ -285,18 +285,20 @@ class BaseController extends Yaf_Controller_Abstract {
                         <div class="arrow"></div>
                         <div class="popover-content">
                             <p class="muted actions">
-                                <a href="javascript: void(0)" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>' . L('REPLY') . '</a>';
+                                <a href="#base-' . $item['comment_id'] . '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>' . L('REPLY') . '</a>
+                                <span class="name-' . $item['comment_id'] . '">';
 
             if ($item['user_homepage']) {
-                $html .= '      <a href="' . $item['user_homepage'] . '" rel="nofollow">' . $item['username'] . '</a>';
+                $html .= '          <a href="' . $item['user_homepage'] . '" rel="nofollow">' . $item['username'] . '</a>';
             }
             else {
-                $html .= $item['username'];
+                $html .=                $item['username'];
             }
 
-            $html .= ' | ' . new_date(null, $item['add_time']);
+            $html .= '          </span> | ' . new_date(null, $item['add_time']);
             $html .= '      </p>';
             $html .= $item['content'];
+            $html .= '<span id="base-' . $item['comment_id'] . '"></span>';
 
             if ($item['last_reply_time'] > $item['add_time'] && $item['level'] < 5) {
                 $html .= $this->_getReplyComments($item['comment_id']);

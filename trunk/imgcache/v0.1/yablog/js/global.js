@@ -23,7 +23,7 @@ function addComments() {
     }
 
     $('#form-panel').html(getFormHtml());
-    $('.form-comment').submit(function() {
+    $('.form-comment').on('submit', function() {
         $.post(System.sys_base_site_url + 'comments/add.shtml', $(this).serialize(), function (data) {
             seajs.log(data, 'log');
         });
@@ -190,24 +190,33 @@ function showCommentsReply() {
     }, function(e) {
         $(this).find('.reply:first').hide();
     }).find('.reply').click(function () {
-        var form = $('#form-reply'), el = $(this).parents('div.popover-content:first');
+        var form = $('#form-reply'), href = $(this).attr('href'), el = $(href), id = href.split('-')[1];
 
         if (!form.length) {
             var html = [];
-            html.push('<div class="popover bottom" id="form-reply">');
+            html.push('<div class="popover hide bottom" id="form-reply">');
             html.push('    <div class="arrow"></div>');
-            html.push('    <div class="popover-title">回复留言</div>');
+            html.push('    <div class="popover-title">回复 <b class="name"></b></div>');
             html.push('    <div class="popover-content">');
             html.push('        ' + getFormHtml());
             html.push('    </div>');
             html.push('</div>');
-            el.append(html.join(''));
+            el.after(html.join(''));
         }
         else {
-            form.appendTo(el);
+            el.after(form.hide());
         }
+
+        form =$('#form-reply').fadeIn(500)
+        .find('b.name:first').text($(this).next().text())
+        .end().find('input[name=parent_id]:first').val(id);
+
+        $html.animate({
+            scrollTop: el.offset().top - 100
+        }, 500);
+        return false;
     });
-}
+}//end showCommentsReply
 
 /**
  * 非微博详情页，鼠标滑过微博，显示微博详情入口，同时隐藏添加时间
