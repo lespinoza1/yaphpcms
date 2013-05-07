@@ -8,6 +8,17 @@
  * @lastmodify      $Date$ $Author$
  */
 
+var DATA_FORM_PANEL = 'form-panel',
+    DATA_FORM_COMMENT = 'form-comment',
+    DATA_FORM_REPLY = 'form-reply',
+    BLOG_FLAG = 'blog',
+    BLOG_TYPE = 1,
+    MINIBLOG_FLAG = 'miniblog',
+    MINIBLOG_TYPE = 2,
+    GUESTBOOK_FLAG = 'guestbook',
+    GUESTBOOK_TYPE = 0,
+    BTN_SUBMIT = 'btn-submit';
+
 seajs.config({
     plugins: ['shim'],
     map: [
@@ -41,19 +52,47 @@ seajs.use(['jquery', 'global'], bootstrap);
  * @return void 无返回值
  */
 function addComments() {
+    var formPanel = $('#' + DATA_FORM_PANEL);
 
-    if (!$('#form-panel').length) {
+    if (!formPanel.length) {
         return;
     }
 
-    $('#form-panel').html(getFormHtml());
-    $('.form-comment').on('submit', function() {
+    formPanel.html(getFormHtml());
+
+    var formComment = $('#' + DATA_FORM_COMMENT).on('submit', function() {
+
+        if (!$.trim(formComment.find('input[name=username]').val())) {
+            alert('a');return false;
+         }
+
+        if (!$body.data(BTN_SUBMIT)) {
+            $body.data(BTN_SUBMIT, formComment.find('#' + BTN_SUBMIT));
+        }
+
+        $body.data(BTN_SUBMIT).attr('disabled', true);
+
         $.post(System.sys_base_site_url + 'comments/add.shtml', $(this).serialize(), function (data) {
-            seajs.log(data, 'log');
+            if (data) {
+                if (data.success) {
+                }
+                else {
+                    alert(data.msg || '系统繁忙，请稍后再试');
+                }
+            }
+            else {
+                alert('系统繁忙，请稍后再试');
+            }
+
+            $body.data(BTN_SUBMIT).attr('disabled', false);
         });
+
         return false;
     });
-}
+
+    $body.data(DATA_FORM_PANEL, formPanel);
+    $body.data(DATA_FORM_COMMENT, formComment);
+}//end addComments
 
 /**
  * 启动函数
@@ -65,6 +104,7 @@ function addComments() {
  */
 function bootstrap() {
     window.$html = $('html');
+    window.$body = $('body');
     navDropdown();//下拉菜单
     showMiniblogDetailLink();//非微博详情页，鼠标滑过微博，显示微博详情入口，同时隐藏添加时间
     showCommentsReply();//鼠标滑过留言评论，显示回复
@@ -82,25 +122,16 @@ function bootstrap() {
  *
  * @return string 表单html
  */
-function getFormHtml(type) {
+function getFormHtml() {
 
-    if (undefined === type) {
-
-        if (undefined === window['_formType']) {
-
-            if ('blog' == NAV_ID) {
-                var type = 1, blogId = META_INFO.hits.split(',')[1];
-            }
-            else if ('miniblog' == NAV_ID) {
-                var type = 2, blogId = META_INFO.hits.split(',')[1];
-            }
-            else {
-                var type = 0, blogId = 0;
-            }
-        }
-        else {
-            var type = window['_formType'];
-        }
+    if (BLOG_FLAG == NAV_ID) {
+        var type = BLOG_TYPE, blogId = META_INFO.hits.split(',')[1];
+    }
+    else if (MINIBLOG_FLAG == NAV_ID) {
+        var type = MINIBLOG_TYPE, blogId = META_INFO.hits.split(',')[1];
+    }
+    else {
+        var type = GUESTBOOK_TYPE, blogId = 0;
     }
 
     if (window['_getFormHtml']) {
@@ -108,7 +139,7 @@ function getFormHtml(type) {
     }
 
     var html = [];
-    html.push('<form class="form-horizontal form-comment" method="post" action="' + System.sys_base_site_url + 'comments/add.shtml">');
+    html.push('<form class="form-horizontal" id="' + DATA_FORM_COMMENT + '" method="post" action="' + System.sys_base_site_url + 'comments/add.shtml">');
     html.push('    <div class="control-group">');
     html.push('        <label class="control-label"><span class="text-error">*</span>用户名</label>');
     html.push('        <div class="controls">');
@@ -130,8 +161,8 @@ function getFormHtml(type) {
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="controls text-right">');
-    html.push('        <button class="btn btn-primary">提交</button>');
-    html.push('        <button class="btn">取消</button>');
+    html.push('        <button id="btn-submit" class="btn btn-primary">提 交</button>');
+    html.push('        <button id="btn-reset-cancel" type="reset" class="btn">取 消</button>');
     html.push('    </div>');
     html.push('    <input type="hidden" name="type" value="' + type + '" />');
     html.push('    <input type="hidden" name="parent_id" value="0" />');
@@ -139,7 +170,6 @@ function getFormHtml(type) {
     html.push('</form>');
 
     html = html.join('');
-    window['_getFormHtml'] = html;
 
     return html;
 }//end getFormHtml
@@ -172,18 +202,7 @@ function navDropdown() {
  * @return void 无返回值
  */
 function getMetaInfo() {
-
-    if ('undefined' == typeof(META_INFO)) {
-        return;
-    }
-
-    $.ajax({
-        dataType: 'json',
-        url: System.sys_base_site_url + 'ajax/metainfo.shtml',
-        data: $.param(META_INFO),
-        method: 'post',
-        success: setMetaInfo
-    });
+    'undefined' != typeof(META_INFO) && $.post(System.sys_base_site_url + 'ajax/metainfo.shtml', $.param(META_INFO), setMetaInfo);
 }
 
 /**
@@ -233,26 +252,38 @@ function showCommentsReply() {
     }, function(e) {
         $(this).find('.reply:first').hide();
     }).find('.reply').click(function () {
-        var form = $('#form-reply'), href = $(this).attr('href'), el = $(href), id = href.split('-')[1];
+        var href = $(this).attr('href'),
+        el = $(href),
+        id = href.split('-')[1];
 
-        if (!form.length) {
+        if (!$body.data(DATA_FORM_REPLY)) {
             var html = [];
-            html.push('<div class="popover hide bottom" id="form-reply">');
+            html.push('<div class="popover hide bottom" id="' + DATA_FORM_REPLY +'">');
             html.push('    <div class="arrow"></div>');
             html.push('    <div class="popover-title">回复 <b class="name"></b></div>');
             html.push('    <div class="popover-content">');
-            html.push('        ' + getFormHtml());
+            //html.push('        ' + getFormHtml());
             html.push('    </div>');
             html.push('</div>');
             el.after(html.join(''));
+            var form = $('#' + DATA_FORM_REPLY);
+            $body.data(DATA_FORM_COMMENT).appendTo(form.find('.popover-content'));
+            $body.data(DATA_FORM_REPLY, form);
+
+            $('#btn-reset-cancel').on('click', function() {
+                $body.data(DATA_FORM_REPLY).hide();
+                $body.data(DATA_FORM_COMMENT).appendTo($body.data(DATA_FORM_PANEL)).find('input[name=parent_id]').val(0);
+            });
         }
         else {
-            el.after(form.hide());
+            $body.data(DATA_FORM_COMMENT).appendTo($body.data(DATA_FORM_REPLY).find('.popover-content'));
+            el.after($body.data(DATA_FORM_REPLY));
         }
 
-        form =$('#form-reply').fadeIn(500)
-        .find('b.name:first').text($(this).next().text())
-        .end().find('input[name=parent_id]:first').val(id);
+        $body.data(DATA_FORM_REPLY).show()
+        .find('b.name').text($(this).next().text())
+        .end()
+        .find('input[name=parent_id]').val(id);
 
         $html.animate({
             scrollTop: el.offset().top - 100
