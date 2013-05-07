@@ -61,22 +61,39 @@ function addComments() {
 
         $body.data(BTN_SUBMIT).attr('disabled', true);
 
-        $.post(System.sys_base_site_url + 'comments/add.shtml', $(this).serialize(), function (data) {
+        $.ajax({
+            method: 'post',
+            url: System.sys_base_site_url + 'comments/add.shtml',
+            dataType: 'json',
+            data: $(this).serialize(),
+            ok: function () {
+                location.reload();
+            },
+            success: function(data) {
+                if (data) {
 
-            if (data) {
-
-                if (data.success) {
-
+                    if (data.success) {
+                        this.ok();
+                    }
+                    else {
+                        alert(data.msg || lang('SYSTEM_ERROR'));
+                    }
                 }
                 else {
-                    alert(data.msg || lang('SYSTEM_ERROR'));
+                    alert(lang('SYSTEM_ERROR'));
+                }
+
+                $body.data(BTN_SUBMIT).attr('disabled', false);
+            },
+            error: function (response) {
+
+                if (response.responseText.indexOf('"success":true') > -1) {
+                    location.reload();
+                }
+                else {
+                    alert(lang('SYSTEM_ERROR'));
                 }
             }
-            else {
-                alert(lang('SYSTEM_ERROR'));
-            }
-
-            $body.data(BTN_SUBMIT).attr('disabled', false);
         });
 
         return false;
@@ -199,7 +216,13 @@ function showCommentsReply() {
 
         $html.animate({
             scrollTop: el.offset().top - 100
-        }, 500);
+        }, 300);
+        return false;
+    })
+    .end().find('a[href^=#comment-]').click(function() {
+        $html.animate({
+            scrollTop: $($(this).attr('href')).offset().top - 50
+        }, 300);
         return false;
     });
 }//end showCommentsReply

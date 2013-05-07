@@ -20,12 +20,12 @@ class CommentsModel extends BaseModel {
         'add_time'          => 'time#insert',
         'last_reply_time'   => 'time#insert',
         'user_ip'           => 'get_client_ip#1',
-        'content'           => array('_setContent', Model::MODEL_BOTH, 'callback')
+        'content'           => '_setContent'
     );
     /**
      * @var array $_db_fields 表字段
      */
-    protected $_db_fields = array (
+    protected $_db_fields = array ('status' => null,
         'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENT'),//父id
         //用户名
         'username'       => array('validate' => array('notblank#USERNAME', '_checkLength#USERNAME#value|0|20')),
@@ -92,7 +92,7 @@ class CommentsModel extends BaseModel {
             return true;
         }
 
-        $parent_info = $this->field('level,node,status')->find($parent_id);//父亲信息
+        $parent_info = $this->field('comment_id,username,level,node,status')->find($parent_id);//父亲信息
 
         C('T_PARENT_INFO', $parent_info);
 
@@ -137,7 +137,7 @@ class CommentsModel extends BaseModel {
                 $parent_id = $node_arr[3];//父级id取第四个
             }
 
-            $data = array(
+            $data = array('status' => 1,
                 'level'          => $parent_info['level'] + 1,//层级
                 'node'           => $parent_info['node'] . ',' . $pk_value,//节点关系
             );
@@ -151,7 +151,7 @@ class CommentsModel extends BaseModel {
         }
         else {
 
-            $data = array(
+            $data = array('status' => 1,
                 'node'           =>  $pk_value,
             );
 
@@ -172,6 +172,11 @@ class CommentsModel extends BaseModel {
      * @return html化后的内容
      */
     protected function _setContent($content) {
-        return '<p>' . nl2br(str_replace(' ', '&nbsp;', $content), $content) . '</p>';
+
+        if ($v = C('T_PARENT_INFO')) {//回复 @用户名
+            $reply = '<a href="#comment-' . $v['comment_id'] . '" rel="nofollow">@' . $v['username'] .  '</a> ';
+        }
+
+        return '<p>' . (empty($reply) ? '' : $reply) . nl2br(str_replace(' ', '&nbsp;', $content), $content) . '</p>';
     }
 }
