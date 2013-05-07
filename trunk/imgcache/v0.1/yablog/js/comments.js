@@ -42,6 +42,7 @@ function addComments() {
         $.post(System.sys_base_site_url + 'comments/add.shtml', $(this).serialize(), function (data) {
 
             if (data) {
+
                 if (data.success) {
 
                 }
@@ -179,4 +180,4 @@ function showCommentsReply() {
         }, 500);
         return false;
     });
-}//end showCommentsRepl⁹ ഀ਀紀⼀⼀攀渀搀 猀栀漀眀䌀漀洀洀攀渀琀猀刀攀瀀氀礀
+}//end showCommentsReply
