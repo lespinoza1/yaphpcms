@@ -29,6 +29,10 @@ class BaseModel extends Model {
      * @var object $_module 对应控制器，即模块。默认null
      */
     protected $_module = null;
+    /**
+     * @var bool $_patch_validate true批处理验证。默认false
+     */
+    protected $_patch_validate = false;
 
     /**
      * 新增数据后，将排序设为该记录自动增长id
