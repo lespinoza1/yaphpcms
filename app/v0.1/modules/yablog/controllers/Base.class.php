@@ -278,13 +278,13 @@ class BaseController extends Yaf_Controller_Abstract {
 
         foreach ($comments as $item) {
             $html .= '
-            <div class="panel-list media panel-miniblog comments-detail">
+            <div class="panel-list media panel-miniblog comments-detail" id="comment-' . $item['comment_id'] . '">
                 <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="' . ($item['user_pic'] ? $item['user_pic'] : COMMON_IMGCACHE . 'images/guest.png') . '" />
                 <div class="media-body">
                     <div class="popover right">
                         <div class="arrow"></div>
                         <div class="popover-content">
-                            <p class="muted actions">
+                            <p class="muted">
                                 <a href="#base-' . $item['comment_id'] . '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>' . L('REPLY') . '</a>
                                 <span class="name-' . $item['comment_id'] . '">';
 
