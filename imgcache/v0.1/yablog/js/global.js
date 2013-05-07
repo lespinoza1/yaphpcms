@@ -8,13 +8,42 @@
  * @lastmodify      $Date$ $Author$
  */
 
-var HOME_FLAG = 'home',//首页标识
+var HOME_FLAG = 'index',//首页标识
     BLOG_FLAG = 'blog',//博客标识
     MINIBLOG_FLAG = 'miniblog',//微博标识
     GUESTBOOK_FLAG = 'guestbook',//留言标识
-    IS_OLD_IE = /msie (6|7|8)/i.test(navigator.userAgent);//IE6-8,不支持html5,比如<input required,<input type="url"等
+    IS_OLD_IE = /msie (6|7|8)/i.test(navigator.userAgent),//IE6-8,不支持html5,比如<input required,<input type="url"等
+    _c = Math.random();
 
-var _c = Math.random();
+//字符串格式化输出
+String.prototype.format = function() {
+
+    if (typeof arguments[0] == 'object') {//json形，如'a{a}b{b}'.format({a: 'a', b: 'b'}) => aabb
+        var args = arguments[0], pattern = /\{(\w+)\}/g;
+    }
+    else {//数字形，如format('a{1}b{2}', 'a', 'b') => aabb
+        var args = arguments, pattern = /\{(\d+)\}/g;
+    }
+
+    return this.replace(pattern, function(m, i) {
+        return args[i];
+    });
+};
+
+//去除左右空白，支持自定义需要去除的字符列表 by mrmsl on 2012-07-28 10:29:41
+String.prototype.ltrim = function(charlist, mode) {
+    var patten = new RegExp('^' + (charlist || '\\s+'), mode || 'g');
+    return this.replace(patten, '');
+};
+String.prototype.rtrim = function(charlist, mode) {
+    var patten = new RegExp((charlist || '\\s+') + '$', mode || 'g');
+    return this.replace(patten, '');
+};
+String.prototype.trim = function(charlist, mode) {
+    charlist = charlist || '\\s';
+    var patten = new RegExp('^' + charlist + '+|' + charlist + '+' + '$', mode || 'g');
+    return this.replace(patten, '');
+};
 
 seajs.config({//seajs配置
     plugins: ['shim'],
@@ -118,6 +147,24 @@ function lang(name, value) {
 }//end lang
 
 /**
+ * console.log
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-07 21:38:55
+ *
+ * @return {void} 无返回值
+ */
+function log() {
+
+    if ('undefined' != typeof(console)) {
+
+        for (var i = 0, len = arguments.length; i < len; i++) {
+            console.log(arguments[i]);
+        }
+    }
+}
+
+/**
  * 导航菜单下拉
  *
  * @author          mrmsl <msl-138@163.com>
@@ -172,7 +219,7 @@ function setMetaInfo(data) {
  */
 function showMiniblogDetailLink() {
 
-    if (HOME_FLAG == NAV_ID || MINIBLOG_FLAG == NAV_ID && ('undefined' == typeof(IS_MINIBLOG_DETAIL))) {
+    if ((HOME_FLAG == NAV_ID || MINIBLOG_FLAG == NAV_ID) && 'undefined' == typeof(IS_MINIBLOG_DETAIL)) {
         $('.miniblog-info').hover(function() {
             var me = $(this);
             me.find('.add_time').hide();
