@@ -29,9 +29,31 @@ function addComments() {
 
     var formComment = $('#' + DATA_FORM_COMMENT).on('submit', function() {
 
-        if (!$.trim(formComment.find('input[name=username]').val())) {
-            alert('a');return false;
-         }
+        if (IS_OLD_IE) {//
+            var checked = true, el = [[formComment.find('input[name=username]'), 'USERNAME'], [formComment.find('textarea'), 'CONTENT']];
+
+            $.each(el, function(index, item) {
+
+                if (!$.trim(item[0].val())) {
+                    alert(lang('PLEASE_ENTER,' + item[1]));
+                    item[0].focus();
+                    checked = false;
+                    return false;
+                }
+            });
+
+            if (!checked) {
+                return false;
+            }
+        }//end if IS_OLD_IE
+
+        var el = formComment.find('input[name=url]'), url = $.trim(el.val());
+
+        if (url.length && 'http://' != url && !/http:\/\/[a-z0-9]+\.[a-z0-9]+/i.test(url)) {//主页链接
+            alert(lang('PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK'));
+            el.focus();
+            return false;
+        }
 
         if (!$body.data(BTN_SUBMIT)) {
             $body.data(BTN_SUBMIT, formComment.find('#' + BTN_SUBMIT));
@@ -96,7 +118,7 @@ function getFormHtml() {
     html.push('    <div class="control-group">');
     html.push('        <label class="control-label">' + lang('HOMEPAGE') + '</label>');
     html.push('        <div class="controls">');
-    html.push('            <input type="url" name="user_homepage" />');
+    html.push('            <input type="url" value="http://" name="user_homepage" />');
     html.push('            <span class="muted">(' + lang('CN_XUANTIAN') + ')</span>');
     html.push('        </div>');
     html.push('    </div>');
