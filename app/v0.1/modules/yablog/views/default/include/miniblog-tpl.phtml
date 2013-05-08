@@ -8,7 +8,8 @@
                 <p class="text-right muted">
                     <span class="actions">
                         <span class="add_time">
-                            <span class="icon-time icon-gray"></span>{echo new_date(null, $miniblog_info['add_time']);}
+                            <span class="icon-time icon-gray"></span>
+                            <span class="time-axis" data-time="{$item.add_time}">{echo new_date(null, $item['add_time']);}</span>
                         </span>
                         <a class="link hide" href="{$miniblog_info.link_url}">{L MINIBLOG,DETAIL}</a>
                         <span class="icon-zoom-in icon-gray ml-10"></span>

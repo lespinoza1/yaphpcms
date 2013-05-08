@@ -15,7 +15,7 @@
                 <div class="blog-detail">
                     <h1>{$blog_info.title}</h1>
                     <p class="blog-meta">
-                        <span>{echo new_date(null, $blog_info['add_time']);}</span>
+                        <span class="time-axis" data-time="{$blog_info.add_time}">{echo new_date(null, $blog_info['add_time']);}</span>
                         <span>{L ORIGIN}：<a href="{$blog_info.from_url}">{$blog_info.from_name}</a></span>
                         <span>{L READS}：<small class="counter blog-hits-{$blog_info.blog_id}">{$blog_info.hits}</small></span>
                         <span>{L COMMENTS}：<small class="counter blog-comments-{$blog_info.blog_id}">{$blog_info.comments}</small></span>
