@@ -45,6 +45,7 @@ class CategoryController extends BaseController {
             $this->_model->alias('b');//b.title
         }
         else {//标签
+            $this->_model->table(TB_TAG)->where(array('tag' => $cate_info))->setInc('searches');//搜索次数+1
             $is_tag     = true;
             $table      = TB_BLOG . ' AS b JOIN ' . TB_TAG . ' AS t ON t.blog_id=b.blog_id';
             $where      = array('t.tag' => array('IN', $cate_info), 'b.is_delete' => 0, 'b.is_issue' => 1);

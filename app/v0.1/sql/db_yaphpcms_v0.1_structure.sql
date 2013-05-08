@@ -283,6 +283,7 @@ CREATE TABLE `tb_tag` (
   tag char(20) NOT NULL DEFAULT '' COMMENT '标签',
   `searches` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '搜索次数',
   PRIMARY KEY(tag,blog_id),
+  KEY(searches),
   FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='标签表 by mashanling on 2013-03-22 17:07:22';
 
