@@ -41,7 +41,7 @@ class TagController extends BaseController {
         ->table(TB_BLOG)
         ->alias('b')
         ->join(' JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
-        ->order('t.blog_id')
+        ->order('t.searches DESC')
         ->field('DISTINCT t.tag')
         ->limit($page_info['limit'])
         ->select();
