@@ -47,7 +47,7 @@ function addComments() {
             }
         }//end if IS_OLD_IE
 
-        var el = formComment.find('input[name=url]'), url = $.trim(el.val());
+        var el = formComment.find('input[name=user_homepage]'), url = $.trim(el.val());
 
         if (url.length && 'http://' != url && !/http:\/\/[a-z0-9]+\.[a-z0-9]+/i.test(url)) {//主页链接
             alert(lang('PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK'));
@@ -136,7 +136,7 @@ function getFormHtml() {
     html.push('    <div class="control-group">');
     html.push('        <label class="control-label">' + lang('HOMEPAGE') + '</label>');
     html.push('        <div class="controls">');
-    html.push('            <input type="url" value="http://" name="user_homepage" />');
+    html.push('            <input type="text" value="http://" name="user_homepage" />');
     html.push('            <span class="muted">(' + lang('CN_XUANTIAN') + ',' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
     html.push('        </div>');
     html.push('    </div>');
