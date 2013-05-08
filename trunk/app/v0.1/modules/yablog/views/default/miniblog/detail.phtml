@@ -16,6 +16,7 @@
                 {php $miniblog_info = $blog_info; }
                 {template 'include', 'miniblog-tpl'}
 
+                <span id="anchor-comments"></span>
                 {if $comments_html}
                 <div class="separation-comment">{L COMMENTS,LIST}</div>
                 {$comments_html}
