@@ -22,7 +22,7 @@ var DATA_FORM_PANEL = 'form-panel',//表单父元素
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-05 22:13:52
  *
- * @return void 无返回值
+ * @return {void} 无返回值
  */
 function addComments() {
     var formPanel = $('#' + DATA_FORM_PANEL).html(getFormHtml());
@@ -110,7 +110,7 @@ function addComments() {
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-06 17:05:32
  *
- * @return string 表单html
+ * @return {string} 表单html
  */
 function getFormHtml() {
 
@@ -144,7 +144,7 @@ function getFormHtml() {
     html.push('        <label class="control-label"><span class="text-error">*</span>' + lang('CONTENT') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <textarea name="content" rows="3" cols="50" class="input-block-level" required></textarea>');
-    html.push('            <span class="muted">http(s)://www.abc.com/path/?querystring =&gt; <a href="http://www.abc.com/path/?querystring" rel="nofollow">http(s)://www.abc.com/path/?querystring</a></span>');
+    html.push('            <span class="muted">http(s)://www.abc.com/path/?querystring ' + lang('SPACE') + '... =&gt; <a href="http://www.abc.com/path/?querystring" rel="nofollow">http(s)://www.abc.com/path/?querystring</a></span>');
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="controls text-right">');
@@ -167,7 +167,7 @@ function getFormHtml() {
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-01 22:20:05
  *
- * @return void 无返回值
+ * @return {void} 无返回值
  */
 function showCommentsReply() {
     $('.comments-detail .popover-content').hover(function(e) {

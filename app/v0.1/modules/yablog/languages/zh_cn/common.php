@@ -31,6 +31,7 @@ return array(
     'NOW_POSITION'      => '您现在的位置',
     'N_PAGES'           => '第%d页',
     'READS'             => '阅读',
+    'SPACE'             => '空格',
     'TAG'               => '标签',
     'THE_DAY_BEFORE_YESTERDAY' => '前天',
     'YESTERDAY'         => '昨天',
