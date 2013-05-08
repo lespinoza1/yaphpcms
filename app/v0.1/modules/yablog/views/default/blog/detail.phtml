@@ -24,7 +24,7 @@
                 <div class="blog-content">
                     {$blog_info.content}
                     {if $tags}<p><span class="icon-tags"></span>{L TAG}：{$tags}</p>{/if}
-                    <p class="text-center"><a class="label label-inverse"><span class="icon-thumbs-up icon-white"></span> {L DIGG_ONE}</a></p>
+                    <p class="text-center"><a data-diggs="blog,{$blog_info.blog_id},{$blog_info.add_time}"  class="label label-inverse"><span class="icon-thumbs-up icon-white"></span> {L DIGG_ONE}</a></p>
                 </div>
 
                     <p>

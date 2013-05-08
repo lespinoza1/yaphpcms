@@ -66,6 +66,29 @@ seajs.config({//seajs配置
 seajs.use(['jquery'], bootstrap);
 
 /**
+ * 获取参数，类似php $_GET。不支持获取数组
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-08 14:33:00
+ *
+ * @param {string} name 参数名称
+ * @param {string} [str=location.href]  匹配字符串
+ *
+ * @return {string} 参数值或空字符串
+ */
+function _GET(name, str) {
+    var pattern = new RegExp('[\?&]' + name + '=([^&]+)', 'g');
+    str = str || location.href;
+    var arr, match = '';
+
+    while ((arr = pattern.exec(str)) !== null) {
+        match = arr[1];
+    }
+
+    return match;
+}
+
+/**
  * 启动函数
  *
  * @author          mrmsl <msl-138@163.com>
@@ -80,6 +103,7 @@ function bootstrap() {
     showMiniblogDetailLink();//非微博详情页，鼠标滑过微博，显示微博详情入口，同时隐藏添加时间
     getMetaInfo();//获取博客,微博元数据,包括点击量,评论数等
     resetTime();//重置时间，即显示为 刚刚、5分钟前、3小时前、昨天10:23、前天15：26等
+    digg();//顶操作
 
     if ($('#form-panel').length) {//评论留言
 
@@ -129,6 +153,29 @@ function date(format, constructor) {
     }
 
     return format;
+}//end date
+
+
+
+/**
+ * 顶操作
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-02 16:23:34
+ *
+ * @return {void} 无返回值
+ */
+function digg() {
+
+    $('a[data-diggs]').one('click', function () {
+        $.post(System.sys_base_site_url + 'ajax/digg.shtml', 'diggs=' + $(this).data('diggs'), function (data) {
+
+            if (data && data.success) {
+                var el = $(data.success), diggs = el.text();
+                el.text(intval(diggs) + 1);
+            }
+        });
+    });
 }
 
 /**
@@ -141,6 +188,53 @@ function date(format, constructor) {
  */
 function getMetaInfo() {
     'undefined' != typeof(META_INFO) && $.post(System.sys_base_site_url + 'ajax/metainfo.shtml', $.param(META_INFO), setMetaInfo);
+}
+
+/**
+ * 转义html，类似php htmlspechalchars
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-08 14:35:20
+ *
+ * @param {string} str 待转义字符串
+ *
+ * @return {string} 转义后的字符串
+ */
+function htmlspecialchars(str) {
+    return str.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');
+}
+
+/**
+ * 反转义html
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-08 14:35:25
+ *
+ * @param {string} str 待转义字符串
+ *
+ * @return {string} 转义后的字符串
+ */
+function htmlspecialchars_decode(str) {
+    return str.replace(/\&lt;/g, '<').replace(/\&gt;/g, '>').replace(/\&quot;/g, '"').replace(/\&#39;/g, "'");
+}
+
+/**
+ * 转化为整数，类似php intval函数
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-08 14:39:02
+ *
+ * @param {mixed} str   需要转换的字符串
+ * @param {int} [def=0] 转换失败默认值
+ * @param {int} [radix=10] 进制
+ *
+ * @return {int} 转化后的整数
+ */
+function intval(str, def, radix) {
+    radix = radix || 10;
+    var str = parseInt(str, radix);
+
+    return isNaN(str) ? parseInt(def == undefined ? 0 : def, radix) : str;
 }
 
 /**
@@ -317,6 +411,24 @@ function str_pad(str, length, pad, padType) {
 }
 
 /**
+ * 去掉html标签
+ *
+ * @author              mashanling(msl-138@163.com)
+ * @date                2013-05-08 14:36:46
+ *
+ * @param {string} str 字符串
+ * @param {bool} [img=false] true保留img标签，false不保留
+ *
+ * @return {String} 去掉html标签后的字符串
+ */
+function strip_tags(str, img) {
+    str = String(str);
+    var pattern = img ? /<(?!img)[^>]*>/ig : /<[^>]*>/gi;
+
+    return str.replace(pattern, '');
+}
+
+/**
  * 时间轴，即显示为 刚刚、5分钟前、3小时前、昨天10:23、前天15：26等
  *
  * @author              mashanling(msl-138@163.com)
@@ -345,4 +457,43 @@ function timeAxis(time) {
     }
 
     return date(null, time * 1000);
+}
+
+/**
+ * 数字精确度
+ *
+ * @author              mashanling(msl-138@163.com)
+ * @date                2013-05-08 14:37:40
+ *
+ * @param {float} value 数字
+ * @param {int} [precision=2] 小数点位数
+ *
+ * @return {float} 精确小数点后的数值
+ */
+function toFixed(value, precision) {
+    precision = precision === undefined ? 2 : precision;
+
+    if ((0.9).toFixed() !== '1') {//IE下等于0
+        var pow = Math.pow(10, precision);
+        return (Math.round(value * pow) / pow).toFixed(precision);
+    }
+
+    return value.toFixed(precision);
+}
+
+/**
+ * 转化为浮点数
+ *
+ * @author              mashanling(msl-138@163.com)
+ * @date                2013-05-08 14:38:06
+ *
+ * @param {mixed} str 需要转换的字符串
+ * @param {float} [def=0.00] 转换失败默认值
+ *
+ * @return {float} 转化后的浮点数
+ */
+function toFloat(str, def) {
+    var str = parseFloat(str);
+
+    return isNaN(str) ? parseFloat(def == undefined ? 0.00 : def) : str;
 }
