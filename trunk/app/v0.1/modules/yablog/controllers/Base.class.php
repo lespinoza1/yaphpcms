@@ -295,7 +295,7 @@ class BaseController extends Yaf_Controller_Abstract {
                 $html .=                $item['username'];
             }
 
-            $html .= '          </span> | ' . new_date(null, $item['add_time']);
+            $html .= '          </span> | <span class="time-axis" data-time="' . $item['add_time'] . '">' . new_date(null, $item['add_time']) . '</span>';
             $html .= '      </p>';
             $html .= $item['content'];
             $html .= '<span id="base-' . $item['comment_id'] . '"></span>';

@@ -55,11 +55,10 @@ seajs.config({//seajs配置
             src: System.sys_base_site_url + 'static/js/lang/zh_cn.js?' + _c
         },
         jquery: {//jquery
-            src: System.sys_base_common_imgcache + 'js/jquery/jquery-1.9.1.min.js?' + _c,
+            src: System.sys_base_common_imgcache + 'js/jquery/jquery-1.9.1.min.js?' + _c
         },
         comments: {//留言评论
-            src: System.sys_base_js_url + 'comments.js?' + _c,
-            deps: ['lang']
+            src: System.sys_base_js_url + 'comments.js?' + _c
         }
     }
 });
@@ -72,7 +71,7 @@ seajs.use(['jquery'], bootstrap);
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-01 17:22:16
  *
- * @return void 无返回值
+ * @return {void} 无返回值
  */
 function bootstrap() {
     window.$html = $('html');
@@ -80,10 +79,11 @@ function bootstrap() {
     navDropdown();//下拉菜单
     showMiniblogDetailLink();//非微博详情页，鼠标滑过微博，显示微博详情入口，同时隐藏添加时间
     getMetaInfo();//获取博客,微博元数据,包括点击量,评论数等
+    resetTime();//重置时间，即显示为 刚刚、5分钟前、3小时前、昨天10:23、前天15：26等
 
     if ($('#form-panel').length) {//评论留言
 
-        seajs.use(['comments', 'lang'], function() {
+        seajs.use('comments', function() {
             showCommentsReply();//鼠标滑过留言评论，显示回复
             addComments();//添加留言或者评论
         });
@@ -93,12 +93,51 @@ function bootstrap() {
 }
 
 /**
+ * 格式化时间，类似php date函数
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-08 10:55:29
+ *
+ * @param {string} [format=System.sys_timezone_datetime_format] 格式
+ * @param {mixed} [constructor] new Date()初始化参数
+ *
+ * @return {string} 格式化后的时间
+ */
+function date(format, constructor) {
+
+    if (typeof(constructor) == 'object') {//已经是日期类型
+        var datetime = constructor;
+    }
+    else {
+        var datetime = constructor ? new Date(constructor) : new Date();
+    }
+
+    format = format || System.sys_timezone_datetime_format;
+
+    var o = {
+        'Y': datetime.getFullYear(),
+        'm': datetime.getMonth() + 1,
+        'd': datetime.getDate(),
+        'H': datetime.getHours(),
+        'i': datetime.getMinutes(),
+        's': datetime.getSeconds()
+    };
+
+    for (var i in o) {
+        _s = i == 'Y' ? o[i] : str_pad(o[i], 2, '0');//不为年，补0
+        format = format.replace(new RegExp(i, 'g'), _s);
+    }
+
+    return format;
+}
+
+/**
  * 获取博客,微博元数据,包括点击量,评论数等
  *
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-02 16:23:34
  *
- * @return void 无返回值
+ * @return {void} 无返回值
  */
 function getMetaInfo() {
     'undefined' != typeof(META_INFO) && $.post(System.sys_base_site_url + 'ajax/metainfo.shtml', $.param(META_INFO), setMetaInfo);
@@ -110,13 +149,12 @@ function getMetaInfo() {
  * @member window
  *
  * @author          mrmsl <msl-138@163.com>
- * @date            2012-07-04 11:17:12
- * @lastmodify      2013-01-12 16:19:06 by mrmsl
+ * @date            2013-05-08 11:01:04
  *
- * @param {Mixed} name  名
- * @param {Mixed} value 值
+ * @param {string} name 名
+ * @param {mixed} [value] 值
  *
- * @return {Mixed} 如果不传参数name，将返回整个语言包；否则返回指定语言
+ * @return {mixed} 如果不传参数name，将返回整个语言包；否则返回指定语言
  */
 function lang(name, value) {
 
@@ -137,7 +175,7 @@ function lang(name, value) {
             }
             else {//如果设置值，返回值，否则只返回键名
                 item = item.toUpperCase();
-                _lang += undefined === L[item] ? item : L[item]
+                _lang += undefined === L[item] ? item : L[item];
             }
 
         });
@@ -170,7 +208,7 @@ function log() {
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-04-30 21:34:20
  *
- * @return void 无返回值
+ * @return {void} 无返回值
  */
 function navDropdown() {
     var me = $('#nav-category'),
@@ -184,12 +222,29 @@ function navDropdown() {
 }
 
 /**
+ * 重置时间，即显示为 刚刚、5分钟前、3小时前、昨天10:23、前天15：26等
+ *
+ * @author              mashanling(msl-138@163.com)
+ * @date                2013-05-08 10:49:51
+ *
+ * @return {void} 无返回值
+ */
+function resetTime() {
+
+    $('.time-axis').each(function (index, item) {
+        $(item).text(timeAxis($(item).data('time')));
+    });
+
+    setInterval(resetTime, 60000);
+}
+
+/**
  * 获取博客,微博元数据,包括点击量,评论数等
  *
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-02 16:23:34
  *
- * @return void 无返回值
+ * @return {void} 无返回值
  */
 function setMetaInfo(data) {
 
@@ -215,7 +270,7 @@ function setMetaInfo(data) {
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-01 22:00:47
  *
- * @return void 无返回值
+ * @return {void} 无返回值
  */
 function showMiniblogDetailLink() {
 
@@ -230,4 +285,60 @@ function showMiniblogDetailLink() {
             me.find('.link').hide();
         });
     }
+}
+
+/**
+ * 使用另一个字符串填充字符串为指定长度。类似php str_pad
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-08 11:17:26
+ *
+ * @param {string} string 待填充字符串
+ * @param {int} [lendgh=10] 总长度
+ * @param {string} [pad=' '] 填充字符
+ * @param {string} [padType=undefined] 填充类型，right为右填充
+ *
+ * @return {string} 填充后的字符串
+ */
+function str_pad(str, length, pad, padType) {
+    str = String(str);
+    length = length ? length : 10;
+    pad = pad == undefined ? ' ' : pad;
+
+    while (str.length < length) {
+        str = padType == 'right' ? str + pad : pad + str;
+    }
+
+    return str;
+}
+
+/**
+ * 时间轴，即显示为 刚刚、5分钟前、3小时前、昨天10:23、前天15：26等
+ *
+ * @author              mashanling(msl-138@163.com)
+ * @date                2013-05-08 10:49:44
+ *
+ * @param {int} time unix时间戳
+ *
+ * @return {string} 格式化显示的时间
+ */
+function timeAxis(time) {
+    var str,
+        now = new Date().getTime() / 1000
+        diff = now - time;
+
+    if (diff < 60) {
+        return lang('JUST_NOW');
+    }
+    else if (diff < 3600) {
+        return lang('MINUTES_AGO').format(Math.floor(diff / 60));
+    }
+    else if (diff < 86400) {
+        return lang('HOURS_AGO').format(Math.floor(diff / 3600));
+    }
+    else if (diff < 86400 * 3) {
+        return lang(1 == Math.floor(diff / 86400) ? 'YESTERDAY' : 'THE_DAY_BEFORE_YESTERDAY') + date(' H:i', time * 1000)
+    }
+
+    return date(null, time * 1000);
 }

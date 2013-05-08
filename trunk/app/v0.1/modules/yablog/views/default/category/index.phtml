@@ -26,7 +26,8 @@
                     {$item.summary}
                     <p class="text-right muted">
                         <span class="actions">
-                            <span class="icon-time icon-gray"></span>{echo new_date(null, $item['add_time']);}
+                            <span class="icon-time icon-gray"></span>
+                            <span class="time-axis" data-time="{$item.add_time}">{echo new_date(null, $item['add_time']);}</span>
                             <span class="icon-zoom-in icon-gray ml-10"></span>
                             <span class="counter blog-hits-{$item.blog_id}">0</span>
                             <a href="javascript: void(0)" rel="nofollow" class="blog-diggs muted">
