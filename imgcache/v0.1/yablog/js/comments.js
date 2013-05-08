@@ -176,7 +176,7 @@ function showCommentsReply() {
             $(item).find('.reply:first').hide();
         });
 
-        $(this).find('.reply:first').show();
+        !$(this).find('#' + DATA_FORM_COMMENT).length && $(this).find('.reply:first').show();
 
         return false;
     }, function(e) {
