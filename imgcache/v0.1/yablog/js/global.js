@@ -104,6 +104,7 @@ function bootstrap() {
     getMetaInfo();//获取博客,微博元数据,包括点击量,评论数等
     resetTime();//重置时间，即显示为 刚刚、5分钟前、3小时前、昨天10:23、前天15：26等
     digg();//顶操作
+    setTitle();//设置title属性
 
     if ($('#form-panel').length) {//评论留言
 
@@ -360,6 +361,22 @@ function setMetaInfo(data) {
             $('.miniblog-comments-' + index).text(item.comments);
         });
     }
+}
+
+/**
+ * 设置title属性
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-08 22:07:37
+ *
+ * @return {void} 无返回值
+ */
+function setTitle() {
+    var arr = [['span.add_time', 'CN_FABIAO,TIME'], ['a.hits', 'READS'], ['a[data-diggs]', 'DIGG'], ['a.comments', 'COMMENTS']];
+
+    $.each(arr, function(index, item) {
+        $(item[0]).attr('title', lang(item[1]));
+    });
 }
 
 /**

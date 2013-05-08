@@ -30,6 +30,7 @@ return array(
     'CN_YI'             => '已',//by mrmsl on 2012-09-15 11:19:23
     'CN_YOU'            => '由',
     'CN_YUAN'           => '原',
+    'COMMENTS'          => '评论',
     'CONFIRM_PASSWORD'  => '确认密码',
     'CONSTRAIN_LENGTH'  => '%s长度应控制在%d到%d个字符之间',
     'CONTENT'           => '内容',
@@ -39,6 +40,7 @@ return array(
     'DELETE'            => '删除',
     'DENY_ACCESS_CONTROLLER' => '禁止直接访问控制器：%s',
     'DETAIL'            => '详情',
+    'DIGG'              => '顶',
     'END'               => '结束',
     'END_WITH'          => '以%s结束',
     'EQ'				            => '等于',
@@ -86,6 +88,7 @@ return array(
     'PLEASE_ENTER'      => '请输入',
     'PLEASE_SELECT'     => '请选择',
     'QUERY'             => '查询',
+    'READS'             => '阅读',
     'REALNAME'          => '真实姓名',
     'REFRESH'           => '刷新',
     'RELATIVE'          => '相对',
