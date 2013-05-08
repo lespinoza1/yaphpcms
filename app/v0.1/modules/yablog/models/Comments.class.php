@@ -177,6 +177,10 @@ class CommentsModel extends BaseModel {
             $reply = '<a href="#comment-' . $v['comment_id'] . '" rel="nofollow">@' . $v['username'] .  '</a> ';
         }
 
-        return '<p>' . (empty($reply) ? '' : $reply) . nl2br(str_replace(' ', '&nbsp;', $content), $content) . '</p>';
+        if (false !== strpos($content, 'http://') || false !== strpos($content, 'https://')) {//http 链接
+            $content = preg_replace('#(https?://[\w+-]+\.[a-z0-9]+[^"\s]*)#', '<a href="\1">\1</a>', $content);
+        }
+
+        return '<p>' . (empty($reply) ? '' : $reply) . nl2br($content) . '</p>';
     }
 }
