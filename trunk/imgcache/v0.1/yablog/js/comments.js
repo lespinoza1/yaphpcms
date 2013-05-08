@@ -82,7 +82,8 @@ function addComments() {
                 else {
                     alert(lang('SYSTEM_ERROR'));
                 }
-
+            },
+            complete: function () {
                 $body.data(BTN_SUBMIT).attr('disabled', false);
             },
             error: function (response) {
@@ -143,6 +144,7 @@ function getFormHtml() {
     html.push('        <label class="control-label"><span class="text-error">*</span>' + lang('CONTENT') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <textarea name="content" rows="3" cols="50" class="input-block-level" required></textarea>');
+    html.push('            <span class="muted">http(s)://www.abc.com/path/?querystring =&gt; <a href="http://www.abc.com/path/?querystring" rel="nofollow">http(s)://www.abc.com/path/?querystring</a></span>');
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="controls text-right">');
