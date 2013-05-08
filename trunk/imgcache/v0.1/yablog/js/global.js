@@ -230,12 +230,16 @@ function navDropdown() {
  * @return {void} 无返回值
  */
 function resetTime() {
+    var flag = 'setIntervalresetTime';
 
     $('.time-axis').each(function (index, item) {
         $(item).text(timeAxis($(item).data('time')));
     });
 
-    setInterval(resetTime, 60000);
+    if (!$body.data(flag)) {
+        $body.data(flag, true);
+        setInterval(resetTime, 60000);
+    }
 }
 
 /**
