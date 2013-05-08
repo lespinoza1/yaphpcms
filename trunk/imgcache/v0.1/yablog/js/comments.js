@@ -129,14 +129,14 @@ function getFormHtml() {
     html.push('        <label class="control-label"><span class="text-error">*</span>' + lang('USERNAME') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <input type="text" name="username" required maxlength="20" />');
-    html.push('            <span class="muted">(' + lang('LT_BYTE').replace('{0}', 20) + lang('CN_TO_BYTE') + ')</span>');
+    html.push('            <span class="muted">(' + lang('LT_BYTE').replace('{0}', 20) + ',' + lang('CN_TO_BYTE') + ')</span>');
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="control-group">');
     html.push('        <label class="control-label">' + lang('HOMEPAGE') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <input type="url" value="http://" name="user_homepage" />');
-    html.push('            <span class="muted">(' + lang('CN_XUANTIAN') + ')</span>');
+    html.push('            <span class="muted">(' + lang('CN_XUANTIAN') + ',' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="control-group">');
