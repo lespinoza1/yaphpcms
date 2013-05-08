@@ -11,10 +11,17 @@
 </head>
 <body class="hide">
 <script>
+    {if isset($guestbook)}
     var data = {echo json_encode($guestbook); };
     $.post('{BASE_SITE_URL}guestbook/add.shtml', '{echo http_build_query($guestbook[0]);}', function(data) {
         console.log(data);
     });
+    {elseif isset($digg)}
+    var data = {echo json_encode($digg); };
+    $.post('{BASE_SITE_URL}ajax/digg.shtml', '{echo http_build_query($digg);}', function(data) {
+        console.log(data);
+    });
+    {/if}
 </script>
 </body>
 </html>

@@ -116,6 +116,37 @@ class AjaxController extends BaseController {
     }
 
     /**
+     * 顶操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-08 11:51:05
+     *
+     * @return void 无返回值
+     */
+    public function diggAction() {
+        $diggs   = Filter::string('diggs');//blog,id,add_time | miniblog,id,add_time
+
+        if ($diggs) {
+            $diggs_arr = explode(',', $diggs);
+            $valid     = false;
+
+            if (3 == count($diggs_arr) && in_array($diggs_arr[0], array('miniblog', 'blog')) && ($id = intval($diggs_arr[1])) && ($add_time = intval($diggs_arr[2]))) {
+                $this->_model->execute('UPDATE ' . DB_PREFIX . $diggs_arr[0] . " SET diggs=diggs+1 WHERE blog_id={$id} AND add_time={$add_time}");
+                $valid = $this->_model->getDb()->getProperty('_num_rows');
+
+            }
+
+            $valid && $this->_ajaxReturn('.' . $diggs_arr[0] . '-diggs-' . $id);
+
+            C('LOG_FILENAME', 'ajax');
+            trigger_error($log = __METHOD__ . ',' . L('INVALID_PARAM') . var_export($diggs_arr, true), E_USER_ERROR);
+            $this->addLog($log, LOG_TYPE_INVALID_PARAM);
+        }
+
+        $this->_ajaxReturn(false);
+    }
+
+    /**
      * ajax异步获取博客,微博元数据,包括点击量,评论数等
      *
      * @author          mrmsl <msl-138@163.com>

@@ -9,12 +9,12 @@
                     <span class="actions">
                         <span class="add_time">
                             <span class="icon-time icon-gray"></span>
-                            <span class="time-axis" data-time="{$item.add_time}">{echo new_date(null, $item['add_time']);}</span>
+                            <span class="time-axis" data-time="{$miniblog_info.add_time}">{echo new_date(null, $miniblog_info['add_time']);}</span>
                         </span>
                         <a class="link hide" href="{$miniblog_info.link_url}">{L MINIBLOG,DETAIL}</a>
                         <span class="icon-zoom-in icon-gray ml-10"></span>
                         <span class="counter miniblog-hits-{$miniblog_info.blog_id}">0</span>
-                        <a href="javascript: void(0)" rel="nofollow" class="miniblog-diggs muted">
+                        <a href="javascript: void(0)" rel="nofollow" data-diggs="miniblog,{$miniblog_info.blog_id},{$miniblog_info.add_time}" class="miniblog-diggs muted">
                             <span class="icon-thumbs-up icon-gray"></span>
                             <span class="counter miniblog-diggs-{$miniblog_info.blog_id}">0</span>
                         </a>

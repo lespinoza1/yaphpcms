@@ -24,7 +24,7 @@
                             <span class="time-axis" data-time="{$item.add_time}">{echo new_date(null, $item['add_time']);}</span>
                             <span class="icon-zoom-in icon-gray ml-10"></span>
                             <span class="counter blog-hits-{$item.blog_id}">0</span>
-                            <a href="javascript: void(0)" rel="nofollow" class="blog-diggs muted">
+                            <a href="javascript: void(0)" rel="nofollow" data-diggs="blog,{$item.blog_id},{$item.add_time}" class="blog-diggs muted">
                                 <span class="icon-thumbs-up icon-gray"></span>
                                 <span class="counter blog-diggs-{$item.blog_id}">0</span>
                             </a>
