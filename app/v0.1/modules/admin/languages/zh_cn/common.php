@@ -13,6 +13,7 @@
  */
 
 return array(
+    'ADD'               => '添加',
     'AUTO'              => '自动',
     'AUTO_OPERATION'    => '自动填充',
     'BELONG_TO'         => '所属',

@@ -43,10 +43,12 @@ class IndexController extends CommonController {
     private function _getBlogs() {
         $blog_arr   = $this->_model
         ->table(TB_BLOG)
+        ->alias('b')
+        ->join(' JOIN ' . TB_CATEGORY . ' AS c ON b.cate_id=c.cate_id')
         //->where($where)
-        ->order('blog_id DESC')
+        ->order('b.blog_id DESC')
         ->limit(10)
-        ->field('blog_id,title,link_url,add_time,summary')
+        ->field('b.blog_id,b.title,b.link_url,b.add_time,b.summary,c.cate_name,c.link_url AS cate_url')
         ->select();
 
         return $blog_arr;
