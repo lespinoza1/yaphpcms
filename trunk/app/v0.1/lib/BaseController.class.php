@@ -35,7 +35,7 @@ class BaseController extends Yaf_Controller_Abstract {
     /**
      * @var bool $_init_model true实例对应模型。默认true
      */
-    protected $_init_model = false;
+    protected $_init_model = true;
     /**
      * @var string $_model_name 模型名称。默认null，对应控制器名
      */
@@ -335,7 +335,7 @@ class BaseController extends Yaf_Controller_Abstract {
                 $this->_model = D($this->_getControllerName());//模型
             }
             else {
-                $this->_model = D(empty($this->_model_name) ? 'Base' : $this->_model_name);//模型
+                $this->_model = D(empty($this->_model_name) ? 'Common' : $this->_model_name);//模型
             }
 
             $this->_model->setProperty('_module', $this);
