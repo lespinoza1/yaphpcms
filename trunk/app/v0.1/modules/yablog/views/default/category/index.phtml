@@ -43,9 +43,6 @@
                                 <span class="counter blog-comments-{$item.blog_id}">0</span>
                             </a>
                         </span>
-                        {if $item['seo_keyword']}
-                        <span class="pull-left"><span class="icon-tags icon-gray"></span> {L TAG}：{echo $me->tags($item['seo_keyword']);}</span>
-                        {/if}
                     </p>
                 </div>
                 {/foreach}
