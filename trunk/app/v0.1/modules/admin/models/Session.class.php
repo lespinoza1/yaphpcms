@@ -25,7 +25,7 @@
  * @date            2012-09-18 14:47:52
  * @lastmodify      $Date$ $Author$
  */
-class SessionModel extends BaseModel {
+class SessionModel extends CommonModel {
     /**
      * @var string $_pk_field 数据表主键字段名称。默认session_id
      */

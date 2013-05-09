@@ -26,9 +26,9 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class AdminController extends BaseController {
+class AdminController extends CommonController {
     /**
-     * @var bool $_after_exec_cache true删除后调用BaseController->_setCache()生成缓存， BaseController->delete()会用到。默认true
+     * @var bool $_after_exec_cache true删除后调用CommonController->_setCache()生成缓存， CommonController->delete()会用到。默认true
      */
     protected $_after_exec_cache   = true;
     /**
@@ -40,7 +40,7 @@ class AdminController extends BaseController {
      */
     protected $_exclude_setField_id = ADMIN_ID;
     /**
-     * @var string $_name_column 名称字段 BaseController->delete()会用到。默认username
+     * @var string $_name_column 名称字段 CommonController->delete()会用到。默认username
      */
     protected $_name_column = 'username';
     /**

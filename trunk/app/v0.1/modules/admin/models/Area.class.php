@@ -26,7 +26,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class AreaModel extends BaseModel {
+class AreaModel extends CommonModel {
     /**
      * @var array $_auto 自动填充
      */
@@ -42,7 +42,7 @@ class AreaModel extends BaseModel {
      * validate: 自动验证，支持多个验证规则
      *
      * @see Model.class.php create()方法对数据过滤
-     * @see BaseModel.class.php __construct()方法设置自动验证字段_validate
+     * @see CommonModel.class.php __construct()方法设置自动验证字段_validate
      */
     protected $_db_fields = array (
         'area_id'          => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,INVALID'),//自增主键

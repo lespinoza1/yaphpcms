@@ -12,7 +12,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class LogModel extends BaseModel {
+class LogModel extends CommonModel {
     /**
      * @var array $_auto 自动填充
      */

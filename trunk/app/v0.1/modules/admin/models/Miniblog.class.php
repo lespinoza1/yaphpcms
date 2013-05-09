@@ -12,7 +12,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class MiniblogModel extends BaseModel {
+class MiniblogModel extends CommonModel {
     /**
      * @var string $_pk_field 数据表主键字段名称。默认blog_id
      */
@@ -34,7 +34,7 @@ class MiniblogModel extends BaseModel {
      * validate: 自动验证，支持多个验证规则
      *
      * @see Model.class.php create()方法对数据过滤
-     * @see BaseModel.class.php __construct()方法设置自动验证字段_validate
+     * @see CommonModel.class.php __construct()方法设置自动验证字段_validate
      */
     protected $_db_fields = array (
         'blog_id'           => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,DATA,INVALID'),//自增主键

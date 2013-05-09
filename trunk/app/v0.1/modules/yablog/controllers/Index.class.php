@@ -26,7 +26,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class IndexController extends BaseController {
+class IndexController extends CommonController {
     /**
      * @var bool $_init_model true实例对应模型。默认true
      */

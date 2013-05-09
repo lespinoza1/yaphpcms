@@ -25,7 +25,7 @@
  * @date            2012-09-27 17:30:44
  * @lastmodify      $Date$ $Author$
  */
-class VerifycodeModel extends BaseModel {
+class VerifycodeModel extends CommonModel {
     /**
      * @var array $_db_fields 数据表主键字段名称。默认array(true)，不需要自动获取表字段
      */

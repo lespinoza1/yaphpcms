@@ -26,7 +26,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class LangController extends BaseController {
+class LangController extends CommonController {
     /**
      * @var bool $_init_model true实例对应模型。默认false
      */

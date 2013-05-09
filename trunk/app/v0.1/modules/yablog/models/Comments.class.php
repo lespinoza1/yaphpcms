@@ -12,7 +12,7 @@
  * @lastmodify      $Date: 2013-03-01 16:53:50 +0800 (周五, 01 三月 2013) $ $Author: msl-138@163.com $
  */
 
-class CommentsModel extends BaseModel {
+class CommentsModel extends CommonModel {
     /**
      * @var array $_auto 自动填充
      */

@@ -26,7 +26,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class LoginController extends BaseController {
+class LoginController extends CommonController {
     /**
      * @var bool $_auto_check_priv true自动检测权限。默认false
      */

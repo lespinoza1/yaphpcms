@@ -1,7 +1,7 @@
 <?php
 /**
  * 项目常量定义模板，修改此文件后，后台修改网站基本信息，重新生成后生效。生成对应文件为app_config.php
- * 后台自动生成，请毋修改。最后更新时间: 2013-05-04 09:10:12
+ * 后台自动生成，请毋修改。最后更新时间: 2013-05-09 17:18:32
  *
  * @file            app_config.tpl
  * @package         Yap
@@ -10,7 +10,7 @@
  * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-04 08:41:37
- * @lastmodify      2013-05-04 09:10:12
+ * @lastmodify      2013-05-09 17:18:32
  */
 
 //核心配置
@@ -27,6 +27,7 @@ define('APP_EXT'            , 'class.php');//类库文件后缀，不包括.
 define('VIEW_EXT'           , 'phtml');    //模板文件后缀，不包括.
 define('SESSION_PATH'       , SYS_APP_PATH . 'sessions/');   //session保存目录
 define('LOG_PATH'           , SYS_APP_PATH . 'logs/');       //日志目录
+define('LIB_PATH'           , SYS_APP_PATH . 'lib' . DS);//基类目录
 define('APP_PATH'           , SYS_APP_PATH . 'modules/' . APP_NAME . DS);//项目目录
 define('BOOTSTRAP_FILE'     , APP_PATH . 'Bootstrap.' . APP_EXT);//ini文件
 define('CONF_FILE'          , INCLUDE_PATH . '/application.ini');//ini文件

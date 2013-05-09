@@ -27,6 +27,7 @@ define('APP_EXT'            , 'class.php');//类库文件后缀，不包括.
 define('VIEW_EXT'           , 'phtml');    //模板文件后缀，不包括.
 define('SESSION_PATH'       , SYS_APP_PATH . 'sessions/');   //session保存目录
 define('LOG_PATH'           , SYS_APP_PATH . 'logs/');       //日志目录
+define('LIB_PATH'           , SYS_APP_PATH . 'lib' . DS);//基类目录
 define('APP_PATH'           , SYS_APP_PATH . 'modules/' . APP_NAME . DS);//项目目录
 define('BOOTSTRAP_FILE'     , APP_PATH . 'Bootstrap.' . APP_EXT);//ini文件
 define('CONF_FILE'          , INCLUDE_PATH . '/application.ini');//ini文件

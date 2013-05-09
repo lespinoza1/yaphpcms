@@ -26,9 +26,9 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class RoleController extends BaseController {
+class RoleController extends CommonController {
     /**
-     * @var bool $_after_exec_cache true删除后调用BaseController->_setCache()生成缓存， BaseController->delete()会用到。默认true
+     * @var bool $_after_exec_cache true删除后调用CommonController->_setCache()生成缓存， CommonController->delete()会用到。默认true
      */
     protected $_after_exec_cache    = true;
     /**
@@ -36,7 +36,7 @@ class RoleController extends BaseController {
      */
     protected $_exclude_delete_id   = ADMIN_ROLE_ID;
     /**
-     * @var string $_name_column 名称字段 BaseController->delete()会用到。默认role_name
+     * @var string $_name_column 名称字段 CommonController->delete()会用到。默认role_name
      */
     protected $_name_column         = 'role_name';
     /**

@@ -31,7 +31,7 @@ define('PACKER_JS_PATH'     , SYS_PATH . '/imgcache/' . VERSION_PATH . 'app/');
  * @lastmodify      $Date$ $Author$
  */
 
-class PackerController extends BaseController {
+class PackerController extends CommonController {
     /**
      * @var array $_js_file 必须加载的js文件，自动加载APP_PATH . 'include/required_js.php'
      */

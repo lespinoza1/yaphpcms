@@ -14,7 +14,7 @@
 
 !IS_LOCAL && exit('Access Denied');
 
-class TestController extends BaseController {
+class TestController extends CommonController {
     /**
      * @var bool $_init_model true实例对应模型。默认false
      */
