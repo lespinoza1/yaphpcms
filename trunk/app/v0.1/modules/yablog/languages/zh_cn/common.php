@@ -13,6 +13,7 @@
  */
 
 return array(
+    'CATEGORY'          => '分类',
     'CN_FABIAO'         => '发表',
     'CN_XUANTIAN'       => '选填',
     'CN_WANGWEN'        => '网文',

@@ -20,7 +20,11 @@
                     {$item.summary}
                     <p class="text-right muted">
                         <span class="actions">
-                            <span class="add_time">
+                            <a href="{$item.cate_url}" class="category muted">
+                                <span class="icon-book icon-gray"></span>
+                                {$item.cate_name}
+                            </a>
+                            <span class="add_time ml-10">
                                 <span class="icon-time icon-gray"></span>
                                 <span class="time-axis" data-time="{$item.add_time}">{echo new_date(null, $item['add_time']);}</span>
                             </span>

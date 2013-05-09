@@ -382,7 +382,7 @@ function setMetaInfo(data) {
  * @return {void} 无返回值
  */
 function setTitle() {
-    var arr = [['span.add_time', 'CN_FABIAO,TIME'], ['a.hits', 'READS'], ['a[data-diggs]', 'DIGG'], ['a.comments', 'COMMENTS']];
+    var arr = [['span.add_time', 'CN_FABIAO,TIME'], ['a.hits', 'READS'], ['a[data-diggs]', 'DIGG'], ['a.comments', 'COMMENTS'], ['a.category', 'CATEGORY']];
 
     $.each(arr, function(index, item) {
         $(item[0]).attr('title', lang(item[1]));
