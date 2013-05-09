@@ -182,7 +182,7 @@ function digg() {
         $.post(System.sys_base_site_url + 'ajax/digg.shtml', 'diggs=' + $(this).data('diggs'), function (data) {
 
             if (data && data.success) {
-                var el = $(data.success), diggs = el.text();
+                var el = $(data.success), diggs = $(el[0]).text();
                 el.text(intval(diggs) + 1);
             }
         });
