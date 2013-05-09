@@ -1791,7 +1791,7 @@ class Model {
      * @return mixed $this->setField()返回结果
      */
     public function setDec($field, $step = 1) {
-        return $this->setField($field, array('exp', $field . '-' . $step));
+        return $this->setField($field, array('exp', $field . '-' . $step, true));
     }
 
     /**
@@ -1828,7 +1828,7 @@ class Model {
      * @return $this->setField()返回结果
      */
     public function setInc($field, $step = 1) {
-        return $this->setField($field, array('exp', $field . '+' . $step));
+        return $this->setField($field, array('exp', $field . '+' . $step, true));
     }
 
     /**
