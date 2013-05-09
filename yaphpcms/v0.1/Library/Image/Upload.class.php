@@ -144,8 +144,15 @@ class Image_Upload extends Image_Image {
      * @return bool true在允许范围内，否则false
      */
     private function _checkMimeType() {
-        $finfo      = new finfo(FILEINFO_MIME_TYPE);
-        $mime_type  = $finfo->file($this->_uploaded_file['tmp_name']);
+
+        if (class_exists('finfo', false)) {
+            $finfo      = new finfo(FILEINFO_MIME_TYPE);
+            $mime_type  = $finfo->file($this->_uploaded_file['tmp_name']);
+        }
+        else {
+            $mime_type  = $this->_uploaded_file['type'];
+        }
+
         $this->_setFileinfo('mime_type', $mime_type);
 
         return in_array($mime_type, $this->_allow_mime_types);
