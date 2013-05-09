@@ -5144,3 +5144,13 @@ a.badge:focus {
 .pl-0 {
   padding-left: 0;
 }
+
+ul.hot-blogs {
+    background: url(../images/rank_number.png) 0 5px no-repeat;
+}
+ul.hot-blogs li {
+    height: 21px;
+    line-height: 21px;
+    padding-left: 20px;
+    overflow: hidden;
+}
