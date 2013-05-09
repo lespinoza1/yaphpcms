@@ -57,6 +57,10 @@ seajs.config({//seajs配置
         jquery: {//jquery
             src: System.sys_base_common_imgcache + 'js/jquery/jquery-1.9.1.min.js?' + _c
         },
+        tagCloud: {//标签云
+            src: System.sys_base_common_imgcache + 'js/jquery/jquery.3DTagCloud.js?' + _c,
+            deps: ['jquery']
+        },
         comments: {//留言评论
             src: System.sys_base_js_url + 'comments.js?' + _c
         }
@@ -114,8 +118,14 @@ function bootstrap() {
         });
     }
 
+    if ($('#tag-cloud')) {//标签云
+        seajs.use('tagCloud', function() {
+            $('#tag-cloud').tagCloud();
+        });
+    }
+
     $('#nav-' + NAV_ID).addClass('active');//高亮导航
-}
+}//end bootstrap
 
 /**
  * 格式化时间，类似php date函数
