@@ -25,7 +25,7 @@
  * @date            2012-12-26 15:01:44
  * @lastmodify      $Date$ $Author$
  */
-class LogModel extends BaseModel {
+class LogModel extends CommonModel {
     /**
      * @var array $_auto 自动填充
      */

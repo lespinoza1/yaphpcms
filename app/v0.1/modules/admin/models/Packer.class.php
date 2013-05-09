@@ -25,7 +25,7 @@
  * @date            2012-07-11 11:19:41
  * @lastmodify      $Date$ $Author$
  */
-class PackerModel extends BaseModel {
+class PackerModel extends CommonModel {
     /**
      * @var array $_db_fields 数据表主键字段名称。默认array(true)，不需要自动获取表字段
      */

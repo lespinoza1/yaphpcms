@@ -12,7 +12,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class CategoryModel extends BaseModel {
+class CategoryModel extends CommonModel {
     /**
      * @var string $_pk_field 数据表主键字段名称。默认cate_id
      */

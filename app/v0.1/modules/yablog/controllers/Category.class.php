@@ -12,7 +12,7 @@
  * @lastmodify      $Date: 2013-04-17 18:23:16 +0800 (周三, 17 四月 2013) $ $Author: msl-138@163.com $
  */
 
-class CategoryController extends BaseController {
+class CategoryController extends CommonController {
     /**
      * @var bool $_init_model true实例对应模型。默认false
      */

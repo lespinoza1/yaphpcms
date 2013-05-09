@@ -25,7 +25,7 @@
  * @date            2012-06-25 16:32:58
  * @lastmodify      $Date$ $Author$
  */
-class LoginModel extends BaseModel {
+class LoginModel extends CommonModel {
     /**
      * @var array $_db_fields
      * 数据表字段信息
@@ -33,7 +33,7 @@ class LoginModel extends BaseModel {
      * validate: 自动验证，支持多个验证规则
      *
      * @see Model.class.php create()方法对数据过滤
-     * @see BaseModel.class.php __construct()方法设置自动验证字段_validate
+     * @see CommonModel.class.php __construct()方法设置自动验证字段_validate
      */
     protected $_db_fields = array (
         '_verify_code' => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码

@@ -26,13 +26,13 @@
  * @date            2012-12-29 14:16:45
  * @lastmodify      $Date$ $Author$
  */
-class AreaController extends BaseController {
+class AreaController extends CommonController {
     /**
-     * @var bool $_get_children_ids true取所有子表单， BaseController->delete()会用到。默认true
+     * @var bool $_get_children_ids true取所有子表单， CommonController->delete()会用到。默认true
      */
     protected $_get_children_ids   = true;
     /**
-     * @var string $_name_column 名称字段 BaseController->delete()会用到。默认area_name
+     * @var string $_name_column 名称字段 CommonController->delete()会用到。默认area_name
      */
     protected $_name_column        = 'area_name';
     /**

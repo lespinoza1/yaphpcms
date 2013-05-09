@@ -26,13 +26,13 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class MenuController extends BaseController {
+class MenuController extends CommonController {
     /**
-     * @var bool $_get_children_ids true取所有子表单， BaseController->delete()会用到。默认true
+     * @var bool $_get_children_ids true取所有子表单， CommonController->delete()会用到。默认true
      */
     protected $_get_children_ids   = true;
     /**
-     * @var string $_name_column 名称字段 BaseController->delete()会用到。默认menu_name
+     * @var string $_name_column 名称字段 CommonController->delete()会用到。默认menu_name
      */
     protected $_name_column        = 'menu_name';
     /**

@@ -12,7 +12,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class GuestbookController extends BaseController {
+class GuestbookController extends CommonController {
     /**
      * @var bool $_init_model true实例对应模型。默认false
      */

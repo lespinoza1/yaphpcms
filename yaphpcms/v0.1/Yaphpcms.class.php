@@ -65,11 +65,19 @@ class Yaphpcms {
             YAP_PATH  . 'Driver/Db/Db' . ucfirst(DB_TYPE) . '.' . APP_EXT,//数据库驱动类
         );
 
-        if (is_file($filename = APP_PATH . 'controllers/Base.' . APP_EXT)) {//项目底层控制器类
+        if (is_file($filename = LIB_PATH . 'BaseController.' . APP_EXT)) {//底层控制器类
             $require_files[] = $filename;
         }
 
-        if (is_file($filename = APP_PATH . 'models/Base.' . APP_EXT)) {//项目底层模型类
+        if (is_file($filename = APP_PATH . 'controllers/Common.' . APP_EXT)) {//项目底层通用控制器类
+            $require_files[] = $filename;
+        }
+
+        if (is_file($filename = LIB_PATH . 'BaseModel.' . APP_EXT)) {//底层模型类
+            $require_files[] = $filename;
+        }
+
+        if (is_file($filename = APP_PATH . 'models/Common.' . APP_EXT)) {//项目底层通用模型类
             $require_files[] = $filename;
         }
 
@@ -106,7 +114,7 @@ class Yaphpcms {
      */
     private function _checkRuntimeRequirements() {
         !extension_loaded('yaf') && exit('yaf extension required!');
-        !ini_get('yaf.use_spl_autoload') && exit('yaf.use_spl_autoload=on required!');
+        !extension_loaded('mbstring') && exit('mbstring extension required!');
         !version_compare(PHP_VERSION, '5.3', '>') && exit('php5.3 or higher required!');
     }
 

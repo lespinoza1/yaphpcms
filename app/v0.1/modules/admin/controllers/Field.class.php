@@ -26,17 +26,17 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class FieldController extends BaseController {
+class FieldController extends CommonController {
     /**
-     * @var bool $_after_exec_cache true删除后调用BaseController->_setCache()生成缓存， BaseController->delete()会用到。默认true
+     * @var bool $_after_exec_cache true删除后调用CommonController->_setCache()生成缓存， CommonController->delete()会用到。默认true
      */
     protected $_after_exec_cache   = true;
     /**
-     * @var bool $_get_children_ids true取所有子表单， BaseController->delete()会用到。默认false
+     * @var bool $_get_children_ids true取所有子表单， CommonController->delete()会用到。默认false
      */
     protected $_get_children_ids   = false;
     /**
-     * @var string $_name_column 名称字段 BaseController->delete()会用到。默认field_name
+     * @var string $_name_column 名称字段 CommonController->delete()会用到。默认field_name
      */
     protected $_name_column        = 'field_name';
     /**

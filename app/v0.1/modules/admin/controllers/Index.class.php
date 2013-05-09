@@ -27,7 +27,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class IndexController extends BaseController {//继承BaseController by mrmsl on 2012-07-02 10:11:37
+class IndexController extends CommonController {//继承CommonController by mrmsl on 2012-07-02 10:11:37
     /**
      * @var bool $_auto_check_priv true自动检测权限。默认false
      */

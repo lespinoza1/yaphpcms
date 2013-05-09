@@ -26,7 +26,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class LogController extends BaseController {
+class LogController extends CommonController {
     /**
      * @var array $_priv_map 权限映射，如'delete' => 'add'删除权限映射至添加权限
      */

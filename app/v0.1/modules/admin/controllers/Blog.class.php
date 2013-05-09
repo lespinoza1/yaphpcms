@@ -12,7 +12,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class BlogController extends BaseController {
+class BlogController extends CommonController {
     /**
      * @var array $_priv_map 权限映射，如'delete' => 'add'删除权限映射至添加权限
      */

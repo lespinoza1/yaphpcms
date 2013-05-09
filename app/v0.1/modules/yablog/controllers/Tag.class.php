@@ -12,7 +12,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class TagController extends BaseController {
+class TagController extends CommonController {
     /**
      * @var bool $_init_model true实例对应模型。默认false
      */

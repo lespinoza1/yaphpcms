@@ -12,7 +12,7 @@
  * @lastmodify      $Date$ $Author$
  */
 
-class MiniblogController extends BaseController {
+class MiniblogController extends CommonController {
     /**
      * @var bool $_init_model true实例对应模型。默认true
      */
