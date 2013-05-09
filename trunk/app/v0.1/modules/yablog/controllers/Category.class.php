@@ -65,7 +65,7 @@ class CategoryController extends CommonController {
         $blog_arr   = $this->_model
         ->table($table)
         ->where($where)
-        ->order('b.blog_id')
+        ->order('b.blog_id DESC')
         ->limit($page_info['limit'])
         ->field('b.blog_id,b.title,b.link_url,b.cate_id,b.add_time,b.summary,b.seo_keyword')
         ->select();
