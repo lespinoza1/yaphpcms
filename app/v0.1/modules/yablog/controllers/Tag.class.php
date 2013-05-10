@@ -29,20 +29,20 @@ class TagController extends CommonController {
     public function indexAction() {
         $page_size  = 60;
         $total      = $this->_model
-        ->table(TB_BLOG)
-        ->alias('b')
-        ->join(' JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
+        ->table(TB_TAG)
+        //->alias('b')
+        //->join(' JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
         //->where($where)
-        ->count('DISTINCT t.tag');
+        ->count('DISTINCT tag');
         $page_info      = Filter::page($total, 'page', $page_size);
         $page           = $page_info['page'];
         $page_one       = $page < 2;
         $tag_arr        = $this->_model
-        ->table(TB_BLOG)
-        ->alias('b')
-        ->join(' JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
-        ->order('t.searches DESC')
-        ->field('DISTINCT t.tag')
+        ->table(TB_TAG)
+        //->alias('b')
+        //->join(' JOIN ' . TB_TAG . ' AS t ON b.blog_id=t.blog_id')
+        ->order('searches DESC')
+        ->field('DISTINCT `tag`')
         ->limit($page_info['limit'])
         ->select();
 
