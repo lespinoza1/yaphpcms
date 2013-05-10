@@ -6,10 +6,9 @@
     <?php echo $css_file, $js_file; ?>
     <script type="text/javascript" src="<?php echo ADMIN_IMGCACHE; ?>app/util/override.js"></script>
     <script type="text/javascript">
-        System.sys_base_admin_entry = '<?php echo WEB_ADMIN_ENTRY; ?>';
         var LOGIN;
         var VERIFYCODE_ENALBE = {
-            module_admin: <?php echo get_verifycode_setting('module_admin', 'enable');?>//后台入口
+            module_admin: <?php echo get_verifycode_setting('module_admin', 'enable');?>
         };//是否开启登陆验证码 by mashanling on 2012-09-29 11:31:47;
 
         Ext.onReady(function(){
