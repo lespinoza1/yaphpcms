@@ -126,20 +126,19 @@ class BaseController extends Yaf_Controller_Abstract {
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-04-12 15:01:54
      *
-     * @param string $dir      保存路径
-     * @param string $filename 文件名
+     * @param string $filename 文件路径
      * @param string $content  文件内容
      *
      * @return void 无返回值
      */
-    protected function _buildHtml($dir, $filename, $content) {
-        !is_dir($dir) && mkdir($dir, 0755, true);
+    protected function _buildHtml($filename, $content) {
+        new_mkdir(dirname($filename));
 
-        file_put_contents($dir . $filename, $content);
+        file_put_contents($filename, $content);
     }
 
     /**
-     * 渲染模板
+     * 渲染模板并输出
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-04-06 17:32:39
@@ -151,8 +150,24 @@ class BaseController extends Yaf_Controller_Abstract {
      * @return void 无返回值
      */
     protected function _display($controller = MODULE_NAME, $action = ACTION_NAME, $cache_id = '') {
-        $this->_getViewTemplate()
-        ->display($controller ? $controller : MODULE_NAME, $action ? $action : ACTION_NAME, $cache_id);
+        echo $this->_fetch($controller, $action, $cache_id);
+    }
+
+    /**
+     * 渲染模板
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 08:49:33
+     *
+     * @param string $controller 控制器。默认MODULE_NAME
+     * @param string $action     操作方法。默认MODULE_NAME
+     * @param string $cache_id   缓存标识。默认''
+     *
+     * @return void 无返回值
+     */
+    protected function _fetch($controller = MODULE_NAME, $action = ACTION_NAME, $cache_id = '') {
+        return $this->_getViewTemplate()
+        ->fetch($controller ? $controller : MODULE_NAME, $action ? $action : ACTION_NAME, $cache_id);
     }
 
     /** 获取表数据缓存
@@ -259,15 +274,15 @@ class BaseController extends Yaf_Controller_Abstract {
         if (!$this->_view_template) {
             $this->_view_template = Template::getInstance();
             $this->_view_template->assign(sys_config())
-            ->assign('L', L())
-            ->assign('C', C())
+            //->assign('L', L())
+            //->assign('C', C())
             ->assign('me', $this)
             ->assign('nav_id', strtolower(CONTROLLER_NAME));
         }
 
         if (null !== $config) {//属性
 
-            if ('build_html' === $config && IS_LOCAL) {//生成静态页
+            if ('build_html' === $config) {//生成静态页
                 $config = array(
                     '_caching'          => false,
                     '_force_compile'    => false,
