@@ -18,7 +18,10 @@
             </div>
             <div class="panel-body">
                 <!--start 网文-->
+                {if $blog_arr}
+
                 {php $meta_info_arr = array('blog' => ''); }
+
                 {foreach $blog_arr $item}
                 {php $meta_info_arr['blog'] .= ',' . $item['blog_id'] . '|' . $item['add_time'];}
                 <div class="panel-list">
@@ -48,6 +51,7 @@
                 {/foreach}
 
                 {$paging}
+                {/if}
                 <!--end 网文-->
             </div>
         </div><!--end span9-->
