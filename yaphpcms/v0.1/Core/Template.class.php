@@ -220,7 +220,7 @@ class Template {
         $compile_dir   = $this->_compile_path . $controller . '/';
         $compile_file  = $compile_dir . $action . '.php';
 
-        !is_dir($compile_dir) && mkdir($compile_dir, 0755, true);
+        new_mkdir($compile_dir);
 
         if (!is_file($template_file)) {
             throw new Exception(L('_TEMPLATE_NOT_EXIST_') . "($template_file)");
@@ -325,7 +325,7 @@ class Template {
         if (!$this->_force_compile && $this->_caching) {//缓存
             $cache_dir = $this->_cache_path . $controller . '/';
 
-            !is_dir($cache_dir) && mkdir($cache_dir, 0755, true);
+            new_mkdir($cache_dir);
 
             $cache_file = $cache_dir . $action . ($cache_id ? $cache_id : $this->_cache_id) . C('HTML_SUFFIX');
 

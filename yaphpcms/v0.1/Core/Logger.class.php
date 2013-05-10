@@ -121,7 +121,7 @@ class Logger {
                 $log_path = TODAY_LOG_PATH;
             }
             else {
-                !is_dir($log_path = LOG_PATH . new_date('Y/md/')) && mkdir($log_path, 0755, true);
+                new_mkdir($log_path = LOG_PATH . new_date('Y/md/'));
                 define('TODAY_LOG_PATH', $log_path);
             }
 

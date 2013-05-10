@@ -230,7 +230,7 @@ function F($name, $value = '', $path = CACHE_PATH, $reload = false) {
         else {//缓存数据
             $dir = dirname($filename);
 
-            !is_dir($dir) && mkdir($dir, 0755, true);//目录不存在则创建
+            new_mkdir($dir);//目录不存在则创建
 
             $_cache[$name] = $value;
 
