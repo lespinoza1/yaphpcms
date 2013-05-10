@@ -5163,3 +5163,7 @@ ul.hot-blogs li {
 #tag-cloud li{
     position: absolute;
 }
+
+.new_comments .media { margin-top: 5px; }
+.new_comments p { margin-bottom: 0; }
+.new_comments a { color: #333; }
