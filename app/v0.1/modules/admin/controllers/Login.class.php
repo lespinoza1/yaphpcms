@@ -49,6 +49,7 @@ class LoginController extends CommonController {
         $js_file  .= js('', true, COMMON_IMGCACHE . 'extjs/v4.1.1a/');
         $js_file  .= $this->_loadTimeScript('LOAD_EXT_TIME');
         $js_file  .= js('System.js,lang/' . APP_NAME . '.' . LANG . '.js' . ('en' != LANG ? ',lang/ext-lang-' . LANG . '.js' : ''), false, '/static/js/');
+        $js_file  .= js('System.sys_base_admin_entry = "' . WEB_ADMIN_ENTRY . '"', 'script');//后台入口
 
         if (IS_LOCAL) {
             $js_file .= js('util/common.js,util/Yap.Field.js,ux/Yap.ux.Form.js,controller/Yap.controller.Base.js,controller/Yap.controller.Login.js', false, ADMIN_IMGCACHE . 'app/');

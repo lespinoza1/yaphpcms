@@ -63,6 +63,7 @@ class IndexController extends CommonController {//继承CommonController by mrms
         $js_file  .= js('', true, COMMON_IMGCACHE . 'extjs/v4.1.1a/');
         $js_file  .= $this->_loadTimeScript('LOAD_EXT_TIME');
         $js_file  .= js('System.js', false, '/static/js/');
+        $js_file  .= js('System.sys_base_admin_entry = "' . WEB_ADMIN_ENTRY . '"', 'script');//后台入口
         $js_file  .= js(APP_NAME . '.' . LANG . '.js', false, '/static/js/lang/') .
         //ext语言包
         ('en' != LANG ? js('ext-lang-' . LANG . '.js', false, '/static/js/lang/') : '');
