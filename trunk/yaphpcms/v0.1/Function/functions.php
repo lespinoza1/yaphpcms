@@ -1006,6 +1006,100 @@ function clear_verifycoe($module) {
 }
 
 /**
+ * 截取字符串,适用中文,摘自网络,discuz uchome
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-09 15:06:16
+ *
+ * @param string $string   待截取字符
+ * @param int    $length   截取字符数
+ * @param string $dot      省略字符,默认...
+ * @param string $encoding 编码,默认utf-8
+ *
+ * @return string 截取后的字符串
+ */
+function cn_substr($string, $length, $dot = '...', $encoding = 'utf-8') {
+    $string = trim($string);
+    $len    = strlen($string);
+
+    if ($len > $length) {//截断字符
+        $word_cut = '';
+
+        if ('utf-8' == strtolower($encoding)) { //utf8编码
+            $n      = 0;
+            $tn     = 0;
+            $noc    = 0;
+
+            while ($n < $len) {
+                $t = ord($string[$n]);
+
+                if ($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
+                    $tn = 1;
+                    $n++;
+                    $noc++;
+                }
+                elseif (194 <= $t && $t <= 223) {
+                    $tn     = 2;
+                    $n     += 2;
+                    $noc   += 2;
+                }
+                elseif (224 <= $t && $t < 239) {
+                    $tn     = 3;
+                    $n     += 3;
+                    $noc   += 2;
+                }
+                elseif (240 <= $t && $t <= 247) {
+                    $tn     = 4;
+                    $n     += 4;
+                    $noc   += 2;
+                }
+                elseif (248 <= $t && $t <= 251) {
+                    $tn     = 5;
+                    $n     += 5;
+                    $noc   += 2;
+                }
+                elseif ($t == 252 || $t == 253) {
+                    $tn     = 6;
+                    $n     += 6;
+                    $noc   += 2;
+                }
+                else {
+                    $n++;
+                }
+
+                if ($noc >= $length) {
+                    break;
+                }
+
+            }
+
+            if ($noc > $length) {
+                $n -= $tn;
+            }
+
+            $word_cut = substr($string, 0, $n);
+        }
+        else {
+
+            for ($i = 0; $i < $length - 1; $i++) {
+
+                if (ord($string[$i]) > 127) {
+                    $word_cut .= $string[$i] . $string[$i + 1];
+                    $i++;
+                }
+                else {
+                    $word_cut .= $string[$i];
+                }
+            }
+        }
+
+        $string = $word_cut;
+    }
+
+    return trim($string);
+}
+
+/**
  * 获取php文件内容，并去掉注释及空白
  *
  * @author          mrmsl <msl-138@163.com>
@@ -1109,6 +1203,36 @@ function new_date($format = null, $time = null) {
  */
 function new_mkdir($path, $mode = 0755) {
     return is_dir($path) ? true : mkdir($path, $mode, true);
+}
+
+/**
+ * mb_substr截取字符串
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-10 11:46:01
+ *
+ * @param string $string   待截取字符
+ * @param int    $length   截取字符数
+ * @param int    $start    开始位置.默认0
+ * @param string $dot      省略字符,默认...
+ * @param string $encoding 编码,默认utf-8
+ *
+ * @return string 截取后的字符串
+ */
+function new_mb_substr($string, $length, $start = 0, $dot = '...', $encoding = 'utf-8') {
+    $string = strip_tags($string);
+
+    if ($length >= mb_strlen($string, $encoding)) {
+        return $string;
+    }
+
+    $string = htmlspecialchars_decode($string, ENT_QUOTES);
+    $string = str_replace('&nbsp;', ' ', $string);
+    $string = mb_substr($string, $start, $length, $encoding);
+    $string = htmlspecialchars($string, ENT_QUOTES);
+    $string = str_replace(' ', '&nbsp;', $string);
+
+    return $string . $dot;
 }
 
 /**
