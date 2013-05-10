@@ -1,7 +1,7 @@
 <?php
 /**
  * 项目常量定义模板，修改此文件后，后台修改网站基本信息，重新生成后生效。生成对应文件为app_config.php
- * 后台自动生成，请毋修改。最后更新时间: 2013-05-09 17:18:32
+ * 后台自动生成，请毋修改。最后更新时间: 2013-05-10 09:10:27
  *
  * @file            app_config.tpl
  * @package         Yap
@@ -10,7 +10,7 @@
  * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-04 08:41:37
- * @lastmodify      2013-05-09 17:18:32
+ * @lastmodify      2013-05-10 09:10:27
  */
 
 //核心配置
@@ -35,6 +35,7 @@ define('CACHE_PATH'         , SYS_APP_PATH . 'caches/');     //缓存目录
 define('MODULE_CACHE_PATH'  , CACHE_PATH . 'modules/');     //系统模块信息缓存目录
 define('LANG_PATH'          , APP_PATH . 'languages/');     //项目语言包目录
 define('VIEW_PATH'          , APP_PATH . 'views/');         //模板目录
+define('SSI_PATH'           , WWWROOT . 'ssi/');         //ssi服务器端包含目录
 define('APP_FORWARD'        , 'APP_FORWARD');               //Yaf_Controller_Abstract::forward标识
 
 //博客设置

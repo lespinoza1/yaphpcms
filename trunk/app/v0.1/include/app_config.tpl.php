@@ -35,6 +35,7 @@ define('CACHE_PATH'         , SYS_APP_PATH . 'caches/');     //缓存目录
 define('MODULE_CACHE_PATH'  , CACHE_PATH . 'modules/');     //系统模块信息缓存目录
 define('LANG_PATH'          , APP_PATH . 'languages/');     //项目语言包目录
 define('VIEW_PATH'          , APP_PATH . 'views/');         //模板目录
+define('SSI_PATH'           , WWWROOT . 'ssi/');         //ssi服务器端包含目录
 define('APP_FORWARD'        , 'APP_FORWARD');               //Yaf_Controller_Abstract::forward标识
 
 //博客设置

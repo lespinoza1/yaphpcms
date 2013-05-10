@@ -197,7 +197,7 @@ class CategoryController extends CommonController {
             $this->_ajaxReturn(false, L('CREATE_CATEGORY_CACHE,FAILURE'), 'EXIT');
         }
 
-        new_mkdir($ssi_path = WWWROOT . 'ssi/category/');
+        new_mkdir($ssi_path = SSI_PATH . 'category/');
 
         foreach($data as $v) {//生成分类ssi导航
             $html = '';
