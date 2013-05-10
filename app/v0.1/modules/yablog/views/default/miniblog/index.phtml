@@ -10,12 +10,17 @@
                 {L MINIBLOG}
             </div>
             <div class="panel-body">
+                {if $blog_arr}
+
                 {php $meta_info_arr = array('miniblog' => ''); }
+
                 {foreach $blog_arr $miniblog_info}
                 {php $meta_info_arr['miniblog'] .= ',' . $miniblog_info['blog_id'] . '|' . $miniblog_info['add_time'];}
                 {template 'include', 'miniblog-tpl'}
                 {/foreach}
+
                 {$paging}
+                {/if}
             </div>
         </div><!--end span9-->
         <div class="span3">
