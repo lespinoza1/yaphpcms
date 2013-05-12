@@ -54,6 +54,21 @@ Ext.define('Yap.controller.Log', {
     },
 
     constructor: function() {//构造函数
+        global('SYSTEM_LOG_ARR', [
+            [lang('LOG_TYPE_ALL'), lang('ALL,LOG')],
+            [lang('LOG_TYPE_ADMIN_OPERATE'), lang('ADMIN_LOG')],
+            [lang('LOG_TYPE_SQL_ERROR'), lang('SQL_ERROR')],
+            [lang('LOG_TYPE_SYSTEM_ERROR'), lang('SYSTEM,ERROR')],
+            [lang('LOG_TYPE_NO_PERMISSION'), lang('NOT_HAS,PERMISSION')],
+            [lang('LOG_TYPE_INVALID_PARAM'), lang('INVALID_PARAM')],
+            [lang('LOG_TYPE_ADMIN_LOGIN_INFO'), lang('ADMIN_LOGIN_LOG')],
+            [lang('LOG_TYPE_CRONTAB'), lang('CRONTAB')],
+            [lang('LOG_TYPE_VALIDATE_FORM_ERROR'), lang('VALIDATE_FORM_ERROR')],
+            [lang('LOG_TYPE_VERIFYCODE_ERROR'), lang('VERIFYCODE_ERROR')],
+            [lang('LOG_TYPE_LOAD_SCRIPT_TIME'), lang('LOG_TYPE_LOAD_SCRIPT_TIME')],
+            [lang('LOG_TYPE_SLOWQUERY'), lang('SLOWQUERY')],
+            [lang('LOG_TYPE_ROLLBACK_SQL'), lang('ROLLBACK_SQL')],
+        ]),
         this.defineModel().defineStore();
     },
 

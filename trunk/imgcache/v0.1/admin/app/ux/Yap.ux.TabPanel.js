@@ -45,7 +45,7 @@ Ext.define('Yap.ux.TabPanel', {
      */
    tabItems: function() {
         var controller = this.controller.getControllerName();
-        var data = eval(lang(controller + '_TAB_ARR'));
+        var data = global(controller + '_TAB_ARR') || eval(lang(controller + '_TAB_ARR'));
         var items = [];
 
         Ext.each(data, function(item) {
