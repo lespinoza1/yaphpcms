@@ -33,8 +33,9 @@ Ext.define('Yap.controller.Blog', {
         options = {
             listeners: {
                 submitsuccess: function (form, action) {
-                    form.findField('cate_name').setValue(form.findField('_picker_cate_name').rawValue);
-                    me._listgrid && form.findField(me.idProperty).getValue() == 0 && me.store().load();//新增
+                    //form.findField('cate_name').setValue(form.findField('_picker_cate_name').rawValue);
+                    //me._listgrid && form.findField(me.idProperty).getValue() == 0 && me.store().load();//新增
+                     me.store().load();
                 }
             }
         };
