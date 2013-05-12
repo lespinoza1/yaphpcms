@@ -918,6 +918,7 @@ function check_verifycode($code, $module) {
 
     if (!$verifycode_setting['case']) {//不区分大小写
         $code    = strtolower($code);
+        $session = strtolower($session);
     }
 
     if ($verifycode_order) {
