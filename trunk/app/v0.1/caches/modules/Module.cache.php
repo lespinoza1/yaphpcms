@@ -1,8 +1,9 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-02-17 12:17:21
+//最后更新时间:2013-05-13 12:49:37
 
 return array (
+  'module_admin_verifycode_case' => '1',
   'module_admin_verifycode_enable' => '1',
   'module_admin_verifycode_error_limit' => '',
   'module_admin_verifycode_height' => '20',

@@ -20,13 +20,14 @@ class CommentsModel extends CommonModel {
         'add_time'          => 'time#insert',
         'last_reply_time'   => 'time#insert',
         'user_ip'           => 'get_client_ip#1',
-        'content'           => '_setContent'
+        'content'           => '_setContent',
+        'status'            => '_setStatus',
     );
     /**
      * @var array $_db_fields 表字段
      */
-    protected $_db_fields = array ('status' => null,
-        'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENT'),//父id
+    protected $_db_fields = array (
+        'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENTS'),//父id
         //用户名
         'username'       => array('validate' => array('notblank#USERNAME', '_checkLength#USERNAME#value|0|20')),
         'content'        => array('validate' => array('notblank#CONTENT')),
@@ -37,8 +38,9 @@ class CommentsModel extends CommonModel {
         'node'           => array('filter' => 'int', 'validate' => array('_checkLength#NODE,DATA#value|0')),
         'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50')),
         'user_pic'       => array('filter' => 'url', 'validate' => array('_checkLength#USER_PIC,DATA#value|0')),
-        'type'           => array('filter' => 'int', 'validate' => array(array('0,1,2', '{%INVALID_PARAM,TYPE}', Model::MUST_VALIDATE, 'in'))),
-        'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id
+        'status'         => array('filter' => 'int', 'validate' => array('_checkLength#STATUS,DATA#value|0')),
+        'type'           => array('filter' => 'int', 'validate' => array('_checkType#INVALID_PARAM,TYPE')),
+        'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id ,调用C('T_TYPE')放于type后面
     );
     /**
      * @var string $_pk_field 数据表主键字段名称。默认log_id
@@ -61,15 +63,15 @@ class CommentsModel extends CommonModel {
      */
     protected function _checkBlog($blog_id) {
         $table  = array(
-            0 => TB_GUESTBOOK,
-            1 => TB_BLOG,
-            2 => TB_MINIBLOG,
+            COMMENT_TYPE_GUESTBOOK  => TB_GUESTBOOK,
+            COMMENT_TYPE_BLOG       => TB_BLOG,
+            COMMENT_TYPE_MINIBLOG   => TB_MINIBLOG,
         );
 
-        if (!isset($table[$type = Filter::int('type')])) {
+        if (!isset($table[$type = C('T_TYPE')])) {
             return false;
         }
-        elseif (0 == $type) {//留言,blog_id=0
+        elseif (COMMENT_TYPE_GUESTBOOK == $type) {//留言,blog_id=0
             return !$blog_id;
         }
 
@@ -112,6 +114,26 @@ class CommentsModel extends CommonModel {
     }
 
     /**
+     * 验证评论类型
+     *
+     * @author      mrmsl <msl-138@163.com>
+     * @date        2013-05-13 13:34:24
+     *
+     * @param int $type 类型
+     *
+     * @return bool true验证成功,否则false
+     */
+    protected function _checkType($type) {
+
+        if (in_array($type, array(COMMENT_TYPE_GUESTBOOK, COMMENT_TYPE_BLOG, COMMENT_TYPE_MINIBLOG))) {
+            C('T_TYPE', $type);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 插入后置操作，向留言表增加刚插入id
      *
      * @author          mrmsl <msl-138@163.com>
@@ -137,7 +159,7 @@ class CommentsModel extends CommonModel {
                 $parent_id = $node_arr[3];//父级id取第四个
             }
 
-            $data = array('status' => 1,
+            $data = array(
                 'level'          => $parent_info['level'] + 1,//层级
                 'node'           => $parent_info['node'] . ',' . $pk_value,//节点关系
             );
@@ -151,7 +173,7 @@ class CommentsModel extends CommonModel {
         }
         else {
 
-            $data = array('status' => 1,
+            $data = array(
                 'node'           =>  $pk_value,
             );
 
@@ -169,7 +191,7 @@ class CommentsModel extends CommonModel {
      *
      * @param string $content 内容
      *
-     * @return html化后的内容
+     * @return string html化后的内容
      */
     protected function _setContent($content) {
 
@@ -182,5 +204,25 @@ class CommentsModel extends CommonModel {
         }
 
         return '<p>' . (empty($reply) ? '' : $reply) . nl2br($content) . '</p>';
+    }
+
+    /**
+     * 设置评论留言状态
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-13 13:46:17
+     *
+     * @param int $status 状态
+     *
+     * @return int 状态
+     */
+    protected function _setStatus() {
+        $type = C('T_TYPE');
+
+        if (COMMENT_TYPE_GUESTBOOK == $type) {
+            return sys_config('module_guestbook_check', 'Module');
+        }
+
+        return 0;
     }
 }
