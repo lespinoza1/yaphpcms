@@ -3,6 +3,22 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES */;
 /*!40103 SET SQL_NOTES='ON' */;
 
+DROP TABLE IF EXISTS `tb_menu`;
+CREATE TABLE `tb_menu` (
+  `menu_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
+  `menu_name` char(30) NOT NULL DEFAULT '' COMMENT '菜单名称',
+  `controller` char(20) NOT NULL DEFAULT '' COMMENT '控制器',
+  `action` char(20) NOT NULL DEFAULT '' COMMENT '操作',
+  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否显示',
+  `sort_order` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
+  `node` char(20) NOT NULL DEFAULT '' COMMENT '节点',
+  `memo` char(60) NOT NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`menu_id`),
+  KEY `controller` (`controller`),
+  KEY `action` (`action`)
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=gbk COMMENT='后台管理菜单表 by mashanling on 2012-12-27 12:44:04';
 
 INSERT INTO `tb_menu` VALUES (1,24,'菜单管理','menu','#',1,0,2,'24,1','');
 INSERT INTO `tb_menu` VALUES (2,1,'添加菜单','menu','add',1,1,3,'24,1,2','');
@@ -64,6 +80,9 @@ INSERT INTO `tb_menu` VALUES (92,85,'评论管理','comment','list',1,92,2,'85,9
 INSERT INTO `tb_menu` VALUES (93,85,'微博管理','miniblog','#',1,93,2,'85,93','');
 INSERT INTO `tb_menu` VALUES (94,93,'微博列表','miniblog','list',1,94,3,'85,93,94','');
 INSERT INTO `tb_menu` VALUES (95,93,'添加微博','miniblog','add',1,95,3,'85,93,95','');
+INSERT INTO `tb_menu` VALUES (96,24,'ssi管理','ssi','#',1,96,2,'24,96','');
+INSERT INTO `tb_menu` VALUES (97,96,'ssi列表','ssi','list',1,97,3,'24,96,97','');
+INSERT INTO `tb_menu` VALUES (98,96,'添加ssi','ssi','add',1,98,3,'24,96,98','');
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
