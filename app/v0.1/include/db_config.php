@@ -40,3 +40,4 @@ define('TB_BLOG_COMMENTS'      , TB_PREFIX . 'blog_comments');    //博客评论
 define('TB_MINIBLOG'           , TB_PREFIX . 'miniblog');       //微博表 by mrmsl on 2013-03-23 13:31:57
 define('TB_MINIBLOG_COMMENTS'  , TB_PREFIX . 'miniblog_comments');//微博评论表 by mrmsl on 2013-03-23 13:32:00
 define('TB_TAG'                , TB_PREFIX . 'tag');            //标签表 by mrmsl on 2013-03-21 14:48:58
+define('TB_SSI'                , TB_PREFIX . 'ssi');            //ssi服务器端包含 by mrmsl on 2013-05-13 15:41:04

@@ -287,6 +287,18 @@ CREATE TABLE `tb_tag` (
   FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='标签表 by mashanling on 2013-03-22 17:07:22';
 
+/*tb_ssi服务器端包含表*/
+CREATE TABLE `tb_ssi` (
+  `ssi_id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `tpl_name` char(30) NOT NULL DEFAULT '' COMMENT '模板文件名，不包括后缀',
+  `ssi_name` char(30) NOT NULL DEFAULT '' COMMENT '生成ssi文件名，不包括后缀',
+  `last_build_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后生成时间',
+  `sort_order` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '排序,越小越靠前',
+  `memo` char(60) NOT NULL DEFAULT '' COMMENT '锁定备注',
+  PRIMARY KEY (`ssi_id`),
+  UNIQUE KEY `tpl_name` (`tpl_name`),
+  UNIQUE KEY `ssi_name` (`ssi_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='tb_ssi服务器端包含表 by mashanling on 2013-05-13 15:17:18';
 
 /*外键约束*/
 
