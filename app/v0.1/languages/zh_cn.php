@@ -31,6 +31,7 @@ return array(
     'CN_YI'             => '已',//by mrmsl on 2012-09-15 11:19:23
     'CN_YOU'            => '由',
     'CN_YUAN'           => '原',
+    'COMMENT'           => '评论',
     'COMMENTS'          => '评论',
     'CONFIRM_PASSWORD'  => '确认密码',
     'CONSTRAIN_LENGTH'  => '%s长度应控制在%d到%d个字符之间',
@@ -116,6 +117,7 @@ return array(
     'TOTAL_NUM'         => '总数',
     'TURN_ON'           => '开启',
     'TRY'               => '尝试',
+    'TYPE'              => '类型',
     'UPDATE'            => '更新',
     'USE'               => '使用',
     'USER'              => '用户',

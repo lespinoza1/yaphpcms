@@ -19,7 +19,7 @@ CREATE TABLE `tb_field` (
   `customize_1` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '自定义字段1(系统设置:0,不写js;1则写) by mashanling on 2012-09-04 18:07:32',
   PRIMARY KEY (`field_id`),
   UNIQUE KEY `menu_id` (`menu_id`,`input_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=gbk COMMENT='表单域表 by mashanling on 2012-12-27 11:37:21';
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=gbk COMMENT='表单域表 by mashanling on 2012-12-27 11:37:21';
 
 INSERT INTO `tb_field` VALUES (4,76,'安全设置','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','string','','sys_security_setting','安全设置',0,0,'',0);
 INSERT INTO `tb_field` VALUES (7,43,'网站域名','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_base_domain','www.yaphpcms.com',1,0,'',1);
@@ -92,6 +92,7 @@ INSERT INTO `tb_field` VALUES (76,71,'事务回滚SQL是否入库','extField.che
 INSERT INTO `tb_field` VALUES (77,43,'imgcache common地址','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\', {width: 300}],\n    lang(\'END_WITH\').replace(\'%s\',\'\"<span class=\"font-red\">/</span>\"\')\n]])','url\n#{%PLEASE_ENTER,CORRECT,FORMAT,CN_DE,@field_name}#MUST_VALIDATE#notblank\nvalidate_path','','sys_base_common_imgcache','http://imgcache.yaphpcms.com/common/',1,15,'',1);
 INSERT INTO `tb_field` VALUES (78,43,'后台imgcache地址','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\', {width: 300}],\n    lang(\'END_WITH\').replace(\'%s\',\'\"<span class=\"font-red\">/</span>\"\')\n]])','url\n#{%PLEASE_ENTER,CORRECT,FORMAT,CN_DE,@field_name}#MUST_VALIDATE#notblank\nvalidate_path','','sys_base_admin_imgcache','http://imgcache.yaphpcms.com/v0.1/admin/',1,15,'',1);
 INSERT INTO `tb_field` VALUES (79,43,'后台管理入口','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\'],\n    lang(\'RELATIVE,WEBSITE,WWWROOT,OR\') + \'http://\' + lang(\'ABSOLUTE,ADDRESS\')\n]])','string\nnotblank','','sys_base_admin_entry','admin.php',1,2,'',0);
+INSERT INTO `tb_field` VALUES (80,84,'留言是否需要审核','extField.checkbox(\'@input_name\',\'@value\', \'%@fieldLabel\')','int','_getCheckboxValue','module_guestbook_check','1',1,22,'',0);
 
 ALTER TABLE `tb_field`
 ADD CONSTRAINT `tb_field_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE;
