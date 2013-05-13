@@ -325,7 +325,7 @@ Ext.define('Yap.controller.Admin', {
                  * @return {void} 无返回值
                  */
                 change: function(grid, pageData) {
-                    if (!isNaN(pageData.pageCount) && this.changed) {//保证经过beforechange
+                    if (pageData && !isNaN(pageData.pageCount) && this.changed) {//保证经过beforechange
                         data = {
                             page: pageData.currentPage,
                             sort: data.sort,
