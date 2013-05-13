@@ -63,22 +63,105 @@ class SsiController extends CommonController {
     }//end _categoryNav
 
     /**
-     * 生成成功
+     * 底部
      *
      * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-13 16:07:14
+     * @date            2013-05-10 13:30:10
      *
-     * @param int $ssi_id ssi_id
+     * @param array $info ssi信息
      *
      * @return void 无返回值
      */
-    private function _successAction($ssi_id) {
-        $ssi_id && $this->_model->save(array($this->_pk_field => $ssi_id, 'last_build_time' => time()));
+    private function _footer($info) {
+        $this->_getViewTemplate('build_html')->assign('footer', sys_config('sys_base_copyright'));
+        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_successAction($info['ssi_id']);
+    }
 
-        if ('all' != ACTION_NAME || !$ssi_id) {
-            $this->_model->addLog(L('BUILD_SSI') . ',' . ACTION_NAME, LOG_TYPE_ADMIN_OPERATE);
-            $this->_setCache()->_ajaxReturn(true, L('BUILD_SSI,SUCCESS'));
-        }
+    /**
+     * 热门网文
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 10:59:29
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _hot_blogs($info) {
+        $blogs = $this->_model
+        ->table(TB_BLOG)
+        ->order('hits DESC')
+        ->where('is_issue=1 AND is_delete=0')
+        ->field('link_url,title')
+        ->limit(10)
+        ->select();
+        $this->_getViewTemplate('build_html')->assign('blogs', $blogs);
+        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_successAction($info['ssi_id']);
+    }
+
+    /**
+     * 导航条
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 08:33:53
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _navbar($info) {
+        $this->_getViewTemplate('build_html')->assign('category_html', $this->_categoryNav());
+        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_successAction($info['ssi_id']);
+    }
+
+    /**
+     * 最新评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 10:38:39
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _new_comments($info) {
+        $comments = $this->_model
+        ->table(TB_COMMENTS)
+        ->alias('c')
+        ->join(' LEFT JOIN ' . TB_BLOG . ' AS b ON c.blog_id=b.blog_id AND b.is_issue=1 AND b.is_delete=0')
+        ->where('c.status=1 AND c.type!=2')
+        ->order('c.comment_id DESC')
+        ->field('c.*,b.link_url,b.title')
+        ->limit(10)
+        ->select();
+        $this->_getViewTemplate('build_html')->assign('comments', $comments);
+        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_successAction($info['ssi_id']);
+    }
+
+    /**
+     * 标签云
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 10:38:39
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _tags($info) {
+        $tags = $this->_model
+        ->table(TB_TAG)
+        ->order('searches DESC')
+        ->field('DISTINCT `tag`')
+        ->limit(50)
+        ->select();
+        $this->_getViewTemplate('build_html')->assign('tags', $tags);
+        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_successAction($info['ssi_id']);
     }
 
     /**
@@ -100,6 +183,25 @@ class SsiController extends CommonController {
         }
 
         return $data;
+    }
+
+    /**
+     * 生成成功
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-13 16:07:14
+     *
+     * @param int $ssi_id ssi_id
+     *
+     * @return void 无返回值
+     */
+    private function _successAction($ssi_id) {
+        $ssi_id && $this->_model->save(array($this->_pk_field => $ssi_id, 'last_build_time' => time()));
+
+        if ('all' != ACTION_NAME || !$ssi_id) {
+            $this->_model->addLog(L('BUILD_SSI') . ',' . ACTION_NAME, LOG_TYPE_ADMIN_OPERATE);
+            $this->_setCache()->_ajaxReturn(true, L('BUILD_SSI,SUCCESS'));
+        }
     }
 
     /**
@@ -165,7 +267,7 @@ class SsiController extends CommonController {
         if ($data = $this->_getCache()) {
 
             foreach($data as $item) {
-                $method = $item['tpl_name'] . 'Action';
+                $method = '_' . $item['tpl_name'];
 
                 if (method_exists($this, $method)) {
                     $this->$method($item);
@@ -178,22 +280,6 @@ class SsiController extends CommonController {
         }
 
         $this->_successAction(0);
-    }
-
-    /**
-     * 底部
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 13:30:10
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    public function footerAction($info) {
-        $this->_getViewTemplate('build_html')->assign('footer', sys_config('sys_base_copyright'));
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
-        $this->_successAction($info['ssi_id']);
     }
 
     /**
@@ -215,91 +301,5 @@ class SsiController extends CommonController {
         }
 
         $this->_ajaxReturn(true, '', $data);
-    }
-
-    /**
-     * 热门网文
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 10:59:29
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    public function hot_blogsAction($info) {
-        $blogs = $this->_model
-        ->table(TB_BLOG)
-        ->order('hits DESC')
-        ->where('is_issue=1 AND is_delete=0')
-        ->field('link_url,title')
-        ->limit(10)
-        ->select();
-        $this->_getViewTemplate('build_html')->assign('blogs', $blogs);
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
-        $this->_successAction($info['ssi_id']);
-    }
-
-    /**
-     * 导航条
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 08:33:53
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    public function navbarAction($info) {
-        $this->_getViewTemplate('build_html')->assign('category_html', $this->_categoryNav());
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
-        $this->_successAction($info['ssi_id']);
-    }
-
-    /**
-     * 最新评论
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 10:38:39
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    public function new_commentsAction($info) {
-        $comments = $this->_model
-        ->table(TB_COMMENTS)
-        ->alias('c')
-        ->join(' LEFT JOIN ' . TB_BLOG . ' AS b ON c.blog_id=b.blog_id AND b.is_issue=1 AND b.is_delete=0')
-        ->where('c.status=1 AND c.type!=2')
-        ->order('c.comment_id DESC')
-        ->field('c.*,b.link_url,b.title')
-        ->limit(10)
-        ->select();
-        $this->_getViewTemplate('build_html')->assign('comments', $comments);
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
-        $this->_successAction($info['ssi_id']);
-    }
-
-    /**
-     * 标签云
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 10:38:39
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    public function tagsAction($info) {
-        $tags = $this->_model
-        ->table(TB_TAG)
-        ->order('searches DESC')
-        ->field('DISTINCT `tag`')
-        ->limit(50)
-        ->select();
-        $this->_getViewTemplate('build_html')->assign('tags', $tags);
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
-        $this->_successAction($info['ssi_id']);
     }
 }
