@@ -24,6 +24,7 @@ return array(
     'DISABLED'          => '禁用',
     'EDIT'              => '编辑',
     'ENABLE'            => '启用',
+    'EXCLUDE_SUFFIX'    => '不包括后缀',
     'FILENAME'          => '文件名',
     'FROM_NAME'         => '来源名称',
     'FROM_URL'          => '来源url',
