@@ -19,7 +19,7 @@ Ext.define('Yap.controller.Ssi', {
      * @cfg {String}
      * 查询字段
      */
-    queryField: 'sort,order,sort_order,tpl_name,ssi_name,memo',//查询字段
+    //queryField: 'sort,order,sort_order,tpl_name,ssi_name,memo',//查询字段
 
     /**
      * @inheritdoc Yap.controller.Base#addAction
@@ -52,8 +52,8 @@ Ext.define('Yap.controller.Ssi', {
      */
     build: function(ssi) {return log(ssi);
         this.commonAction({
-            action: this.getActionUrl(false, 'pack'),
-            data: 'file=' + file,
+            action: this.getActionUrl(false, 'build'),
+            data: 'ssi=' + ssi,
             scope: this,
             store: this.store()
         });
@@ -117,6 +117,11 @@ Ext.define('Yap.controller.Ssi', {
                 return me.searchReplaceRenderer(v, 'ssi_name');
             }
         }, {
+            header: lang('ORDER'),//排序
+            dataIndex: 'sort_order',
+            width: 50,
+            align: 'center'
+        }, {
             header: lang('LAST_BUILD_TIME'),//最后生成ssi文件时间
             dataIndex: 'last_build_time',
             width: 140
@@ -146,18 +151,33 @@ Ext.define('Yap.controller.Ssi', {
      * @inheritdoc Yap.controller.Base#listAction
      */
     listAction: function(data) {
-        Yap.cmp.card.layout.setActiveItem(this.listgrid(data));
-        global('app_contextmenu_refresh') && this.store().load();//标签页右键刷新 by mrmsl on 2012-08-15 09:10:17
-        return this;
+        data.sort = data.sort || 'sort_order';//排序字段
+        data.order = data.order || 'ASC';//排序
+        data.page = intval(data.page) || 1;//页
+        this.callParent([data]);//通用列表
     },
 
     /**
      * @inheritdoc Yap.controller.Admin#store
      */
     store: function(data) {
+        this._store = this._store || Ext.create('Yap.store.Ssi');
 
-        if (!this._store) {//未创建
-            this._store = Ext.create('Yap.store.Ssi');
+        if (data) {
+            var sorters = this._store.sorters.getAt(0);//排序
+
+            //排序不一致，重新设置 by mrmsl on 2012-07-27 15:45:18
+            if (sorters.property != data.sort || sorters.direction != data.order) {
+                this._store.sorters.clear();
+                this._store.sorters.add(new Ext.util.Sorter({
+                    property: data.sort,
+                    direction: data.order
+                }));
+            }
+
+
+            //this._store._data = undefined;//this.httpBuildQuery(data, 'sort,order');
+            //this._store.proxy.url = this.getActionUrl(false, 'list');
         }
 
         return this._store;
@@ -228,7 +248,7 @@ Ext.define('Yap.controller.Ssi', {
              * @cfg {Boolean}
              * 服务器端排序
              */
-            remoteSort: false,
+            remoteSort: true,
             /**
              * @cfg {Object/String}
              * 模型
@@ -252,8 +272,8 @@ Ext.define('Yap.controller.Ssi', {
              * sorters
              */
             sorters: {
-                property : this.idProperty,
-                direction: 'DESC'
+                property : 'sort_order',
+                direction: 'ASC'
             },
             constructor: function(config) {//构造函数
                 this.callParent([config || {}]);
