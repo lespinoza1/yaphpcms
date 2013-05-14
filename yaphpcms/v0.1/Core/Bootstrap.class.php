@@ -38,7 +38,7 @@ class BootstrapPlugin extends Yaf_Plugin_Abstract {
      * @return void 无返回值
      */
     private function _denyControllers() {
-        $deny_controllers = array('Error', 'Base');
+        $deny_controllers = array('Error', 'Common');
 
         if (in_array(CONTROLLER_NAME, $deny_controllers)) {
             throw new Exception(L('INVALID,VISIT'));
