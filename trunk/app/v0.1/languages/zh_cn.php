@@ -66,6 +66,7 @@ return array(
     'INFO'              => '信息',
     'INVALID'           => '非法',
     'INVALID_PARAM'     => '非法参数',
+    'IS_EMPTY'          => '为空',
     'LAST'              => '最后',
     'LT_BYTE'           => '{0}个字符以内',
     'LENGTH'            => '长度',

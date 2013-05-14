@@ -198,7 +198,7 @@ class SsiController extends CommonController {
     private function _successAction($ssi_id) {
         $ssi_id && $this->_model->save(array($this->_pk_field => $ssi_id, 'last_build_time' => time()));
 
-        if ('all' != ACTION_NAME || !$ssi_id) {
+        if (('all' != ACTION_NAME && 'build' != ACTION_NAME) || !$ssi_id) {
             $this->_model->addLog(L('BUILD_SSI') . ',' . ACTION_NAME, LOG_TYPE_ADMIN_OPERATE);
             $this->_setCache()->_ajaxReturn(true, L('BUILD_SSI,SUCCESS'));
         }
@@ -283,6 +283,51 @@ class SsiController extends CommonController {
     }
 
     /**
+     * 生成ssi
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-14 11:30:05
+     *
+     * @return void 无返回值
+     */
+    public function buildAction() {
+        $ssi_id   = map_int(Filter::string($this->_pk_field), true);
+
+        if (!$ssi_id) {
+            $this->_model->addLog(L('PRIMARY_KEY,DATA,IS_EMPTY'), LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(false, L('BUILD_SSI,FAILURE'));
+        }
+
+        $caches = $this->_getCache();
+        $error  = '';
+
+        foreach($ssi_id as $v) {
+
+            if (isset($caches[$v])) {
+                $item   = $caches[$v];
+                $method = '_' . $item['tpl_name'];
+
+                if (method_exists($this, $method)) {
+                    $this->$method($item);
+                }
+                else {
+                    $error .= ',' . $method;
+                }
+            }
+            else {
+                $error .= ',id(' . $v . ')';
+            }
+        }
+
+        if($error) {
+            C('LOG_FILENAME', 'ssi');
+            trigger_error(__METHOD__ . $error . L('NOT_EXIST'), E_USER_ERROR);
+        }
+
+        $this->_successAction(0);
+    }//end build
+
+    /**
      * 列表
      *
      * @author          mrmsl <msl-138@163.com>
@@ -291,14 +336,14 @@ class SsiController extends CommonController {
      * @return void 无返回值
      */
     public function listAction() {
-        $data = $this->_getCache();
+        $db_fields      = $this->_getDbFields();//表字段
+        $sort           = Filter::string('sort', 'get', $this->_pk_field);//排序字段
+        $sort           = in_array($sort, $db_fields) ? $sort : 'sort_order';
+        $order          = empty($_GET['dir']) ? Filter::string('order', 'get') : Filter::string('dir', 'get');//排序
+        $order          = toggle_order($order);
+        $data           = $this->_model->order($sort . ' ' . $order)->select();
 
-        if ($data) {
-            $data = array_values($data);
-        }
-        else {
-            $data = array();
-        }
+        false === $data && $this->_sqlErrorExit(L('QUERY,MODULE_NAME_SSI') . L('LIST,ERROR'));//出错
 
         $this->_ajaxReturn(true, '', $data);
     }
