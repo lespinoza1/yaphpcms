@@ -656,7 +656,11 @@ Ext.define('Yap.controller.Base', {
             }
 
             Yap.cmp.card.layout.setActiveItem(this.listgrid(data, options));
-            this._listgrid.toolbar && this.setQueryData(this._listgrid.toolbar, data, this.queryField.split(',').slice(2));
+
+            if (this._listgrid.toolbar && this.queryField) {
+                this.setQueryData(this._listgrid.toolbar, data, this.queryField.split(',').slice(2));
+            }
+
             this.setSort.call(this._listgrid, data.sort, data.order);
         }
         else {//不可排序或treePanel
