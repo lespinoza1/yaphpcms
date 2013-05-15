@@ -69,7 +69,7 @@ Ext.define('Yap.ux.Grid', {
     _afterRender: function() {
         //this.callParent(arguments);
         var data = this.tabData, controller = this.controller;
-        data.sort && controller.setSort.call(this, data.sort, data.okrder);
+        //data.sort && controller.setSort.call(this, data.sort, data.order);
         controller.selectModel = this.selModel;
         this.toolbar = this.child('toolbar');
     },
@@ -83,8 +83,8 @@ Ext.define('Yap.ux.Grid', {
      */
     onSortChange: function(ct, column, direction, opt) {
         var controller = this.controller;
-
-        if (!controller._initlistgrid && direction && controller._sortable) {//走两次？一次direction为空
+//log(controller._initlistgrid , direction , controller._sortable)
+        //if (!controller._initlistgrid && direction && controller._sortable) {//走两次？一次direction为空
             controller.setSort.call(this, column.dataIndex, direction);
             var data = {
                 page: controller.store().currentPage,
@@ -93,7 +93,7 @@ Ext.define('Yap.ux.Grid', {
             };
 
             controller.store(controller.setHistory(data));//重新设置store排序
-        }
+        //}
 
         delete controller._initlistgrid;//干掉 by mrmsl on 2012-07-27 15:43:49
     },
