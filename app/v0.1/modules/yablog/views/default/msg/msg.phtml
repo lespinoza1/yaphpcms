@@ -1,20 +1,29 @@
 {template 'include', 'header'}
 
 <div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span9 panel hide">
-            <img src="{COMMON_IMGCACHE}images/ok.gif" alt="" />
-            {if isset($msg_content)}
-            {$msg_content}
-            {else}
-            {L MESSAGE_CONTENT}
-            {/if}
-        </div>
-        <div class="span3">
-            <!--#include virtual="/v0.1/ssi/hot_blogs.shtml"-->
-            <!--#include virtual="/v0.1/ssi/tags.shtml"-->
-            <!--#include virtual="/v0.1/ssi/new_comments.shtml"-->
-        </div>
+    <div class="row-fluid panel">
+            <div class="panel-header">
+                <span class="icon-home"></span>
+                {L NOW_POSITION}：<a href="{BASE_SITE_URL}">{L HOME}</a>
+                <span class="divider">&raquo;</span>
+                {if isset($bread)}
+                {$bread}
+                {else}
+                {L SYSTEM_INFOMATION}
+                {/if}
+            </div>
+            <div class="panel-body text-center">
+                {if isset($page_not_found)}
+                <!--#include virtual="/v0.1/ssi/404.shtml"-->
+                {else}
+                <img src="{COMMON_IMGCACHE}images/ok.gif" alt="" />
+                {if isset($msg_content)}
+                {$msg_content}
+                {else}
+                {L MESSAGE_CONTENT}
+                {/if}
+                {/if}
+            </div>
     </div><!--end row-fluid-->
 </div><!--end container-fluid-->
 
