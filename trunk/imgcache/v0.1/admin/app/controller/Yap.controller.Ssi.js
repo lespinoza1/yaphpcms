@@ -251,11 +251,16 @@ Ext.define('Yap.controller.Ssi', {
             xtype: 'toolbar',
             dock: 'top',
             items: [{
-                text: lang('BUILD_SSI'),
-                handler: function() {
-                    var ssi = me.hasSelect(me._listgrid);
-                    ssi && me.build(ssi);
-                }
+                text: lang('OPERATE'),
+                itemId: 'btn',
+                menu: [
+                    this.deleteItem(), {
+                    text: lang('BUILD_SSI'),
+                    handler: function() {
+                        var ssi = me.hasSelect(me._listgrid);
+                        ssi && me.build(ssi);
+                    }
+                }]
             }]
         };
     },//end tbar
