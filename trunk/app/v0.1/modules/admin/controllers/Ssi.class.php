@@ -30,6 +30,24 @@ class SsiController extends CommonController {
     );
 
     /**
+     * 删除后置操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-18 11:05:45
+     *
+     * @param array $pk_id 主键值
+     *
+     * @return void 无返回值
+     */
+    protected function _afterDelete($pk_id) {
+        $caches = $this->_getCache();
+
+        foreach($pk_id as $id) {
+            is_file($filename = SSI_PATH . $caches[$id]['ssi_name'] . C('HTML_SUFFIX')) && unlink($filename);
+        }
+    }
+
+    /**
      * 分类导航
      *
      * @author          mrmsl <msl-138@163.com>
@@ -190,13 +208,6 @@ class SsiController extends CommonController {
      */
     protected function _setCacheData() {
         $data = $this->_model->key_column($this->_pk_field)->order('sort_order ASC,ssi_id ASC')->select();
-
-        if ($data) {
-
-            foreach ($data as $k => $v) {
-                $data[$k]['last_build_time'] = $v['last_build_time'] ? new_date(null, $v['last_build_time']) : '';
-            }
-        }
 
         return $data;
     }
