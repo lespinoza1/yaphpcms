@@ -914,11 +914,11 @@ class CommonController extends BaseController {
                 $this->_sqlErrorExit($log . L('FAILURE'), L('DELETE,FAILURE'));
             }
 
+            method_exists($this, '_afterDelete') && $this->_afterDelete($pk_id);
+
             if (!empty($this->_after_exec_cache) && isset($data)) {
                 $this->_setCache($data);//生成缓存
             }
-
-            method_exists($this, '_afterDelete') && $this->_afterDelete($pk_id);
 
             $this->_model->addLog($log . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);//管理员操作日志
 
