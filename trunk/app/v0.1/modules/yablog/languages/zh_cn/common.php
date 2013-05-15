@@ -24,7 +24,6 @@ return array(
     'LIST'              => '列表',
     'MINUTES_AGO'       => '{0}分钟前',
     'MODULE_NAME_COMMENT'  => '评论',
-    'NOW_POSITION'      => '您现在的位置',
     'N_PAGES'           => '第%d页',
     'SPACE'             => '空格',
     'THE_DAY_BEFORE_YESTERDAY' => '前天',

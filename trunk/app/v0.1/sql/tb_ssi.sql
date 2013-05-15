@@ -22,6 +22,7 @@ INSERT INTO `tb_ssi` VALUES (4,'navbar','navbar',1368438842,0,'导航栏');
 INSERT INTO `tb_ssi` VALUES (5,'hot_blogs','hot_blogs',1368438842,0,'热门网文');
 INSERT INTO `tb_ssi` VALUES (6,'new_comments','new_comments',1368438842,0,'最新评论留言');
 INSERT INTO `tb_ssi` VALUES (7,'tags','tags',1368438842,0,'标签云');
+INSERT INTO `tb_ssi` VALUES (8,'page_not_found','404',1368438925,0,'404页面');
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

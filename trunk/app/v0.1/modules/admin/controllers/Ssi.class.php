@@ -74,7 +74,7 @@ class SsiController extends CommonController {
      */
     private function _footer($info) {
         $this->_getViewTemplate('build_html')->assign('footer', sys_config('sys_base_copyright'));
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
         $this->_successAction($info['ssi_id']);
     }
 
@@ -97,7 +97,7 @@ class SsiController extends CommonController {
         ->limit(10)
         ->select();
         $this->_getViewTemplate('build_html')->assign('blogs', $blogs);
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
         $this->_successAction($info['ssi_id']);
     }
 
@@ -113,7 +113,7 @@ class SsiController extends CommonController {
      */
     private function _navbar($info) {
         $this->_getViewTemplate('build_html')->assign('category_html', $this->_categoryNav());
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
         $this->_successAction($info['ssi_id']);
     }
 
@@ -138,7 +138,23 @@ class SsiController extends CommonController {
         ->limit(10)
         ->select();
         $this->_getViewTemplate('build_html')->assign('comments', $comments);
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
+        $this->_successAction($info['ssi_id']);
+    }
+
+    /**
+     * 404页面
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-15 11:05:51
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _page_not_found($info) {
+        $this->_getViewTemplate('build_html')->assign('web_title', L('PAGE_NOT_FOUND'));
+        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
         $this->_successAction($info['ssi_id']);
     }
 
@@ -160,7 +176,7 @@ class SsiController extends CommonController {
         ->limit(50)
         ->select();
         $this->_getViewTemplate('build_html')->assign('tags', $tags);
-        $this->_buildHtml(SSI_PATH . $info['tpl_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['ssi_name']));
+        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
         $this->_successAction($info['ssi_id']);
     }
 
