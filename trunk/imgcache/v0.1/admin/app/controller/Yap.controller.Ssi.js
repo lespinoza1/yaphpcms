@@ -19,7 +19,7 @@ Ext.define('Yap.controller.Ssi', {
      * @cfg {String}
      * 查询字段
      */
-    //queryField: 'sort,order,sort_order,tpl_name,ssi_name,memo',//查询字段
+    queryField: 'sort,order,page',//,sort_order,tpl_name,ssi_name,memo',//查询字段
 
     /**
      * @inheritdoc Yap.controller.Base#addAction
@@ -158,6 +158,62 @@ Ext.define('Yap.controller.Ssi', {
     },
 
     /**
+     * 分页条
+     *
+     * @param {Object} data 当前标签数据
+     *
+     * @return {Object} Ext.toolbar.Paging配置项
+     */
+    pagingBar: function(data) {
+        var me = this;
+
+        return {
+            xtype: 'pagingtoolbar',
+            dock: 'bottom',
+            store: this.store(),
+            displayInfo: true,
+            listeners: {
+
+                /**
+                 * 分页前
+                 *
+                 * @ignore
+                 *
+                 * @param {Object} paging 分页条
+                 * @param {Number} page      将分至页
+                 *
+                 * @return {void} 无返回值
+                 */
+                beforechange: function(paging, page) {
+                    this.changed = true;
+                },
+
+                /**
+                 * 分页后
+                 *
+                 * @ignore
+                 *
+                 * @param {Object} grid     列表grid
+                 * @param {Object} pageData 分类数据
+                 *
+                 * @return {void} 无返回值
+                 */
+                change: function(grid, pageData) {
+                    if (pageData && !isNaN(pageData.pageCount) && this.changed) {//保证经过beforechange
+                        data = {
+                            page: pageData.currentPage,
+                            sort: data.sort,
+                            order: data.order
+                        };
+                        data.page != _GET('page') && me.store(me.setHistory(data));
+                        this.changed = false;
+                    }
+                }
+            }
+        };
+    },//end pagingBar
+
+    /**
      * @inheritdoc Yap.controller.Admin#store
      */
     store: function(data) {
@@ -176,7 +232,7 @@ Ext.define('Yap.controller.Ssi', {
             }
 
 
-            //this._store._data = undefined;//this.httpBuildQuery(data, 'sort,order');
+            this._store._data = this.httpBuildQuery(data, this.queryField);
             //this._store.proxy.url = this.getActionUrl(false, 'list');
         }
 

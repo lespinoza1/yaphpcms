@@ -58,11 +58,6 @@ Ext.define('Yap.History', {
      * @return {void} 无返回值
      */
     navigate: function(hash) {
-        if (this.noNavigate) {
-            this.noNavigate = false;
-            return false;
-        }
-
         getController('Tabs').loadScript(hash || getController('Index').getUrl(), true);
     },
 
@@ -94,7 +89,6 @@ Ext.define('Yap.History', {
      * @return {void} 无返回值
      */
     push: function(url, noNavigate) {
-        this.noNavigate = noNavigate;
         url = Ext.isString(url) ? url : Ext.Object.toQueryString(url);//支持string,object类型 by mrmsl on 2012-07-30 17:33:07
         url = this.cleanUrl(url);
         Ext.util.History.add(url)
