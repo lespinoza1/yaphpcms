@@ -20,5 +20,5 @@ return array(
     'TPL_NAME'          => '模板名',
 
     'PAGE_NOT_FOUND'            => '404错误页面',
-    'PAGE_NOT_FOUND_CONTENT'    => '<h4>抱歉，您访问的页面不存在或已经被删除。<br />给您浏览造成的不便，请谅解。</h4><br /><strong>您可以：</strong><br />1、<a href="' . BASE_SITE_URL . '">返回首页</a><br />2、<a href="javascript: history.back();">返回上一页</a>',
+    'PAGE_NOT_FOUND_CONTENT'    => '<h4>抱歉，您访问的页面不存在或已经被删除。</h4><br /><strong>您可以：</strong><ul><li>检查您输入的网址拼写是否正确</li><li>返回<a href="' . BASE_SITE_URL . '">首页</a></li><li>返回<a href="javascript: history.back();" rel="nofollow">上一页</a></li></ul>',
 );
