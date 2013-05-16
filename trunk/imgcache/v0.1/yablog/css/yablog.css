@@ -694,6 +694,32 @@ a:focus {
 .blog-detail a.label:hover {
   background-color: #3a87ad;
 }
+ul.hot-blogs {
+  background: url(../images/rank_number.png) 0 5px no-repeat;
+}
+ul.hot-blogs li {
+  height: 21px;
+  line-height: 21px;
+  padding-left: 20px;
+  overflow: hidden;
+}
+#tag-cloud {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+#tag-cloud li {
+  position: absolute;
+}
+.new_comments .media {
+  margin-top: 5px;
+}
+.new_comments p {
+  margin-bottom: 0;
+}
+.new_comments a {
+  color: #333;
+}
 p {
   margin: 0 0 10px;
 }
@@ -5144,26 +5170,3 @@ a.badge:focus {
 .pl-0 {
   padding-left: 0;
 }
-
-ul.hot-blogs {
-    background: url(../images/rank_number.png) 0 5px no-repeat;
-}
-ul.hot-blogs li {
-    height: 21px;
-    line-height: 21px;
-    padding-left: 20px;
-    overflow: hidden;
-}
-
-#tag-cloud {
-    width: 100%;
-    height: 300px;
-    position: relative;
-}
-#tag-cloud li{
-    position: absolute;
-}
-
-.new_comments .media { margin-top: 5px; }
-.new_comments p { margin-bottom: 0; }
-.new_comments a { color: #333; }
