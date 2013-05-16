@@ -118,7 +118,7 @@ function bootstrap() {
         });
     }
 
-    if ($('#tag-cloud')) {//标签云
+    if ($('#tag-cloud').length) {//标签云
         seajs.use('tagCloud', function() {
             $('#tag-cloud').tagCloud();
         });
