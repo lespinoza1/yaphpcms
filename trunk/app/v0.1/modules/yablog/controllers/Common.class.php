@@ -116,7 +116,14 @@ class CommonController extends BaseController {
      * @return void 无返回值
      */
     protected function _showMessage($message, $link_url = array(), $status_code = null) {
-        null !== $status_code && send_http_status($status_code);
+
+        if (null !== $status_code) {
+            send_http_status($status_code);
+
+            if (404 == $status_code && is_file($filename = WWWROOT . '404' . C('HTML_SUFFIX'))) {
+                exit(file_get_contents($filename));
+            }
+        }
 
         $template = $this->_getViewTemplate();
 
