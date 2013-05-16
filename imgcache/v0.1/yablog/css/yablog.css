@@ -720,13 +720,21 @@ ul.hot-blogs li {
 .new_comments a {
   color: #333;
 }
-.page-not-found {
-  margin: 20px 350px;
+.page-not-found,
+.system-infomation {
+  padding: 20px 350px;
   line-height: 150%;
 }
-.page-not-found h4 {
+.page-not-found h4,
+.system-infomation h4 {
   color: red;
   font-size: 18px;
+}
+.system-infomation h4 {
+  color: #080;
+}
+.clear-both {
+  clear: both;
 }
 p {
   margin: 0 0 10px;

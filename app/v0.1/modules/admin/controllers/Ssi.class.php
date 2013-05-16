@@ -120,6 +120,22 @@ class SsiController extends CommonController {
     }
 
     /**
+     * 系统提示页面
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-16 11:33:43
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _msg($info) {
+        $this->_getViewTemplate('build_html')->assign('web_title', L('SYSTEM_INFOMATION'));
+        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
+        $this->_successAction($info['ssi_id']);
+    }
+
+    /**
      * 导航条
      *
      * @author          mrmsl <msl-138@163.com>

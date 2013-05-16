@@ -1,0 +1,37 @@
+{template 'include', 'header'}
+
+<div class="container-fluid">
+    <div class="row-fluid panel">
+        <div class="panel-header">
+            <span class="icon-home"></span>
+            {L NOW_POSITION}：<a href="{BASE_SITE_URL}">{L HOME}</a>
+            <span class="divider">&raquo;</span>
+            {L SYSTEM_INFOMATION}
+        </div>
+        <div class="panel-body">
+            <div class="system-infomation">
+                <img class="pull-left" alt="" src="{COMMON_IMGCACHE}images/ok.gif" />
+                <div class="text-left pull-left ml-10">
+                    {L SYSTEM_INFOMATION_CONTENT}
+                </div>
+                <div class="clear-both"></div>
+            </div>
+        </div>
+    </div><!--end row-fluid-->
+</div><!--end container-fluid-->
+
+<script>
+    var ON_LOAD = function () {
+        var flag = _GET('flag');
+
+        if (flag && 'comment' != flag && 'guestbook' != flag) {
+            location.replace(System.sys_base_site_url + '404.shtml');
+            return;
+        }
+
+        var el = $('#h4-info'), text = el.text();
+        el.text(text.replace('{0}', lang(flag || 'comment')));
+    }
+</script>
+
+{template 'include', 'footer'}

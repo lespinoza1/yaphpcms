@@ -66,14 +66,14 @@ function addComments() {
             url: System.sys_base_site_url + 'comments/add.shtml',
             dataType: 'json',
             data: $(this).serialize(),
-            ok: function () {
-                location.reload();
+            ok: function (flag) {
+                location.href = System.sys_base_site_url + 'msg.shtml?flag=' + flag;
             },
             success: function(data) {
                 if (data) {
 
                     if (data.success) {
-                        this.ok();
+                        this.ok(data.success);
                     }
                     else {
                         alert(data.msg || lang('SYSTEM_ERROR'));

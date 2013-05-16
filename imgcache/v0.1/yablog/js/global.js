@@ -124,6 +124,10 @@ function bootstrap() {
         });
     }
 
+    if ('function' == typeof(ON_LOAD)) {
+        ON_LOAD();
+    }
+
     $('#nav-' + NAV_ID).addClass('active');//高亮导航
 }//end bootstrap
 
