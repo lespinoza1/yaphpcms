@@ -46,14 +46,14 @@ Ext.define('Yap.controller.Ssi', {
      *
      * @private
      *
-     * @param {String} ssi ssi
+     * @param {String} ssi ssi_id串
      *
      * @return {void} 无返回值
      */
-    build: function(ssi) {return log(ssi);
+    build: function(ssi_id) {
         this.commonAction({
             action: this.getActionUrl(false, 'build'),
-            data: 'ssi=' + ssi,
+            data: 'ssi_id=' + ssi,
             scope: this,
             store: this.store()
         });
@@ -135,7 +135,15 @@ Ext.define('Yap.controller.Ssi', {
             xtype: 'appactioncolumn',
             items: [
             me.editColumnItem(true),
-            {//删除
+            {//生成ssi
+                renderer: function(v, meta, record) {
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('BUILD_SSI') + '</span>';
+                },
+                handler: function(grid, rowIndex, cellIndex) {
+                    var record = grid.getStore().getAt(rowIndex);
+                    me.build(record.get(me.idProperty));
+                }
+            }, {//删除
                 renderer: function(v, meta, record) {
                     return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE') + '</span>';
                 },
@@ -257,7 +265,7 @@ Ext.define('Yap.controller.Ssi', {
                     this.deleteItem(), {
                     text: lang('BUILD_SSI'),
                     handler: function() {
-                        var ssi = me.hasSelect(me._listgrid);
+                        var ssi = me.hasSelect(me.selectModel);
                         ssi && me.build(ssi);
                     }
                 }]
