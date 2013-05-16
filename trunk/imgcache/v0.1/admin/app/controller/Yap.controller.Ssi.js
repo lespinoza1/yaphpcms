@@ -53,7 +53,7 @@ Ext.define('Yap.controller.Ssi', {
     build: function(ssi_id) {
         this.commonAction({
             action: this.getActionUrl(false, 'build'),
-            data: 'ssi_id=' + ssi,
+            data: 'ssi_id=' + ssi_id,
             scope: this,
             store: this.store()
         });
@@ -124,7 +124,8 @@ Ext.define('Yap.controller.Ssi', {
         }, {
             header: lang('LAST_BUILD_TIME'),//最后生成ssi文件时间
             dataIndex: 'last_build_time',
-            width: 140
+            width: 140,
+            renderer: this.renderDatetime
         }, {
             header: lang('MEMO'),//备注
             dataIndex: 'memo',
