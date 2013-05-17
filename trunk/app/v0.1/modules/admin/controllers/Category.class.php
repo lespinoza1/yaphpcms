@@ -214,15 +214,19 @@ class CategoryController extends CommonController {
 
         new_mkdir($ssi_path = SSI_PATH . 'category/');
 
+        $suffix     = C('HTML_SUFFIX');
+        $sep        = ' <span class="divider">&raquo;</span> ';
+        $nav        = '<a href="'  . BASE_SITE_URL . 'category' . $suffix .'">' . L('CN_WANGWEN') . '</a>' . $sep ;
+
         foreach($data as $v) {//生成分类ssi导航
-            $html = '';
+            $html = $nav;
 
             foreach (explode(',', $v['node']) as $item) {
                 $info  = $data[$item];
-                $html .= '<a href="' . $info['link_url'] . '">' . $info['cate_name'] . '</a> <span class="divider">&raquo;</span> ';
+                $html .= '<a href="' . $info['link_url'] . '">' . $info['cate_name'] . '</a>' . $sep;
             }
 
-            file_put_contents($ssi_path . 'nav' . $v[$this->_pk_field] . C('HTML_SUFFIX'), $html);
+            file_put_contents($ssi_path . 'nav' . $v[$this->_pk_field] . $suffix, $html);
         }
 
         $tree_data = Tree::array2tree($data, $this->_pk_field);//树形式
