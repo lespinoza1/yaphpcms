@@ -122,7 +122,7 @@ class MiniblogController extends CommonController {
                 //'relative_blog'     => $this->_getRelativeBlog($blog_id, $blog_info['seo_keyword']),
             ));
 
-            $content = $o->fetch(CONTROLLER_NAME, 'detail');
+            $content = $o->fetch(CONTROLLER_NAME, 'detail', $blog_id);
             //file_put_contents($filename, $content);
             echo $content;
 
