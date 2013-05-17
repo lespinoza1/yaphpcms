@@ -141,7 +141,7 @@ class BlogController extends CommonController {
                 'comments_html'     => $this->_getBlogComments($blog_id),
             ));
 
-            $content = $o->fetch(CONTROLLER_NAME, 'detail');
+            $content = $o->fetch(CONTROLLER_NAME, 'detail', $blog_id);
             //file_put_contents($filename, $content);
             echo $content;
 
