@@ -39,7 +39,7 @@ class CategoryController extends CommonController {
      * @return void 无返回值
      */
     protected function _afterCommonAddTreeData() {
-        $this->_model->cate_id && $this->deleteHtmlAction(array(array($this->_pk_field => $this->_model->cate_id)));
+        $this->_model->cate_id && $this->publicDeleteHtmlAction(array(array($this->_pk_field => $this->_model->cate_id)));
     }
 
     /**
@@ -64,14 +64,14 @@ class CategoryController extends CommonController {
             $data[] = array($this->_pk_field => $v);
         }
 
-        $this->deleteHtmlAction($data);//删除分类静态文件
+        $this->publicDeleteHtmlAction($data);//删除分类静态文件
         $this->createAction();//重新生成缓存
 
         $blog_arr = $this->_model->table(TB_BLOG)->field('link_url')->where(array('cate_id' => array('IN', $pk_id)))->select();//博客
         $this->_model->table(TB_BLOG)->where(array('cate_id' => array('IN', $pk_id)))->delete();//删除
         C('HTML_BUILD_INFO', $blog_arr);
         C(APP_FORWARD, true);
-        $this->forward('Blog', 'deleteHtml', array('build_arr' => null));//删除博客静态文件
+        $this->forward('Blog', 'publicDeleteHtml', array('build_arr' => null));//删除博客静态文件
     }
 
     /**
@@ -142,42 +142,57 @@ class CategoryController extends CommonController {
     }
 
     /**
-     * 删除分类静态页
+     * 清除缓存
      *
      * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-12 22:01:02
+     * @date            2013-05-17 09:01:33
      *
      * @return void 无返回值
      */
-    public function deleteHtmlAction($build_info = null) {
+    public function clearCacheAction() {
+        $cate_id    = Filter::string($pk_field = $this->_pk_field);
+        $cate_id    = map_int($cate_id, true);
         $cate_arr   = $this->_getCache();
-        $build_info = null === $build_info ? C('HTML_BUILD_INFO') : $build_info;
-        $set_arr    = array();
 
-        foreach($build_info as $item) {
-            $cate_id = $item[$this->_pk_field];
+        if ($cate_id) {
+            $error          = '';
+            $log            = '';
+            $template       = $this->_getViewTemplate();
+            $name_column    = $this->_name_column;
+            $cache_path     = $template->_cache_path . CONTROLLER_NAME . DS;
 
-            if (!isset($cate_arr[$cate_id]) || isset($set_arr[$cate_id])) {
-                continue;
-            }
-            else {
-                $cate_info = $cate_arr[$cate_id];
-                $node_arr  = explode(',', $cate_info['node']);
+            foreach($cate_id as $v) {
 
-                foreach($node_arr as $v) {
+                if (isset($cate_arr[$v])) {
 
-                    if (isset($set_arr[$v])) {
-                        continue;
+                    foreach(glob($cache_path . "index{$v}-*") as $filename) {
+                        unlink($filename);
                     }
-                    else {
-                        $filename = str_replace(BASE_SITE_URL, WWWROOT, $cate_arr[$v]['link_url']);
-                        is_file($filename) && unlink($filename);
-                        $set_arr[$v] = true;
-                    }
+
+                    $log .= ",{$cate_arr[$v][$name_column]}({$v})";
+                }
+                else {
+                    $error .= ',' . $v;
                 }
             }
+
+            if ($error) {
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . L('MODULE_NAME_CATEGORY') . $error . L('NOT_EXIST'), E_USER_WARNING);
+            }
+
+            if ($log) {
+                $this->_model->addLog(L('CLEAR,MODULE_NAME_CATEGORY,CACHE') . substr($log, 1) . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+                $this->_ajaxReturn(true, L('CLEAR,SUCCESS'));
+            }
+            else {
+                $this->_model->addLog(L('CLEAR,MODULE_NAME_CATEGORY,CACHE,FAILURE,%<br />,INVALID_PARAM,%:,MODULE_NAME') . $error . L('NOT_EXIST'), LOG_TYPE_INVALID_PARAM);
+            }
         }
-    }
+
+        empty($error) && $this->_model->addLog(L("CLEAR,MODULE_NAME_CATEGORY,CACHE,FAILURE,%<br />,INVALID_PARAM,%:,MODULE_NAME,%{$this->_pk_field},IS_EMPTY"), LOG_TYPE_INVALID_PARAM);
+        $this->_ajaxReturn(false, L('CLEAR,FAILURE'));
+    }//end clearCacheAction
 
     /**
      * 生成缓存
@@ -272,6 +287,44 @@ class CategoryController extends CommonController {
         }
 
         $this->_ajaxReturn(true, '', $data);
+    }
+
+    /**
+     * 删除分类静态页
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-12 22:01:02
+     *
+     * @return void 无返回值
+     */
+    public function publicDeleteHtmlAction($build_info = null) {
+        $cate_arr   = $this->_getCache();
+        $build_info = null === $build_info ? C('HTML_BUILD_INFO') : $build_info;
+        $set_arr    = array();
+
+        foreach($build_info as $item) {
+            $cate_id = $item[$this->_pk_field];
+
+            if (!isset($cate_arr[$cate_id]) || isset($set_arr[$cate_id])) {
+                continue;
+            }
+            else {
+                $cate_info = $cate_arr[$cate_id];
+                $node_arr  = explode(',', $cate_info['node']);
+
+                foreach($node_arr as $v) {
+
+                    if (isset($set_arr[$v])) {
+                        continue;
+                    }
+                    else {
+                        $filename = str_replace(BASE_SITE_URL, WWWROOT, $cate_arr[$v]['link_url']);
+                        is_file($filename) && unlink($filename);
+                        $set_arr[$v] = true;
+                    }
+                }
+            }
+        }
     }
 
     /**

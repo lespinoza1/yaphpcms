@@ -35,7 +35,7 @@ class BlogController extends CommonController {
      */
     protected function _afterDelete($pk_id) {
         $this->_model->table(TB_COMMENTS)->where(array($this->_pk_field => array('IN', $pk_id)))->delete();
-        $this->deleteHtmlAction(null);
+        $this->_deleteBlogHtml(null);
     }
 
     /**
@@ -46,8 +46,8 @@ class BlogController extends CommonController {
         if ('cate_id' == $field || ($value && 'is_delete' == $field) || (!$value && 'is_issue' == $field)) {//转移分类、未发布、已删除
             //$this->_getViewTemplate()->clearCache($this->_getControllerName(), 'detail', $pk_id);
             C(APP_FORWARD, true);
-            $this->forward('Category', 'deleteHtml');
-            $this->deleteHtmlAction(null);//删除静态文件
+            $this->forward('Category', 'publicDeleteHtml');
+            $this->_deleteBlogHtml(null);//删除静态文件
         }
     }
 
@@ -71,24 +71,6 @@ class BlogController extends CommonController {
         }
 
         return $log ? substr($log, 0, -1) : null;
-    }
-
-    /**
-     * 删除静态文件
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-17 14:33:27
-     *
-     * @param $build_arr array|null 已修改博客信息
-     *
-     * @return void 无返回值
-     */
-    public function deleteHtmlAction($build_arr = array()) {
-        $build_arr = null === $build_arr ? C('HTML_BUILD_INFO') : $build_arr;
-
-        foreach ($build_arr as $blog_id => $item) {
-            is_file($filename = str_replace(BASE_SITE_URL, WWWROOT, $item['link_url'])) && unlink($filename);
-        }
     }
 
     /**
@@ -169,7 +151,7 @@ exit;*/
 
             if (!$to_build) {
                 C('HTML_BUILD_INFO', array($pk_value => array('cate_id' => $blog_info['cate_id'] . ',' . $data['cate_id'], 'link_url' => $blog_info['link_url'])));
-                $this->deleteHtmlAction(null);
+                $this->_deleteBlogHtml(null);
             }
 
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
@@ -185,6 +167,14 @@ exit;*/
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
     }//end addAction
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteBlogHtmlAction() {
+        $this->_name_column = 'title';
+        parent::deleteBlogHtmlAction();
+    }//end deleteBlogHtmlAction
 
     /**
      * 获取博客具体信息
@@ -340,4 +330,18 @@ exit;*/
 
         $this->_setField($field, $cate_id, $msg, L('TO') . $cate_name);
     }//end moveAction
+
+    /**
+     * 删除静态文件
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-17 14:33:27
+     *
+     * @param $build_arr array|null 已修改博客信息
+     *
+     * @return void 无返回值
+     */
+    public function publicDeleteHtmlAction($build_arr = array()) {
+        $this->_deleteBlogHtml($build_arr);
+    }
 }

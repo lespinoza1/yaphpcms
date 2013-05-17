@@ -529,6 +529,24 @@ class CommonController extends BaseController {
     }
 
     /**
+     * 删除博客,微博静态文件
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-17 10:42:11
+     *
+     * @param $build_arr array|null 已修改博客信息
+     *
+     * @return void 无返回值
+     */
+    protected function _deleteBlogHtml($build_arr = array()) {
+        $build_arr = null === $build_arr ? C('HTML_BUILD_INFO') : $build_arr;
+
+        foreach ($build_arr as $blog_id => $item) {
+            is_file($filename = str_replace(BASE_SITE_URL, WWWROOT, $item['link_url'])) && unlink($filename);
+        }
+    }
+
+    /**
      * 获取菜单树数据
      *
      * @author          mrmsl <msl-138@163.com>
@@ -930,6 +948,56 @@ class CommonController extends BaseController {
             $this->_ajaxReturn(false, L('DELETE,FAILURE'));
         }
     }//end deleteAction
+
+    /**
+     * 后台删除博客,微博静态文件
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-17 10:51:07
+     *
+     * @return void 无返回值
+     */
+    public function deleteBlogHtmlAction() {
+        $pk_value    = Filter::string($pk_field = $this->_pk_field);
+        $pk_value    = map_int($pk_value, true);
+
+        if ($pk_value) {
+            $error          = '';
+            $log            = '';
+            $name_column    = empty($this->_name_column) ? '' : $this->_name_column;
+            $field          = $pk_field . ',link_url' . ($name_column ? ',' . $name_column : '');
+            $data           = $this->_model->field($field)->key_column($pk_field)->where(array($pk_field => array('IN', $pk_value)))->select();
+            $delete         = array();
+
+            foreach($pk_value as $v) {
+
+                if (isset($data[$v])) {
+                    $delete[] = array('link_url' => $data[$v]['link_url']);
+                    $log .= ',' . ($name_column ? ",{$data[$v][$name_column]}({$v})" : $v);
+                }
+                else {
+                    $error .= ',' . $v;
+                }
+            }
+
+            if ($error) {
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . L('MODULE_NAME') . $error . L('NOT_EXIST'), E_USER_WARNING);
+            }
+
+            if ($log) {
+                $this->_deleteBlogHtml($delete);
+                $this->_model->addLog(L('DELETE,MODULE_NAME,STATIC_PAGE') . substr($log, 1) . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+                $this->_ajaxReturn(true, L('DELETE,SUCCESS'));
+            }
+            else {
+                $this->_model->addLog(L('DELETE,MODULE_NAME,STATIC_PAGE,FAILURE,%<br />,INVALID_PARAM,%:,MODULE_NAME') . $error . L('NOT_EXIST'), LOG_TYPE_INVALID_PARAM);
+            }
+        }
+
+        empty($error) && $this->_model->addLog(L("DELETE,MODULE_NAME,STATIC_PAGE,FAILURE,%<br />,INVALID_PARAM,%:,MODULE_NAME,%{$this->_pk_field},IS_EMPTY"), LOG_TYPE_INVALID_PARAM);
+        $this->_ajaxReturn(false, L('DELETE,FAILURE'));
+    }//end deleteBlogHtmlAction
 
     /**
      * 记录加载css,js时间
