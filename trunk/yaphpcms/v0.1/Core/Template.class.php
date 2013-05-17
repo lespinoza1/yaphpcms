@@ -192,13 +192,14 @@ class Template {
         else {
 
             if (C('CLEAR_COMPILE_FILE')) {
-                foreach(glob($compile_dir . '*') as $v) {//编译文件
-                    is_file($filename = $compile_dir . $v) && unlink($filename);
+
+                foreach(glob($compile_dir . '*') as $filename) {//编译文件
+                    is_file($filename) && unlink($filename);var_dump($filename);
                 }
             }
 
-            foreach(blog($cache_dir . '*') as $v) {//缓存文件
-                is_file($filename = $cache_dir . $v) && unlink($filename);
+            foreach(glob($cache_dir . '*') as $filename) {//缓存文件
+                is_file($filename) && unlink($filename);
             }
         }
     }//end clearCache

@@ -17,6 +17,9 @@ return array(
     'AUTO'              => '自动',
     'AUTO_OPERATION'    => '自动填充',
     'BELONG_TO'         => '所属',
+    'BUILD'             => '生成',
+    'CACHE'             => '缓存',
+    'CLEAR'             => '清除',
     'COLUMN'            => '字段',
     'COMMENT'           => '评论',
     'COMPRESS'          => '压缩',
@@ -49,5 +52,6 @@ return array(
     'SEO_KEYWORD'       => 'SEO关键字',
     'SEO_DESCRIPTION'   => 'SEO描述',
     'SET_LEVEL_NODE'    => '_setNodeAndLevel()设置子节点层次以及节点关系',
+    'STATIC_PAGE'       => 'html静态页',
     'VERIFY_CODE_TYPE'  => '验证码类型',
 );

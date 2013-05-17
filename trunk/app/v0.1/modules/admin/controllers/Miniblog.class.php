@@ -33,7 +33,7 @@ class MiniblogController extends CommonController {
      */
     protected function _afterDelete($pk_id) {
         $this->_model->table(TB_COMMENTS)->where(array($this->_pk_field => array('IN', $pk_id)))->delete();
-        $this->deleteHtmlAction(null);
+        $this->_deleteBlogHtml(null);
     }
 
     /**
@@ -95,7 +95,7 @@ class MiniblogController extends CommonController {
 
             $diff = $this->_dataDiff($blog_info, $data, $diff_key);//差异
             C('HTML_BUILD_INFO', array(array('link_url' => $blog_info['link_url'])));
-            $this->deleteHtmlAction(null);
+            $this->_deleteBlogHtml(null);
             $this->_model->addLog($msg . L('MODULE_NAME_MINIBLOG')  . "{$blog_info['content']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
@@ -110,28 +110,6 @@ class MiniblogController extends CommonController {
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
     }//end addAction
-
-    /**
-     * 删除静态文件
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-26 22:05:03
-     *
-     * @param $build_arr array|null 已修改微博信息
-     *
-     * @return void 无返回值
-     */
-    public function deleteHtmlAction($build_arr = array()) {
-        $build_arr = null === $build_arr ? C('HTML_BUILD_INFO') : $build_arr;
-
-        if (!$build_arr) {
-            return;
-        }
-
-        foreach ($build_arr as $item) {
-            is_file($filename = str_replace(BASE_SITE_URL, WWWROOT, $item['link_url'])) && unlink($filename);
-        }
-    }
 
     /**
      * 获取微博具体信息
