@@ -285,7 +285,9 @@ Ext.define('Yap.controller.Base', {
             confirmText: lang('YOU_CONFIRM,DELETE') + confirmText + lang('STATIC_PAGE'),
             failedMsg: lang('DELETE,FALIURE'),
             scope: this,
-            store: this.store()
+            callback: function () {
+                this.selectModel.deselectAll();
+            }
         };
 
         this.myConfirm(options);
