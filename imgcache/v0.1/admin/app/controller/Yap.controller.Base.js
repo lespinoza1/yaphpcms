@@ -255,6 +255,43 @@ Ext.define('Yap.controller.Base', {
     },//end delete
 
     /**
+     * 删除博客,微博静态文件
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-17 14:52:21
+     *
+     * @protected
+     *
+     * @param {Mixed}  record      record数据或id串
+     * @param {String} confirmText 确认信息
+     *
+     * @return {void} 无返回值
+     */
+    deleteBlogHtml: function(record, confirmText) {
+        var pkValue;
+        var controller = this.getControllerName();
+
+        if (Ext.isString(record)) {//选中删除
+            pkValue = record;
+            confirmText = lang('SELECTED,RECORD');
+        }
+        else {//点击删除
+            pkValue = record.get(this.idProperty);
+        }
+
+        var options = {
+            action: this.getActionUrl(false, 'deleteBlogHtml'),
+            data: this.idProperty + '=' + pkValue,
+            confirmText: lang('YOU_CONFIRM,DELETE') + confirmText + lang('STATIC_PAGE'),
+            failedMsg: lang('DELETE,FALIURE'),
+            scope: this,
+            store: this.store()
+        };
+
+        this.myConfirm(options);
+    },//end clearCache
+
+    /**
      * actioncolumn通用删除item
      *
      * @author          mrmsl <msl-138@163.com>

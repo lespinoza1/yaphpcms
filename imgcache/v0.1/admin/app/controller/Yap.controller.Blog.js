@@ -258,6 +258,14 @@ Ext.define('Yap.controller.Blog', {
                     var record = grid.getStore().getAt(rowIndex);
                     me['delete'](record, '<span class="font-red">{0}</span>'.format(htmlspecialchars(record.get('title'))));
                 }
+            }, {//删除静态页
+                renderer: function(v, meta, record) {
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE,STATIC_PAGE') + '</span>';
+                },
+                handler: function(grid, rowIndex, cellIndex) {
+                    var record = grid.getStore().getAt(rowIndex);
+                    me.deleteBlogHtml(record, '<span class="font-red">{0}</span>'.format(htmlspecialchars(record.get('title'))));
+                }
             }]
         }];
     },//end getListColumns
@@ -399,6 +407,12 @@ Ext.define('Yap.controller.Blog', {
                 text: lang('OPERATE'),
                 itemId: 'btn',
                 menu: [this.deleteItem('COMPLETELY_DELETE'), {
+                    text: lang('DELETE,STATIC_PAGE'),
+                    handler: function() {
+                        var selection = me.hasSelect(me.selectModel);
+                        selection.length && me.deleteBlogHtml(selection);
+                    }
+                }, {
                     text: lang('CN_WEI,ISSUE'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['is_issue', 1]);

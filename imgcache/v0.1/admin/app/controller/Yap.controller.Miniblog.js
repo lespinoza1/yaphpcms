@@ -129,6 +129,14 @@ Ext.define('Yap.controller.Miniblog', {
                     var record = grid.getStore().getAt(rowIndex);
                     me['delete'](record);
                 }
+            }, {//删除静态页
+                renderer: function(v, meta, record) {
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE,STATIC_PAGE') + '</span>';
+                },
+                handler: function(grid, rowIndex, cellIndex) {
+                    var record = grid.getStore().getAt(rowIndex);
+                    me.deleteBlogHtml(record, lang('CN_CI,MINIBLOG'));
+                }
             }]
         }];
     },//end getListColumns
@@ -249,7 +257,17 @@ Ext.define('Yap.controller.Miniblog', {
                 overflowHandler: 'Menu'
             },
             dock: 'top',
-            items: [this.deleteItem(), '-', lang('ADD,TIME,CN_CONG'),
+            items: [{
+                text: lang('OPERATE'),
+                itemId: 'btn',
+                menu: [this.deleteItem(), {
+                    text: lang('DELETE,STATIC_PAGE'),
+                    handler: function() {
+                        var selection = me.hasSelect(me.selectModel);
+                        selection.length && me.deleteBlogHtml(selection);
+                    }
+                }]
+            }, '-', lang('ADD,TIME,CN_CONG'),
             extField.dateField({itemId: 'date_start'}), lang('TO'),
             extField.dateField({itemId: 'date_end'}),
             extCombo.matchMode(),//匹配模式

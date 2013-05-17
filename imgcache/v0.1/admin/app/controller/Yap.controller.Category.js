@@ -27,6 +27,43 @@ Ext.define('Yap.controller.Category', {
     queryField: 'column,keyword,match_mode,is_show',//查询字段
 
     /**
+     * 清除静态页缓存
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-17 13:36:21
+     *
+     * @protected
+     *
+     * @param {Mixed}  record      record数据或id串
+     * @param {String} confirmText 确认信息
+     *
+     * @return {void} 无返回值
+     */
+    clearCache: function(record, confirmText) {
+        var pkValue;
+        var controller = this.getControllerName();
+
+        if (Ext.isString(record)) {//选中删除
+            pkValue = record;
+            confirmText = lang('SELECTED,RECORD');
+        }
+        else {//点击删除
+            pkValue = record.get(this.idProperty);
+        }
+
+        var options = {
+            action: this.getActionUrl(false, 'clearCache'),
+            data: this.idProperty + '=' + pkValue,
+            confirmText: lang('YOU_CONFIRM,CLEAR') + confirmText + lang('STATIC_PAGE,CACHE'),
+            failedMsg: lang('CLEAR,FALIURE'),
+            scope: this,
+            store: this.store()
+        };
+
+        this.myConfirm(options);
+    },//end clearCache
+
+    /**
      * 获取表单域
      *
      * @author       mrmsl <msl-138@163.com>
@@ -152,8 +189,14 @@ Ext.define('Yap.controller.Category', {
                 }
             },
             this.editColumnItem(true),//编辑
-            this.deleteColumnItem(this.nameColumn)//操作
-            ]
+            this.deleteColumnItem(this.nameColumn),//操作
+            {//清除静态页缓存 by mrmsl on 2013-05-17 13:35:07
+                text: lang('CLEAR,STATIC_PAGE,CACHE'),
+                handler: function(grid, rowIndex, cellIndex) {
+                    var record = grid.getStore().getAt(rowIndex);
+                    me.clearCache(record, '<span class="font-red font-bold">' + record.get(me.nameColumn) + '</span>');
+                }
+            }]
         }];
     },//end getListColumns
 
@@ -244,6 +287,12 @@ Ext.define('Yap.controller.Category', {
                     handler: function() {
                         var selection = me.hasSelect(me._listgrid, ['is_show', 1]);
                         selection.length && me.setOneOrZero(selection[0], 0, 'is_show', lang('YOU_CONFIRM,HIDE,SELECTED,RECORD'), selection[1]);
+                    }
+                }, {//清除静态页缓存 by mrmsl on 2013-05-17 13:43:57
+                    text: lang('CLEAR,STATIC_PAGE,CACHE'),
+                    handler: function() {
+                        var selection = me.hasSelect(me._listgrid);
+                        selection.length && me.clearCache(selection);
                     }
                 }]//end button cate
             }, '-', Yap.Field.combo().show(),//显示状态
