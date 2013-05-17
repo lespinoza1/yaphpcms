@@ -57,7 +57,9 @@ Ext.define('Yap.controller.Category', {
             confirmText: lang('YOU_CONFIRM,CLEAR') + confirmText + lang('STATIC_PAGE,CACHE'),
             failedMsg: lang('CLEAR,FALIURE'),
             scope: this,
-            store: this.store()
+            callback: function () {
+                //log(this._listgrid.getSelectionModel().deselectAll(), this._listgrid.getSelectionModel().store);
+            }
         };
 
         this.myConfirm(options);
