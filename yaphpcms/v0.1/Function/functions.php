@@ -1261,7 +1261,7 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars = '') {
     C('LOG_FILENAME', false);
 
     if ($log_level = C('LOG_LEVEL')) {//通过trigger_error触发
-        C('LOG_LEVEL', null);
+        C('LOG_LEVEL', false);
 
         if (strpos(sys_config('sys_log_level'), $log_level) === false) {
             return;
