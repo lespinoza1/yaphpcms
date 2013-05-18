@@ -54,4 +54,6 @@ return array(
     'SET_LEVEL_NODE'    => '_setNodeAndLevel()设置子节点层次以及节点关系',
     'STATIC_PAGE'       => 'html静态页',
     'VERIFY_CODE_TYPE'  => '验证码类型',
+    'WEBSITE'           => '网站',
+    'WWWROOT'           => '根目录',
 );

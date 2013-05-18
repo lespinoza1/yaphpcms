@@ -115,6 +115,7 @@ return array(
     'SYSTEM_INFOMATION' => '系统提示',
     'TAG'               => '标签',
     'TAG_CLOUD'         => '标签云',
+    'TEMPLATE'          => '模板',
     'TIME'              => '时间',
     'TITLE'             => '标题',
     'TO'                => '到',

@@ -1,25 +1,25 @@
 /**
- * ssi服务器端包含控制器
+ * 生成静态页管理控制器
  *
- * @file            app/controller/Yap.controller.Ssi.js
+ * @file            app/controller/Yap.controller.Html.js
  * @version         0.1
  * @author          mrmsl <msl-138@163.com>
- * @date            2013-05-13 21:58:41
+ * @date            2013-05-18 12:07:58
  * @lastmodify      $Date$ $Author$
  */
 
-Ext.define('Yap.controller.Ssi', {
+Ext.define('Yap.controller.Html', {
     extend: 'Yap.controller.Base',
     /**
      * @cfg {String}
      * 主键
      */
-    idProperty: 'ssi_id',
+    idProperty: 'html_id',
     /**
      * @cfg {String}
      * 查询字段
      */
-    queryField: 'sort,order,page',//,sort_order,tpl_name,ssi_name,memo',//查询字段
+    queryField: 'sort,order,page',//,sort_order,tpl_name,html_name,memo',//查询字段
 
     /**
      * @inheritdoc Yap.controller.Base#addAction
@@ -42,18 +42,18 @@ Ext.define('Yap.controller.Ssi', {
     },
 
     /**
-     * 生成ssi
+     * 生成html
      *
      * @private
      *
-     * @param {String} ssi ssi_id串
+     * @param {String} html html_id串
      *
      * @return {void} 无返回值
      */
-    build: function(ssi_id) {
+    build: function(html_id) {
         this.commonAction({
             action: this.getActionUrl(false, 'build'),
-            data: 'ssi_id=' + ssi_id,
+            data: 'html_id=' + html_id,
             scope: this,
             store: this.store()
         });
@@ -70,22 +70,22 @@ Ext.define('Yap.controller.Ssi', {
      *
      * @return {Array} 表单域
      */
-    formField: function(data) {
+    formField: function(data) {global('app_labelWidth', 200);
         var me = this;
         var extField = Yap.Field.field();
 
         return [
             extField.fieldContainer(['TPL_NAME', [//模板名，不包括后缀
                 [null, 'tpl_name', 'PLEASE_ENTER,TPL_NAME'],
-                lang('LT_BYTE').format(30)
+                lang('TPL_NAME_TIP,%，,EXCLUDE_SUFFIX') + '。' + lang('LT_BYTE').format(30)
             ]]),
-            extField.fieldContainer(['SSI_NAME,', [//生成ssi文件名，不包括后缀
-                [null, 'ssi_name', 'PLEASE_ENTER,SSI_NAME'],
-                lang('LT_BYTE').format(30)
+            extField.fieldContainer(['HTML_NAME,', [//生成html文件名，不包括后缀
+                [null, 'html_name', 'PLEASE_ENTER,HTML_NAME'],
+                lang('RELATIVE,WEBSITE,WWWROOT,%，,EXCLUDE_SUFFIX') + '。' + lang('LT_BYTE').format(30)
             ]]),
             extField.sortOrderField(),//排序
             extField.memoField(),//备注
-             extField.hiddenField(),//ssi_id
+             extField.hiddenField(),//html_id
             this.btnSubmit()//通用提交按钮
         ]
     },
@@ -104,17 +104,17 @@ Ext.define('Yap.controller.Ssi', {
             dataIndex: this.idProperty
         }, {
             header: lang('TPL_NAME'),//模板文件名
-            width: 120,
+            width: 150,
             dataIndex: 'tpl_name',
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, 'tpl_name');
             }
         }, {
-            header: lang('SSI_NAME'),//生成ssi文件名
-            width: 120,
-            dataIndex: 'ssi_name',
+            header: lang('HTML_NAME'),//生成html文件名
+            width: 150,
+            dataIndex: 'html_name',
             renderer: function(v) {
-                return me.searchReplaceRenderer(v, 'ssi_name');
+                return me.searchReplaceRenderer(v, 'html_name');
             }
         }, {
             header: lang('ORDER'),//排序
@@ -122,7 +122,7 @@ Ext.define('Yap.controller.Ssi', {
             width: 50,
             align: 'center'
         }, {
-            header: lang('LAST_BUILD_TIME'),//最后生成ssi文件时间
+            header: lang('LAST,BUILD,TIME'),//最后生成html文件时间
             dataIndex: 'last_build_time',
             width: 140,
             renderer: this.renderDatetime
@@ -136,9 +136,9 @@ Ext.define('Yap.controller.Ssi', {
             xtype: 'appactioncolumn',
             items: [
             me.editColumnItem(true),
-            {//生成ssi
+            {//生成html
                 renderer: function(v, meta, record) {
-                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('BUILD_SSI') + '</span>';
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('BUILD,STATIC_PAGE') + '</span>';
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
@@ -150,7 +150,7 @@ Ext.define('Yap.controller.Ssi', {
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
-                    me['delete'](record, '<span class="font-red">{0}</span>(<span class="font-bold font-666">{1}</span>)'.format(htmlspecialchars(record.get('tpl_name')), htmlspecialchars(record.get('ssi_name'))));
+                    me['delete'](record, '<span class="font-red">{0}</span>(<span class="font-bold font-666">{1}</span>)'.format(htmlspecialchars(record.get('tpl_name')), htmlspecialchars(record.get('html_name'))));
                 }
             }]
         }];
@@ -226,7 +226,7 @@ Ext.define('Yap.controller.Ssi', {
      * @inheritdoc Yap.controller.Admin#store
      */
     store: function(data) {
-        this._store = this._store || Ext.create('Yap.store.Ssi');
+        this._store = this._store || Ext.create('Yap.store.Html');
 
         if (data) {
             var sorters = this._store.sorters.getAt(0);//排序
@@ -264,17 +264,17 @@ Ext.define('Yap.controller.Ssi', {
                 itemId: 'btn',
                 menu: [
                     this.deleteItem(), {
-                    text: lang('BUILD_SSI'),
+                    text: lang('BUILD,STATIC_PAGE'),
                     handler: function() {
-                        var ssi = me.hasSelect(me.selectModel);
-                        ssi && me.build(ssi);
+                        var html = me.hasSelect(me.selectModel);
+                        html && me.build(html);
                     }
                 }]
             }]
         };
     },//end tbar
 
-    //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Ssi.model.Ssi
+    //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Html.model.Html
     /**
      * @inheritdoc Yap.controller.Field#defineModel
      */
@@ -282,13 +282,13 @@ Ext.define('Yap.controller.Ssi', {
         /**
          * 系统日志数据模型
          */
-        Ext.define('Yap.model.Ssi', {
+        Ext.define('Yap.model.Html', {
             extend: 'Ext.data.Model',
             /**
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'tpl_name', 'ssi_name', 'last_build_time', 'memo', 'sort_order'],
+            fields: [this.idProperty, 'tpl_name', 'html_name', 'last_build_time', 'memo', 'sort_order'],
             /**
              * @cfg {String}
              * 主键
@@ -301,13 +301,13 @@ Ext.define('Yap.controller.Ssi', {
 
     /**
      * @inheritdoc Yap.controller.Field#defineStore
-     * @member Yap.controller.Ssi
+     * @member Yap.controller.Html
      */
     defineStore: function() {
         /**
          * 系统日志数据容器
          */
-        Ext.define('Yap.store.Ssi', {
+        Ext.define('Yap.store.Html', {
             extend: 'Ext.data.Store',
             /**
              * @cfg {Boolean}
@@ -323,7 +323,7 @@ Ext.define('Yap.controller.Ssi', {
              * @cfg {Object/String}
              * 模型
              */
-            model: 'Yap.model.Ssi',
+            model: 'Yap.model.Html',
             /**
              * @cfg {Object}
              * proxy
@@ -355,4 +355,4 @@ Ext.define('Yap.controller.Ssi', {
 });
 
 //放到最后，以符合生成jsduck类说明
-Ext.data.JsonP.Yap_controller_Ssi(Yap.controller.Ssi);
+Ext.data.JsonP.Yap_controller_Html(Yap.controller.Html);
