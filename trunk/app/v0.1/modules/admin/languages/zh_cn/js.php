@@ -91,7 +91,6 @@ return array(
     'STRONG'                    => '强烈',//by mrmsl on 2012-09-13 11:06:54
     'SUFFIX'                    => '后缀',//by mrmsl on 2012-09-13 2012-09-13 11:32:33
     'SUGGEST'                   => '建议',//by mrmsl on 2012-09-13 11:04:23
-    'SUMMARY'                   => '摘要',
     'TO_BE_REPLACED'            => '将被替换为',
     'TO_EDIT_TIP'               => '<span class="font-red">填写后，请毋轻易修改</span>',//by mrmsl on 2012-09-05 11:11:31
     'TOTAL_RECORDS'             => '共{0}条记录',//记录总数 by mrmsl on 2012-08-13 13:52:40
