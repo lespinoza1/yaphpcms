@@ -691,6 +691,9 @@ a:focus {
   margin-bottom: 10px;
   border-bottom: 1px dotted #dddddd;
 }
+.blog-detail .blog-content .well {
+  padding: 8px;
+}
 .blog-detail a.label:hover {
   background-color: #3a87ad;
 }

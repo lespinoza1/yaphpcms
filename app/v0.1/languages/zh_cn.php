@@ -110,6 +110,7 @@ return array(
     'SUBMIT'            => '提交',
     'SUBMIT_TIP'        => '可按ctrl+enter提交',
     'SUCCESS'           => '成功',
+    'SUMMARY'           => '摘要',
     'SYSTEM'            => '系统',
     'SYSTEM_INFOMATION' => '系统提示',
     'TAG'               => '标签',
