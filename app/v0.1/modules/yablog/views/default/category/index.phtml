@@ -8,12 +8,14 @@
                 {L NOW_POSITION}：<a href="{BASE_SITE_URL}">{L HOME}</a>
                 <span class="divider">&raquo;</span>
                 {if '' === $tag}
-                {if $cate_info['parent_id']}<!--#include virtual="/v0.1/ssi/category/nav{$cate_info.parent_id}.shtml"-->{/if}
-                {$cate_info.cate_name}
+                    {if isset($cate_info['parent_id'])}
+                    <!--#include virtual="/v0.1/ssi/category/nav{$cate_info.parent_id}.shtml"-->
+                    {/if}
+                    {$cate_info.cate_name}
                 {else}
-                <a href="{BASE_SITE_URL}tag.shtml">{L TAG}</a>
-                <span class="divider">&raquo;</span>
-                {$tag}
+                    <a href="{BASE_SITE_URL}tag.shtml">{L TAG}</a>
+                    <span class="divider">&raquo;</span>
+                    {$tag}
                 {/if}
             </div>
             <div class="panel-body">
