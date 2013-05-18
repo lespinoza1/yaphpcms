@@ -1,17 +1,17 @@
 <?php
 /**
- * ssi服务器端包含控制器类
+ * 生成静态页管理控制器类
  *
- * @file            Ssi.class.php
+ * @file            Html.class.php
  * @package         Yap\Module\Admin\Controller
  * @version         0.1
  * @copyright       Copyright (c) 2013 {@link http://www.yaphpcms.com yaphpcms} All rights reserved
  * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
  * @author          mrmsl <msl-138@163.com>
- * @date            2013-05-10 08:32:06
+ * @date            2013-05-18 09:33:40
  * @lastmodify      $Date$ $Author$
  */
-class SsiController extends CommonController {
+class HtmlController extends CommonController {
     /**
      * @var bool $_after_exec_cache true删除后调用CommonController->_setCache()生成缓存， CommonController->delete()会用到。默认true
      */
@@ -43,8 +43,39 @@ class SsiController extends CommonController {
         $caches = $this->_getCache();
 
         foreach($pk_id as $id) {
-            is_file($filename = SSI_PATH . $caches[$id]['ssi_name'] . C('HTML_SUFFIX')) && unlink($filename);
+            is_file($filename = WWWROOT . $caches[$id]['html_name'] . C('HTML_SUFFIX')) && unlink($filename);
         }
+    }
+
+    /**
+     * 生成静态页
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-18 13:54:56
+     *
+     * @param array $item 信息
+     *
+     * @return string 错误信息
+     */
+    protected function _build($item) {
+
+        //首页,网文首页,留言首页,微博首页 直接删除对应静态页即可
+        if (in_array($item['html_name'], array('index', 'category', 'guestbook', 'miniblog'))) {
+            is_file($filename = WWWROOT . $item['_controller'] . C('HTML_SUFFIX')) && unlink($filename);
+            return '';
+        }
+
+        $method = "_{$item['_controller']}_{$item['_action']}";
+        $error  = '';
+
+        if (method_exists($this, $method)) {
+            $this->$method($item);
+        }
+        else {
+            $error = ',' . $method;
+        }
+
+        return $error;
     }
 
     /**
@@ -81,45 +112,6 @@ class SsiController extends CommonController {
     }//end _categoryNav
 
     /**
-     * 底部
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 13:30:10
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    private function _footer($info) {
-        $this->_getViewTemplate('build_html')->assign('footer', sys_config('sys_base_copyright'));
-        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
-        $this->_successAction($info['ssi_id']);
-    }
-
-    /**
-     * 热门网文
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 10:59:29
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    private function _hot_blogs($info) {
-        $blogs = $this->_model
-        ->table(TB_BLOG)
-        ->order('hits DESC')
-        ->where('is_issue=1 AND is_delete=0')
-        ->field('link_url,title')
-        ->limit(10)
-        ->select();
-        $this->_getViewTemplate('build_html')->assign('blogs', $blogs);
-        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
-        $this->_successAction($info['ssi_id']);
-    }
-
-    /**
      * 系统提示页面
      *
      * @author          mrmsl <msl-138@163.com>
@@ -129,51 +121,10 @@ class SsiController extends CommonController {
      *
      * @return void 无返回值
      */
-    private function _msg($info) {
+    private function _html_msg($info) {
         $this->_getViewTemplate('build_html')->assign('web_title', L('SYSTEM_INFOMATION'));
-        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
-        $this->_successAction($info['ssi_id']);
-    }
-
-    /**
-     * 导航条
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 08:33:53
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    private function _navbar($info) {
-        $this->_getViewTemplate('build_html')->assign('category_html', $this->_categoryNav());
-        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
-        $this->_successAction($info['ssi_id']);
-    }
-
-    /**
-     * 最新评论
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-10 10:38:39
-     *
-     * @param array $info ssi信息
-     *
-     * @return void 无返回值
-     */
-    private function _new_comments($info) {
-        $comments = $this->_model
-        ->table(TB_COMMENTS)
-        ->alias('c')
-        ->join(' LEFT JOIN ' . TB_BLOG . ' AS b ON c.blog_id=b.blog_id AND b.is_issue=1 AND b.is_delete=0')
-        ->where('c.status=1 AND c.type!=2')
-        ->order('c.comment_id DESC')
-        ->field('c.*,b.link_url,b.title')
-        ->limit(10)
-        ->select();
-        $this->_getViewTemplate('build_html')->assign('comments', $comments);
-        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
-        $this->_successAction($info['ssi_id']);
+        $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
+        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -186,10 +137,90 @@ class SsiController extends CommonController {
      *
      * @return void 无返回值
      */
-    private function _page_not_found($info) {
+    private function _html_page_not_found($info) {
         $this->_getViewTemplate('build_html')->assign('web_title', L('PAGE_NOT_FOUND'));
-        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
-        $this->_successAction($info['ssi_id']);
+        $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
+        $this->_successAction($info['html_id']);
+    }
+
+    /**
+     * 底部
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 13:30:10
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _ssi_footer($info) {
+        $this->_getViewTemplate('build_html')->assign('footer', sys_config('sys_base_copyright'));
+        $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
+        $this->_successAction($info['html_id']);
+    }
+
+    /**
+     * 热门网文
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 10:59:29
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _ssi_hot_blogs($info) {
+        $blogs = $this->_model
+        ->table(TB_BLOG)
+        ->order('hits DESC')
+        ->where('is_issue=1 AND is_delete=0')
+        ->field('link_url,title')
+        ->limit(10)
+        ->select();
+        $this->_getViewTemplate('build_html')->assign('blogs', $blogs);
+        $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
+        $this->_successAction($info['html_id']);
+    }
+
+    /**
+     * 导航条
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 08:33:53
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _ssi_navbar($info) {
+        $this->_getViewTemplate('build_html')->assign('category_html', $this->_categoryNav());
+        $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
+        $this->_successAction($info['html_id']);
+    }
+
+    /**
+     * 最新评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-10 10:38:39
+     *
+     * @param array $info ssi信息
+     *
+     * @return void 无返回值
+     */
+    private function _ssi_new_comments($info) {
+        $comments = $this->_model
+        ->table(TB_COMMENTS)
+        ->alias('c')
+        ->join(' LEFT JOIN ' . TB_BLOG . ' AS b ON c.blog_id=b.blog_id AND b.is_issue=1 AND b.is_delete=0')
+        ->where('c.status=1 AND c.type!=2')
+        ->order('c.comment_id DESC')
+        ->field('c.*,b.link_url,b.title')
+        ->limit(10)
+        ->select();
+        $this->_getViewTemplate('build_html')->assign('comments', $comments);
+        $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
+        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -202,7 +233,7 @@ class SsiController extends CommonController {
      *
      * @return void 无返回值
      */
-    private function _tags($info) {
+    private function _ssi_tags($info) {
         $tags = $this->_model
         ->table(TB_TAG)
         ->order('searches DESC')
@@ -210,8 +241,8 @@ class SsiController extends CommonController {
         ->limit(50)
         ->select();
         $this->_getViewTemplate('build_html')->assign('tags', $tags);
-        $this->_buildHtml(SSI_PATH . $info['ssi_name'] . C('HTML_SUFFIX'), $this->_fetch(null, $info['tpl_name']));
-        $this->_successAction($info['ssi_id']);
+        $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
+        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -223,7 +254,16 @@ class SsiController extends CommonController {
      * @return mixed 查询成功，返回数组，否则false
      */
     protected function _setCacheData() {
-        $data = $this->_model->key_column($this->_pk_field)->order('sort_order ASC,ssi_id ASC')->select();
+        $data = $this->_model->key_column($this->_pk_field)->order('sort_order ASC,' . $this->_pk_field . ' ASC')->select();
+
+        if ($data) {
+
+            foreach($data as $k => $v) {
+                $arr = explode('/', $v['tpl_name']);
+                $data[$k]['_controller'] = $arr[0];
+                $data[$k]['_action'] = $arr[1];
+            }
+        }
 
         return $data;
     }
@@ -234,16 +274,16 @@ class SsiController extends CommonController {
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-05-13 16:07:14
      *
-     * @param int $ssi_id ssi_id
+     * @param int $html_id html_id
      *
      * @return void 无返回值
      */
-    private function _successAction($ssi_id) {
-        $ssi_id && $this->_model->save(array($this->_pk_field => $ssi_id, 'last_build_time' => time()));
+    private function _successAction($html_id) {
+        $html_id && $this->_model->save(array($this->_pk_field => $html_id, 'last_build_time' => time()));
 
-        if (('all' != ACTION_NAME && 'build' != ACTION_NAME) || !$ssi_id) {
-            $this->_model->addLog(L('BUILD_SSI') . ',' . ACTION_NAME, LOG_TYPE_ADMIN_OPERATE);
-            $this->_setCache()->_ajaxReturn(true, L('BUILD_SSI,SUCCESS'));
+        if (('all' != ACTION_NAME && 'build' != ACTION_NAME) || !$html_id) {
+            $this->_model->addLog(L('BUILD,STATIC_PAGE') . ',' . ACTION_NAME, LOG_TYPE_ADMIN_OPERATE);
+            $this->_setCache()->_ajaxReturn(true, L('BUILD,STATIC_PAGE,SUCCESS'));
         }
     }
 
@@ -264,24 +304,24 @@ class SsiController extends CommonController {
         $pk_value  = $this->_model->$pk_field;//ssiid
 
         $data      = $this->_model->getProperty('_data');//数据，$model->data 在save()或add()后被重置为array()
-        $diff_key  = 'tpl_name,ssi_name,sort_order,memo';//比较差异字段 增加锁定字列by mrmsl on 2012-07-11 11:42:33
+        $diff_key  = 'tpl_name,html_name,sort_order,memo';//比较差异字段 增加锁定字列by mrmsl on 2012-07-11 11:42:33
         $msg       = L($pk_value ? 'EDIT' : 'ADD');//添加或编辑
-        $log_msg   = $msg . L('MODULE_NAME_SSI,FAILURE');//错误日志
+        $log_msg   = $msg . L('MODULE_NAME,FAILURE');//错误日志
         $error_msg = $msg . L('FAILURE');//错误提示信息
 
         if ($pk_value) {//编辑
 
             if (!$info = $this->_getCache($pk_value)) {//ssi不存在
-                $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,MODULE_NAME_SSI,%{$pk_field}({$pk_value}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
+                $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,MODULE_NAME,%{$pk_field}({$pk_value}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
                 $this->_ajaxReturn(false, $error_msg);
             }
 
             if (false === $this->_model->save()) {//更新出错
-                $this->_sqlErrorExit($msg . L('MODULE_NAME_SSI') . "{$info['tpl_name']}({$pk_value})" . L('FAILURE'), $error_msg);
+                $this->_sqlErrorExit($msg . L('MODULE_NAME') . "{$info['tpl_name']}({$pk_value})" . L('FAILURE'), $error_msg);
             }
 
             $diff = $this->_dataDiff($info, $data, $diff_key);//差异
-            $this->_model->addLog($msg . L('MODULE_NAME_SSI')  . "{$info['tpl_name']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+            $this->_model->addLog($msg . L('MODULE_NAME')  . "{$info['tpl_name']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
             $this->_setCache()->_ajaxReturn(true, $msg . L('SUCCESS'));
 
         }
@@ -289,10 +329,10 @@ class SsiController extends CommonController {
             $data = $this->_dataDiff($data, false, $diff_key);//数据
 
             if ($this->_model->add() === false) {//插入出错
-                $this->_sqlErrorExit($msg . L('MODULE_NAME_SSI') . $data . L('FAILURE'), $error_msg);
+                $this->_sqlErrorExit($msg . L('MODULE_NAME') . $data . L('FAILURE'), $error_msg);
             }
 
-            $this->_model->addLog($msg . L('MODULE_NAME_SSI') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+            $this->_model->addLog($msg . L('MODULE_NAME') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
             $this->_setCache()->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
     }
@@ -308,17 +348,15 @@ class SsiController extends CommonController {
     public function allAction() {
 
         if ($data = $this->_getCache()) {
+            $error  = '';
 
             foreach($data as $item) {
-                $method = '_' . $item['tpl_name'];
+                $error .= $this->_build($item);
+            }
 
-                if (method_exists($this, $method)) {
-                    $this->$method($item);
-                }
-                else {
-                    C('LOG_FILENAME', 'ssi');
-                    trigger_error($log = __METHOD__ . ',' . $method . L('NOT_EXIST'), E_USER_ERROR);
-                }
+            if($error) {
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . $error . L('NOT_EXIST'), E_USER_ERROR);
             }
         }
 
@@ -326,7 +364,7 @@ class SsiController extends CommonController {
     }
 
     /**
-     * 生成ssi
+     * 生成
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-05-14 11:30:05
@@ -334,28 +372,20 @@ class SsiController extends CommonController {
      * @return void 无返回值
      */
     public function buildAction() {
-        $ssi_id   = map_int(Filter::string($this->_pk_field), true);
+        $html_id   = map_int(Filter::string($this->_pk_field), true);
 
-        if (!$ssi_id) {
+        if (!$html_id) {
             $this->_model->addLog(L('PRIMARY_KEY,DATA,IS_EMPTY'), LOG_TYPE_INVALID_PARAM);
-            $this->_ajaxReturn(false, L('BUILD_SSI,FAILURE'));
+            $this->_ajaxReturn(false, L('BUILD,STATIC_PAGE,FAILURE'));
         }
 
         $caches = $this->_getCache();
         $error  = '';
 
-        foreach($ssi_id as $v) {
+        foreach($html_id as $v) {
 
             if (isset($caches[$v])) {
-                $item   = $caches[$v];
-                $method = '_' . $item['tpl_name'];
-
-                if (method_exists($this, $method)) {
-                    $this->$method($item);
-                }
-                else {
-                    $error .= ',' . $method;
-                }
+                $error .= $this->_build($caches[$v]);
             }
             else {
                 $error .= ',id(' . $v . ')';
@@ -363,7 +393,7 @@ class SsiController extends CommonController {
         }
 
         if($error) {
-            C('LOG_FILENAME', 'ssi');
+            C('LOG_FILENAME', CONTROLLER_NAME);
             trigger_error(__METHOD__ . $error . L('NOT_EXIST'), E_USER_ERROR);
         }
 
@@ -386,7 +416,7 @@ class SsiController extends CommonController {
         $order          = toggle_order($order);
         $data           = $this->_model->order($sort . ' ' . $order)->select();
 
-        false === $data && $this->_sqlErrorExit(L('QUERY,MODULE_NAME_SSI') . L('LIST,ERROR'));//出错
+        false === $data && $this->_sqlErrorExit(L('QUERY,MODULE_NAME') . L('LIST,ERROR'));//出错
 
         $this->_ajaxReturn(true, '', $data);
     }

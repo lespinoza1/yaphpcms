@@ -32,12 +32,9 @@ define('TB_MENU'               , TB_PREFIX . 'menu');           //后台菜单�
 define('TB_LOG'                , TB_PREFIX . 'log');            //系统日志表
 define('TB_FIELD'              , TB_PREFIX . 'field');          //表单域表 by mrmsl on 2012-08-01 17:15:55
 define('TB_SESSION'            , TB_PREFIX . 'session');        //session表 by mrmsl on 2012-09-18 16:16:56
-define('TB_GUESTBOOK'          , TB_PREFIX . 'guestbook');      //留言表 by mrmsl on 2013-02-26 17:46:53
 define('TB_COMMENTS'           , TB_PREFIX . 'comments');       //留言评论表 by mrmsl on 2013-02-27 16:29:14
 define('TB_CATEGORY'           , TB_PREFIX . 'category');       //博客分类表 by mrmsl on 2013-03-21 14:48:58
 define('TB_BLOG'               , TB_PREFIX . 'blog');           //博客表 by mrmsl on 2013-03-23 13:31:47
-define('TB_BLOG_COMMENTS'      , TB_PREFIX . 'blog_comments');    //博客评论表 by mrmsl on 2013-03-23 13:31:51
 define('TB_MINIBLOG'           , TB_PREFIX . 'miniblog');       //微博表 by mrmsl on 2013-03-23 13:31:57
-define('TB_MINIBLOG_COMMENTS'  , TB_PREFIX . 'miniblog_comments');//微博评论表 by mrmsl on 2013-03-23 13:32:00
 define('TB_TAG'                , TB_PREFIX . 'tag');            //标签表 by mrmsl on 2013-03-21 14:48:58
-define('TB_SSI'                , TB_PREFIX . 'ssi');            //ssi服务器端包含 by mrmsl on 2013-05-13 15:41:04
+define('TB_HTML'               , TB_PREFIX . 'html');           //生成静态页管理 by mrmsl on 2013-05-18 09:40:56

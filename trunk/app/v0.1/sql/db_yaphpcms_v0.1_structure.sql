@@ -115,14 +115,6 @@ CREATE TABLE `tb_blog` (
   KEY issue_delete(is_issue, is_delete)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客表 by mashanling on 2013-03-22 15:56:41';
 
-/*tb_blog_comments博客评论表*/
-CREATE TABLE `tb_blog_comments` (
-  `blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '微博id',
-  `comment_id` smallint(3) unsigned NOT NULL DEFAULT 0 COMMENT 'tb_comments comment_id',
-  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='博客评论表 by mashanling on 2013-03-22 17:34:52';
-
 /*tb_category博客分类表
 ALTER TABLE tb_category
 ADD COLUMN link_url varchar(150) NOT NULL DEFAULT '' COMMENT '分类链接'
@@ -196,10 +188,18 @@ CREATE TABLE `tb_field` (
   UNIQUE KEY `menu_id` (`menu_id`,`input_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='表单域表 by mashanling on 2012-12-27 11:37:21';
 
-/*tb_guestbook留言表*/
-CREATE TABLE `tb_guestbook` (
-  `comment_id` smallint(3) unsigned NOT NULL DEFAULT 0 COMMENT 'tb_comments comment_id'
-) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='留言表 by mashanling on 2013-02-26 16:02:11';
+/*tb_html 生成静态页管理表*/
+CREATE TABLE `tb_html` (
+  `html_id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `tpl_name` char(30) NOT NULL DEFAULT '' COMMENT '模板文件名，相对前台模板路径,格式: 目录/模板文件名,不包括后缀',
+  `html_name` char(30) NOT NULL DEFAULT '' COMMENT '生成静态页文件名，相对网站根目录,不包括后缀',
+  `last_build_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后生成时间',
+  `sort_order` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '排序,越小越靠前',
+  `memo` char(60) NOT NULL DEFAULT '' COMMENT '锁定备注',
+  PRIMARY KEY (`html_id`),
+  UNIQUE KEY `tpl_name` (`tpl_name`),
+  UNIQUE KEY `html_name` (`html_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='生成静态页管理表 by mashanling on 2013-05-18 09:39:52';
 
 /*tb_log系统日志表*/
 CREATE TABLE `tb_log` (
@@ -250,14 +250,6 @@ CREATE TABLE `tb_miniblog` (
   PRIMARY KEY (`blog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='微博表 by mashanling on 2013-03-22 17:10:34';
 
-/*tb_miniblog_comments微博评论表*/
-CREATE TABLE `tb_miniblog_comments` (
-  `blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '微博id',
-  `comment_id` smallint(3) unsigned NOT NULL DEFAULT 0 COMMENT 'tb_comments comment_id',
-  FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (`blog_id`) REFERENCES `tb_miniblog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='微博评论表 by mashanling on 2013-02-26 16:02:11';
-
 /*tb_session session表*/
 CREATE TABLE `tb_session` (
   `session_id` varchar(32) NOT NULL DEFAULT '' COMMENT 'session id',
@@ -287,19 +279,6 @@ CREATE TABLE `tb_tag` (
   FOREIGN KEY (`blog_id`) REFERENCES `tb_blog` (`blog_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='标签表 by mashanling on 2013-03-22 17:07:22';
 
-/*tb_ssi服务器端包含表*/
-CREATE TABLE `tb_ssi` (
-  `ssi_id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `tpl_name` char(30) NOT NULL DEFAULT '' COMMENT '模板文件名，不包括后缀',
-  `ssi_name` char(30) NOT NULL DEFAULT '' COMMENT '生成ssi文件名，不包括后缀',
-  `last_build_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后生成时间',
-  `sort_order` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '排序,越小越靠前',
-  `memo` char(60) NOT NULL DEFAULT '' COMMENT '锁定备注',
-  PRIMARY KEY (`ssi_id`),
-  UNIQUE KEY `tpl_name` (`tpl_name`),
-  UNIQUE KEY `ssi_name` (`ssi_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='tb_ssi服务器端包含表 by mashanling on 2013-05-13 15:17:18';
-
 /*外键约束*/
 
 /*管理员表role_id系统角色id*/
@@ -318,7 +297,3 @@ ADD CONSTRAINT `tb_admin_role_priv_ibfk_2` FOREIGN KEY (`menu_id`) REFERENCES `t
 /*表单域表menu_id菜单id*/
 ALTER TABLE `tb_field`
 ADD CONSTRAINT `tb_field_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*留言表comment_id 留言评论id*/
-ALTER TABLE `tb_guestbook`
-ADD CONSTRAINT `tb_guestbook_ibfk_1` FOREIGN KEY (`comment_id`) REFERENCES `tb_comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE;

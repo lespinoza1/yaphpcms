@@ -94,11 +94,9 @@ return array(
     'TO_BE_REPLACED'            => '将被替换为',
     'TO_EDIT_TIP'               => '<span class="font-red">填写后，请毋轻易修改</span>',//by mrmsl on 2012-09-05 11:11:31
     'TOTAL_RECORDS'             => '共{0}条记录',//记录总数 by mrmsl on 2012-08-13 13:52:40
-    'WEBSITE'                   => '网站',//by mrmsl on 2012-09-07 09:33:53
     'WILL'                      => '将',//by mrmsl on 2012-09-18 10:59:39
     'WIDTH'                     => '宽度',//by mrmsl on 2012-09-22 13:51:53
     'WITH_BROWSER_PROCESS'      => '随浏览器进程',//by mrmsl on 2012-09-13 12:33:44
-    'WWWROOT'                   => '根目录',//by mrmsl on 2012-09-07 09:33:18
     'UNIT'                      => '单位',//by mrmsl on 2012-09-11 12:53:04
     'UNSIGNED'                  => '非负',//by mrmsl on 2012-09-13 11:22:09
     'USUALLY'                   => '通常',//by mrmsl on 2012-09-13 11:22:09
