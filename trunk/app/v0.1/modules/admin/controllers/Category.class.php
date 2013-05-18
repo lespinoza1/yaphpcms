@@ -217,6 +217,7 @@ class CategoryController extends CommonController {
         $suffix     = C('HTML_SUFFIX');
         $sep        = ' <span class="divider">&raquo;</span> ';
         $nav        = '<a href="'  . BASE_SITE_URL . 'category' . $suffix .'">' . L('CN_WANGWEN') . '</a>' . $sep ;
+        file_put_contents($ssi_path . 'nav0' . $suffix, $nav);
 
         foreach($data as $v) {//生成分类ssi导航
             $html = $nav;
