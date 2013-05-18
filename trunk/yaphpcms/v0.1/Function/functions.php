@@ -1872,13 +1872,14 @@ function validate_dir($path, $name = '', $relative_path = 'WWWROOT', $must_end_w
             return true;
         }
 
-        $relative_path = defined($relative_path) ? constant($relative_path) : WWWROOT;
-    }
-    else {
         $relative_path = null;
     }
+    else {
+        $relative_path = defined($relative_path) ? constant($relative_path) : WWWROOT;
+    }
 
-    $path          = false === strpos($path, '\\') ? $path : str_replace('\\', DS, $path);
+    $name   = 0 === strpos($name, '{%') ? L(substr($name, 2, -1)) : $name;
+    $path   = false === strpos($path, '\\') ? $path : str_replace('\\', DS, $path);
 
     if ($must_end_with && DS != substr($path, -1)) {
         return $name . sprintf(L('MUST,END_WITH'), DS);
