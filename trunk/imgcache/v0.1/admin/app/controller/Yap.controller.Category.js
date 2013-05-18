@@ -140,7 +140,7 @@ Ext.define('Yap.controller.Category', {
         return [{
             xtype: 'treecolumn',
             header: lang('MODULE_NAME_CATEGORY'),//分类名
-            flex: 2,
+            flex: 3,
             dataIndex: this.nameColumn,
             renderer: function(v) {
                 return me.searchReplaceRenderer(v, me.nameColumn);
@@ -175,7 +175,7 @@ Ext.define('Yap.controller.Category', {
             },
             sortable: false
         }, {//操作列
-            flex: 1,
+            flex: 2,
             xtype: 'appactioncolumn',
             items: [{
                 text: lang('ADD,CHILD,MODULE_NAME_CATEGORY'),//添加子分类
