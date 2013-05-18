@@ -34,7 +34,12 @@ class CategoryController extends CommonController {
             $is_tag     = false;
             $cate_id    = $cate_info['cate_id'];
             $table      = TB_BLOG;
-            $where      = array('b.cate_id' => array('IN', $this->_getChildrenIds($cate_id)), 'b.is_delete' => 0, 'b.is_issue' => 1);
+            $where      = array('b.is_delete' => 0, 'b.is_issue' => 1);
+
+            if ($cate_id) {//category.shtml
+                $where['b.cate_id'] = array('IN', $this->_getChildrenIds($cate_id));
+            }
+
             $url_tpl    = str_replace('.shtml', '/page/\\1.shtml', $cate_info['link_url']);
             $cache_flag = $cate_id;
             $total      = $this->_model
@@ -93,7 +98,7 @@ class CategoryController extends CommonController {
         }
         else {//分类
             $o->assign(array(
-                'web_title' => $this->nav($cate_id, 'cate_name', null, ' | '),
+                'web_title' => $cate_id ? $this->nav($cate_id, 'cate_name', null, ' | ') : $cate_info['cate_name'],
                 'cate_info' => $cate_info,
                 'tag'       => '',
             ));
@@ -130,6 +135,11 @@ class CategoryController extends CommonController {
 
         if (!$cate_arr) {
             $this->_showMessage('no arr', null, 404);
+        }
+
+        if ('' === $cate_name) {//category.shtml
+            $this->_fetchBlog(array('cate_id' => 0, 'cate_name' => L('CN_WANGWEN'), 'link_url' => BASE_SITE_URL . 'category' . C('HTML_SUFFIX')));
+            return;
         }
 
         foreach($cate_arr as $v) {
