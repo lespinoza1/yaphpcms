@@ -124,7 +124,6 @@ class HtmlController extends CommonController {
     private function _html_msg($info) {
         $this->_getViewTemplate('build_html')->assign('web_title', L('SYSTEM_INFOMATION'));
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
-        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -140,7 +139,6 @@ class HtmlController extends CommonController {
     private function _html_page_not_found($info) {
         $this->_getViewTemplate('build_html')->assign('web_title', L('PAGE_NOT_FOUND'));
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
-        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -156,7 +154,6 @@ class HtmlController extends CommonController {
     private function _ssi_footer($info) {
         $this->_getViewTemplate('build_html')->assign('footer', sys_config('sys_base_copyright'));
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
-        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -179,7 +176,6 @@ class HtmlController extends CommonController {
         ->select();
         $this->_getViewTemplate('build_html')->assign('blogs', $blogs);
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
-        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -195,7 +191,6 @@ class HtmlController extends CommonController {
     private function _ssi_navbar($info) {
         $this->_getViewTemplate('build_html')->assign('category_html', $this->_categoryNav());
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
-        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -220,7 +215,6 @@ class HtmlController extends CommonController {
         ->select();
         $this->_getViewTemplate('build_html')->assign('comments', $comments);
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
-        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -242,7 +236,6 @@ class HtmlController extends CommonController {
         ->select();
         $this->_getViewTemplate('build_html')->assign('tags', $tags);
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
-        $this->_successAction($info['html_id']);
     }
 
     /**
@@ -274,17 +267,21 @@ class HtmlController extends CommonController {
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-05-13 16:07:14
      *
-     * @param int $html_id html_id
-     *
      * @return void 无返回值
      */
-    private function _successAction($html_id) {
-        $html_id && $this->_model->save(array($this->_pk_field => $html_id, 'last_build_time' => time()));
+    private function _successAction() {
 
-        if (('all' != ACTION_NAME && 'build' != ACTION_NAME) || !$html_id) {
-            $this->_model->addLog(L('BUILD,STATIC_PAGE') . ',' . ACTION_NAME, LOG_TYPE_ADMIN_OPERATE);
-            $this->_setCache()->_ajaxReturn(true, L('BUILD,STATIC_PAGE,SUCCESS'));
+        if ('all' == ACTION_NAME) {
+            $is_all = true;
+            $this->_model->execute('UPDATE ' . TB_HTML . ' SET last_build_time=' . time());
         }
+        elseif ('build' == ACTION_NAME) {
+            $is_build = true;
+            C('T_HTML_ID') && $this->_model->save(array($this->_pk_field => array('IN', C('T_HTML_ID')), 'last_build_time' => time()));
+        }
+
+        $this->_model->addLog(L('BUILD,STATIC_PAGE') . ',' . ACTION_NAME . C('T_LOG'), LOG_TYPE_ADMIN_OPERATE);
+        $this->_setCache()->_ajaxReturn(true, L('BUILD,STATIC_PAGE,SUCCESS'));
     }
 
     /**
@@ -360,7 +357,7 @@ class HtmlController extends CommonController {
             }
         }
 
-        $this->_successAction(0);
+        $this->_successAction();
     }
 
     /**
@@ -381,23 +378,30 @@ class HtmlController extends CommonController {
 
         $caches = $this->_getCache();
         $error  = '';
+        $log    = '';
 
-        foreach($html_id as $v) {
+        foreach($html_id as $k => $v) {
 
             if (isset($caches[$v])) {
-                $error .= $this->_build($caches[$v]);
+                $item   = $caches[$v];
+                $error .= $this->_build($item);
+                $log   .= ",{$item['tpl_name']}({$item[$this->_pk_field]})";
             }
             else {
+                unset($html_id[$k]);
                 $error .= ',id(' . $v . ')';
             }
         }
+
+        $html_id && C('T_HTML_ID', $html_id);
+        $log && C('T_LOG', $log);
 
         if($error) {
             C('LOG_FILENAME', CONTROLLER_NAME);
             trigger_error(__METHOD__ . $error . L('NOT_EXIST'), E_USER_ERROR);
         }
 
-        $this->_successAction(0);
+        $this->_successAction();
     }//end build
 
     /**
