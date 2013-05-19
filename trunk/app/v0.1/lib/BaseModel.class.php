@@ -130,6 +130,7 @@ class BaseModel extends Model {
         $verifycode_setting = get_verifycode_setting($module);
 
         if (!$verifycode_setting['enable']) {//未开启验证码
+            $this->_checkVerifycode = true;//通过验证码检测
             return true;
         }
 
