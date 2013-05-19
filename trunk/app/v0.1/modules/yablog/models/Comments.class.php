@@ -221,7 +221,7 @@ class CommentsModel extends CommonModel {
         $type = C('T_TYPE');
 
         if (COMMENT_TYPE_GUESTBOOK == $type) {
-            return sys_config('module_guestbook_check', 'Module');
+            return !sys_config('module_guestbook_check', 'Module');
         }
 
         return 0;
