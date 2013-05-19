@@ -47,7 +47,7 @@ class CommentsModel extends CommonModel {
      */
     protected $_pk_field        = 'comment_id';
     /**
-     * @var string $_true_table_name 实际数据表名(包含表前缀)。默认TB_GUESTBOOK
+     * @var string $_true_table_name 实际数据表名(包含表前缀)。默认TB_COMMENTS
      */
     protected $_true_table_name = TB_COMMENTS;//表
 
@@ -63,17 +63,18 @@ class CommentsModel extends CommonModel {
      */
     protected function _checkBlog($blog_id) {
         $table  = array(
-            COMMENT_TYPE_GUESTBOOK  => TB_GUESTBOOK,
             COMMENT_TYPE_BLOG       => TB_BLOG,
             COMMENT_TYPE_MINIBLOG   => TB_MINIBLOG,
         );
+        $type = C('T_TYPE');
 
-        if (!isset($table[$type = C('T_TYPE')])) {
-            return false;
-        }
-        elseif (COMMENT_TYPE_GUESTBOOK == $type) {//留言,blog_id=0
+        if (COMMENT_TYPE_GUESTBOOK == $type) {//留言,blog_id=0
             return !$blog_id;
         }
+        elseif (!isset($table[$type])) {
+            return false;
+        }
+
 
         return $blog_id && $this->table($table[$type])->where('blog_id=' . $blog_id)->find();
     }
