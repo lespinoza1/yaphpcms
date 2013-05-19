@@ -1111,8 +1111,20 @@ Ext.define('Yap.controller.Base', {
                 this._tabs.loadFormField(function(callback) {
                     items = callback.call(me);
                     global('app_labelWidth', global('app_labelWidth') || 180);
-                    items.push(me.btnSubmit());
-                    items.length > 1 && tab.add(items);
+
+                    if (items.length) {
+                        items.push(me.btnSubmit());
+                        tab.add(items);
+                    }
+                    else {//无表单域，显示添加表单域按钮
+                        tab.add({
+                            xtype: 'button',
+                            text: lang('ADD,MODULE_NAME_FIELD'),
+                            handler: function() {
+                                Yap.History.push('#' + me.getAction('field', 'add&back=' + encodeURIComponent(location.href)));
+                            }
+                        });
+                    }
                 });//加载表单输入域
 
                 this[key] = true;
