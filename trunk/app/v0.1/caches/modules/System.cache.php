@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-04-11 21:21:56
+//最后更新时间:2013-05-19 22:39:38
 
 return array (
   'sys_base_domain' => 'www.yaphpcms.com',
@@ -63,6 +63,8 @@ return array (
   'sys_verifycode_error_limit' => '5/10',
   'sys_verifycode_case' => '',
   'sys_verifycode_type' => '5',
+  'sys_base_title_separator' => '|',
+  'sys_base_bread_separator' => '&raquo;',
   'sys_base_copyright' => 'Copyright &copy; 2013 yablog 版权所有',
   'sys_base_domain_scope' => '.yaphpcms.com',
   'sys_base_website' => 'http://www.yaphpcms.com/',
