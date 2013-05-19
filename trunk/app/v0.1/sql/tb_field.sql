@@ -93,6 +93,7 @@ INSERT INTO `tb_field` VALUES (77,43,'imgcache common地址','extField.fieldCont
 INSERT INTO `tb_field` VALUES (78,43,'后台imgcache地址','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\', {width: 300}],\n    lang(\'END_WITH\').replace(\'%s\',\'\"<span class=\"font-red\">/</span>\"\')\n]])','url\n#{%PLEASE_ENTER,CORRECT,FORMAT,CN_DE,@field_name}#MUST_VALIDATE#notblank\nvalidate_path','','sys_base_admin_imgcache','http://imgcache.yaphpcms.com/v0.1/admin/',1,15,'',1);
 INSERT INTO `tb_field` VALUES (79,43,'后台管理入口','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\'],\n    lang(\'RELATIVE,WEBSITE,WWWROOT,OR\') + \'http://\' + lang(\'ABSOLUTE,ADDRESS\')\n]])','string\nnotblank','','sys_base_admin_entry','admin.php',1,2,'',0);
 INSERT INTO `tb_field` VALUES (80,84,'留言是否需要审核','extField.checkbox(\'@input_name\',\'@value\', \'%@fieldLabel\')','int','_getCheckboxValue','module_guestbook_check','1',1,22,'',0);
+INSERT INTO `tb_field` VALUES (82,99,'评论是否需要审核','extField.checkbox(\'@input_name\',\'@value\', \'%@fieldLabel\')','int','_getCheckboxValue','module_comments_check','1',1,82,'',0);
 
 ALTER TABLE `tb_field`
 ADD CONSTRAINT `tb_field_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE;

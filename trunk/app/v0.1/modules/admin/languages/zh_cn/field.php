@@ -67,6 +67,7 @@ return array(
     //模块设置tab标签数据 by mrmsl on 2012-09-22 15:10:51
     'MODULE_TAB_ARR'=> '[
      ["admin", "管理员模块"],
-     ["guestbook", "留言模块"]
+     ["guestbook", "留言模块"],
+     ["comments", "评论模块"]
     ]',
 );

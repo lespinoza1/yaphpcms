@@ -218,12 +218,6 @@ class CommentsModel extends CommonModel {
      * @return int 状态
      */
     protected function _setStatus() {
-        $type = C('T_TYPE');
-
-        if (COMMENT_TYPE_GUESTBOOK == $type) {
-            return !sys_config('module_guestbook_check', 'Module');
-        }
-
-        return 0;
+        return !sys_config('module_' . (COMMENT_TYPE_GUESTBOOK == C('T_TYPE') ? 'guestbook' : 'comments') . '_check', 'Module');
     }
 }

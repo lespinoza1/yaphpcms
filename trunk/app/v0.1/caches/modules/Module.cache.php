@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-05-13 12:49:37
+//最后更新时间:2013-05-19 22:27:49
 
 return array (
   'module_admin_verifycode_case' => '1',
@@ -13,4 +13,5 @@ return array (
   'module_admin_verifycode_type' => '5',
   'module_admin_verifycode_width' => '40',
   'module_guestbook_check' => '1',
+  'module_comments_check' => '1',
 );
