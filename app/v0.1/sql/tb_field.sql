@@ -94,6 +94,8 @@ INSERT INTO `tb_field` VALUES (78,43,'后台imgcache地址','extField.fieldConta
 INSERT INTO `tb_field` VALUES (79,43,'后台管理入口','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\'],\n    lang(\'RELATIVE,WEBSITE,WWWROOT,OR\') + \'http://\' + lang(\'ABSOLUTE,ADDRESS\')\n]])','string\nnotblank','','sys_base_admin_entry','admin.php',1,2,'',0);
 INSERT INTO `tb_field` VALUES (80,84,'留言是否需要审核','extField.checkbox(\'@input_name\',\'@value\', \'%@fieldLabel\')','int','_getCheckboxValue','module_guestbook_check','1',1,22,'',0);
 INSERT INTO `tb_field` VALUES (82,99,'评论是否需要审核','extField.checkbox(\'@input_name\',\'@value\', \'%@fieldLabel\')','int','_getCheckboxValue','module_comments_check','1',1,82,'',0);
+INSERT INTO `tb_field` VALUES (83,100,'标题分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_base_title_separator','|',1,83,'',0);
+INSERT INTO `tb_field` VALUES (84,100,'面包屑分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','raw\nnotblank','','sys_base_bread_separator','&raquo;',1,83,'',0);
 
 ALTER TABLE `tb_field`
 ADD CONSTRAINT `tb_field_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE;

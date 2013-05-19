@@ -84,6 +84,7 @@ INSERT INTO `tb_menu` VALUES (96,24,'生成静态页管理','html','#',1,96,2,'2
 INSERT INTO `tb_menu` VALUES (97,96,'生成静态页列表','html','list',1,97,3,'24,96,97','');
 INSERT INTO `tb_menu` VALUES (98,96,'添加生成静态页','html','add',1,98,3,'24,96,98','');
 INSERT INTO `tb_menu` VALUES (99,79,'评论模块','module','comments',1,99,3,'24,79,99','');
+INSERT INTO `tb_menu` VALUES (100,42,'显示设置','system','show',1,100,3,'24,42,100','');
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

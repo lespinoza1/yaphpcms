@@ -37,6 +37,7 @@ return array(
         ["template", "模板设置"],
         ["log", "日志设置"],
         ["verifycode", "验证码设置"],
+        ["show", "显示设置"],
         ["other", "其它设置"]
     ]',
     'MODULE_NAME_SYSTEM'=> '系统设置',
