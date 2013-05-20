@@ -583,7 +583,7 @@ Ext.define('Yap.Field', {
              */
             verifyCode: function(imgCodeId, module) {
                 module = module || getController().verifycodeModule;
-                var enable = VERIFYCODE_ENALBE[module];//是否开启验证码
+                var enable = System[module + '_verifycode_enable'];//是否开启验证码
 
                 if (!enable) {//未开启验证码
                     return {
