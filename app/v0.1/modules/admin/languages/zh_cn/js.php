@@ -102,4 +102,5 @@ return array(
     'USUALLY'                   => '通常',//by mrmsl on 2012-09-13 11:22:09
     'YES'                       => '是',//by mrmsl on 2012-09-15 12:04:32
     'YOU_CONFIRM'               => '您确定要',
+    'ZERO_UN_LIMIT'             => '0表示不限制',
 );
