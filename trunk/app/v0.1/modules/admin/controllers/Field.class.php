@@ -61,75 +61,92 @@ class FieldController extends CommonController {
      * @return string Extjs 表单域代码
      */
     private function _fieldCode($key, $extra = '') {
-        $default = "'<a class=\"a-font-000\" href=\"#' + this.getAction('system','verifycode') + '\">' + lang('SYSTEM,DEFAULT,VALUE') + '</a>'";
+        $default = "'<a class=\"a-font-000\" href=\"#' + this.getAction({$this->_get_action}) + '\">' + lang('SYSTEM,DEFAULT,VALUE') + '</a>'";
 
         $js_arr = array(
-        //验证码启用
-        'verifycode_enable' => "
-         extField.fieldContainer('%@fieldLabel',
-            [
-             extField.checkbox('@input_name', '', '', 'ENABLE', 1, '', {xtype: 'radio'}),
-             extField.checkbox('@input_name', '', '', 'DISABLED', 0, '', {xtype: 'radio'})
-             " . ($extra ? ",extField.checkbox('@input_name', '', '', '%' + {$default}, -1, '', {xtype: 'radio'})" : '') . "
-            ], true, {
-             xtype: 'radiogroup',
-                value: '@value' ? {'@input_name': '@value'} : false,
-                columns: 1,
-                vertical: true,
-                name: '@input_name'
-   })",
-        //验证码宽度
-        'verifycode_width'  => "extField.fieldContainer(['%@fieldLabel', [['numberField', '@input_name', 'PLEASE_ENTER,%@field_name', '', '@value', {minValue: 0, maxValue: 100}], lang('UNIT') + '：px' + @tip], true])",
-        //验证码高度
-        'verifycode_height' => "extField.fieldContainer(['%@fieldLabel', [['numberField', '@input_name', 'PLEASE_ENTER,%@field_name', '', '@value', {minValue: 0, maxValue: 50}], lang('UNIT') + '：px' + @tip], true])",
-        //验证码长度
-  'verifycode_length' => "extField.fieldContainer(['%@fieldLabel', [['numberField', '@input_name', 'PLEASE_ENTER,%@field_name', '', '@value', {minValue: 0, maxValue: 10}], lang('UNIT') + '：px' + @tip], true])",
-        //验证码顺序
-  'verifycode_order'  => "extField.fieldContainer(['%@fieldLabel', [[null, '@input_name', 'PLEASE_ENTER,%@field_name', '', '@value'], lang('VERIFY_CODE_ORDER_TIP')" . ($extra ? " + lang('%。-1,MEAN,CN_QU') + {$default}" : '') . "], true, {vertical: true}])",
-        //验证码刷新限制
-  'verifycode_refresh_limit'  => "
-  extField.fieldContainer(['%@fieldLabel', [
-            [null,'@input_name','', '', '@value', {size: 10}],
-            lang('VERIFY_CODE_REFRESH_LIMIT_TIP')" . ($extra ? " + lang('%。,KEEP_BLANK,CN_QU') + {$default}" : '') . "
-        ], true])",
-        //验证码错误限制
-  'verifycode_error_limit'  => "
-  extField.fieldContainer(['%@fieldLabel', [
-            [null,'@input_name','', '', '@value', {size: 10}],
-            lang('VERIFY_CODE_ERROR_LIMIT_TIP')" . ($extra ? " + lang('%。,KEEP_BLANK,CN_QU') + {$default}" : '') . "
-        ], true])",
-        //验证码区分大小写
-        'verifycode_case' => "
-         extField.fieldContainer('%@fieldLabel',
-            [
-             extField.checkbox('@input_name', '', '', 'DIFFERENTIATE', 1, '', {xtype: 'radio'}),
-             extField.checkbox('@input_name', '', '', 'NO,DIFFERENTIATE', 0, '', {xtype: 'radio'}),
-             " . ($extra ? "extField.checkbox('@input_name', '', '', '%' + {$default}, -1, '', {xtype: 'radio'})" : '') . "
-            ], true, {
-             xtype: 'radiogroup',
-                value: '@value' ? {'@input_name': '@value'} : false,
-                columns: 1,
-                vertical: true,
-                name: '@input_name'
-   })",
-        //验证码类型
-        'verifycode_type' => "
-         extField.fieldContainer('%@fieldLabel',
-            [
-             extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_LETTERS', lang('VERIFY_CODE_TYPE_LETTERS_VALUE'), '', {xtype: 'radio'}),
-             extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_LETTERS_UPPER', lang('VERIFY_CODE_TYPE_LETTERS_UPPER_VALUE'), '', {xtype: 'radio'}),
-             extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_LETTERS_LOWER', lang('VERIFY_CODE_TYPE_LETTERS_LOWER_VALUE'), '', {xtype: 'radio'}),
-             extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_NUMERIC', lang('VERIFY_CODE_TYPE_NUMERIC_VALUE'), '', {xtype: 'radio'}),
-             extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_ALPHANUMERIC', lang('VERIFY_CODE_TYPE_ALPHANUMERIC_VALUE'), '', {xtype: 'radio'}),
-             extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_ALPHANUMERIC_EXTEND', lang('VERIFY_CODE_TYPE_ALPHANUMERIC_EXTEND_VALUE'), '', {xtype: 'radio'})
-             " . ($extra ? ",extField.checkbox('@input_name', '', '', '%' + {$default}, -1, '', {xtype: 'radio'})" : '') . "
-            ], true, {
-             xtype: 'radiogroup',
-                value: '@value' ? {'@input_name': '@value'} : false,
-                columns: 1,
-                vertical: true,
-                name: '@input_name'
-   })"
+
+            //验证码启用
+            'verifycode_enable' => "
+                 extField.fieldContainer('%@fieldLabel',
+                    [
+                     extField.checkbox('@input_name', '', '', 'ENABLE', 1, '', {xtype: 'radio'}),
+                     extField.checkbox('@input_name', '', '', 'DISABLED', 0, '', {xtype: 'radio'})
+                     " . ($extra ? ",extField.checkbox('@input_name', '', '', '%' + {$default}, -1, '', {xtype: 'radio'})" : '') . "
+                    ], true, {
+                     xtype: 'radiogroup',
+                        value: '@value' ? {'@input_name': '@value'} : false,
+                        columns: 1,
+                        vertical: true,
+                        name: '@input_name'
+                })",
+
+            //验证码宽度
+            'verifycode_width'  => "extField.fieldContainer(['%@fieldLabel', [['numberField', '@input_name', 'PLEASE_ENTER,%@field_name', '', '@value', {minValue: 0, maxValue: 100}], lang('UNIT') + '：px' + @tip], true])",
+
+            //验证码高度
+            'verifycode_height' => "extField.fieldContainer(['%@fieldLabel', [['numberField', '@input_name', 'PLEASE_ENTER,%@field_name', '', '@value', {minValue: 0, maxValue: 50}], lang('UNIT') + '：px' + @tip], true])",
+
+            //验证码长度
+            'verifycode_length' => "extField.fieldContainer(['%@fieldLabel', [['numberField', '@input_name', 'PLEASE_ENTER,%@field_name', '', '@value', {minValue: 0, maxValue: 10}], lang('UNIT') + '：px' + @tip], true])",
+
+            //验证码顺序
+            'verifycode_order'  => "extField.fieldContainer(['%@fieldLabel', [[null, '@input_name', 'PLEASE_ENTER,%@field_name', '', '@value'], lang('VERIFY_CODE_ORDER_TIP')" . ($extra ? " + lang('%。-1,MEAN,CN_QU') + {$default}" : '') . "], true, {vertical: true}])",
+
+            //验证码刷新限制
+            'verifycode_refresh_limit'  => "
+                extField.fieldContainer(['%@fieldLabel', [
+                [null,'@input_name','', '', '@value', {size: 10}],
+                lang('VERIFY_CODE_REFRESH_LIMIT_TIP')" . ($extra ? " + lang('%。,KEEP_BLANK,CN_QU') + {$default}" : '') . "
+                ], true])",
+
+            //验证码错误限制
+            'verifycode_error_limit'  => "
+                extField.fieldContainer(['%@fieldLabel', [
+                [null,'@input_name','', '', '@value', {size: 10}],
+                lang('VERIFY_CODE_ERROR_LIMIT_TIP')" . ($extra ? " + lang('%。,KEEP_BLANK,CN_QU') + {$default}" : '') . "
+                ], true])",
+
+            //验证码区分大小写
+            'verifycode_case' => "
+                 extField.fieldContainer('%@fieldLabel',
+                    [
+                     extField.checkbox('@input_name', '', '', 'DIFFERENTIATE', 1, '', {xtype: 'radio'}),
+                     extField.checkbox('@input_name', '', '', 'NO,DIFFERENTIATE', 0, '', {xtype: 'radio'}),
+                     " . ($extra ? "extField.checkbox('@input_name', '', '', '%' + {$default}, -1, '', {xtype: 'radio'})" : '') . "
+                    ], true, {
+                     xtype: 'radiogroup',
+                        value: '@value' ? {'@input_name': '@value'} : false,
+                        columns: 1,
+                        vertical: true,
+                        name: '@input_name'
+                })",
+
+            //验证码类型
+            'verifycode_type' => "
+                extField.fieldContainer('%@fieldLabel',
+                [
+                 extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_LETTERS', lang('VERIFY_CODE_TYPE_LETTERS_VALUE'), '', {xtype: 'radio'}),
+                 extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_LETTERS_UPPER', lang('VERIFY_CODE_TYPE_LETTERS_UPPER_VALUE'), '', {xtype: 'radio'}),
+                 extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_LETTERS_LOWER', lang('VERIFY_CODE_TYPE_LETTERS_LOWER_VALUE'), '', {xtype: 'radio'}),
+                 extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_NUMERIC', lang('VERIFY_CODE_TYPE_NUMERIC_VALUE'), '', {xtype: 'radio'}),
+                 extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_ALPHANUMERIC', lang('VERIFY_CODE_TYPE_ALPHANUMERIC_VALUE'), '', {xtype: 'radio'}),
+                 extField.checkbox('@input_name', '', '', 'VERIFY_CODE_TYPE_ALPHANUMERIC_EXTEND', lang('VERIFY_CODE_TYPE_ALPHANUMERIC_EXTEND_VALUE'), '', {xtype: 'radio'})
+                 " . ($extra ? ",extField.checkbox('@input_name', '', '', '%' + {$default}, -1, '', {xtype: 'radio'})" : '') . "
+                ], true, {
+                 xtype: 'radiogroup',
+                    value: '@value' ? {'@input_name': '@value'} : false,
+                    columns: 1,
+                    vertical: true,
+                    name: '@input_name'
+                })",
+            /*//评论留言是否需要审核
+            'guestbook_comments_check' => "extField.checkbox('@input_name','@value', '%@fieldLabel')",
+
+            //评论留言最大回复次数
+            'guestbook_comments_max_reply' => "extField.fieldContainer(['%@fieldLabel', [
+                ['numberField','@input_name','PLEASE_ENTER,%@field_name', '', '@value', {minValue: 0, maxValue: 10}],
+                lang('ZERO_UN_LIMIT')
+                ]])",*/
         );
 
         return isset($js_arr[$key]) ? $js_arr[$key] : '';
@@ -238,6 +255,45 @@ class FieldController extends CommonController {
      */
     protected function _setCacheData() {
         return $this->_model->order('is_enable DESC,sort_order ASC, field_id ASC')->key_column($this->_pk_field)->select();
+    }
+
+    /**
+     * 快捷表单域
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-20 11:37:51
+     *
+     * @param string $field_code 表单域
+     *
+     * @return string 快捷表单域
+     */
+    protected function _shortcutCode($field_code) {
+
+        //验证码字段或评论留言
+        if (($is_field_code = 0 === strpos($field_code, 'verifycode_'))) {// || ($is_guestbook_comments = 0 === strpos($field_code, 'guestbook_comments_'))) {
+
+            if (!empty($is_field_code)) {//验证码
+                $this->_get_action = "'system', 'verifycode'";
+            }
+            /*elseif (!empty($is_guestbook_comments)) {//评论留言
+                $this->_get_action = "'module', 'guestbook_comments'";
+            }*/
+
+            $_arr = explode('@', $field_code);
+            $field_code = $this->_fieldCode($_arr[0], isset($_arr[1]));
+
+            if (!$field_code) {
+                return '';
+            }
+
+            if (!isset($_arr[1])) {//无提示
+                return str_replace('@tip', "''", $field_code);
+            }
+
+            return str_replace('@tip', "lang('%。0,MEAN,CN_QU,SYSTEM') + '<a class=\"a-font-000\" href=\"#' + this.getAction({$this->_get_action}) + '\">' + lang('SYSTEM,DEFAULT,VALUE') + '</a>'", $field_code);
+        }
+
+        return $field_code;
     }
 
     /**
@@ -463,20 +519,8 @@ class FieldController extends CommonController {
                 $field_name = $item['field_name'];//表单域名
                 $field_code = $item['field_code'];//js代码
 
-                if (strpos($field_code, 'verifycode_') === 0) {//验证码字段 by mrmsl on 2012-09-22 14:39:17
-                    $_arr = explode('@', $field_code);
-                    $field_code = $this->_fieldCode($_arr[0], isset($_arr[1]));
-
-                    if (!$field_code) {
-                        continue;
-                    }
-
-                    if (!isset($_arr[1])) {//无提示
-                        $field_code = str_replace('@tip', "''", $field_code);
-                    }
-                    else {//验证码提示
-                        $field_code = str_replace('@tip', "lang('%。0,MEAN,CN_QU,SYSTEM') + '<a class=\"a-font-000\" href=\"#' + this.getAction('system','verifycode') + '\">' + lang('SYSTEM,DEFAULT,VALUE') + '</a>'", $field_code);
-                    }
+                if (!$field_code = $this->_shortcutCode($field_code)) {
+                    continue;
                 }
 
                 $find       = array('@fieldLabel', '@field_name', '@input_name', '@value');
