@@ -3,23 +3,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES */;
 /*!40103 SET SQL_NOTES='ON' */;
 
-DROP TABLE IF EXISTS `tb_field`;
-CREATE TABLE `tb_field` (
-  `field_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `menu_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '所属菜单',
-  `field_name` varchar(50) NOT NULL DEFAULT '' COMMENT '字段名',
-  `field_code` text NOT NULL COMMENT '字段js代码',
-  `validate_rule` varchar(300) NOT NULL DEFAULT 'string' COMMENT '输入框值 by mashanling on 2012-08-31 15:26:18',
-  `auto_operation` varchar(300) NOT NULL DEFAULT '' COMMENT '输入框值 by mashanling on 2012-09-07 12:37:32',
-  `input_name` varchar(50) NOT NULL DEFAULT '' COMMENT '输入框名称',
-  `input_value` text NOT NULL COMMENT '输入框值 by mashanling on 2012-08-29 16:28:49',
-  `is_enable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否启用;0,不启用;1启用',
-  `sort_order` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '排序,排序越小越靠前',
-  `memo` varchar(100) NOT NULL DEFAULT '' COMMENT '备注',
-  `customize_1` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '自定义字段1(系统设置:0,不写js;1则写) by mashanling on 2012-09-04 18:07:32',
-  PRIMARY KEY (`field_id`),
-  UNIQUE KEY `menu_id` (`menu_id`,`input_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=gbk COMMENT='表单域表 by mashanling on 2012-12-27 11:37:21';
 
 INSERT INTO `tb_field` VALUES (4,76,'安全设置','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','string','','sys_security_setting','安全设置',0,0,'',0);
 INSERT INTO `tb_field` VALUES (7,43,'网站域名','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_base_domain','www.yaphpcms.com',1,0,'',1);
@@ -94,12 +77,10 @@ INSERT INTO `tb_field` VALUES (78,43,'后台imgcache地址','extField.fieldConta
 INSERT INTO `tb_field` VALUES (79,43,'后台管理入口','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\'],\n    lang(\'RELATIVE,WEBSITE,WWWROOT,OR\') + \'http://\' + lang(\'ABSOLUTE,ADDRESS\')\n]])','string\nnotblank','','sys_base_admin_entry','admin.php',1,2,'',0);
 INSERT INTO `tb_field` VALUES (80,84,'留言是否需要审核','extField.checkbox(\'@input_name\',\'@value\', \'%@fieldLabel\')','int','_getCheckboxValue','module_guestbook_check','1',1,22,'',0);
 INSERT INTO `tb_field` VALUES (82,99,'评论是否需要审核','extField.checkbox(\'@input_name\',\'@value\', \'%@fieldLabel\')','int','_getCheckboxValue','module_comments_check','1',1,82,'',0);
-INSERT INTO `tb_field` VALUES (83,100,'标题分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_base_title_separator','|',1,83,'',0);
-INSERT INTO `tb_field` VALUES (84,100,'面包屑分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','raw\nnotblank','','sys_base_bread_separator','&raquo;',1,83,'',0);
-
-ALTER TABLE `tb_field`
-ADD CONSTRAINT `tb_field_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `tb_menu` (`menu_id`) ON DELETE CASCADE;
-
+INSERT INTO `tb_field` VALUES (83,100,'标题分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_show_title_separator','|',1,83,'',0);
+INSERT INTO `tb_field` VALUES (84,100,'面包屑分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','raw\nnotblank','','sys_show_bread_separator','&raquo;',1,83,'',0);
+INSERT INTO `tb_field` VALUES (85,84,'留言最大回复层级','extField.fieldContainer([\'%@fieldLabel\', [\n    [\'numberField\',\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\', {size: 4, minValue: 0, maxValue: 10}],\n    lang(\'ZERO_UN_LIMIT\')\n]])','int','','module_guestbook_max_reply_level','5',1,85,'',0);
+INSERT INTO `tb_field` VALUES (86,99,'评论最大回复层级','extField.fieldContainer([\'%@fieldLabel\', [\n    [\'numberField\',\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\', {minValue: 0, maxValue: 10}],\n    lang(\'ZERO_UN_LIMIT\')\n]])','int','','module_comments_max_reply_level','5',1,85,'',0);
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
