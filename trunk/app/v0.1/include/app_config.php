@@ -1,7 +1,7 @@
 <?php
 /**
  * 项目常量定义模板，修改此文件后，后台修改网站基本信息，重新生成后生效。生成对应文件为app_config.php
- * 后台自动生成，请毋修改。最后更新时间: 2013-05-20 08:29:13
+ * 后台自动生成，请毋修改。最后更新时间: 2013-05-20 09:09:14
  *
  * @file            app_config.tpl
  * @package         Yap
@@ -10,7 +10,7 @@
  * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-04 08:41:37
- * @lastmodify      2013-05-20 08:29:13
+ * @lastmodify      2013-05-20 09:09:14
  */
 
 //核心配置
@@ -120,6 +120,8 @@ define('ADMIN_IMGCACHE'        , 'http://imgcache.yaphpcms.com/v0.1/admin/');//�
 define('IMGCACHE_JS'           , 'http://imgcache.yaphpcms.com/v0.1/yablog/js/');//js url
 define('IMGCACHE_CSS'          , 'http://imgcache.yaphpcms.com/v0.1/yablog/css/');//css url
 define('IMGCACHE_IMG'          , 'http://imgcache.yaphpcms.com/v0.1/yablog/images/');//img url
+define('TITLE_SEPARATOR'       , ' ' . '|' . ' ');//标题分割符
+define('BREAD_SEPARATOR'       , ' <span class="divider">' . '&raquo;' . '</div> ');//面包屑分割符
 
 //session,cookie设置
 define('SESSION_PREFIX'        , 'mrmsl');  //session前缀

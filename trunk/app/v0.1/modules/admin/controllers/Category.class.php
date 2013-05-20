@@ -215,8 +215,7 @@ class CategoryController extends CommonController {
         new_mkdir($ssi_path = SSI_PATH . 'category/');
 
         $suffix     = C('HTML_SUFFIX');
-        $sep        = ' <span class="divider">&raquo;</span> ';
-        $nav        = '<a href="'  . BASE_SITE_URL . 'category' . $suffix .'">' . L('CN_WANGWEN') . '</a>' . $sep ;
+        $nav        = '<a href="'  . BASE_SITE_URL . 'category' . $suffix .'">' . L('CN_WANGWEN') . '</a>' . BREAD_SEPARATOR ;
         file_put_contents($ssi_path . 'nav0' . $suffix, $nav);
 
         foreach($data as $v) {//生成分类ssi导航
@@ -224,7 +223,7 @@ class CategoryController extends CommonController {
 
             foreach (explode(',', $v['node']) as $item) {
                 $info  = $data[$item];
-                $html .= '<a href="' . $info['link_url'] . '">' . $info['cate_name'] . '</a>' . $sep;
+                $html .= '<a href="' . $info['link_url'] . '">' . $info['cate_name'] . '</a>' . BREAD_SEPARATOR;
             }
 
             file_put_contents($ssi_path . 'nav' . $v[$this->_pk_field] . $suffix, $html);

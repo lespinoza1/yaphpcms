@@ -374,21 +374,22 @@ class BaseController extends Yaf_Controller_Abstract {
      * @param int    $id         id字段值
      * @param string $name_field 名称字段
      * @param string $filename   缓存文件。默认null，当前模块名
-     * @param string $separator  导航分割符。默认»
+     * @param string $separator  导航分割符。默认null
      *
      * @return string 面包屑导航
      */
-    public function nav($id, $name_field, $filename = null, $separator = '&raquo;') {
-        $nav  = array();
-        $data = $this->_getCache(0, $filename ? $filename : $this->_getControllerName());
-        $info = $data[$id];
+    public function nav($id, $name_field, $filename = null, $separator = null) {
+        $separator  = null === $separator ? BREAD_SEPARATOR : $separator;
+        $nav        = array();
+        $data       = $this->_getCache(0, $filename ? $filename : $this->_getControllerName());
+        $info       = $data[$id];
 
         foreach(explode(',', $info['node']) as $item) {
             $nav[] = $data[$item][$name_field];
         }
 
-        if (' | ' == $separator) {
-            return join(' | ', array_reverse($nav));
+        if (TITLE_SEPARATOR == $separator) {
+            return join(TITLE_SEPARATOR, array_reverse($nav));
         }
 
         return join($separator, $nav);

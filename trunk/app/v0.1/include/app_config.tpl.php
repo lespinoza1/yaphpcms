@@ -120,6 +120,8 @@ define('ADMIN_IMGCACHE'        , sys_config('sys_base_admin_imgcache'));//后台
 define('IMGCACHE_JS'           , sys_config('sys_base_js_url'));//js url
 define('IMGCACHE_CSS'          , sys_config('sys_base_css_url'));//css url
 define('IMGCACHE_IMG'          , sys_config('sys_base_img_url'));//img url
+define('TITLE_SEPARATOR'       , ' ' . sys_config('sys_show_title_separator') . ' ');//标题分割符
+define('BREAD_SEPARATOR'       , ' <span class="divider">' . sys_config('sys_show_bread_separator') . '</div> ');//面包屑分割符
 
 //session,cookie设置
 define('SESSION_PREFIX'        , sys_config('sys_session_prefix'));  //session前缀

@@ -91,14 +91,14 @@ class CategoryController extends CommonController {
 
         if ($is_tag) {//标签
             $o->assign(array(
-                'web_title'     => $cate_info . ' | ' . L('TAG'),
+                'web_title'     => $cate_info . TITLE_SEPARATOR . L('TAG'),
                 'tag'           => $cate_info,
                 'seo_keywords'  => $cate_info,
             ));
         }
         else {//分类
             $o->assign(array(
-                'web_title' => $cate_id ? $this->nav($cate_id, 'cate_name', null, ' | ') : $cate_info['cate_name'],
+                'web_title' => $cate_id ? $this->nav($cate_id, 'cate_name', null, TITLE_SEPARATOR) : $cate_info['cate_name'],
                 'cate_info' => $cate_info,
                 'tag'       => '',
             ));
