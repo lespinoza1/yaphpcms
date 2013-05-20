@@ -208,6 +208,8 @@ class FieldController extends CommonController {
         //$js_data['sys_base_admin_entry'] = 0 === strpos('http://', $v = $sys_config['sys_base_admin_entry']) ? $v : $js_data['sys_base_site_url'] . $system_data['sys_base_admin_entry'];//后台管理入口
         $js_data['sys_base_domain_scope'] = $system_data['sys_base_domain_scope'];//cookie作用域
         $js_data['sys_cookie_domain'] = $system_data['sys_cookie_domain'] == '@domain' ? $system_data['sys_base_domain_scope'] : $system_data['sys_cookie_domain'];//cookie域名
+        $js_data['sys_show_title_separator'] = ' ' . $system_data['sys_show_title_separator'] . ' ';
+        $js_data['sys_show_bread_separator'] = ' ' . $system_data['sys_show_bread_separator'] . ' ';
 
         unset($js_data['sys_base_admin_entry']);//不暴露后台入口至前台
         array2js($js_data, $cache_key, WWWROOT . $system_data['sys_base_js_path'] . $cache_key . '.js');
