@@ -115,13 +115,13 @@ function addComments() {
 function getFormHtml() {
 
     if (BLOG_FLAG == NAV_ID) {
-        var type = BLOG_TYPE, blogId = META_INFO.hits.split(',')[1];
+        var type = BLOG_TYPE, blogId = META_INFO.hits.split(',')[1], verifycodeModule = 'comments';
     }
     else if (MINIBLOG_FLAG == NAV_ID) {
-        var type = MINIBLOG_TYPE, blogId = META_INFO.hits.split(',')[1];
+        var type = MINIBLOG_TYPE, blogId = META_INFO.hits.split(',')[1], verifycodeModule = 'comments';
     }
     else {
-        var type = GUESTBOOK_TYPE, blogId = 0;
+        var type = GUESTBOOK_TYPE, blogId = 0, verifycodeModule = 'guestbook';
     }
 
     var html = [];
@@ -147,6 +147,19 @@ function getFormHtml() {
     html.push('            <span class="muted">http(s)://www.abc.com/path/?querystring ' + lang('SPACE') + '... =&gt; <a href="http://www.abc.com/path/?querystring" rel="nofollow">http(s)://www.abc.com/path/?querystring</a></span>');
     html.push('        </div>');
     html.push('    </div>');
+
+    if (1 == System['module_' + verifycodeModule + '_verifycode_enable']) {//开启验证码
+        html.push('    <div class="control-group">');
+        html.push('        <label class="control-label"><span class="text-error">*</span>' + lang('VERIFY_CODE') + '</label>');
+        html.push('        <div class="controls">');
+        html.push('            <input type="text" name="verifycode" required maxlength="6" />');
+        html.push('        </div>');
+        html.push('    </div>');
+    }
+    else {
+        html.push('<input type="hidden" name="verifycode" value="ok" />');
+    }
+
     html.push('    <div class="controls text-right">');
     html.push('        <button id="btn-submit" class="btn btn-primary">' + lang('SUBMIT') + '</button>');
     html.push('        <button id="btn-reset-cancel" type="reset" class="btn">' + lang('CANCEL') + '</button>');
