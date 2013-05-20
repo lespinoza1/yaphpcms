@@ -81,16 +81,16 @@ Ext.define('Yap.view.Viewport', {
                     });
                 }
 
-                title = title.join('_');
+                title = title.join(System.sys_show_title_separator);
                 title = strip_tags(title);
                 this.cache[controller + action] = title;
             }
 
             this.origTitle = this.origTitle ? this.origTitle : document.title;
             //编辑 => 添加  by mrmsl on 2012-08-09 12:46:17 最近操作调用
-            document.title = this.cache[controller + action] ? (this.cache[controller + action].replace(lang('EDIT'), lang('ADD')) + '_' + this.origTitle) : this.origTitle;
+            document.title = this.cache[controller + action] ? (this.cache[controller + action].replace(lang('EDIT'), lang('ADD')) + System.sys_show_title_separator + this.origTitle) : this.origTitle;
         }
 
-        Yap.cmp.card.setTitle(document.title.split('_').reverse().join(' » '));//主面板标题 by mrmsl on 2012-12-03 13:21:49
+        Yap.cmp.card.setTitle(document.title.split(System.sys_show_title_separator).reverse().join(System.sys_show_bread_separator));//主面板标题 by mrmsl on 2012-12-03 13:21:49
     }//end setPageTitle
 });
