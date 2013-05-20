@@ -6,7 +6,7 @@
             <div class="panel-header">
                 <span class="icon-home"></span>
                 {L NOW_POSITION}：<a href="{BASE_SITE_URL}">{L HOME}</a>
-                <span class="divider">&raquo;</span>
+                {BREAD_SEPARATOR}
                 {if '' === $tag}
                     {if isset($cate_info['parent_id'])}
                     <!--#include virtual="/v0.1/ssi/category/nav{$cate_info.parent_id}.shtml"-->
@@ -14,7 +14,7 @@
                     {$cate_info.cate_name}
                 {else}
                     <a href="{BASE_SITE_URL}tag.shtml">{L TAG}</a>
-                    <span class="divider">&raquo;</span>
+                    {BREAD_SEPARATOR}
                     {$tag}
                 {/if}
             </div>

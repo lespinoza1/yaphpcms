@@ -133,7 +133,7 @@ class BlogController extends CommonController {
             ->assign($this->_getNextAndPrevBlog($blog_id))//上下篇
             ->assign('blog_info', $blog_info)//博客内容
             ->assign(array(
-                'web_title'         => $blog_info['title'] . ' | ' . $this->nav($blog_info['cate_id'], 'cate_name', 'Category', ' | ') . ' | ' . L('CN_WANGWEN'),
+                'web_title'         => $blog_info['title'] . TITLE_SEPARATOR . $this->nav($blog_info['cate_id'], 'cate_name', 'Category', TITLE_SEPARATOR) . TITLE_SEPARATOR . L('CN_WANGWEN'),
                 'seo_keywords'      => $blog_info['seo_keyword'],
                 'seo_description'   => $blog_info['seo_description'],
                 'tags'              => $this->tags($blog_info['seo_keyword']),

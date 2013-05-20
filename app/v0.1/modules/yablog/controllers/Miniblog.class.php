@@ -114,7 +114,7 @@ class MiniblogController extends CommonController {
             $o = $this->_getViewTemplate('build_html')
             ->assign('blog_info', $blog_info)//微博内容
             ->assign(array(
-                'web_title'         => L('MINIBLOG,DETAIL') . ' | ' . L('MINIBLOG'),
+                'web_title'         => L('MINIBLOG,DETAIL') . TITLE_SEPARATOR . L('MINIBLOG'),
                 'comments_html'     => $this->_getBlogComments($blog_id),
                 //'seo_keywords'      => $blog_info['seo_keyword'],
                 //'seo_description'   => $blog_info['seo_description'],
