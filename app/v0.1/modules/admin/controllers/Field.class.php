@@ -172,6 +172,11 @@ class FieldController extends CommonController {
         $menu_ids   = $this->_getChildrenIds($parent_id, false, false, 'Menu');
         $data       = $this->_model->where("menu_id IN({$menu_ids}) AND is_enable=1")->getField('input_name,input_value');
         $this->_setCache($data, $cache_key);
+
+        $system_js_filename = WWWROOT . sys_config('sys_base_js_path') . 'System.js';
+        $system_js_data     = file_get_contents($system_js_filename);
+        $system_js_data     = json_decode(substr($system_js_data, strpos($system_js_data, 'var System = ') + strlen('var System = '), -1), true);
+        $this->_writeSystemJsData($system_js_data);
     }
 
     /**
@@ -229,7 +234,8 @@ class FieldController extends CommonController {
         $js_data['sys_show_bread_separator'] = ' ' . $system_data['sys_show_bread_separator'] . ' ';
 
         unset($js_data['sys_base_admin_entry']);//不暴露后台入口至前台
-        array2js($js_data, $cache_key, WWWROOT . $system_data['sys_base_js_path'] . $cache_key . '.js');
+
+        $this->_writeSystemJsData($js_data, $system_data);
 
         $this->publicDefineSystemConstantsAction($system_data);//生成系统常量
     }//end _saveValueCallbackSystem
@@ -294,6 +300,28 @@ class FieldController extends CommonController {
         }
 
         return $field_code;
+    }
+
+    /**
+     * 写System.js
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-20 21:52:36
+     *
+     * @param array $js_data        js数据
+     * @param array $system_data    系统数据。默认null， 取sys_config()
+     *
+     * @return void 无返回值
+     */
+    protected function _writeSystemJsData($js_data, $system_data = null) {
+        $system_data = null === $system_data ? sys_config() : $system_data;
+
+        //管理员,留言,评论模块是开启验证码
+        foreach(array('admin', 'guestbook', 'comments') as $item) {
+            $js_data['module_' . $item . '_verifycode_enable'] = get_verifycode_setting('module_' . $item, 'enable');
+        }
+
+        array2js($js_data, 'System', WWWROOT . $system_data['sys_base_js_path'] . 'System.js');
     }
 
     /**
