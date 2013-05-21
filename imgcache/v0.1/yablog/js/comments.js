@@ -105,6 +105,51 @@ function addComments() {
 }//end addComments
 
 /**
+ * 绑定验证码事件
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-21 08:43:04
+ *
+ * @return {void} 无返回值
+ */
+function bindVerifycode() {
+    var el = $('#txt-verifycode');
+
+    if (el.length) {
+        el.focus(function () {
+            var next = el.next('img');
+
+            if (!next.length) {
+                $('<img />').bind({
+                    error: function() {
+
+                        if (!el.data('error')) {log('error');
+                            this.src = System.sys_base_common_imgcache + 'images/verifycode_error.png';
+                            el.data('error', true);
+                        }
+                    },
+                    click: function() {
+                        this.src = System.sys_base_site_url + 'verifycode/' + window._VERIFYCODE_MODULE + '.shtml?' + Math.random();
+                    }
+                }).attr({
+                    title: lang('REFRESH_CODE_TIP'),
+                    id: 'img-verifycode',
+                    src: System.sys_base_site_url + 'verifycode/' + window._VERIFYCODE_MODULE + '.shtml'
+                }).css({
+                    valign: 'absmiddle',
+                    margin: '0 5px',
+                    cursor: 'pointer'
+                }).insertAfter(el)
+                .after($('<span class="muted">' + lang('VERIFY_CODE_ORDER') + '：' + '<span class="text-error">' + (System[window._VERIFYCODE_MODULE + '_verifycode_order']) + '</span></span>'));
+            }
+        });
+    }
+    /*else if (!el.next('img').is(':visible')) {
+        el.next('img').click();
+    }*/
+}//end bindVerifycode
+
+/**
  * 获取留言或者评论 表单 html
  *
  * @author          mrmsl <msl-138@163.com>
@@ -114,15 +159,18 @@ function addComments() {
  */
 function getFormHtml() {
 
-    if (BLOG_FLAG == NAV_ID) {
-        var type = BLOG_TYPE, blogId = META_INFO.hits.split(',')[1], verifycodeModule = 'comments';
+    switch (NAV_ID) {
+        case GUESTBOOK_FLAG://留言
+            var type = GUESTBOOK_TYPE, blogId = 0, verifycodeModule = 'module_guestbook';
+            break;
+
+        default://评论
+            var blogId = META_INFO.hits.split(',')[1], verifycodeModule = 'module_comments';
+            var type = BLOG_FLAG == NAV_ID ? BLOG_TYPE : MINIBLOG_TYPE;
+            break;
     }
-    else if (MINIBLOG_FLAG == NAV_ID) {
-        var type = MINIBLOG_TYPE, blogId = META_INFO.hits.split(',')[1], verifycodeModule = 'comments';
-    }
-    else {
-        var type = GUESTBOOK_TYPE, blogId = 0, verifycodeModule = 'guestbook';
-    }
+
+    window._VERIFYCODE_MODULE = verifycodeModule;
 
     var html = [];
     html.push('<form class="form-horizontal" id="' + DATA_FORM_COMMENT + '" method="post" action="' + System.sys_base_site_url + 'comments/add.shtml">');
@@ -148,16 +196,16 @@ function getFormHtml() {
     html.push('        </div>');
     html.push('    </div>');
 
-    if (1 == System['module_' + verifycodeModule + '_verifycode_enable']) {//开启验证码
+    if (1 == System[verifycodeModule + '_verifycode_enable']) {//开启验证码
         html.push('    <div class="control-group">');
         html.push('        <label class="control-label"><span class="text-error">*</span>' + lang('VERIFY_CODE') + '</label>');
         html.push('        <div class="controls">');
-        html.push('            <input type="text" name="verifycode" required maxlength="6" />');
+        html.push('            <input type="text" id="txt-verifycode" name="_verify_code" required maxlength="6" />');
         html.push('        </div>');
         html.push('    </div>');
     }
     else {
-        html.push('<input type="hidden" name="verifycode" value="ok" />');
+        html.push('<input type="hidden" name="_verify_code" value="ok" />');
     }
 
     html.push('    <div class="controls text-right">');
