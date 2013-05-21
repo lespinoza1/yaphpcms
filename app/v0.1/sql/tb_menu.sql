@@ -3,22 +3,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES */;
 /*!40103 SET SQL_NOTES='ON' */;
 
-DROP TABLE IF EXISTS `tb_menu`;
-CREATE TABLE `tb_menu` (
-  `menu_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
-  `menu_name` char(30) NOT NULL DEFAULT '' COMMENT '菜单名称',
-  `controller` char(20) NOT NULL DEFAULT '' COMMENT '控制器',
-  `action` char(20) NOT NULL DEFAULT '' COMMENT '操作',
-  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否显示',
-  `sort_order` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
-  `node` char(20) NOT NULL DEFAULT '' COMMENT '节点',
-  `memo` char(60) NOT NULL DEFAULT '' COMMENT '备注',
-  PRIMARY KEY (`menu_id`),
-  KEY `controller` (`controller`),
-  KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=gbk COMMENT='后台管理菜单表 by mashanling on 2012-12-27 12:44:04';
 
 INSERT INTO `tb_menu` VALUES (1,24,'菜单管理','menu','#',1,0,2,'24,1','');
 INSERT INTO `tb_menu` VALUES (2,1,'添加菜单','menu','add',1,1,3,'24,1,2','');
@@ -68,7 +52,7 @@ INSERT INTO `tb_menu` VALUES (80,79,'管理员模块','module','admin',1,80,3,'2
 INSERT INTO `tb_menu` VALUES (81,0,'mrmsl','test','test',0,81,1,'81','');
 INSERT INTO `tb_menu` VALUES (82,25,'事务回滚SQL','log','rollbackSql',1,82,3,'24,25,82','');
 INSERT INTO `tb_menu` VALUES (83,85,'留言管理','guestbook','list',1,83,2,'85,83','');
-INSERT INTO `tb_menu` VALUES (84,79,'留言模块','module','guestbook',1,84,3,'24,79,84','');
+INSERT INTO `tb_menu` VALUES (84,101,'留言模块','module','guestbook',1,84,4,'24,79,101,84','');
 INSERT INTO `tb_menu` VALUES (85,0,'内容管理','content','#',1,85,1,'85','');
 INSERT INTO `tb_menu` VALUES (86,85,'博客管理','blog','#',1,86,2,'85,86','');
 INSERT INTO `tb_menu` VALUES (87,86,'博客列表','blog','list',1,87,3,'85,86,87','');
@@ -83,8 +67,9 @@ INSERT INTO `tb_menu` VALUES (95,93,'添加微博','miniblog','add',1,95,3,'85,9
 INSERT INTO `tb_menu` VALUES (96,24,'生成静态页管理','html','#',1,96,2,'24,96','');
 INSERT INTO `tb_menu` VALUES (97,96,'生成静态页列表','html','list',1,97,3,'24,96,97','');
 INSERT INTO `tb_menu` VALUES (98,96,'添加生成静态页','html','add',1,98,3,'24,96,98','');
-INSERT INTO `tb_menu` VALUES (99,79,'评论模块','module','comments',1,99,3,'24,79,99','');
+INSERT INTO `tb_menu` VALUES (99,101,'评论模块','module','comments',1,99,4,'24,79,101,99','');
 INSERT INTO `tb_menu` VALUES (100,42,'显示设置','system','show',1,100,3,'24,42,100','');
+INSERT INTO `tb_menu` VALUES (101,79,'留言评论模块','module','guestbook_comments',1,101,3,'24,79,101','');
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
