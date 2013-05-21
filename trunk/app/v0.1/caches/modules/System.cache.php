@@ -1,15 +1,15 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-05-20 22:29:51
+//最后更新时间:2013-05-21 07:54:45
 
 return array (
   'sys_base_domain' => 'www.yaphpcms.com',
   'sys_base_http_protocol' => 'http',
   'sys_base_wwwroot' => 'v0.1/',
   'sys_base_admin_entry' => 'admin.php',
-  'sys_base_web_title' => 'yablog',
   'sys_base_web_name' => 'yablog',
-  'sys_base_web_index_title' => 'yablog首页',
+  'sys_base_web_title' => 'yablog,又一个博客',
+  'sys_base_web_index_title' => '首页',
   'sys_base_js_path' => 'static/js/',
   'sys_base_css_path' => 'static/css/',
   'sys_seo_keyword' => 'mrmsl',
