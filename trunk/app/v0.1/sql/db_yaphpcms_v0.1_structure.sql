@@ -145,6 +145,8 @@ ADD COLUMN `blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '博客id �
 ADD COLUMN type tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0留言;1博客评论;2微博评论.默认0',
 ADD COLUMN email varchar(50) NOT NULL DEFAULT '' COMMENT '用户email' AFTER username,
 ADD COLUMN at_email tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '有回复时是否发送emil;0否;1是'
+ADD COLUMN province varchar(20) NOT NULL DEFAULT '' COMMENT '用户省份' AFTER user_ip,
+ADD COLUMN city varchar(20) NOT NULL DEFAULT '' COMMENT '用户城市' AFTER province,
 DROP INDEX status,
 ADD INDEX(blog_id),
 ADD INDEX(type,status)
