@@ -30,6 +30,7 @@ class CommentsModel extends CommonModel {
         'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENTS'),//父id
         //用户名
         'username'       => array('validate' => array('notblank#USERNAME', '_checkLength#USERNAME#value|0|20')),
+        'email'          => array('filter' => 'email', 'validate' => array('_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50')),
         'content'        => array('validate' => array('notblank#CONTENT')),
         'add_time'       => array('filter' => 'int', 'validate' => array('_checkLength#ADD_TIME,DATA#value|0')),//添加时间
         'last_reply_time'=> array('filter' => 'int', 'validate' => array('_checkLength#LAST_REPLY_TIME,DATA#value|0')),//最后回复时间
@@ -41,7 +42,9 @@ class CommentsModel extends CommonModel {
         'status'         => array('filter' => 'int', 'validate' => array('_checkLength#STATUS,DATA#value|0')),
         'type'           => array('filter' => 'int', 'validate' => array('_checkType#INVALID_PARAM,TYPE')),
         'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id ,调用C('T_TYPE')放于type后面
-        '_verify_code'     => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码
+        '_verify_code'   => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码
+        'province'       => array('validate' => array('_checkLength#PROVINCE,DATA#value|0')),
+        'city'           => array('validate' => array('_checkLength#CITY,DATA#value|0')),
     );
     /**
      * @var string $_pk_field 数据表主键字段名称。默认log_id
@@ -51,6 +54,13 @@ class CommentsModel extends CommonModel {
      * @var string $_true_table_name 实际数据表名(包含表前缀)。默认TB_COMMENTS
      */
     protected $_true_table_name = TB_COMMENTS;//表
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function _beforeInsert(&$data, $options) {
+        //$ip_info = $this->_
+    }
 
     /**
      * 检查博客或者微博是否存在

@@ -59,7 +59,6 @@ return array(
     'MEAN'                      => '表示',//by mrmsl on 2012-09-13 11:19:36
     'METHOD'                    => '方法',
     'NAVIGATION_MENU'           => '导航菜单',//by mrmsl on 2012-09-13 12:57:53
-    'NO'                        => '不',//by mrmsl on 2012-09-13 12:57:53
     'NO_TITLE'                  => '无标题',
     'NOT_FILL'                  => '不填',
     'OPEN'                      => '打开',
