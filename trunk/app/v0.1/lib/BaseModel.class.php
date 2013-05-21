@@ -127,6 +127,11 @@ class BaseModel extends Model {
      * @return mixed 如果正确，返回true，否则返回提示信息
      */
     protected function _checkVerifycode($code, $module) {
+
+        if ($v = C('T_VERIFYCODE_MODULE')) {//动态设置模块 by mrmsl on 2013-05-21 11:42:23
+            $module = $v;
+        }
+
         $verifycode_setting = get_verifycode_setting($module);
 
         if (!$verifycode_setting['enable']) {//未开启验证码
