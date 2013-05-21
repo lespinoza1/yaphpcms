@@ -72,10 +72,16 @@ class BaseVerifycodeController extends CommonController {
 
         if ($error) {//有错误
             $this->_model->addLog(L('VERIFY_CODE') . "({$module})" . $error, LOG_TYPE_VERIFYCODE_ERROR);
-            exit();
+            $exit = true;
         }
         elseif (!check_verifycode_limit($module, 'refresh')) {//刷新次数限制
-            return false;
+            $exit = true;
+        }
+
+        if (!empty($exit)) {
+            header('Content-type: image/png');
+            readfile(COMMON_IMGCACHE . 'images/verifycode_error.png');
+            exit();
         }
 
         $width  = $verifycode_setting['width'];//宽
