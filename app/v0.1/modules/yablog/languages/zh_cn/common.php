@@ -25,6 +25,7 @@ return array(
     'MINUTES_AGO'       => '{0}分钟前',
     'MODULE_NAME_COMMENT'  => '评论',
     'N_PAGES'           => '第%d页',
+    'SECRET'            => '保密',
     'SPACE'             => '空格',
     'THE_DAY_BEFORE_YESTERDAY' => '前天',
     'YESTERDAY'         => '昨天',

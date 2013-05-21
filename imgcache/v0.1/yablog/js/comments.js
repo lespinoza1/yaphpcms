@@ -45,9 +45,17 @@ function addComments() {
             if (!checked) {
                 return false;
             }
+
+            var el = formComment.find('input[name=email]'), emial = el.val().trim();
+
+            if (email && /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email)) {
+                alert(lang('PLEASE_ENTER,CORRECT,CN_DE,EMAIL'));
+                return false;
+            }
+
         }//end if IS_OLD_IE
 
-        var el = formComment.find('input[name=user_homepage]'), url = $.trim(el.val());
+        var el = formComment.find('input[name=user_homepage]'), url = el.val().trim();
 
         if (url.length && 'http://' != url && !/http:\/\/[a-z0-9]+\.[a-z0-9]+/i.test(url)) {//主页链接
             alert(lang('PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK'));
@@ -178,21 +186,28 @@ function getFormHtml() {
     html.push('        <label class="control-label"><span class="text-error">*</span>' + lang('USERNAME') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <input type="text" name="username" required maxlength="20" />');
-    html.push('            <span class="muted">(' + lang('LT_BYTE').replace('{0}', 20) + ',' + lang('CN_TO_BYTE') + ')</span>');
+    html.push('            <span class="muted">(' + lang('LT_BYTE').replace('{0}', 20) + '。' + lang('CN_TO_BYTE') + ')</span>');
+    html.push('        </div>');
+    html.push('    </div>');
+    html.push('    <div class="control-group">');
+    html.push('        <label class="control-label">' + lang('EMAIL') + '</label>');
+    html.push('        <div class="controls">');
+    html.push('            <input type="email" value="" name="email" maxlength="50" />');
+    html.push('            <span class="muted">(' + lang('SECRET,%，,NO,SHOW') + '。' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="control-group">');
     html.push('        <label class="control-label">' + lang('HOMEPAGE') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <input type="text" value="http://" name="user_homepage" />');
-    html.push('            <span class="muted">(' + lang('CN_XUANTIAN') + ',' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
+    html.push('            <span class="muted">(' + lang('CN_XUANTIAN') + '。' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="control-group">');
     html.push('        <label class="control-label"><span class="text-error">*</span>' + lang('CONTENT') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <textarea name="content" rows="3" cols="50" class="input-block-level" required></textarea>');
-    html.push('            <span class="muted">http(s)://www.abc.com/path/?querystring ' + lang('SPACE') + '... =&gt; <a href="http://www.abc.com/path/?querystring" rel="nofollow">http(s)://www.abc.com/path/?querystring</a></span>');
+    html.push('            <span class="muted">http(s)://www.yablog.cn/path/?querystring ' + lang('SPACE') + '... =&gt; <a href="http://www.yablog.cn.com/path/?querystring" rel="nofollow">http(s)://www.abc.com/path/?querystring</a></span>');
     html.push('        </div>');
     html.push('    </div>');
 
