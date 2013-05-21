@@ -41,6 +41,7 @@ class CommentsModel extends CommonModel {
         'status'         => array('filter' => 'int', 'validate' => array('_checkLength#STATUS,DATA#value|0')),
         'type'           => array('filter' => 'int', 'validate' => array('_checkType#INVALID_PARAM,TYPE')),
         'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id ,调用C('T_TYPE')放于type后面
+        '_verify_code'     => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码
     );
     /**
      * @var string $_pk_field 数据表主键字段名称。默认log_id
@@ -128,6 +129,7 @@ class CommentsModel extends CommonModel {
 
         if (in_array($type, array(COMMENT_TYPE_GUESTBOOK, COMMENT_TYPE_BLOG, COMMENT_TYPE_MINIBLOG))) {
             C('T_TYPE', $type);
+            C('T_VERIFYCODE_MODULE', COMMENT_TYPE_GUESTBOOK == $type ? 'module_guestbook' : 'module_comments');
             return true;
         }
 

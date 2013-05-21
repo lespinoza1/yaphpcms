@@ -20,5 +20,4 @@ return array(
     'LOGIN_TITLE'           => '管理员登陆',
     'MAC_ADDRESS_ERROR'     => '读取电脑硬件信息失败，请检查您的浏览器设置',
     'PC_HAS_NOT_PERMISSION' => '电脑未授权',
-    'REFRESH_CODE_TIP'      => '看不清，换一张',
 );
