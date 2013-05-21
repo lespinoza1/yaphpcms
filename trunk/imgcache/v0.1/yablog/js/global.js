@@ -63,6 +63,9 @@ seajs.config({//seajs配置
         },
         comments: {//留言评论
             src: System.sys_base_js_url + 'comments.js?' + _c
+        },
+        cnzz: {//站长统计
+            src: 'http://s11.cnzz.com/stat.php?id=5299476&web_id=5299476'
         }
     }
 });
@@ -115,6 +118,7 @@ function bootstrap() {
         seajs.use('comments', function() {
             showCommentsReply();//鼠标滑过留言评论，显示回复
             addComments();//添加留言或者评论
+            bindVerifycode();//绑定验证码事件
         });
     }
 
@@ -129,6 +133,10 @@ function bootstrap() {
     }
 
     $('#nav-' + NAV_ID).addClass('active');//高亮导航
+
+    seajs.use('cnzz', function () {//站长统计
+        log('cnzz');
+    });
 }//end bootstrap
 
 /**
