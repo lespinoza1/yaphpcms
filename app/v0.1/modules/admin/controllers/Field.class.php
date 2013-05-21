@@ -317,8 +317,11 @@ class FieldController extends CommonController {
         $system_data = null === $system_data ? sys_config() : $system_data;
 
         //管理员,留言,评论模块是开启验证码
-        foreach(array('admin', 'guestbook', 'comments') as $item) {
-            $js_data['module_' . $item . '_verifycode_enable'] = get_verifycode_setting('module_' . $item, 'enable');
+        foreach(array('guestbook', 'comments') as $item) {
+
+            foreach(array('enable', 'order', 'case') as $v) {
+                $js_data['module_' . $item . '_verifycode_' . $v] = get_verifycode_setting('module_' . $item, $v);
+            }
         }
 
         array2js($js_data, 'System', WWWROOT . $system_data['sys_base_js_path'] . 'System.js');

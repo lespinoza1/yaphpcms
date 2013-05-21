@@ -8,6 +8,7 @@
         Ext.onReady(function(){
             Ext.create('Yap.Application');
         });
+        System.module_admin_verifycode_enable = '<?php echo get_verifycode_setting('module_admin', 'enable'); ?>';
         var ADMIN_ID = <?php echo ADMIN_ID; ?>;
         var ADMIN_ROLE_ID = <?php echo ADMIN_ROLE_ID; ?>;
         <?php echo "
@@ -19,10 +20,7 @@
             lastLoginIp: '{$admin_info['last_login_ip']}',
             roleId: {$admin_info['role_id']},
             priv: " . ($admin_priv ? $admin_priv : '[]') . "
-        };
-        var VERIFYCODE_ENALBE = {
-            module_admin: " . get_verifycode_setting('module_admin', 'enable') . //是否开启登陆及修改密码验证码 by mashanling on 2012-09-29 11:31:47
-        "};"
+        };"
         ?>
     </script>
 </head>

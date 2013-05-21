@@ -7,6 +7,7 @@
     <script type="text/javascript" src="<?php echo ADMIN_IMGCACHE; ?>app/util/override.js"></script>
     <script type="text/javascript">
         var LOGIN;
+        System.module_admin_verifycode_enable = '<?php echo get_verifycode_setting('module_admin', 'enable'); ?>';
 
         Ext.onReady(function(){
             LOGIN = Ext.create('Yap.controller.Login');
