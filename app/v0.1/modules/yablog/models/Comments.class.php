@@ -22,6 +22,7 @@ class CommentsModel extends CommonModel {
         'user_ip'           => 'get_client_ip#1',
         'content'           => '_setContent',
         'status'            => '_setStatus',
+        'at_email'          => '_getCheckboxValue',//有人回复时通知我
     );
     /**
      * @var array $_db_fields 表字段
@@ -45,6 +46,7 @@ class CommentsModel extends CommonModel {
         '_verify_code'   => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码
         'province'       => array('validate' => array('_checkLength#PROVINCE,DATA#value|0')),
         'city'           => array('validate' => array('_checkLength#CITY,DATA#value|0')),
+        'at_email'       => array('filter' => 'int'),//有人回复时通知我
     );
     /**
      * @var string $_pk_field 数据表主键字段名称。默认log_id
@@ -59,7 +61,17 @@ class CommentsModel extends CommonModel {
      * {@inheritDoc}
      */
     protected function _beforeInsert(&$data, $options) {
-        //$ip_info = $this->_
+        $ip_info = get_ip_info();//ip地址信息
+
+        if (is_array($ip_info)) {
+            $data['province'] = $ip_info[0];
+            $data['city'] = $ip_info[1];
+        }
+        else {
+            $data['city'] = $ip_info;
+        }
+
+        $data['email'] = $data['email'] ? strtolower($data['email']) : '';
     }
 
     /**

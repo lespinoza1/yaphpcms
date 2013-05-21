@@ -1529,7 +1529,17 @@ function get_ip_info() {
         return '';
     }
 
-    return json_decode($data, true);
+    $data = json_decode($data, true);
+
+    if (!$data || $data['code']) {
+        C('LOG_FILENAME', CONTROLLER_NAME);
+        trigger_error(L('GET,PROVINCE,CITY,FAILURE'));
+        return '';
+    }
+
+    $data = $data['data'];
+
+    return array($data['region'], $data['city']);
 }//end get_ip_info
 
 /**
