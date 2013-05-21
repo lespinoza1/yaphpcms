@@ -1490,6 +1490,49 @@ function get_browser_name () {
 }//end get_browser_name
 
 /**
+ * 去淘宝数据库获取ip地址信息，如广东省深圳市
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-21 17:27:37
+ *
+ * @param string $datetime 时间表达式
+ *
+ * @return array|string 成功获取，返回array(province, city)，否则返回字符串作为城市
+ */
+function get_ip_info() {
+    $ip = get_client_ip();//'14.153.254.58'
+
+    if (!$ip2long = intval($ip)) {//无法获取到ip
+        return '';
+    }
+    elseif ('127.0.0.1' == $ip) {//本机电脑
+        return L('SELF_COMPUTER');
+    }
+    elseif (0 === strpos($ip, '192.168.')) {//局域网
+        return L('LOCAL_AREA_NETWORK');
+    }
+
+    $opt = array (
+        'http'  => array (
+            'method'    => 'GET',
+            'timeout'   => 1,
+        )
+    );
+
+    $context = stream_context_create($opt);
+
+    $data = file_get_contents(TAOBAO_IP_API . $ip, false, $context);
+
+    if (!$data) {//获取失败
+        C('LOG_FILENAME', CONTROLLER_NAME);
+        trigger_error(L('GET,PROVINCE,CITY,FAILURE'));
+        return '';
+    }
+
+    return json_decode($data, true);
+}//end get_ip_info
+
+/**
  * 获取用户id
  *
  * @author          mrmsl <msl-138@163.com>
