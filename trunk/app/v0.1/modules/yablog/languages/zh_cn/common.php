@@ -13,6 +13,7 @@
  */
 
 return array(
+    'AT_ME_NOTICE_ME'   => '有人回复我时通过我',
     'CATEGORY'          => '分类',
     'CN_FABIAO'         => '发表',
     'CN_XUANTIAN'       => '选填',

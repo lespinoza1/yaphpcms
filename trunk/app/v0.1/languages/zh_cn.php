@@ -21,6 +21,7 @@ return array(
     'CAN_BUT'           => '只能',
     'CAN_NOT'           => '不能',
     'CAN_ONLY_BE'       => '只能为',
+    'CASE_SENSITIVE'    => '区分大小写',
     'CITY'              => '城市',
     'CN_CISHU'          => '次数',
     'CN_CONG'           => '从',

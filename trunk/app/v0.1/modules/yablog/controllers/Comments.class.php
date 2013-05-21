@@ -33,6 +33,8 @@ class CommentsController extends CommonController {
 
         $this->_model->startTrans()->add();
 
+        clear_verifycoe(C('T_VERIFYCODE_MODULE'));
+
         $this->_ajaxReturn(COMMENT_TYPE_GUESTBOOK == C('T_TYPE') ? 'guestbook' : 'comment');
     }
 }

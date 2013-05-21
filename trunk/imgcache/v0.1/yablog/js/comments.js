@@ -148,7 +148,13 @@ function bindVerifycode() {
                     margin: '0 5px',
                     cursor: 'pointer'
                 }).insertAfter(el)
-                .after($('<span class="muted">' + lang('VERIFY_CODE_ORDER') + '：' + '<span class="text-error">' + (System[window._VERIFYCODE_MODULE + '_verifycode_order']) + '</span></span>'));
+                .after(
+                    $('<span class="muted">' +
+                    (1 == System[window._VERIFYCODE_MODULE + '_verifycode_case'] ? lang('CASE_SENSITIVE') : lang('NO,CASE_SENSITIVE')) +
+                     '，' + lang('VERIFY_CODE_ORDER') + '：' + '<span class="text-error">' +
+                    (System[window._VERIFYCODE_MODULE + '_verifycode_order']) +
+                    '</span></span>')
+                );
             }
         });
     }
@@ -193,7 +199,7 @@ function getFormHtml() {
     html.push('        <label class="control-label">' + lang('EMAIL') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <input type="email" value="" name="email" maxlength="50" />');
-    html.push('            <span class="muted">(' + lang('SECRET,%，,NO,SHOW') + '。' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
+    html.push('            <span class="muted">(' + lang('CN_XUANTIAN,%，,SECRET,%，,NO,SHOW') + '。' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="control-group">');
@@ -223,6 +229,11 @@ function getFormHtml() {
         html.push('<input type="hidden" name="_verify_code" value="ok" />');
     }
 
+    html.push('    <div class="control-group">');
+    html.push('        <div class="controls">');
+    html.push('            <label class="muted"><input type="checkbox" value="1" name="at_email" /> ' + lang('AT_ME_NOTICE_ME') + '</label>');
+    html.push('        </div>');
+    html.push('    </div>');
     html.push('    <div class="controls text-right">');
     html.push('        <button id="btn-submit" class="btn btn-primary">' + lang('SUBMIT') + '</button>');
     html.push('        <button id="btn-reset-cancel" type="reset" class="btn">' + lang('CANCEL') + '</button>');
