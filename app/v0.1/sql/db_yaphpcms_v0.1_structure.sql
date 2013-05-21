@@ -140,9 +140,11 @@ CREATE TABLE `tb_category` (
 /*tb_comments留言评论表
 ALTER TABLE tb_comments
 ADD COLUMN user_homepage varchar(50) NOT NULL DEFAULT '' COMMENT '用户主页url' AFTER user_ip
-ADD COLUMN user_pic varchar(50) NOT NULL DEFAULT '' COMMENT '用户头像url' AFTER user_ip
+ADD COLUMN user_pic varchar(50) NOT NULL DEFAULT '' COMMENT '用户头像url' AFTER user_ip,
 ADD COLUMN `blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '博客id 或者 微博id',
 ADD COLUMN type tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0留言;1博客评论;2微博评论.默认0',
+ADD COLUMN email varchar(50) NOT NULL DEFAULT '' COMMENT '用户email' AFTER username,
+ADD COLUMN at_email tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '有回复时是否发送emil;0否;1是'
 DROP INDEX status,
 ADD INDEX(blog_id),
 ADD INDEX(type,status)
