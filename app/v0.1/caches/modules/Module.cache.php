@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-05-22 11:58:30
+//最后更新时间:2013-05-22 13:03:24
 
 return array (
   'module_admin_verifycode_enable' => '1',
@@ -38,5 +38,5 @@ return array (
   'module_guestbook_comments_max_reply_level' => '5',
   'module_comments_alternation' => '-1',
   'module_guestbook_alternation' => '-1',
-  'module_guestbook_comments_alternation' => '60',
+  'module_guestbook_comments_alternation' => '120',
 );
