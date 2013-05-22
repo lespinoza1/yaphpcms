@@ -156,7 +156,7 @@ class FieldController extends CommonController {
 
             //评论留言最大回复次数
             'guestbook_comments_max_reply_level' => "extField.fieldContainer(['%@fieldLabel', [
-                ['numberField','@input_name','PLEASE_ENTER,%@field_name', '', '@value', {size: 4, minValue: " . ($extra ? -1 : 0) . ", maxValue: 10}],
+                ['numberField','@input_name','PLEASE_ENTER,%@field_name', '', '@value', {size: 4, minValue: " . ($extra ? -1 : 0) . ", maxValue: 5}],
                 lang('ZERO_UN_LIMIT')" . ($extra ? " + ',' + lang('%。-1,MEAN,CN_QU') + {$default}" : '') . "
             ]])",
 
@@ -187,6 +187,12 @@ class FieldController extends CommonController {
         $cache_key  = ucfirst($controller);
         $node_arr   = explode(',', $menu_info['node']);
         $parent_id  = $node_arr[count($node_arr) - 2];//父级菜单id
+        $parent_info= $this->_getCache($parent_id, 'Menu');
+
+        if ('guestbook_comments' == $parent_info['action']) {//留言评论模块,包含留言模块,评论模块
+            $parent_id = $parent_info['parent_id'];
+        }
+
         $menu_ids   = $this->_getChildrenIds($parent_id, false, false, 'Menu');
         $data       = $this->_model->where("menu_id IN({$menu_ids}) AND is_enable=1")->getField('input_name,input_value');
         $this->_setCache($data, $cache_key);
