@@ -61,6 +61,10 @@ seajs.config({//seajs配置
             src: System.sys_base_common_imgcache + 'js/jquery/jquery.3DTagCloud.js?' + _c,
             deps: ['jquery']
         },
+        highlight: {
+            src: System.sys_base_common_imgcache + 'js/jquery/jquery.highlight.js?' + _c,
+            deps: ['jquery']
+        },
         comments: {//留言评论
             src: System.sys_base_js_url + 'comments.js?' + _c
         },
@@ -125,6 +129,12 @@ function bootstrap() {
     if ($('#tag-cloud').length) {//标签云
         seajs.use('tagCloud', function() {
             $('#tag-cloud').tagCloud();
+        });
+    }
+
+    if ('undefined' != typeof(HIGHLIGHT_WORD)) {//高亮
+        seajs.use('highlight', function() {
+            $('.panel-list h3, .panel-list div').highlight(HIGHLIGHT_WORD, {className: 'font-red'});
         });
     }
 

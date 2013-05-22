@@ -736,9 +736,6 @@ ul.hot-blogs li {
 .system-infomation h4 {
   color: #080;
 }
-.clear-both {
-  clear: both;
-}
 p {
   margin: 0 0 10px;
 }
@@ -5188,4 +5185,13 @@ a.badge:focus {
 }
 .pl-0 {
   padding-left: 0;
+}
+.font-red {
+  color: red;
+}
+.highlight {
+  background-color: yellow;
+}
+.clear-both {
+  clear: both;
 }

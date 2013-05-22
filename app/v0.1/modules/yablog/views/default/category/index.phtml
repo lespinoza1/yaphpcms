@@ -28,7 +28,7 @@
                 {php $meta_info_arr['blog'] .= ',' . $item['blog_id'] . '|' . $item['add_time'];}
                 <div class="panel-list">
                     <h3><a href="{$item.link_url}">{$item.title}</a></h3>
-                    {$item.summary}
+                    <div>{$item.summary}</div>
                     <p class="text-right muted">
                         <span class="actions">
                             <span class="add_time">
@@ -64,5 +64,5 @@
         </div><!--end  span3-->
     </div><!--end row-fluid-->
 </div><!--end container-fluid-->
-
+<script>{if '' !== $tag}var HIGHLIGHT_WORD = '{echo addslashes($tag); }';{/if}</script>
 {template 'include', 'footer'}
