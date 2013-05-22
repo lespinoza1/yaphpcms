@@ -18,6 +18,7 @@ return array(
     'ALL'                       => '全部',
     'AVAILABILITY'              => '有效',//by mrmsl on 2012-09-18 09:49:35
     'AVOID'                     => '避免',
+    'AUDITING'                  => '审核',
     'CACHE'                     => '缓存',//by mrmsl on 2012-09-18 09:57:50
     'CHILD'                     => '子',//by mrmsl on 2013-01-10 12:58:11
     'CLONE'                     => '复制',//by mrmsl on 2012-09-29 12:53:09
@@ -59,6 +60,7 @@ return array(
     'MEAN'                      => '表示',//by mrmsl on 2012-09-13 11:19:36
     'METHOD'                    => '方法',
     'NAVIGATION_MENU'           => '导航菜单',//by mrmsl on 2012-09-13 12:57:53
+    'NEED'                      => '需要',
     'NO_TITLE'                  => '无标题',
     'NOT_FILL'                  => '不填',
     'OPEN'                      => '打开',

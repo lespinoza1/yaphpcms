@@ -139,14 +139,32 @@ class FieldController extends CommonController {
                     vertical: true,
                     name: '@input_name'
                 })",
-            /*//评论留言是否需要审核
-            'guestbook_comments_check' => "extField.checkbox('@input_name','@value', '%@fieldLabel')",
+            //评论留言是否需要审核
+            'guestbook_comments_check' => "
+                 extField.fieldContainer('%@fieldLabel',
+                    [
+                     extField.checkbox('@input_name', '', '', 'NEED,AUDITING', 1, '', {xtype: 'radio'}),
+                     extField.checkbox('@input_name', '', '', 'NO,NEED,AUDITING', 0, '', {xtype: 'radio'}),
+                     " . ($extra ? "extField.checkbox('@input_name', '', '', '%' + {$default}, -1, '', {xtype: 'radio'})" : '') . "
+                    ], true, {
+                     xtype: 'radiogroup',
+                        value: '@value' ? {'@input_name': '@value'} : false,
+                        columns: 1,
+                        vertical: true,
+                        name: '@input_name'
+                })",
 
             //评论留言最大回复次数
-            'guestbook_comments_max_reply' => "extField.fieldContainer(['%@fieldLabel', [
-                ['numberField','@input_name','PLEASE_ENTER,%@field_name', '', '@value', {minValue: 0, maxValue: 10}],
-                lang('ZERO_UN_LIMIT')
-                ]])",*/
+            'guestbook_comments_max_reply_level' => "extField.fieldContainer(['%@fieldLabel', [
+                ['numberField','@input_name','PLEASE_ENTER,%@field_name', '', '@value', {size: 4, minValue: " . ($extra ? -1 : 0) . ", maxValue: 10}],
+                lang('ZERO_UN_LIMIT')" . ($extra ? " + ',' + lang('%。-1,MEAN,CN_QU') + {$default}" : '') . "
+            ]])",
+
+            //评论留言间隔
+            'guestbook_comments_alternation' => "extField.fieldContainer(['%@fieldLabel', [
+                ['numberField','@input_name','PLEASE_ENTER,%@field_name', '', '@value', {size: 4, minValue: " . ($extra ? -1 : 0) . "}],
+                lang('UNIT,%：,SECOND,%。,ZERO_UN_LIMIT')" . ($extra ? " + ',' + lang('%。-1,MEAN,CN_QU') + {$default}" : '') . "
+            ]])",
         );
 
         return isset($js_arr[$key]) ? $js_arr[$key] : '';
@@ -276,14 +294,14 @@ class FieldController extends CommonController {
     protected function _shortcutCode($field_code) {
 
         //验证码字段或评论留言
-        if (($is_field_code = 0 === strpos($field_code, 'verifycode_'))) {// || ($is_guestbook_comments = 0 === strpos($field_code, 'guestbook_comments_'))) {
+        if (($is_field_code = 0 === strpos($field_code, 'verifycode_')) || ($is_guestbook_comments = 0 === strpos($field_code, 'guestbook_comments_'))) {
 
             if (!empty($is_field_code)) {//验证码
                 $this->_get_action = "'system', 'verifycode'";
             }
-            /*elseif (!empty($is_guestbook_comments)) {//评论留言
+            elseif (!empty($is_guestbook_comments)) {//评论留言
                 $this->_get_action = "'module', 'guestbook_comments'";
-            }*/
+            }
 
             $_arr = explode('@', $field_code);
             $field_code = $this->_fieldCode($_arr[0], isset($_arr[1]));
@@ -296,7 +314,13 @@ class FieldController extends CommonController {
                 return str_replace('@tip', "''", $field_code);
             }
 
-            return str_replace('@tip', "lang('%。0,MEAN,CN_QU,SYSTEM') + '<a class=\"a-font-000\" href=\"#' + this.getAction({$this->_get_action}) + '\">' + lang('SYSTEM,DEFAULT,VALUE') + '</a>'", $field_code);
+            $field_code = str_replace('@tip', "lang('%。0,MEAN,CN_QU,SYSTEM') + '<a class=\"a-font-000\" href=\"#' + this.getAction({$this->_get_action}) + '\">' + lang('SYSTEM,DEFAULT,VALUE') + '</a>'", $field_code);
+
+            if (!empty($is_guestbook_comments)) {
+                $field_code = str_replace('SYSTEM,', '', $field_code);
+            }
+
+            return $field_code;
         }
 
         return $field_code;
