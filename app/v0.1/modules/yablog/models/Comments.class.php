@@ -28,6 +28,7 @@ class CommentsModel extends CommonModel {
      * @var array $_db_fields 表字段
      */
     protected $_db_fields = array (
+        'type'           => array('filter' => 'int', 'validate' => array('_checkType#INVALID_PARAM,TYPE')),
         'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENTS'),//父id
         //用户名
         'username'       => array('validate' => array('notblank#USERNAME', '_checkLength#USERNAME#value|0|20')),
@@ -41,7 +42,6 @@ class CommentsModel extends CommonModel {
         'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50')),
         'user_pic'       => array('filter' => 'url', 'validate' => array('_checkLength#USER_PIC,DATA#value|0')),
         'status'         => array('filter' => 'int', 'validate' => array('_checkLength#STATUS,DATA#value|0')),
-        'type'           => array('filter' => 'int', 'validate' => array('_checkType#INVALID_PARAM,TYPE')),
         'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id ,调用C('T_TYPE')放于type后面
         '_verify_code'   => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码
         'province'       => array('validate' => array('_checkLength#PROVINCE,DATA#value|0')),
@@ -173,15 +173,16 @@ class CommentsModel extends CommonModel {
         $pk_value = $data[$this->_pk_field];
 
         if ($parent_info = C('T_PARENT_INFO')) {//父
-            $node_arr = explode(',', $parent_info['node']);
+            $node_arr           = explode(',', $parent_info['node']);
+            $max_reply_level    = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'max_reply_level');
 
-            if (5 == $parent_info['level']) {//最多5层回复
+            if ($max_reply_level == $parent_info['level']) {//最多5层回复
                 C('LOG_FILENAME', CONTROLLER_NAME);
-                trigger_error(__METHOD__ . ',level>5' . var_export($parent_info, true), E_USER_NOTICE);
+                trigger_error(__METHOD__ . ',level>' . $max_reply_level . var_export($parent_info, true), E_USER_NOTICE);
 
                 $parent_info['level']--;
                 $parent_info['node'] = substr($parent_info['node'], 0, strrpos($parent_info['node'], ','));
-                $parent_id = $node_arr[3];//父级id取第四个
+                $parent_id = $node_arr[$max_reply_level > 2 ? $max_reply_level - 2 : 1];//父级id取第四个
             }
 
             $data = array(
@@ -242,6 +243,6 @@ class CommentsModel extends CommonModel {
      * @return int 状态
      */
     protected function _setStatus() {
-        return !sys_config('module_' . (COMMENT_TYPE_GUESTBOOK == C('T_TYPE') ? 'guestbook' : 'comments') . '_check', 'Module');
+        return !$this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'check');
     }
 }
