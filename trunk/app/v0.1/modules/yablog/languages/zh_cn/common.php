@@ -30,4 +30,5 @@ return array(
     'SPACE'             => '空格',
     'THE_DAY_BEFORE_YESTERDAY' => '前天',
     'YESTERDAY'         => '昨天',
+    'YOUR_SUBMIT_HIGH_FREQUENCY' => '您的提交过于频繁',
 );

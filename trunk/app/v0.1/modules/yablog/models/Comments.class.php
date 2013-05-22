@@ -151,7 +151,16 @@ class CommentsModel extends CommonModel {
 
         if (in_array($type, array(COMMENT_TYPE_GUESTBOOK, COMMENT_TYPE_BLOG, COMMENT_TYPE_MINIBLOG))) {
             C('T_TYPE', $type);
-            C('T_VERIFYCODE_MODULE', COMMENT_TYPE_GUESTBOOK == $type ? 'module_guestbook' : 'module_comments');
+            C('T_VERIFYCODE_MODULE', $module = COMMENT_TYPE_GUESTBOOK == $type ? 'module_guestbook' : 'module_comments');
+
+            $last_time = session($module);
+
+            if ($last_time > time() && $this->_module->getGuestbookCommentsSetting($module, 'alternation')) {//提交过于频繁
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . ',' . $module . ',' . new_date(null, $last_time) . ' => ' . new_date(), E_USER_ERROR);
+                return L('YOUR_SUBMIT_HIGH_FREQUENCY');
+            }
+
             return true;
         }
 
@@ -206,6 +215,9 @@ class CommentsModel extends CommonModel {
             $this->where($this->_pk_field . '=' . $pk_value)->save($data);//节点关系
         }
 
+    if ($v = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'alternation')) {//间隔
+        session(C('T_VERIFYCODE_MODULE'), time() + $v);
+    }
         $this->commit();
     }//end _afterInsert
 
