@@ -59,12 +59,12 @@ Ext.define('Yap.controller.Field', {
         global('app_labelWidth', 150);
         var field = [extField.hiddenField(),//field_id
         extField.fieldContainer(['FIELD_NAME,%(fieldLabel)', [//表单域名
-            [null, this.nameColumn, 'PLEASE_ENTER,FIELD_NAME', '', undefined, {size: 30}],
-            lang('LT_BYTE').format(45) + '，' + lang('CN_TO_BYTE')
+            [null, this.nameColumn, 'PLEASE_ENTER,FIELD_NAME', '', undefined, {width: 250}],
+            lang('LT_BYTE').format(50) + '，' + lang('CN_TO_BYTE')
         ]]),
         extField.fieldContainer(['INPUT_NAME', [//输入框名称
-            [null, 'input_name', 'PLEASE_ENTER,INPUT_NAME', '', undefined, {size: 30}],
-            lang('LT_BYTE').format(40) + '，' + lang('%。,TO_EDIT_TIP')
+            [null, 'input_name', 'PLEASE_ENTER,INPUT_NAME', '', undefined, {width: 250}],
+            lang('LT_BYTE').format(50) + lang('%。,TO_EDIT_TIP')
         ]]),
         {
             allowBlank: false,
