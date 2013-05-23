@@ -43,6 +43,7 @@ return array(
     'MOVE'              => '移动',
     'NO_PERMISSION'     => '您没有权限执行该操作',
     'OBJECT'            => '对象',
+    'ONE_LINE_ONE'      => '一行一个',
     'ORDER'             => '排序',
     'PATH'              => '路径',
     'PERMISSION'        => '权限',

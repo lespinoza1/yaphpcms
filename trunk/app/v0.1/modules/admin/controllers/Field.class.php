@@ -165,6 +165,10 @@ class FieldController extends CommonController {
                 ['numberField','@input_name','PLEASE_ENTER,%@field_name', '', '@value', {size: 4, minValue: " . ($extra ? -1 : 0) . "}],
                 lang('UNIT,%：,SECOND,%。,ZERO_UN_LIMIT')" . ($extra ? " + ',' + lang('%。-1,MEAN,CN_QU') + {$default}" : '') . "
             ]])",
+
+            //评论留言禁用用户名
+            'guestbook_comments_disabled_username' => "extField.textField('@input_name', '', '%@fieldLabel', '@value', {xtype: 'textarea', height: 200, width: 500}),
+                extField.textareaComment(lang('ONE_LINE_ONE')" . ($extra ? " + lang('%。,KEEP_BLANK,CN_QU') + {$default}" : '') . ", '180')",
         );
 
         return isset($js_arr[$key]) ? $js_arr[$key] : '';
