@@ -12,6 +12,4 @@
  * @lastmodify      $Date$ $Author$
  */
 
-return array(
-    'MODULE_NAME_COMMENT' => L('GUESTBOOK')
-);
+return include(__DIR__ . DS . 'comments.php');
