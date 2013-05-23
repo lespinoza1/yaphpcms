@@ -170,6 +170,7 @@ class CommonController extends BaseController {
             'check'             => -1,//是否审核
             'alternation'       => -1,//间隔
             'max_reply_level'   => -1,//最大回复层数
+            'disabled_username' => '',//禁用用户名
         );
 
         $key      = $module . '_';
