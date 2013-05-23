@@ -199,7 +199,7 @@ function getFormHtml() {
     html.push('        <label class="control-label">' + lang('EMAIL') + '</label>');
     html.push('        <div class="controls">');
     html.push('            <input type="email" value="" name="email" maxlength="50" />');
-    html.push('            <span class="muted">(' + lang('CN_XUANTIAN,%，,SECRET,%，,NO,SHOW') + '。' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
+    html.push('            <span class="muted">(' + lang('CN_XUANTIAN,%，,SECRET,%，,NO,SHOW,%。,SUPPORT,%gravatar,HEAD_PIC') + '。' + lang('LT_BYTE').replace('{0}', 50) + ')</span>');
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="control-group">');
