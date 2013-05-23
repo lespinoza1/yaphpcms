@@ -114,23 +114,23 @@ function addComments() {
 
         if (input) {
             (function(ele, background, times){
-                var i = 0, t= false , o = ele.attr('background-color') + ' ', c = '', b = '', times = times || 3;
+                var i = 0, t= false , times = times || 3;
 
                 if(t) {
                     return;
                 }
-
-                t = setInterval(function(){log(i);
+                ele.css({'background-color': '#ffe9e8', border: '1px solid red'});
+                t = setInterval(function() {
                     i++;
-                    c = i % 2 ? '#ffe9e8' : c;
-                    ele.css(i % 2 ? {'background-color': '#ffe9e8', border: '1px solid red'} : {'background-color': 'fff', border: '1px solid #ccc'});
+
+                    ele.css(i % 2 ? {'background-color': 'fff', border: '1px solid #ccc'} : {'background-color': '#ffe9e8', border: '1px solid red'});
 
                     if(i == 2 * times){
                         clearInterval(t);
                         ele.focus();
-                        ele.css({'background-color': 'fff', border: '1px solid #ccc'});
+                        ele.css({'background-color': '#fff', border: '1px solid #ccc'});
                     }
-                }, 200);
+                }, IS_OLD_IE ? 200 : 300);
             })(input);
             input.after(el);
             $html.animate({
