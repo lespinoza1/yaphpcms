@@ -32,14 +32,14 @@ class CommentsModel extends CommonModel {
         'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENTS'),//父id
         //用户名
         'username'       => array('validate' => array('notblank#USERNAME', '_checkLength#USERNAME#value|0|20')),
-        'email'          => array('filter' => 'email', 'validate' => array('_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50')),
+        'email'          => array('filter' => 'email', 'validate' => array('_checkLength#EMAIL#value|0|50')),
         'content'        => array('validate' => array('notblank#CONTENT')),
         'add_time'       => array('filter' => 'int', 'validate' => array('_checkLength#ADD_TIME,DATA#value|0')),//添加时间
         'last_reply_time'=> array('filter' => 'int', 'validate' => array('_checkLength#LAST_REPLY_TIME,DATA#value|0')),//最后回复时间
         'user_ip'        => array('filter' => 'int', 'validate' => array('_checkLength#USER_IP,DATA#value|0')),//用户ip
         'level'          => array('filter' => 'int', 'validate' => array('_checkLength#LEVEL,DATA#value|0')),
         'node'           => array('filter' => 'int', 'validate' => array('_checkLength#NODE,DATA#value|0')),
-        'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#MODULE_NAME_COMMENT,HOMEPAGE,LINK#value|0|50')),
+        'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#HOMEPAGE,LINK#value|0|50')),
         'user_pic'       => array('filter' => 'url', 'validate' => array('_checkLength#USER_PIC,DATA#value|0')),
         'status'         => array('filter' => 'int', 'validate' => array('_checkLength#STATUS,DATA#value|0')),
         'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id ,调用C('T_TYPE')放于type后面

@@ -257,14 +257,11 @@ function getFormHtml() {
  * @return {void} 无返回值
  */
 function showCommentsReply() {
-    $('.comments-detail .popover-content').hover(function(e) {
-
-        $.each($(this).parents('.popover-content'), function(index, item) {
+    $('.comment-detail').hover(function(e) {
+         $.each($(this).parents('.comment-detail'), function(index, item) {
             $(item).find('.reply:first').hide();
         });
-
-        !$(this).find('#' + DATA_FORM_COMMENT).length && $(this).find('.reply:first').show();
-
+        $(this).find('.reply:first').show();
         return false;
     }, function(e) {
         $(this).find('.reply:first').hide();
@@ -294,6 +291,10 @@ function showCommentsReply() {
             });
         }
         else {
+            if (el.next('#' + DATA_FORM_REPLY).length) {
+                $('#btn-reset-cancel').click();
+                return;
+            }
             $body.data(DATA_FORM_COMMENT).appendTo($body.data(DATA_FORM_REPLY).find('.popover-content'));
             el.after($body.data(DATA_FORM_REPLY));
         }
