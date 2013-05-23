@@ -30,7 +30,7 @@ function addComments() {
     var formComment = $('#' + DATA_FORM_COMMENT).on('submit', function() {
 
         if (IS_OLD_IE) {//
-            var checked = true, el = [[formComment.find('input[name=username]'), 'USERNAME'], [formComment.find('textarea'), 'CONTENT']];
+            var checked = true, el = [[formComment.find('input[name=username]'), 'USERNAME'], [formComment.find('textarea'), 'CONTENT'], [formComment.find('input[name=_verify_code]'), 'VERIFY_CODE']];
 
             $.each(el, function(index, item) {
 
@@ -159,9 +159,9 @@ function bindVerifycode() {
 
     if (el.length) {
         el.focus(function () {
-            var next = el.next('img');
+            var img = el.parent().find('img');
 
-            if (!next.length) {
+            if (!img.length) {
                 $('<img />').bind({
                     error: function() {
 
