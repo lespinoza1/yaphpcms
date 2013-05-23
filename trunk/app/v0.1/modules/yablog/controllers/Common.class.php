@@ -34,18 +34,19 @@ class CommonController extends BaseController {
      * @author          mrmsl <msl-138@163.com>
      * @date            2013-04-28 12:47:13
      *
-     * @param int $comment_id 评论id
+     * @param int   $comment_id 评论id
+     * @param bool  $is_reply   true为回复。默认false
      *
      * @return string $this->getRecurrsiveComments()返回html
      */
-    private function _getReplyComments($comment_id) {
+    private function _getReplyComments($comment_id, $is_reply = false) {
         $data = $this->_model
         ->table(TB_COMMENTS)
         ->where('status=1 AND parent_id=' . $comment_id)
         ->order('comment_id')
         ->select();
 
-        return $this->_getRecurrsiveComments($data);
+        return $this->_getRecurrsiveComments($data, $is_reply);
     }
 
     /**
@@ -55,10 +56,11 @@ class CommonController extends BaseController {
      * @date            2013-04-28 12:47:13
      *
      * @param array $comments 评论数组
+     * @param bool  $is_reply true为回复。默认false
      *
      * @return string 评论html
      */
-    protected function _getRecurrsiveComments($comments) {
+    protected function _getRecurrsiveComments($comments, $is_reply = false) {
 
         if (!$comments) {
             return '';
@@ -68,12 +70,9 @@ class CommonController extends BaseController {
 
         foreach ($comments as $item) {
             $html .= '
-            <div class="panel-list media panel-miniblog comments-detail" id="comment-' . $item['comment_id'] . '">
-                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="' . ($item['user_pic'] ? $item['user_pic'] : COMMON_IMGCACHE . 'images/guest.png') . '" />
+            <div class="panel-list media comment-detail panel-comment' . ($is_reply ? ' panel-comment-reply' : '') . '" id="comment-' . $item['comment_id'] . '">
+                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="' . (!IS_LOCAL && $item['user_pic'] ? $item['user_pic'] : COMMON_IMGCACHE . 'images/guest.png') . '" />
                 <div class="media-body">
-                    <div class="popover right">
-                        <div class="arrow"></div>
-                        <div class="popover-content">
                             <p class="muted">
                                 <a href="#base-' . $item['comment_id'] . '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>' . L('REPLY') . '</a>
                                 <span class="name-' . $item['comment_id'] . '">';
@@ -91,12 +90,10 @@ class CommonController extends BaseController {
             $html .= '<span id="base-' . $item['comment_id'] . '"></span>';
 
             if ($item['last_reply_time'] > $item['add_time'] && $item['level'] < 5) {
-                $html .= $this->_getReplyComments($item['comment_id']);
+                $html .= $this->_getReplyComments($item['comment_id'], true);
             }
 
             $html .= '  </div>
-                    </div>
-                </div>
             </div>';
         }
 

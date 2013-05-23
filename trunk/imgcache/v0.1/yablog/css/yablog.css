@@ -604,7 +604,9 @@ a:focus {
 }
 .panel .panel-body .panel-miniblog,
 .panel .panel-body .panel-comment {
-  border-bottom: none;
+  border-bottom: 1px dotted #dddddd;
+  padding: 8px 0;
+  margin: 0 0 10px;
 }
 .panel .panel-body .panel-miniblog .popover,
 .panel .panel-body .panel-comment .popover {
@@ -615,6 +617,12 @@ a:focus {
 .panel .panel-body .panel-comment .right > .arrow {
   top: 15px;
   margin-top: 0;
+}
+.panel .panel-body .panel-comment-reply {
+  border-top: 1px dotted #dddddd;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 .avatar,
 .avatar img,
