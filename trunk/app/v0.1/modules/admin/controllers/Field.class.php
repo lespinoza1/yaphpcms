@@ -586,7 +586,7 @@ class FieldController extends CommonController {
 
                 $find       = array('@fieldLabel', '@field_name', '@input_name', '@value');
                 $field_label= sprintf('<a class="a-font-000" href="#controller=field&action=add&field_id=%d&back=%s">%s</a>', $item['field_id'], urlencode("#controller={$controller}&action={$action}"), $field_name, $input_name);
-                $replace    = array($field_label, $field_name, $input_name, $item['input_value']);
+                $replace    = array($field_label, $field_name, $input_name, strpos($item['input_value'], "\n") ? str_replace("\n", "\\n", $item['input_value']) : $item['input_value']);
                 $field_code = trim(str_ireplace($find, $replace, $field_code));
                 $field[]    = strpos($field_code, 'extField.') === 0 ? $field_code : '{' . $field_code . '}';
             }//end foreach
