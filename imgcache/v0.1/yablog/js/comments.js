@@ -35,8 +35,8 @@ function addComments() {
             $.each(el, function(index, item) {
 
                 if (!$.trim(item[0].val())) {
-                    alert(lang('PLEASE_ENTER,' + item[1]));
-                    item[0].focus();
+                    formComment.trigger('error', [lang('PLEASE_ENTER,' + item[1]), item[0]]);
+                    //item[0].focus();
                     checked = false;
                     return false;
                 }
@@ -46,10 +46,11 @@ function addComments() {
                 return false;
             }
 
-            var el = formComment.find('input[name=email]'), emial = el.val().trim();
+            var el = formComment.find('input[name=email]'), email = el.val().trim();
 
-            if (email && /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email)) {
-                alert(lang('PLEASE_ENTER,CORRECT,CN_DE,EMAIL'));
+            if (email && !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email)) {
+                formComment.trigger('error', [lang('PLEASE_ENTER,CORRECT,CN_DE,EMAIL'), el]);
+                //el.focus();
                 return false;
             }
 
@@ -58,8 +59,8 @@ function addComments() {
         var el = formComment.find('input[name=user_homepage]'), url = el.val().trim();
 
         if (url.length && 'http://' != url && !/http:\/\/[a-z0-9]+\.[a-z0-9]+/i.test(url)) {//主页链接
-            alert(lang('PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK'));
-            el.focus();
+            formComment.trigger('error', [lang('PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK'), el]);
+            //el.focus();
             return false;
         }
 
@@ -84,11 +85,11 @@ function addComments() {
                         this.ok(data.success);
                     }
                     else {
-                        alert(data.msg || lang('SYSTEM_ERROR'));
+                        formComment.trigger('error', data.msg || lang('SYSTEM_ERROR'));
                     }
                 }
                 else {
-                    alert(lang('SYSTEM_ERROR'));
+                    formComment.trigger('error', lang('SYSTEM_ERROR'));
                 }
             },
             complete: function () {
@@ -100,12 +101,45 @@ function addComments() {
                     location.reload();
                 }
                 else {
-                    alert(lang('SYSTEM_ERROR'));
+                    formComment.trigger('error', lang('SYSTEM_ERROR'));
                 }
             }
         });
 
         return false;
+    }).on('click', function() {
+        $(this).find('.error').hide();
+    }).on('error', function (e, error, input) {log(arguments);
+        var el = $(this).find('.error').html(error).show();
+
+        if (input) {
+            (function(ele, background, times){
+                var i = 0, t= false , o = ele.attr('background-color') + ' ', c = '', b = '', times = times || 3;
+
+                if(t) {
+                    return;
+                }
+
+                t = setInterval(function(){log(i);
+                    i++;
+                    c = i % 2 ? '#ffe9e8' : c;
+                    ele.css(i % 2 ? {'background-color': '#ffe9e8', border: '1px solid red'} : {'background-color': 'fff', border: '1px solid #ccc'});
+
+                    if(i == 2 * times){
+                        clearInterval(t);
+                        ele.focus();
+                        ele.css({'background-color': 'fff', border: '1px solid #ccc'});
+                    }
+                }, 200);
+            })(input);
+            input.after(el);
+            $html.animate({
+                scrollTop: input.offset().top - 100
+            }, 300);
+        }
+        else {
+            $(this).find('#btn-submit').before(el);
+        }
     });
 
     $body.data(DATA_FORM_PANEL, formPanel);
@@ -235,6 +269,7 @@ function getFormHtml() {
     html.push('        </div>');
     html.push('    </div>');
     html.push('    <div class="controls text-right">');
+    html.push('        <span class="error font-red"></span>');
     html.push('        <button id="btn-submit" class="btn btn-primary">' + lang('SUBMIT') + '</button>');
     html.push('        <button id="btn-reset-cancel" type="reset" class="btn">' + lang('CANCEL') + '</button>');
     html.push('    </div>');
