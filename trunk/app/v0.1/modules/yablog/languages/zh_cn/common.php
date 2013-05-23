@@ -23,6 +23,7 @@ return array(
     'LIST'              => '列表',
     'MINUTES_AGO'       => '{0}分钟前',
     'N_PAGES'           => '第%d页',
+    'SUPPORT'           => '支持',
     'THE_DAY_BEFORE_YESTERDAY' => '前天',
     'YESTERDAY'         => '昨天',
 );

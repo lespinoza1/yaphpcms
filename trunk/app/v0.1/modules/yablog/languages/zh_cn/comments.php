@@ -13,8 +13,9 @@
  */
 
 return array(
-    'CN_XUANTIAN'               => '选填',
     'AT_ME_NOTICE_ME'           => '有人回复我时通过我',
+    'CN_XUANTIAN'               => '选填',
+    'HEAD_PIC'                  => '头像',
     'SECRET'                    => '保密',
     'SPACE'                     => '空格',
     'YOUR_SUBMIT_HIGH_FREQUENCY'=> '您的提交过于频繁',
