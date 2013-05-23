@@ -31,7 +31,7 @@ class CommentsModel extends CommonModel {
         'type'           => array('filter' => 'int', 'validate' => array('_checkType#INVALID_PARAM,TYPE')),
         'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENTS'),//父id
         //用户名
-        'username'       => array('validate' => array('notblank#USERNAME', '_checkLength#USERNAME#value|0|20')),
+        'username'       => array('validate' => array('_checkUsername#PLEASE_ENTER,USERNAME', '_checkLength#USERNAME#value|0|20')),
         'email'          => array('filter' => 'email', 'validate' => array('_checkLength#EMAIL#value|0|50')),
         'content'        => array('validate' => array('notblank#CONTENT')),
         'add_time'       => array('filter' => 'int', 'validate' => array('_checkLength#ADD_TIME,DATA#value|0')),//添加时间
@@ -56,6 +56,60 @@ class CommentsModel extends CommonModel {
      * @var string $_true_table_name 实际数据表名(包含表前缀)。默认TB_COMMENTS
      */
     protected $_true_table_name = TB_COMMENTS;//表
+
+    /**
+     * 插入后置操作，向留言表增加刚插入id
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-03-01 13:30:52
+     *
+     * @param $data     插入数据
+     * @param $options  查询表达式
+     *
+     * @return void 无返回值
+     */
+    protected function _afterInsert($data, $options) {
+        $pk_value = $data[$this->_pk_field];
+
+        if ($parent_info = C('T_PARENT_INFO')) {//父
+            $node_arr           = explode(',', $parent_info['node']);
+            $max_reply_level    = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'max_reply_level');
+
+            if ($max_reply_level == $parent_info['level']) {//最多5层回复
+                C('LOG_FILENAME', CONTROLLER_NAME);
+                trigger_error(__METHOD__ . ',level>' . $max_reply_level . var_export($parent_info, true), E_USER_NOTICE);
+
+                $parent_info['level']--;
+                $parent_info['node'] = substr($parent_info['node'], 0, strrpos($parent_info['node'], ','));
+                $parent_id = $node_arr[$max_reply_level > 2 ? $max_reply_level - 2 : 1];//父级id取第四个
+            }
+
+            $data = array(
+                'level'          => $parent_info['level'] + 1,//层级
+                'node'           => $parent_info['node'] . ',' . $pk_value,//节点关系
+            );
+
+            if (!empty($parent_id)) {
+                $data['parent_id'] = $parent_id;
+            }
+
+            $this->where($this->_pk_field . '=' . $pk_value)->save($data);
+            $this->where(array($this->_pk_field => array('IN', $node_arr)))->save(array('last_reply_time' => time()));//更新最上层最后回复时间
+        }
+        else {
+
+            $data = array(
+                'node'           =>  $pk_value,
+            );
+
+            $this->where($this->_pk_field . '=' . $pk_value)->save($data);//节点关系
+        }
+
+    if ($v = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'alternation')) {//间隔
+        session(C('T_VERIFYCODE_MODULE'), time() + $v);
+    }
+        $this->commit();
+    }//end _afterInsert
 
     /**
      * {@inheritDoc}
@@ -168,58 +222,34 @@ class CommentsModel extends CommonModel {
     }
 
     /**
-     * 插入后置操作，向留言表增加刚插入id
+     * 检测用户名，包括禁用用户名
      *
      * @author          mrmsl <msl-138@163.com>
-     * @date            2013-03-01 13:30:52
+     * @date            2013-05-23 15:00:32
      *
-     * @param $data     插入数据
-     * @param $options  查询表达式
+     * @param string $username 用户名
      *
-     * @return void 无返回值
+     * @return mixed true验证否则，如果未输入，返回提示信息，如果禁用，返回禁用信息，否则返回false
      */
-    protected function _afterInsert($data, $options) {
-        $pk_value = $data[$this->_pk_field];
+    protected function _checkUsername($username) {
 
-        if ($parent_info = C('T_PARENT_INFO')) {//父
-            $node_arr           = explode(',', $parent_info['node']);
-            $max_reply_level    = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'max_reply_level');
+        if ($username === '') {//如果未输入，提示输入
+            return false;
+        }
 
-            if ($max_reply_level == $parent_info['level']) {//最多5层回复
+        if ($disabled_username = $this->_module->getGuestbookCommentsSetting($module = C('T_VERIFYCODE_MODULE'), 'disabled_username')) {
+
+            if (in_array(strtolower($username), explode(EOL_LF, strtolower($disabled_username)))) {
                 C('LOG_FILENAME', CONTROLLER_NAME);
-                trigger_error(__METHOD__ . ',level>' . $max_reply_level . var_export($parent_info, true), E_USER_NOTICE);
+                $error = L('DISABLED,USERNAME') . $username;
+                trigger_error(__METHOD__ . ',' . $module . $error, E_USER_ERROR);
 
-                $parent_info['level']--;
-                $parent_info['node'] = substr($parent_info['node'], 0, strrpos($parent_info['node'], ','));
-                $parent_id = $node_arr[$max_reply_level > 2 ? $max_reply_level - 2 : 1];//父级id取第四个
+                return $error;
             }
-
-            $data = array(
-                'level'          => $parent_info['level'] + 1,//层级
-                'node'           => $parent_info['node'] . ',' . $pk_value,//节点关系
-            );
-
-            if (!empty($parent_id)) {
-                $data['parent_id'] = $parent_id;
-            }
-
-            $this->where($this->_pk_field . '=' . $pk_value)->save($data);
-            $this->where(array($this->_pk_field => array('IN', $node_arr)))->save(array('last_reply_time' => time()));//更新最上层最后回复时间
-        }
-        else {
-
-            $data = array(
-                'node'           =>  $pk_value,
-            );
-
-            $this->where($this->_pk_field . '=' . $pk_value)->save($data);//节点关系
         }
 
-    if ($v = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'alternation')) {//间隔
-        session(C('T_VERIFYCODE_MODULE'), time() + $v);
+        return true;
     }
-        $this->commit();
-    }//end _afterInsert
 
     /**
      * html化内容

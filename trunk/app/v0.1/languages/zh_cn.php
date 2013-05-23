@@ -45,6 +45,7 @@ return array(
     'DENY_ACCESS_CONTROLLER' => '禁止直接访问控制器：%s',
     'DETAIL'            => '详情',
     'DIGG'              => '顶',
+    'DISABLED'          => '禁用',
     'EMAIL'             => '邮箱',
     'END'               => '结束',
     'END_WITH'          => '以%s结束',

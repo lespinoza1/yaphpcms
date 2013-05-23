@@ -24,7 +24,6 @@ return array(
     'COMMENT'           => '评论',
     'COMPRESS'          => '压缩',
     'CONNECT'           => '连接',
-    'DISABLED'          => '禁用',
     'EDIT'              => '编辑',
     'ENABLE'            => '启用',
     'EXCLUDE_SUFFIX'    => '不包括后缀',
