@@ -112,6 +112,7 @@ return array(
     'SAVE'              => '保存',
     'SELF_COMPUTER'     => '本机电脑',
     'SERVER'            => '服务器',
+    'SERVER_ERROR'      => '系统繁忙，请稍后再试',
     'SHOW'              => '显示',
     'START'             => '开始',
     'START_WITH'        => '以%s开始',

@@ -79,7 +79,6 @@ return array(
     'SELECTED'                  => '选中',
     'SELECTED_RECORD_NOT_TO_BE_UPDATE' => '选中记录已是需要设置的状态，无需再设置',
     'SELECT_ONE'                => '请至少选择一条记录',
-    'SERVER_ERROR'              => '系统繁忙，请稍后再试',
     'SESSION_COOKIE_SECURE_TIP' => '是否仅通过https发送 cookie',
     'SESSION_COOKIE_HTTPONLY_TIP' => 'session cookie只能通过http获取，javascript无法获取',
     'SESSION_LIFETIME_TIP'      => 'session过期时间，单位秒。0表示取系统默认值，通常为1440',
