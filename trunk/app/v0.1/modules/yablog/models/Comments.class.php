@@ -234,7 +234,7 @@ class CommentsModel extends CommonModel {
     protected function _setContent($content) {
 
         if ($v = C('T_PARENT_INFO')) {//回复 @用户名
-            $reply = '<a href="#comment-' . $v['comment_id'] . '" rel="nofollow">@' . $v['username'] .  '</a> ';
+            $reply = '@<a href="#comment-' . $v['comment_id'] . '" rel="nofollow">' . $v['username'] .  '</a> ';
         }
 
         if (false !== strpos($content, 'http://') || false !== strpos($content, 'https://')) {//http 链接
