@@ -103,10 +103,13 @@ INSERT INTO `tb_field` VALUES (105,101,'留言评论是否需要审核','guestbo
 INSERT INTO `tb_field` VALUES (106,101,'留言评论最大回复层级','guestbook_comments_max_reply_level','int','','module_guestbook_comments_max_reply_level','5',1,0,'',0);
 INSERT INTO `tb_field` VALUES (107,99,'评论间隔','guestbook_comments_alternation@','int','','module_comments_alternation','-1',1,0,'',0);
 INSERT INTO `tb_field` VALUES (108,84,'留言间隔','guestbook_comments_alternation@','int','','module_guestbook_alternation','-1',1,0,'',0);
-INSERT INTO `tb_field` VALUES (109,101,'留言评论间隔','guestbook_comments_alternation@','int','','module_guestbook_comments_alternation','0',1,0,'',0);
-INSERT INTO `tb_field` VALUES (110,101,'留言评论禁用用户名','guestbook_comments_disabled_username','string','','module_guestbook_comments_disabled_username','admin\nyablog\nmrmsl',1,110,'',0);
+INSERT INTO `tb_field` VALUES (109,101,'留言评论间隔','guestbook_comments_alternation@','int','','module_guestbook_comments_alternation','120',1,0,'',0);
+INSERT INTO `tb_field` VALUES (110,101,'留言评论禁用用户名','guestbook_comments_disabled_username','string','','module_guestbook_comments_disabled_username','admin\nyablog\nmrmsl\nmsl',1,110,'',0);
 INSERT INTO `tb_field` VALUES (111,84,'留言禁用用户名','guestbook_comments_disabled_username@','string','','module_guestbook_disabled_username','',1,0,'',0);
 INSERT INTO `tb_field` VALUES (112,99,'评论禁用用户名','guestbook_comments_disabled_username@','string','','module_guestbook_disabled_username','',1,0,'',0);
+INSERT INTO `tb_field` VALUES (113,101,'禁止留言评论ip','guestbook_comments_disabled_ip','string','','module_guestbook_comments_disabled_ip','127.0.0.1\n192.168.124.1',1,113,'',0);
+INSERT INTO `tb_field` VALUES (114,84,'禁止留言ip','guestbook_comments_disabled_ip@','string','','module_guestbook_disabled_ip','',1,0,'',0);
+INSERT INTO `tb_field` VALUES (115,99,'禁止评论ip','guestbook_comments_disabled_ip@','string','','module_comments_disabled_ip','',1,0,'',0);
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

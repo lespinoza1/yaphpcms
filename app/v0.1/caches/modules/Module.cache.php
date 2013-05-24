@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-05-23 13:10:03
+//最后更新时间:2013-05-24 08:47:38
 
 return array (
   'module_admin_verifycode_enable' => '1',
@@ -38,9 +38,14 @@ return array (
   'module_guestbook_comments_max_reply_level' => '5',
   'module_comments_alternation' => '-1',
   'module_guestbook_alternation' => '-1',
-  'module_guestbook_comments_alternation' => '0',
+  'module_guestbook_comments_alternation' => '120',
   'module_guestbook_comments_disabled_username' => 'admin
 yablog
-mrmsl',
+mrmsl
+msl',
   'module_guestbook_disabled_username' => '',
+  'module_guestbook_comments_disabled_ip' => '127.0.0.1
+192.168.124.10',
+  'module_guestbook_disabled_ip' => '',
+  'module_comments_disabled_ip' => '',
 );

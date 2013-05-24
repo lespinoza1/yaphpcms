@@ -54,6 +54,7 @@ return array(
     'EXCEED'            => '超出',
     'EXIST'             => '已经存在',
     'FAILURE'           => '失败',
+    'FORBID'            => '禁止',
     'FORMAT'            => '格式',
     'GET'               => '获取',
     'GT'                => '大于',

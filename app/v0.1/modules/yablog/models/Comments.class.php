@@ -58,6 +58,41 @@ class CommentsModel extends CommonModel {
     protected $_true_table_name = TB_COMMENTS;//表
 
     /**
+     * 验证其它,包括提交频率,禁止ip等
+     *
+     * @author      mrmsl <msl-138@163.com>
+     * @date        2013-05-24 09:15:07
+     *
+     * @return string|bool true验证成功,否则错误信息
+     */
+    private function _checkOther() {
+        $module     = C('T_VERIFYCODE_MODULE');
+        $last_time  = session($module);
+
+        if ($last_time > time() && $this->_module->getGuestbookCommentsSetting($module, 'alternation')) {//提交过于频繁
+            $error = sprintf(L('YOUR_SUBMIT_HIGH_FREQUENCY'), L(C('T_MODULE')));
+            $log   = $module . $error . ',' . new_date(null, $last_time) . ' => ' . new_date();
+            $error = $error . ',' . str_replace('{0}', new_date(null, $last_time), L('TRY_IT_UNTIL'));
+        }
+
+        if ($disabled_ip = $this->_module->getGuestbookCommentsSetting($module, 'disabled_ip')) {
+
+            if (in_array($ip = get_client_ip(), explode(EOL_LF, $disabled_ip))) {
+                $log = $error = L('FORBID,' . C('T_MODULE')) . 'ip:' . $ip;
+            }
+        }
+
+        if (empty($log)) {
+            return true;
+        }
+
+        C('LOG_FILENAME', CONTROLLER_NAME);
+        trigger_error(__METHOD__ . ',' . $log, E_USER_ERROR);
+
+        return $error;
+    }
+
+    /**
      * 插入后置操作，向留言表增加刚插入id
      *
      * @author          mrmsl <msl-138@163.com>
@@ -205,17 +240,12 @@ class CommentsModel extends CommonModel {
 
         if (in_array($type, array(COMMENT_TYPE_GUESTBOOK, COMMENT_TYPE_BLOG, COMMENT_TYPE_MINIBLOG))) {
             C('T_TYPE', $type);
-            C('T_VERIFYCODE_MODULE', $module = COMMENT_TYPE_GUESTBOOK == $type ? 'module_guestbook' : 'module_comments');
+            C('T_MODULE', $module = COMMENT_TYPE_GUESTBOOK == $type ? 'guestbook' : 'comments');
+            C('T_VERIFYCODE_MODULE', $module = 'module_' . $module);
 
-            $last_time = session($module);
+            $check_other = $this->_checkOther();//其它验证,包括提交频率,禁止ip等
 
-            if ($last_time > time() && $this->_module->getGuestbookCommentsSetting($module, 'alternation')) {//提交过于频繁
-                C('LOG_FILENAME', CONTROLLER_NAME);
-                trigger_error(__METHOD__ . ',' . $module . ',' . new_date(null, $last_time) . ' => ' . new_date(), E_USER_ERROR);
-                return sprintf(L('YOUR_SUBMIT_HIGH_FREQUENCY'), L(COMMENT_TYPE_GUESTBOOK == $type ? 'GUESTBOOK' : 'COMMENT')) . ',' . str_replace('{0}', new_date(null, $last_time), L('TRY_IT_UNTIL'));
-            }
-
-            return true;
+            return true === $check_other ? true : $check_other;
         }
 
         return false;
@@ -241,7 +271,7 @@ class CommentsModel extends CommonModel {
 
             if (in_array(strtolower($username), explode(EOL_LF, strtolower($disabled_username)))) {
                 C('LOG_FILENAME', CONTROLLER_NAME);
-                $error = L('DISABLED,USERNAME') . $username;
+                $error = L('DISABLED,' . C('T_MODULE') . ',USERNAME') . $username;
                 trigger_error(__METHOD__ . ',' . $module . $error, E_USER_ERROR);
 
                 return $error;
