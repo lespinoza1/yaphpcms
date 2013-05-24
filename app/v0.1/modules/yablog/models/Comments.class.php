@@ -212,7 +212,7 @@ class CommentsModel extends CommonModel {
             if ($last_time > time() && $this->_module->getGuestbookCommentsSetting($module, 'alternation')) {//提交过于频繁
                 C('LOG_FILENAME', CONTROLLER_NAME);
                 trigger_error(__METHOD__ . ',' . $module . ',' . new_date(null, $last_time) . ' => ' . new_date(), E_USER_ERROR);
-                return L('YOUR_SUBMIT_HIGH_FREQUENCY');
+                return sprintf(L('YOUR_SUBMIT_HIGH_FREQUENCY'), L(COMMENT_TYPE_GUESTBOOK == $type ? 'GUESTBOOK' : 'COMMENT')) . ',' . str_replace('{0}', new_date(null, $last_time), L('TRY_IT_UNTIL'));
             }
 
             return true;
