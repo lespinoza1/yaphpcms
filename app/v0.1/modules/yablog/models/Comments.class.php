@@ -90,7 +90,7 @@ class CommentsModel extends CommonModel {
         trigger_error(__METHOD__ . ',' . $log, E_USER_ERROR);
 
         return $error;
-    }
+    }//end _checkOther
 
     /**
      * 插入后置操作，向留言表增加刚插入id
@@ -119,30 +119,40 @@ class CommentsModel extends CommonModel {
                 $parent_id = $node_arr[$max_reply_level > 2 ? $max_reply_level - 2 : 1];//父级id取第四个
             }
 
-            $data = array(
+            $update = array(
                 'level'          => $parent_info['level'] + 1,//层级
                 'node'           => $parent_info['node'] . ',' . $pk_value,//节点关系
             );
 
             if (!empty($parent_id)) {
-                $data['parent_id'] = $parent_id;
+                $update['parent_id'] = $parent_id;
             }
 
-            $this->where($this->_pk_field . '=' . $pk_value)->save($data);
+            $this->where($this->_pk_field . '=' . $pk_value)->save($update);
             $this->where(array($this->_pk_field => array('IN', $node_arr)))->save(array('last_reply_time' => time()));//更新最上层最后回复时间
         }
         else {
 
-            $data = array(
+            $update = array(
                 'node'           =>  $pk_value,
             );
 
-            $this->where($this->_pk_field . '=' . $pk_value)->save($data);//节点关系
+            $this->where($this->_pk_field . '=' . $pk_value)->save($update);//节点关系
         }
 
-    if ($v = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'alternation')) {//间隔
-        session(C('T_VERIFYCODE_MODULE'), time() + $v);
-    }
+        if ($v = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'alternation')) {//间隔
+            session(C('T_VERIFYCODE_MODULE'), time() + $v);
+        }
+
+
+        if (!$this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'check')) {//不需要审核
+            $type = C('T_TYPE');
+
+            if (COMMENT_TYPE_GUESTBOOK != $type) {//评论数+1
+                $this->execute('UPDATE ' . (COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG) . ' SET comments=comments+1 WHERE blog_id=' . $data['blog_id']);
+            }
+        }
+
         $this->commit();
     }//end _afterInsert
 
@@ -160,7 +170,7 @@ class CommentsModel extends CommonModel {
             $data['city'] = $ip_info;
         }
 
-        $data['email'] = $data['email'] ? strtolower($data['email']) : '';
+        $data['email'] = empty($data['email']) ? '' : strtolower($data['email']);
     }
 
     /**
