@@ -18,5 +18,7 @@ return array(
     'HEAD_PIC'                  => '头像',
     'SECRET'                    => '保密',
     'SPACE'                     => '空格',
-    'YOUR_SUBMIT_HIGH_FREQUENCY'=> '您的提交过于频繁',
+    'TRY_IT_LATER'              => '请稍后再试',
+    'TRY_IT_UNTIL'              => '请于<span style="color: #333; font-weight: bold;">{0}</span>后再试',
+    'YOUR_SUBMIT_HIGH_FREQUENCY'=> '您的%s过于频繁',
 );

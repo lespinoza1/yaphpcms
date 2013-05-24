@@ -133,13 +133,14 @@ function addComments() {
                 }, IS_OLD_IE ? 200 : 300);
             })(input);
             input.after(el);
-            $html.animate({
-                scrollTop: input.offset().top - 100
-            }, 300);
         }
         else {
             $(this).find('#btn-submit').before(el);
         }
+
+        $html.animate({
+            scrollTop: (input || el).offset().top - 100
+        }, 300);
     });
 
     $body.data(DATA_FORM_PANEL, formPanel);
