@@ -557,6 +557,7 @@ class Db {
         }
 
         if (!$set) {
+            $this->rollback();
             throw new Exception(__FUNCTION__ . ' Arguments Invalid');
         }
 
