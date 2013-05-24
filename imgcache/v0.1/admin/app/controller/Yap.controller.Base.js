@@ -1121,7 +1121,7 @@ Ext.define('Yap.controller.Base', {
                             xtype: 'button',
                             text: lang('ADD,MODULE_NAME_FIELD'),
                             handler: function() {
-                                Yap.History.push('#' + me.getAction('field', 'add&back=' + encodeURIComponent(location.href)));
+                                Yap.History.push('#' + me.getAction('field', 'add&parent_id=' + items + '&back=' + encodeURIComponent(location.href)));
                             }
                         });
                     }

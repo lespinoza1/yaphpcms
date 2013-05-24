@@ -603,7 +603,7 @@ class FieldController extends CommonController {
                 $field[] = "{xtype: 'hidden', name: '_menu_id', value: {$item['menu_id']}}";
             }
 
-            $field = "{$callback}(function () {var extField = Yap.Field.field();return [" . join(',' . EOL_LF . EOL_LF, $field) . '];})';
+            $field = "{$callback}(function () {var extField = Yap.Field.field();return " . ($field ? '[' . join(',' . EOL_LF . EOL_LF, $field) . ']' : $this->_model->table(TB_MENU)->where("controller='{$controller}' AND action='{$action}'")->getField('menu_id')) . ';})';
             exit($field);
         }
         else {
