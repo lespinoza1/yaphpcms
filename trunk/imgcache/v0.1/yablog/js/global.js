@@ -47,6 +47,7 @@ String.prototype.trim = function(charlist, mode) {
 
 seajs.config({//seajs配置
     plugins: ['shim'],
+    base: System.sys_base_js_url,
     map: [
         //['.js', '.js?' + new Date().getTime()]
     ],
@@ -64,9 +65,6 @@ seajs.config({//seajs配置
         highlight: {
             src: System.sys_base_common_imgcache + 'js/jquery/jquery.highlight.js?' + _c,
             deps: ['jquery']
-        },
-        comments: {//留言评论
-            src: System.sys_base_js_url + 'comments.js?' + _c
         },
         cnzz: {//站长统计
             src: 'http://s11.cnzz.com/stat.php?id=5299476&web_id=5299476'
@@ -117,14 +115,7 @@ function bootstrap() {
     digg();//顶操作
     setTitle();//设置title属性
 
-    if ($('#form-panel').length) {//评论留言
-
-        seajs.use('comments', function() {
-            showCommentsReply();//鼠标滑过留言评论，显示回复
-            addComments();//添加留言或者评论
-            bindVerifycode();//绑定验证码事件
-        });
-    }
+    $('#form-panel').length && seajs.use('comments');//评论留言
 
     if ($('#tag-cloud').length) {//标签云
         seajs.use('tagCloud', function() {
