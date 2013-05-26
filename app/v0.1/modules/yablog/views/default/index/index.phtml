@@ -4,14 +4,6 @@
     <div class="row-fluid">
         <div class="span9 panel noborder">
             <div class="panel-body">
-                <!--start 微博  -->
-                {if $miniblog}
-                {php $miniblog_info = $miniblog; }
-                {php $meta_info_arr['miniblog'] = $miniblog_info['blog_id'] . '|' . $miniblog_info['add_time']; }
-                {template 'include', 'miniblog-tpl'}
-                {/if}
-                <!--end 微博-->
-
                 <!--start 网文-->
                 {foreach $blog_arr $item}
                 {php $meta_info_arr['blog'] .= ',' . $item['blog_id'] . '|' . $item['add_time'];}
