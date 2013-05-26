@@ -903,30 +903,34 @@ function check_verifycode($code, $module) {
     if (isset($_checked[$module])) {//已经验证过
         return $_checked[$module];
     }
-
-    if (!check_verifycode_limit($module)) {//错误次数限制
-        return false;
+    elseif (!check_verifycode_limit($module)) {//错误次数限制
+        $result = false;
     }
+    else {
+        $session            = session(SESSION_VERIFY_CODE);
+        $verifycode_setting = get_verifycode_setting($module);
+        $verifycode_order   = $verifycode_setting['order'];
 
-    $session            = session(SESSION_VERIFY_CODE);
-    $verifycode_setting = get_verifycode_setting($module);
-    $verifycode_order   = $verifycode_setting['order'];
+        if (!$verifycode_setting['case']) {//不区分大小写
+            $code    = strtolower($code);
+            $session = strtolower($session);
+        }
 
-    if (!is_numeric($verifycode_order)) {
-        return $code == $session;
-    }
+        if (!is_numeric($verifycode_order)) {//非数字，$verifycode_order即为验证码
+            $result = $code == $verifycode_order;
+        }
+        elseif (!$verifycode_order) {//验证码顺序
+            $result = $code == $session;
+        }
+        elseif (($len = strlen($verifycode_order)) != strlen($code)) {//输入长度与顺序长度一致，避免abcd => abcde也通过
+            $result = false;
+        }
+        else {
 
-    if (!$verifycode_setting['case']) {//不区分大小写
-        $code    = strtolower($code);
-        $session = strtolower($session);
-    }
-
-    if ($verifycode_order) {
-        $len = strlen($verifycode_order);//4312
-
-        for($i = 0; $i < $len; $i++) {
-            $n      = $verifycode_order{$i} - 1;
-            $result = isset($code{$i}) && isset($session{$n}) && $code{$i} == $session{$n};
+            for($i = 0; $i < $len; $i++) {
+                $n      = $verifycode_order{$i} - 1;
+                $result = isset($code{$i}) && isset($session{$n}) && $code{$i} == $session{$n};
+            }
         }
     }
 
