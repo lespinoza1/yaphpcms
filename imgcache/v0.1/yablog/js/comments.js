@@ -69,6 +69,24 @@ define('comments', [], function (require, exports, module) {
             return me;
         };//end _addComments
 
+
+
+        /**
+         * ctrl + enter提交表单
+         *
+         * @author          mrmsl <msl-138@163.com>
+         * @date            2013-05-26 21:49:16
+         *
+         * @return {object} 本类实例
+         */
+        me._bindSubmitForm = function () {
+            $(document).on('keypress', function (e) {
+                e.ctrlKey && (13 == e.keyCode || 10 == e.keyCode) && me._commentForm.trigger('submit');
+            });
+
+            return me;
+        };//end _bindSubmitForm
+
         /**
          * 绑定验证码事件
          *
@@ -320,7 +338,8 @@ define('comments', [], function (require, exports, module) {
             html.push('    <div class="controls text-right">');
             html.push('        <span class="error font-red" style="padding: 4px 3px 4px 4px; margin-right: 1px;"></span>');
             html.push('        <button id="btn-submit" class="btn btn-primary">' + lang('SUBMIT') + '</button>');
-            html.push('        <button id="btn-reset-cancel" type="reset" class="btn">' + lang('CANCEL') + '</button>');
+            html.push('        <button id="btn-reset-cancel" type="reset" class="btn hide">' + lang('CANCEL') + '</button>');
+            html.push('         <span class="muted">' + lang('SUBMIT_TIP') + '</span>');
             html.push('    </div>');
             html.push('    <input type="hidden" name="type" value="' + type + '" />');
             html.push('    <input type="hidden" name="parent_id" value="0" />');
@@ -360,7 +379,7 @@ define('comments', [], function (require, exports, module) {
                 me._resetCancelBtn = $('#btn-reset-cancel').on('click', function() {//取消
                     me._replyFormPanel.hide();
                     me._commentForm.appendTo(me._formPanel).find('input[name=parent_id]').val(0);
-                    me._commentForm.find('div.hide').hide();
+                    me._commentForm.find('div.hide').hide().end().find(me._resetCancelBtn).hide();
                 });
             }
             else {
@@ -376,7 +395,9 @@ define('comments', [], function (require, exports, module) {
             me._replyFormPanel.show()
             .find('b.name').text($(this).next().text())
             .end()
-            .find('input[name=parent_id]').val(id);
+            .find('input[name=parent_id]').val(id)
+            .end()
+            .find(me._resetCancelBtn).show();
 
             $html.animate({
                 scrollTop: el.offset().top - 100
@@ -427,7 +448,8 @@ define('comments', [], function (require, exports, module) {
          me.init = function () {
             me._showCommentsReply()//鼠标滑过留言评论，显示回复
             ._addComments()//添加留言或者评论
-            ._bindVerifycode();//绑定验证码事件
+            ._bindVerifycode()//绑定验证码事件
+            ._bindSubmitForm();//ctrl + enter提交表单
 
             return me;
          };
