@@ -296,7 +296,7 @@ define('comments', [], function (require, exports, module) {
             html.push('        <label class="control-label"><span class="text-error">*</span>' + lang('CONTENT') + '</label>');
             html.push('        <div class="controls">');
             html.push('            <textarea name="content" rows="3" cols="50" class="input-block-level" required></textarea>');
-            html.push('            <span class="muted">http(s)://www.yablog.cn/path/?querystring ' + lang('SPACE') + '... =&gt; <a href="http://www.yablog.cn.com/path/?querystring" rel="nofollow">http(s)://www.abc.com/path/?querystring</a></span>');
+            html.push('            <span class="muted">http(s)://www.yablog.cn/path/?querystring ' + lang('SPACE') + '... =&gt; <a href="http://www.yablog.cn/path/?querystring" rel="nofollow">http(s)://www.yablog.cn/path/?querystring</a></span>');
             html.push('        </div>');
             html.push('    </div>');
 
