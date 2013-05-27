@@ -49,21 +49,21 @@ seajs.config({//seajs配置
     plugins: ['shim'],
     base: System.sys_base_js_url,
     map: [
-        //['.js', '.js?' + new Date().getTime()]
+        ['.js', System.IS_LOCAL ? '.js?' + _c : '.js']
     ],
     alias: {
         lang: {//语言包
-            src: System.sys_base_site_url + 'static/js/lang/zh_cn.js?' + _c
+            src: System.sys_base_site_url + 'static/js/lang/zh_cn.js'
         },
         jquery: {//jquery
-            src: System.sys_base_common_imgcache + 'js/jquery/jquery-1.9.1.min.js?' + _c
+            src: System.sys_base_common_imgcache + 'js/jquery/jquery-1.9.1.min.js'
         },
         tagCloud: {//标签云
-            src: System.sys_base_common_imgcache + 'js/jquery/jquery.3DTagCloud.js?' + _c,
+            src: System.sys_base_common_imgcache + 'js/jquery/jquery.3DTagCloud.js',
             deps: ['jquery']
         },
         highlight: {
-            src: System.sys_base_common_imgcache + 'js/jquery/jquery.highlight.js?' + _c,
+            src: System.sys_base_common_imgcache + 'js/jquery/jquery.highlight.js',
             deps: ['jquery']
         },
         cnzz: {//站长统计
@@ -72,7 +72,7 @@ seajs.config({//seajs配置
     }
 });
 
-seajs.use(['jquery'], bootstrap);
+seajs.use('jquery', bootstrap);
 
 /**
  * 获取参数，类似php $_GET。不支持获取数组
@@ -123,6 +123,8 @@ function animateTop(scrollTop, duration) {
  * @return {void} 无返回值
  */
 function bootstrap() {
+    $('#nav-' + NAV_ID).addClass('active');//高亮导航
+
     window.$html = $('html,body');
     window.$body = $('body');
     navDropdown();//下拉菜单
@@ -147,15 +149,9 @@ function bootstrap() {
         });
     }
 
-    if ('function' == typeof(ON_LOAD)) {
-        ON_LOAD();
-    }
+    'function' == typeof(ON_LOAD) && ON_LOAD();//回调
 
-    $('#nav-' + NAV_ID).addClass('active');//高亮导航
-
-    seajs.use('cnzz', function () {//站长统计
-        log('cnzz');
-    });
+    seajs.use('cnzz');//站长统计
 }//end bootstrap
 
 /**
