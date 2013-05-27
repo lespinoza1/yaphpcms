@@ -98,6 +98,23 @@ function _GET(name, str) {
 }
 
 /**
+ * 平滑滚动
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-27 10:18:14
+ *
+ * @param {int} [scrollTop=0] 距离顶部像素
+ * @param {int} [duration=300] 滚动持续时间,单位:毫秒
+ *
+ * @return {void} 无返回值
+ */
+function animateTop(scrollTop, duration) {
+    $html.animate({
+        scrollTop: scrollTop || 0
+    }, duration || 300);
+}
+
+/**
  * 启动函数
  *
  * @author          mrmsl <msl-138@163.com>
@@ -114,6 +131,7 @@ function bootstrap() {
     resetTime();//重置时间，即显示为 刚刚、5分钟前、3小时前、昨天10:23、前天15：26等
     digg();//顶操作
     setTitle();//设置title属性
+    gototop();//返回页面顶部
 
     $('#form-panel').length && seajs.use('comments');//评论留言
 
@@ -213,6 +231,43 @@ function digg() {
 function getMetaInfo() {
     'undefined' != typeof(META_INFO) && $.post(System.sys_base_site_url + 'ajax/metainfo.shtml', $.param(META_INFO), setMetaInfo);
 }
+
+/**
+ * 返回页面顶部
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-05-27 09:41:13
+ *
+ * @param {string} [gototopHtml=<a href="#" id="gototop"></a>] 显示html代码
+ * @param {int} [minScroll=300] 滚动距离顶最少像素
+ *
+ * @return {void} 无返回值
+ */
+function gototop(gototopHtml, minScroll) {
+    gototopHtml = gototopHtml || '<a href="#" id="gototop"></a>';
+    minScroll = minScroll || 300;
+
+    var t,
+        o = $(gototopHtml).appendTo($body).on('click', function() {
+        animateTop();
+
+        return false;
+    });
+
+    $(window).on('scroll', function() {
+
+        if ($(window).scrollTop() > minScroll) {
+            t && clearTimeout(t);
+            t = setTimeout(function () {
+                o.fadeIn();
+            }, 200);
+        }
+        else {
+            t && clearTimeout(t);
+            o.fadeOut();
+        };
+    });
+}//end gototop
 
 /**
  * 转义html，类似php htmlspechalchars
