@@ -84,6 +84,16 @@ class CommonController extends BaseController {
                 $html .=                $item['username'];
             }
 
+            if ($item['city']) {
+                $html .= "          [{$item['province']}{$item['city']}]";
+            }
+            elseif ($ip = long2ip($item['user_ip'])) {
+                $arr = explode('.', $ip);
+                $arr[2] = $arr[3] = '*';
+                $ip = join('.', $arr);
+                $html .= "          [{$ip}]";
+            }
+
             $html .= '          </span> | <span class="time-axis" data-time="' . $item['add_time'] . '">' . new_date(null, $item['add_time']) . '</span>';
             $html .= '      </p>';
             $html .= $item['content'];
