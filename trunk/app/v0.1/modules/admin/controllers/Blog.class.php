@@ -125,7 +125,7 @@ exit;*/
 
         $data['cate_name'] = $cate_info['cate_name'];//所属分类名称
         $summary           = strip_tags($data['summary']);
-        $data['summary']   = $summary ? $data['summary'] : substr(strip_tags($data['content']), 0, 300);//摘要，默认取内容前300字节 by mrmsl on 2013-04-12 14:56:41
+        $data['summary']   = $summary ? $data['summary'] : cn_substr($data['content'], 300);//摘要，默认取内容前300字节 by mrmsl on 2013-04-12 14:56:41
 
         unset($data['link_url']);
 

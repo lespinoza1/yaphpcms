@@ -1024,11 +1024,15 @@ function clear_verifycoe($module) {
  * @return string 截取后的字符串
  */
 function cn_substr($string, $length, $dot = '...', $encoding = 'utf-8') {
-    $string = trim($string);
-    $len    = strlen($string);
+    $string         = trim($string);
+    $string         = htmlspecialchars_decode(strip_tags($string), ENT_QUOTES);
+    $string         = str_replace('&nbsp;', ' ', $string);
+    $len            = strlen($string);
+    $include_dot    = false;
 
-    if ($len > $length) {//截断字符
-        $word_cut = '';
+    if ($len > $length) {
+        $include_dot    = true;
+        $word_cut       = '';
 
         if ('utf-8' == strtolower($encoding)) { //utf8编码
             $n      = 0;
@@ -1101,7 +1105,10 @@ function cn_substr($string, $length, $dot = '...', $encoding = 'utf-8') {
         $string = $word_cut;
     }
 
-    return trim($string);
+    $string = htmlspecialchars($string, ENT_QUOTES);
+    $string = str_replace(' ', '&nbsp;', $string);
+
+    return $string . ($include_dot ? $dot : '');
 }
 
 /**

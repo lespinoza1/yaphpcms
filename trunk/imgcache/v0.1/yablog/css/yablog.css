@@ -727,9 +727,18 @@ ul.hot-blogs li {
 }
 .new_comments p {
   margin-bottom: 0;
+  height: 22px;
+  line-height: 22px;
+  overflow: hidden;
 }
 .new_comments a {
   color: #333;
+}
+.new_comments .comments-detail {
+  margin-bottom: 0;
+}
+.new_comments .comments-detail:last-child {
+  border-bottom: none;
 }
 .page-not-found,
 .system-infomation {
