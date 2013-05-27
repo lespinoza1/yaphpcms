@@ -83,7 +83,7 @@ define('comments', [], function (require, exports, module) {
             $(document).on('keypress', function (e) {
                 if (e.ctrlKey && (13 == e.keyCode || 10 == e.keyCode)) {
                     me._commentForm.find('div.hide').show();
-                    me._commentForm.trigger('submit');
+                    me._commentForm.trigger('submit', true);
                 }
             });
 
@@ -149,11 +149,13 @@ define('comments', [], function (require, exports, module) {
          * @author          mrmsl <msl-138@163.com>
          * @date            2013-05-26 09:38:29
          *
+         * @param {bool} [trigger=undefined] true通过trigger触发
+         *
          * @return {void} true验证成功，否则false
          */
-        me._checkForm = function () {
+        me._checkForm = function (trigger) {
 
-            if (IS_OLD_IE) {//ie6,7,8
+            if (IS_OLD_IE || trigger) {//ie6,7,8
                 var checked = true;
                 var elArr = [
                     [me._commentForm.find('input[name=username]'), 'USERNAME'],
@@ -222,11 +224,14 @@ define('comments', [], function (require, exports, module) {
          * @author          mrmsl <msl-138@163.com>
          * @date            2013-05-26 09:39:18
          *
+         * @param {object} e event
+         * @param {bool} [trigger=undefined] true通过trigger触发
+         *
          * @return {bool} false，阻止表单提交
          */
-        me._submitForm = function () {
+        me._submitForm = function (e, trigger) {
 
-            if (!me._checkForm()) {
+            if (!me._checkForm(trigger)) {
                 return false;
             }
 
