@@ -4,7 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo L('MANAGE_CENTER');?></title>
     <?php echo $css_file, $js_file; ?>
+    <script src="<?php echo COMMON_IMGCACHE; ?>js/seajs/sea-2.0.1.js" id="seajsnode"></script>
     <script type="text/javascript">
+
         Ext.onReady(function(){
             Ext.create('Yap.Application');
         });
@@ -22,6 +24,28 @@
             priv: " . ($admin_priv ? $admin_priv : '[]') . "
         };"
         ?>
+
+        var UEDITOR_HOME_URL = System.sys_base_website + 'v0.1/static/js/ueditor/v1.2.5/';//百度ueditor路径
+
+        seajs.config({//seajs配置
+            plugins: ['shim'],
+            base: '<?php echo sys_config("sys_base_admin_imgcache"); ?>',
+            map: [
+                ['.js', System.IS_LOCAL ? '.js?' + Math.random() : '.js']
+            ],
+            alias: {
+                jquery: {//jquery
+                    src: System.sys_base_common_imgcache + 'js/jquery/jquery-1.9.1.min.js'
+                },
+                ueditor: {//uditor
+                    src: UEDITOR_HOME_URL + 'ueditor.min.js',
+                    deps: ['ueditorConfig']
+                },
+                ueditorConfig: {//ueditor config
+                    src: UEDITOR_HOME_URL + 'editor_config.js'
+                }
+            }
+        });
     </script>
 </head>
 <body>
