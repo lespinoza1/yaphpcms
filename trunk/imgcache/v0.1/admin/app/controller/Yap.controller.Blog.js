@@ -44,7 +44,7 @@ Ext.define('Yap.controller.Blog', {
             return me.superclass.addAction.apply(this, [data, options]);
         }
 
-        seajs.use([UEDITOR_HOME_URL + 'editor_config', UEDITOR_HOME_URL + 'ueditor.min'], function() {
+        seajs.use(['ueditor', 'ueditorConfig'], function() {
             Ext.require('Yap.ux.Ueditor', function () {
                 me.ueditor = true;
                 me.superclass.addAction.apply(this, [data, options]);

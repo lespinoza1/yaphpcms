@@ -59,7 +59,6 @@ class IndexController extends CommonController {//继承CommonController by mrms
         $css_file .= css('extjs/v4.1.1a//resources/css/ext-all-gray.css,extjs/v4.1.1a/resources/css/ext-patch.css', COMMON_IMGCACHE);
         $css_file .= css('app.css', ADMIN_IMGCACHE . 'css/');
         $js_file   = $this->_loadTimeScript('LOAD_CSS_TIME');
-        $js_file  .= js('sea-2.0.1.min.js', false, COMMON_IMGCACHE . 'js/seajs/');//增加seajs by mrmsl on 2013-03-29 15:58:35
         $js_file  .= js('', true, COMMON_IMGCACHE . 'extjs/v4.1.1a/');
         $js_file  .= $this->_loadTimeScript('LOAD_EXT_TIME');
         $js_file  .= js('System.js', false, '/static/js/');
