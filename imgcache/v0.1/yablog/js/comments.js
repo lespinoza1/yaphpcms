@@ -213,9 +213,7 @@ define('comments', [], function (require, exports, module) {
                 me.jQShake(el, {border: '1px solid red', 'background-color': '#ffe9e8'}, {border: 'none', 'background-color': '#fff'});
             }
 
-            $html.animate({
-                scrollTop: (input || el).offset().top - 100
-            }, 300);
+            animateTop((input || el).offset().top - 100);
         };//end _formError
 
         /**
@@ -402,9 +400,7 @@ define('comments', [], function (require, exports, module) {
             .end()
             .find(me._resetCancelBtn).show();
 
-            $html.animate({
-                scrollTop: el.offset().top - 100
-            }, 300);
+            animateTop(el.offset().top - 100);
 
             return false;
         };//end _replyClick
@@ -431,9 +427,8 @@ define('comments', [], function (require, exports, module) {
             })
             .find('.reply').on('click', me._replyClick)
             .end().find('a[href^=#comment-]').on('click', function() {
-                $html.animate({
-                    scrollTop: $($(this).attr('href')).offset().top - 50
-                }, 300);
+                animateTop($($(this).attr('href')).offset().top - 50);
+
                 return false;
             });
 

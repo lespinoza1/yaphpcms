@@ -744,6 +744,18 @@ ul.hot-blogs li {
 .system-infomation h4 {
   color: #080;
 }
+#gototop {
+  position: fixed;
+  background: url(../../../common/images/gototop.png) no-repeat;
+  display: none;
+  width: 46px;
+  height: 46px;
+  right: 5px;
+  bottom: 5px;
+}
+#gototop:hover {
+  background-position: 0 -47px;
+}
 p {
   margin: 0 0 10px;
 }
