@@ -81,7 +81,10 @@ define('comments', [], function (require, exports, module) {
          */
         me._bindSubmitForm = function () {
             $(document).on('keypress', function (e) {
-                e.ctrlKey && (13 == e.keyCode || 10 == e.keyCode) && me._commentForm.trigger('submit');
+                if (e.ctrlKey && (13 == e.keyCode || 10 == e.keyCode)) {
+                    me._commentForm.find('div.hide').show();
+                    me._commentForm.trigger('submit');
+                }
             });
 
             return me;
