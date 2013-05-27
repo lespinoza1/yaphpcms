@@ -10,6 +10,7 @@
 
 define('comments', [], function (require, exports, module) {
 
+    //评论类
     function Comments() {
         var me = this;
         /**
