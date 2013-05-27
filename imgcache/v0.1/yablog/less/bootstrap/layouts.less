@@ -157,9 +157,15 @@ ul.hot-blogs li {
     position: absolute;
 }
 
-.new_comments .media { margin-top: 5px; }
-.new_comments p { margin-bottom: 0; }
-.new_comments a { color: #333; }
+.new_comments {
+    .media { margin-top: 5px; }
+    p { margin-bottom: 0; height: 22px; line-height: 22px; overflow: hidden; }
+    a { color: #333; }
+    .comments-detail { margin-bottom: 0; }
+    .comments-detail:last-child {
+        border-bottom: none;
+    }
+}
 
 .page-not-found,
 .system-infomation {
