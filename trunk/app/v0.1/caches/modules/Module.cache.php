@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-05-24 08:47:38
+//最后更新时间:2013-05-27 08:20:17
 
 return array (
   'module_admin_verifycode_enable' => '1',
@@ -44,8 +44,7 @@ yablog
 mrmsl
 msl',
   'module_guestbook_disabled_username' => '',
-  'module_guestbook_comments_disabled_ip' => '127.0.0.1
-192.168.124.10',
+  'module_guestbook_comments_disabled_ip' => '',
   'module_guestbook_disabled_ip' => '',
   'module_comments_disabled_ip' => '',
 );
