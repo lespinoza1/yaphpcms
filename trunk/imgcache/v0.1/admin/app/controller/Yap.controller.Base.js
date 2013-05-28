@@ -413,7 +413,7 @@ Ext.define('Yap.controller.Base', {
 
         Ext.each(selection, function(item, index) {
 
-            if (item.get(field) == val) {
+            if (Ext.isArray(val) && -1 != Ext.Array.indexOf(val, item.get(field)) || item.get(field) == val) {
                 result.push(item);
             }
         });

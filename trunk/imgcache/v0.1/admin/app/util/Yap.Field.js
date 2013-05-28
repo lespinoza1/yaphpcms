@@ -29,6 +29,36 @@ Ext.define('Yap.Field', {
 
         return {
             /**
+             * 审核状态下拉框
+             *
+             * @author          mrmsl <msl-138@163.com>
+             * @date            2013-05-28 12:52:51
+             *
+             * @ignore
+             *
+             * @return {Object} Ext.form.ComboBox
+             */
+            audting: function(returnStatus) {
+                var store = [
+                    ['0', lang('CN_WEI,AUDITING')],
+                    ['1', lang('CN_YI,PASS')],
+                    ['2', lang('CN_WEI,PASS')]
+                ];
+
+                if (returnStatus) {
+                    return store;
+                }
+
+                store.unshift(['-1', lang('AUDITING,STATUS')]);
+                return this.base({
+                    width: 80,
+                    itemId: 'audting',
+                    value: '-1',
+                    store: store
+                });
+            },
+
+            /**
              * 基础下拉框
              *
              * @author          mrmsl <msl-138@163.com>

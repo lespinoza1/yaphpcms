@@ -45,6 +45,7 @@ return array(
     'ONE_LINE_ONE'      => '一行一个',
     'ORDER'             => '排序',
     'PATH'              => '路径',
+    'PASS'              => '通过',
     'PERMISSION'        => '权限',
     'PERSONAL'          => '个人',
     'PRIMARY_KEY'       => '数据主键',
