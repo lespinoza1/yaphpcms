@@ -73,29 +73,29 @@ class CommonController extends BaseController {
             <div class="panel-list media comment-detail panel-comment' . ($is_reply ? ' panel-comment-reply' : '') . '" id="comment-' . $item['comment_id'] . '">
                 <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="' . (!IS_LOCAL && $item['user_pic'] ? $item['user_pic'] : COMMON_IMGCACHE . 'images/guest.png') . '" />
                 <div class="media-body">
-                            <p class="muted">
-                                <a href="#base-' . $item['comment_id'] . '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>' . L('REPLY') . '</a>
-                                <span class="name-' . $item['comment_id'] . '">';
+                    <p class="muted">
+                        <a href="#base-' . $item['comment_id'] . '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>' . L('REPLY') . '</a>
+                        <span class="name-' . $item['comment_id'] . '">';
 
             if ($item['user_homepage']) {
-                $html .= '          <a href="' . $item['user_homepage'] . '" rel="nofollow">' . $item['username'] . '</a>';
+                $html .= '  <a href="' . $item['user_homepage'] . '" rel="nofollow">' . $item['username'] . '</a>';
             }
             else {
-                $html .=                $item['username'];
+                $html .=        $item['username'];
             }
 
             if ($item['city']) {
-                $html .= "          [{$item['province']}{$item['city']}]";
+                $html .= "      [{$item['province']}{$item['city']}]";
             }
             elseif ($ip = long2ip($item['user_ip'])) {
                 $arr = explode('.', $ip);
                 $arr[2] = $arr[3] = '*';
                 $ip = join('.', $arr);
-                $html .= "          [{$ip}]";
+                $html .= "      [{$ip}]";
             }
 
-            $html .= '          </span> | <span class="time-axis" data-time="' . $item['add_time'] . '">' . new_date(null, $item['add_time']) . '</span>';
-            $html .= '      </p>';
+            $html .= '  </span><span class="time-axis pull-right" data-time="' . $item['add_time'] . '">' . new_date(null, $item['add_time']) . '</span>';
+            $html .= '</p>';
             $html .= $item['content'];
             $html .= '<span id="base-' . $item['comment_id'] . '"></span>';
 
@@ -103,7 +103,8 @@ class CommonController extends BaseController {
                 $html .= $this->_getReplyComments($item['comment_id'], true);
             }
 
-            $html .= '  </div>
+            $html .= '
+                </div>
             </div>';
         }
 
