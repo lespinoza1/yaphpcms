@@ -424,12 +424,15 @@ define('comments', [], function (require, exports, module) {
             $('.comment-detail').hover(function(e) {
                  $.each($(this).parents('.comment-detail'), function(index, item) {
                     $(item).find('.reply:first').hide();
+                    $(item).find('.time-axis:first').show();
                 });
                 $(this).find('.reply:first').show();
+                $(this).find('.time-axis:first').hide();
 
                 return false;
             }, function(e) {
                 $(this).find('.reply:first').hide();
+                $(this).find('.time-axis:first').show();
             })
             .find('.reply').on('click', me._replyClick)
             .end().find('a[href^=#comment-]').on('click', function() {
