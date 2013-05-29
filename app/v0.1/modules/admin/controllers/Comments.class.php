@@ -39,15 +39,46 @@ class CommentsController extends CommonController {
     }
 
     /**
+     * 更新博客,微博评论数
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-29 16:24:19
+     *
+     * @param array|int $blog_id blog_id
+     * @param int       $type    评论类型
+     *
+     * @return void 无返回值
+     */
+    private function _updateBlogCommentsNum($blog_id, $type) {
+        $table      = COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG;
+        $blog_id    = is_array($blog_id) ? $blog_id : explode(',', $blog_id);
+        $updated    = array();
+
+        foreach($blog_id as $v) {
+
+            if (!isset($updated[$v])) {
+                $count = $this->_model->where("type={$type} AND blog_id={$v} AND status=" . COMMENT_STATUS_PASS)->count();
+                $this->_model->execute("UPDATE {$table} SET comments={$count} WHERE blog_id={$v}");
+                $updated[$v] = true;
+            }
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function _afterSetField($field, $value, $pk_id) {
 
-        if ('cate_id' == $field || ($value && 'is_delete' == $field) || (!$value && 'is_issue' == $field)) {//转移分类、未发布、已删除
-            //$this->_getViewTemplate()->clearCache($this->_getControllerName(), 'detail', $pk_id);
-            C(APP_FORWARD, true);
-            $this->forward('Category', 'publicDeleteHtml');
-            $this->_deleteCommentsHtml(null);//删除静态文件
+        if ('status' == $field) {//审核状态
+            $info = C('T_INFO');
+
+            if (!empty($info['delete_blog_html'])) {
+                $this->_deleteBlogHtml($info['delete_blog_html']);//删除静态页
+
+                //更新评论数
+                !empty($info[COMMENT_TYPE_BLOG]) && $this->_updateBlogCommentsNum($info[COMMENT_TYPE_BLOG], COMMENT_TYPE_BLOG);
+                !empty($info[COMMENT_TYPE_MINIBLOG]) && $this->_updateBlogCommentsNum($info[COMMENT_TYPE_MINIBLOG], COMMENT_TYPE_MINIBLOG);
+            }
         }
     }
 
@@ -56,29 +87,52 @@ class CommentsController extends CommonController {
      */
     protected function _beforeExec(&$pk_id, &$log) {
         $pk_field   = $this->_pk_field;
-        $data       = $this->_model->where(array($pk_field => array('IN', $pk_id)))->field($pk_field . ',title,cate_id,link_url')->select();
+        $data       = $this->_model->where(array($pk_field => array('IN', $pk_id)))
+        ->field($pk_field . ',type,status,parent_id,blog_id,node')
+        ->key_column($pk_field)
+        ->select();
         $log        = '';
         $info       = array();//记录操作博客信息，如删除静态文件，删除对应类静态文件等
 
         if (false !== $data) {
 
-            foreach ($data as $v) {
-                $log .= $v['title'] . "({$v[$pk_field]}),";
-                $info[$v[$pk_field]] = array('cate_id' => $v['cate_id'], 'link_url' => $v['link_url']);
+            $selected = array(
+                COMMENT_TYPE_BLOG       => array(),
+                COMMENT_TYPE_MINIBLOG   => array(),
+                'at_email'              => array(),
+            );
+
+            foreach ($data as $k => $v) {
+                $log .= $k . ',';
+
+                if (COMMENT_TYPE_GUESTBOOK != $v['type'] && !isset($selected[$v['type']][$v['blog_id']])) {
+                    $a = $this->_model->table(COMMENT_TYPE_BLOG == $v['type'] ? TB_BLOG : TB_MINIBLOG)->where('blog_id=' . $v['blog_id'])->field('link_url')->find();
+                    $info[$v['type']][] = $v['blog_id'];
+                    $info['delete_blog_html'][] = array('link_url' => $a['link_url']);
+                    $selected[$v['type']][$v['blog_id']] = true;
+                }
+
+                if (($parent_id = $v['parent_id']) && !isset($selected['at_email'][$parent_id])) {//有回复时是否发送邮件
+                    $selected['at_email'][$parent_id] = true;
+
+                    if ($at_email = $this->_model->where('at_email=1 AND comment_id=' . $parent_id)->getField('at_email')) {
+                        $info['at_email'] = $parent_id;
+                    }
+                }
             }
 
-            C('HTML_BUILD_INFO', $info);
+            C('T_INFO', $info);
         }
 
         return $log ? substr($log, 0, -1) : null;
-    }
+    }//end _beforeExec
 
     /**
      * {@inheritDoc}
      */
     protected function _infoCallback(&$cate_info) {
-        $cate_info['add_time'] = new_date(sys_config('sys_timezone_datetime_format'), $cate_info['add_time']);
-        $cate_info['cate_name'] = $this->_getCache($cate_info['cate_id'] . '.cate_name', 'Category');
+        //$cate_info['add_time'] = new_date(sys_config('sys_timezone_datetime_format'), $cate_info['add_time']);
+        //$cate_info['cate_name'] = $this->_getCache($cate_info['cate_id'] . '.cate_name', 'Category');
     }
 
     /**
@@ -101,7 +155,7 @@ class CommentsController extends CommonController {
         $to_build  = $data['is_issue'] && !$data['is_delete'];
         $diff_key  = 'title,content,cate_name,is_issue,seo_keyword,seo_description,sort_order,is_delete';//比较差异字段
         $msg       = L($pk_value ? 'EDIT' : 'ADD');//添加或编辑
-        $log_msg   = $msg . L('GUESTBOOK_COMMENTS,FAILURE');//错误日志
+        $log_msg   = $msg . L('MODULE_NAME,FAILURE');//错误日志
         $error_msg = $msg . L('FAILURE');//错误提示信息
         $cate_info = $this->_getCache($cate_id = $this->_model->cate_id, 'Category');//所属分类
 
@@ -114,12 +168,12 @@ class CommentsController extends CommonController {
         if ($pk_value) {//编辑
 
             if (!$blog_info = $this->_model->find($pk_value)) {//编辑博客不存在
-                $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,GUESTBOOK_COMMENTS,%{$pk_field}({$pk_value}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
+                $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,MODULE_NAME,%{$pk_field}({$pk_value}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
                 $this->_ajaxReturn(false, $error_msg);
             }
 
             if (false === $this->_model->save()) {//更新出错
-                $this->_sqlErrorExit($msg . L('GUESTBOOK_COMMENTS') . "{$blog['title']}({$pk_value})" . L('FAILURE'), $error_msg);
+                $this->_sqlErrorExit($msg . L('MODULE_NAME') . "{$blog['title']}({$pk_value})" . L('FAILURE'), $error_msg);
             }
 
             $cate_info = $this->_getCache($blog_info['cate_id'], 'Category');
@@ -129,7 +183,7 @@ class CommentsController extends CommonController {
 
             strpos($diff, 'seo_keyword') && $this->_model->addTags($pk_value, $data['seo_keyword']);
 
-            $this->_model->addLog($msg . L('GUESTBOOK_COMMENTS')  . "{$blog_info['title']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+            $this->_model->addLog($msg . L('MODULE_NAME')  . "{$blog_info['title']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
 
             if (!$to_build) {
                 C('HTML_BUILD_INFO', array($pk_value => array('cate_id' => $blog_info['cate_id'] . ',' . $data['cate_id'], 'link_url' => $blog_info['link_url'])));
@@ -142,21 +196,42 @@ class CommentsController extends CommonController {
             $data = $this->_dataDiff($data, false, $diff_key);//数据
 
             if (false === ($insert_id =$this->_model->add())) {//插入出错
-                $this->_sqlErrorExit($msg . L('GUESTBOOK_COMMENTS') . $data . L('FAILURE'), $error_msg);
+                $this->_sqlErrorExit($msg . L('MODULE_NAME') . $data . L('FAILURE'), $error_msg);
             }
 
-            $this->_model->addLog($msg . L('GUESTBOOK_COMMENTS') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+            $this->_model->addLog($msg . L('MODULE_NAME') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
     }//end addAction
 
     /**
-     * {@inheritDoc}
+     * 审核状态
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-29 09:13:46
+     *
+     * @return void 无返回值
      */
-    public function deleteCommentsHtmlAction() {
-        $this->_name_column = 'title';
-        parent::deleteCommentsHtmlAction();
-    }//end deleteCommentsHtmlAction
+    public function auditingAction() {
+        $this->_model->startTrans();
+
+        $field      = 'status';
+        $value      = Filter::int('auditing');
+        $status_arr = array(
+            COMMENT_STATUS_UNAUDITING   => L('CN_WEI,AUDITING'),
+            COMMENT_STATUS_PASS         => L('CN_YI,PASS'),
+            COMMENT_STATUS_UNPASS       => L('CN_WEI,PASS'),
+        );
+
+        if (!isset($status_arr[$value])) {
+            $log = L('INVALID,AUDITING,STATUS');
+            $this->_triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $log . ': ' . $value);
+            $this->_ajaxReturn(false, $log);
+        }
+
+        C('T_STATUS_ARR', array($field => $status_arr));
+        $this->_setOneOrZero($field, $value);
+    }//end auditingAction
 
     /**
      * 获取博客具体信息
@@ -166,32 +241,8 @@ class CommentsController extends CommonController {
      *
      * @return $this->_info()结果
      */
-    function infoAction() {
+    public function infoAction() {
         return $this->_info(false);
-    }
-
-    /**
-     * 删除状态
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-03-21 13:32:41
-     *
-     * @return void 无返回值
-     */
-    public function isDeleteAction() {
-        $this->_setOneOrZero('isDelete');
-    }
-
-    /**
-     * 发布状态
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-03-21 13:32:41
-     *
-     * @return void 无返回值
-     */
-    public function issueAction() {
-        $this->_setOneOrZero('is_issue');
     }
 
     /**
@@ -207,6 +258,7 @@ class CommentsController extends CommonController {
         $db_fields      = $this->_getDbFields();//表字段
         $sort           = Filter::string('sort', 'get', $this->_pk_field);//排序字段
         $sort           = in_array($sort, $db_fields) ? $sort : $this->_pk_field;
+        $sort           = 'c.' . $sort;
         $order          = empty($_GET['dir']) ? Filter::string('order', 'get') : Filter::string('dir', 'get');//排序
         $order          = toggle_order($order);
         $keyword        = Filter::string('keyword', 'get');//关键字
@@ -227,9 +279,9 @@ class CommentsController extends CommonController {
         );
 
         if ($keyword !== '' && isset($column_arr[$column])) {
-            $where['' . $column] = $this->_buildMatchQuery('' . $column, $keyword, Filter::string('match_mode', 'get'));
+            $where[$column_arr[$column]] = $this->_buildMatchQuery($column_arr[$column], $keyword, Filter::string('match_mode', 'get'));
 
-            if ('blog_content' == $column) {
+            if ('blog_content' == $column || 'blog_title' == $column) {
                 $table = ' JOIN ' . TB_BLOG . ' AS b ON b.blog_id=c.blog_id';
             }
         }
@@ -256,10 +308,10 @@ class CommentsController extends CommonController {
 
         isset($table) && $this->_model->join($table);
 
-        $total      = $this->_model->alias('c')->where($where)->count();
+        $total      = $this->_model->alias('c')->where($where)->count('c.blog_id');
 
         if ($total === false) {//查询出错
-            $this->_sqlErrorExit(L('QUERY,GUESTBOOK_COMMENTS') . L('TOTAL_NUM,ERROR'));
+            $this->_sqlErrorExit(L('QUERY,MODULE_NAME') . L('TOTAL_NUM,ERROR'));
         }
         elseif ($total == 0) {//无记录
             $this->_ajaxReturn(true, '', null, $total);
@@ -270,60 +322,13 @@ class CommentsController extends CommonController {
         isset($table) && $this->_model->join($table);
 
         $data      = $this->_model->alias('c')
+        ->field('c.*')
         ->where($where)
         ->limit($page_info['limit'])
         ->order(('' .$sort) . ' ' . $order)->select();
 
-        $data === false && $this->_sqlErrorExit(L('QUERY,GUESTBOOK_COMMENTS') . L('LIST,ERROR'));//出错
+        $data === false && $this->_sqlErrorExit(L('QUERY,MODULE_NAME') . L('LIST,ERROR'));//出错
 
         $this->_ajaxReturn(true, '', $data, $total);
     }//end listAction
-
-    /**
-     * 移动所属分类
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-03-31 19:27:28
-     *
-     * @return void 无返回值
-     */
-    function moveAction() {
-        $field       = 'cate_id';//定段
-        $cate_id     = Filter::int($field);//所属分类id
-        $msg         = L('MOVE');//提示
-        $log_msg     = $msg . L('GUESTBOOK_COMMENTS,FAILURE');//错误日志
-        $error_msg   = $msg . L('FAILURE');//错误提示信息
-
-        if ($cate_id) {//分类id
-            $cate_info = $this->_getCache($cate_id, 'Category');
-
-            if (!$cate_info) {//分类不存在
-                $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,BELONG_TO_CATEGORY,%{$field}({$cate_id}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
-                $this->_ajaxReturn(false, $error_msg);
-            }
-
-            $cate_name = $cate_info['cate_name'];
-        }
-        else {
-            //非法参数
-            $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%: {$field},IS_EMPTY"), LOG_TYPE_INVALID_PARAM);
-            $this->_ajaxReturn(false, $error_msg);
-        }
-
-        $this->_setField($field, $cate_id, $msg, L('TO') . $cate_name);
-    }//end moveAction
-
-    /**
-     * 删除静态文件
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-17 14:33:27
-     *
-     * @param $build_arr array|null 已修改博客信息
-     *
-     * @return void 无返回值
-     */
-    public function publicDeleteHtmlAction($build_arr = array()) {
-        $this->_deleteCommentsHtml($build_arr);
-    }
 }
