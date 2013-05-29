@@ -40,5 +40,9 @@ class CommentsModel extends CommonModel {
      */
     protected $_db_fields = array (
         'comment_id'          => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,DATA,INVALID'),//自增主键
+        'parent_id'      => array('filter' => 'int'),//父id
+        'content'        => array('validate' => array('notblank#CONTENT')),
+        'status'         => array('filter' => 'int'),
+        'at_email'       => array('filter' => 'int'),//有人回复时通知我
     );
 }
