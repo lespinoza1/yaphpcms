@@ -14,4 +14,5 @@
 
 return array(
     'GUESTBOOK_COMMENTS'    => '留言评论',
+    'MODULE_NAME_COMMENTS'  => '留言评论',
 );
