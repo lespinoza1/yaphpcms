@@ -106,7 +106,7 @@ Ext.define('Yap.controller.Comments', {
      * @return {Array} 数据列配置
      */
     getListColumns: function() {
-        var me = this, statusArr = Yap.Field.combo().audting(true);
+        var me = this, statusArr = [TEXT.gray(lang('CN_WEI,AUDITING')), TEXT.green(lang('CN_YI,PASS')), TEXT.red(lang('CN_WEI,PASS'))];
 
         return [{
             text: 'id',//id
@@ -148,7 +148,7 @@ Ext.define('Yap.controller.Comments', {
             dataIndex: 'status',
             width: 80,
             renderer: function(v, cls, record) {
-                return statusArr[v][1];
+                return statusArr[v];
             }
         }, {//操作列
             flex: 1,
@@ -289,8 +289,8 @@ Ext.define('Yap.controller.Comments', {
      * @return {Object} Ext.tool.Toolbar工具栏配置项
      */
     tbar: function(data) {
-        var me = this, extField = Yap.Field.field(), extCombo = Yap.Field.combo();
-        me.typeArr.unshift(['-1', lang('TYPE')]);
+        var me = this, extField = Yap.Field.field(), extCombo = Yap.Field.combo(), typeArr = Ext.Array.clone(me.typeArr);
+        typeArr.unshift(['-1', lang('TYPE')]);
 
         return {
             xtype: 'toolbar',
@@ -324,9 +324,9 @@ Ext.define('Yap.controller.Comments', {
                 width: 80,
                 itemId: 'type',
                 value: '-1',
-                store: me.typeArr
+                store: typeArr
             }),
-            extCombo.audting(),//审核状态
+            extCombo.auditing(),//审核状态
             {
                 xtype: 'combobox',//搜索字段
                 width: 80,
