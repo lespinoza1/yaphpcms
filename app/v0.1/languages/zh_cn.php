@@ -93,6 +93,7 @@ return array(
     'NOT_CORRECT'       => '不正确',
     'NOT_EXIST'         => '不存在',
     'NOT_HAS'           => '没有',
+    'NOT_IN'            => '不在',
     'NOW_POSITION'      => '您现在的位置',
     'OPERATE'           => '操作',
     'OR'                => '或',

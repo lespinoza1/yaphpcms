@@ -14,6 +14,7 @@
 
 return array(
     'ADD'               => '添加',
+    'AUDITING'          => '审核',
     'AUTO'              => '自动',
     'AUTO_OPERATION'    => '自动填充',
     'BELONG_TO'         => '所属',
