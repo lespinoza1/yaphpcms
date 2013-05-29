@@ -163,7 +163,7 @@ Ext.define('Yap.controller.Blog', {
             width: 300,
             dataIndex: 'title',
             renderer: function(v, cls, record) {
-                return '<a href="{0}" target="_blank" class="appactioncolum">{1}'.format(record.get('link_url'), me.searchReplaceRenderer(v, 'title'));
+                return '<a href="{0}" target="_blank" class="link">{1}</a>'.format(record.get('link_url'), me.searchReplaceRenderer(v, 'title'));
             }
         }, {
             header: lang('BELONG_TO_CATEGORY'),//所属分类
@@ -220,9 +220,16 @@ Ext.define('Yap.controller.Blog', {
             dataIndex: 'hits',
             width: 80
         }, {
-            header: lang('COMMENTS'),//点击次数
+            header: lang('COMMENTS'),//评论次数
             dataIndex: 'comments',
-            width: 80
+            width: 80,
+            align: 'center',
+            renderer: function(v, b, record) {
+                var a = '<a href="#controller=comments&action=list&column=blog_id&type=1&auditing=1&keyword={0}" class="link">{1}</a>'.format(record.get(me.idProperty), v),
+                    b = '<a href="#controller=comments&action=list&column=blog_id&type=1&keyword={0}" class="link"><span class="font-red">{1}</span></a>'.format(record.get(me.idProperty), record.get('total_comments'));
+
+                return a + '/' + b;
+            }
         }, {
             header: lang('ISSUE'),//发布
             align: 'center',
@@ -538,7 +545,7 @@ Ext.define('Yap.controller.Blog', {
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'content', 'add_time', 'title', 'cate_name', 'is_issue', 'is_delete', 'sort_order','from_name', 'from_url', 'hits', 'comments', 'seo_keyword', 'seo_description', 'link_url'],
+            fields: [this.idProperty, 'content', 'add_time', 'title', 'cate_name', 'is_issue', 'is_delete', 'sort_order','from_name', 'from_url', 'hits', 'comments', 'total_comments', 'seo_keyword', 'seo_description', 'link_url'],
             /**
              * @cfg {String}
              * 主键
