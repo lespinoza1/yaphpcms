@@ -61,6 +61,9 @@ class BlogModel extends CommonModel {
         'add_time'         => null,
         'update_time'      => array('filter' => 'int', 'validate' => array('_checkLength#UPDATE,TIME,DATA#value|0')),
         'link_url'         => null,
+        'hits'             => array('validate' => array('_checkLength#HITS,DATA#value|0')),
+        'comments'         => array('validate' => array('_checkLength#COMMENTS,DATA#value|0')),
+        'total_comments'   => array('validate' => array('_checkLength#COMMENTS,DATA#value|0')),
     );
 
     /**
