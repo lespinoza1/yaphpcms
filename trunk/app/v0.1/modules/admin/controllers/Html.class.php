@@ -351,10 +351,7 @@ class HtmlController extends CommonController {
                 $error .= $this->_build($item);
             }
 
-            if($error) {
-                C('LOG_FILENAME', CONTROLLER_NAME);
-                trigger_error(__METHOD__ . $error . L('NOT_EXIST'), E_USER_ERROR);
-            }
+           $error && $this->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $error . L('NOT_EXIST');
         }
 
         $this->_successAction();
@@ -396,10 +393,7 @@ class HtmlController extends CommonController {
         $html_id && C('T_HTML_ID', $html_id);
         $log && C('T_LOG', $log);
 
-        if($error) {
-            C('LOG_FILENAME', CONTROLLER_NAME);
-            trigger_error(__METHOD__ . $error . L('NOT_EXIST'), E_USER_ERROR);
-        }
+        $error && $this->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $error . L('NOT_EXIST'));
 
         $this->_successAction();
     }//end build
