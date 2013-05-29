@@ -38,23 +38,17 @@ Ext.define('Yap.Field', {
              *
              * @return {Object} Ext.form.ComboBox
              */
-            audting: function(returnStatus) {
-                var store = [
-                    ['0', lang('CN_WEI,AUDITING')],
-                    ['1', lang('CN_YI,PASS')],
-                    ['2', lang('CN_WEI,PASS')]
-                ];
-
-                if (returnStatus) {
-                    return store;
-                }
-
-                store.unshift(['-1', lang('AUDITING,STATUS')]);
+            auditing: function() {
                 return this.base({
                     width: 80,
-                    itemId: 'audting',
+                    itemId: 'auditing',
                     value: '-1',
-                    store: store
+                    store: [
+                        ['-1', lang('AUDITING,STATUS')],
+                        ['0', lang('CN_WEI,AUDITING')],
+                        ['1', lang('CN_YI,PASS')],
+                        ['2', lang('CN_WEI,PASS')]
+                    ]
                 });
             },
 
