@@ -89,6 +89,7 @@ ADD COLUMN link_url varchar(150) NOT NULL DEFAULT '' COMMENT '博客链接',
 ADD COLUMN summary text COMMENT '摘要'
 ADD INDEX issue_delete(is_issue, is_delete)
 ADD COLUMN `diggs` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '顶数' AFTER hits
+ADD COLUMN `total_comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '总评论数' AFTER comments;
 */
 
 CREATE TABLE `tb_blog` (
@@ -103,6 +104,7 @@ CREATE TABLE `tb_blog` (
   `hits` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
   `diggs` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '顶数'
   `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
+  `total_comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '总评论数' AFTER comments,
    seo_keyword varchar(180) NOT NULL DEFAULT '' COMMENT 'SEO关键字',
    seo_description varchar(300) NOT NULL DEFAULT '' COMMENT 'SEO描述',
   `content` text COMMENT '内容',
@@ -246,6 +248,7 @@ CREATE TABLE `tb_menu` (
 ALTER TABLE tb_miniblog
 ADD COLUMN link_url varchar(100) NOT NULL DEFAULT '' COMMENT '微博链接'
 ADD COLUMN `diggs` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '顶数' AFTER hits
+ADD COLUMN `total_comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '总评论数' AFTER comments;
 */
 CREATE TABLE `tb_miniblog` (
   `blog_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
@@ -253,6 +256,7 @@ CREATE TABLE `tb_miniblog` (
   `hits` smallint(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
   `diggs` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '顶数'
   `comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
+  `total_comments` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '总评论数' AFTER comments,
   `content` text NOT NULL COMMENT '内容',
   link_url varchar(100) NOT NULL DEFAULT '' COMMENT '微博链接'
   PRIMARY KEY (`blog_id`)
