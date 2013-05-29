@@ -142,14 +142,17 @@ class CommentsModel extends CommonModel {
             session(C('T_VERIFYCODE_MODULE'), time() + $v);
         }
 
+        $type = C('T_TYPE');
 
         if (!$this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'check')) {//不需要审核
-            $type = C('T_TYPE');
 
             if (COMMENT_TYPE_GUESTBOOK != $type) {//评论数+1
                 $this->execute('UPDATE ' . (COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG) . ' SET comments=comments+1 WHERE blog_id=' . $data['blog_id']);
             }
         }
+
+        //总评论数+1
+        COMMENT_TYPE_GUESTBOOK != $type && $this->execute('UPDATE ' . (COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG) . ' SET total_comments=total_comments+1 WHERE blog_id=' . $data['blog_id']);
 
         $this->commit();
     }//end _afterInsert
