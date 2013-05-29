@@ -110,7 +110,7 @@ class CommentsModel extends CommonModel {
             $max_reply_level    = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'max_reply_level');
 
             if ($max_reply_level == $parent_info['level']) {//最多5层回复
-                $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ ',level>' . $max_reply_level . var_export($parent_info, true), E_USER_NOTICE);
+                $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',level>' . $max_reply_level . var_export($parent_info, true), E_USER_NOTICE);
 
                 $parent_info['level']--;
                 $parent_info['node'] = substr($parent_info['node'], 0, strrpos($parent_info['node'], ','));
