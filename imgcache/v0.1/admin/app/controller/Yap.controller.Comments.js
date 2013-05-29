@@ -313,19 +313,19 @@ Ext.define('Yap.controller.Comments', {
                 menu: [this.deleteItem(), {
                     text: lang('PASS'),
                     handler: function() {
-                        var selection = me.hasSelect(me.selectModel, ['status', [0, 2]]);
+                        var selection = me.hasSelect(me.selectModel, ['status', ['0', '2']]);
                         selection.length && me.setOneOrZero(selection[0], 1, 'auditing', lang('YOU_CONFIRM,PASS,SELECTED,RECORD'), selection[1]);
                     }
                 }, {
                     text: lang('NO,PASS'),
                     handler: function() {
-                        var selection = me.hasSelect(me.selectModel, ['status', [0, 1]]);
+                        var selection = me.hasSelect(me.selectModel, ['status', ['0', '1']]);
                         selection.length && me.setOneOrZero(selection[0], 2, 'auditing', lang('YOU_CONFIRM,NO,PASS,SELECTED,RECORD'), selection[1]);
                     }
                 }, {
                     text: lang('CN_WEI,AUDITING'),
                     handler: function() {
-                        var selection = me.hasSelect(me.selectModel, ['status', [1, 2]]);
+                        var selection = me.hasSelect(me.selectModel, ['status', ['1', '2']]);
                         selection.length && me.setOneOrZero(selection[0], 0, 'auditing', lang('YOU_CONFIRM,CN_WEI,AUDITING,SELECTED,RECORD'), selection[1]);
                     }
                 }]
