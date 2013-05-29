@@ -702,13 +702,13 @@ class CommonController extends BaseController {
                 $this->_sqlErrorExit($log . L('FAILURE'), $error_msg);
             }
 
-            $this->_model->addLog($log . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);//管理员操作日志
-
             if (!empty($this->_after_exec_cache) && isset($data)) {
                 $this->_setCache($data);//生成缓存
             }
 
             method_exists($this, '_afterSetField') && $this->_afterSetField($field, $value, $pk_id);
+
+            $this->_model->addLog($log . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);//管理员操作日志
 
             $this->_ajaxReturn(true, $msg . L('SUCCESS'));
         }
@@ -813,22 +813,27 @@ class CommonController extends BaseController {
      *
      * @author          mrmsl <msl-138@163.com>
      * @date            2012-08-24 14:41:18
-     * @lastmodify      2013-03-28 12:16:42 by mrmsl
+     * @lastmodify      2013-05-29 09:11:56 by mrmsl
      *
      * @param string $field 字段。默认is_show
+     * @param string $value 值。默认null
      *
      * @return void 无返回值
      */
-    protected function _setOneOrZero($field = 'is_show') {
+    protected function _setOneOrZero($field = 'is_show', $value = null) {
         $field      = 'isDelete' == $field ? 'is_delete' : $field;
-        $status_arr = array(
+        $status_arr = C('T_STATUS_ARR');
+        $status_arr = $status_arr ? $status_arr : array(
             'is_show'     => array(0 => 'HIDE', 1 => 'SHOW'),//显示与隐藏
             'is_enable'   => array(0 => 'DISABLED', 1 => 'ENABLE'),//启用与禁用
             'is_delete'   => array(0 => 'CN_WEI,DELETE', 1 => 'CN_YI,DELETE'),//删除与未删除
             'is_issue'    => array(0 => 'CN_WEI,ISSUE',  1 => 'CN_YI,ISSUE'),//发布与未发布
         );
 
-        $value = Filter::int($field) ? 1 : 0;
+        if (null === $value) {
+            $value = Filter::int($field) ? 1 : 0;
+        }
+
         $this->_setField($field, $value, L($status_arr[$field][$value]));
     }
 
