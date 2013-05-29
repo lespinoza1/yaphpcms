@@ -156,7 +156,10 @@ CREATE TABLE `tb_comments` (
   `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
  type tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0留言;1博客评论;2微博评论.默认0'
   `username` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名',
+  email varchar(50) NOT NULL DEFAULT '' COMMENT '用户email'
   `user_ip` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ip,ip2long',
+  province varchar(20) NOT NULL DEFAULT '' COMMENT '用户省份',
+  city varchar(20) NOT NULL DEFAULT '' COMMENT '用户城市'
   user_homepage varchar(50) NOT NULL DEFAULT '' COMMENT '用户主页url',
   user_pic varchar(50) NOT NULL DEFAULT '' COMMENT '用户头像url',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
@@ -167,6 +170,7 @@ CREATE TABLE `tb_comments` (
   `node` varchar(24) NOT NULL DEFAULT '' COMMENT '节点',
   `content` text NOT NULL COMMENT '内容',
 `blog_id` smallint(4) unsigned NOT NULL DEFAULT 0 COMMENT '博客id 或者 微博id',
+at_email tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '有回复时是否发送emil;0否;1是;2已经发送',
   PRIMARY KEY (`comment_id`),
   KEY `parent_id` (`parent_id`),
   KEY `last_reply_time` (`last_reply_time`),
