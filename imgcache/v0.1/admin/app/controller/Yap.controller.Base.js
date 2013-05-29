@@ -960,7 +960,8 @@ Ext.define('Yap.controller.Base', {
             is_restrict: ['RELEASE,CN_BANGDING,LOGIN', 'CN_BANGDING,LOGIN'],//绑定与不绑定登陆管理员
             is_lock: ['RELEASE,LOCK', 'LOCK'],//锁定与不锁定管理员
             is_delete: ['CN_WEI,DELETE', 'CN_YI,DELETE'],//删除与未删除
-            is_issue: ['CN_WEI,ISSUE', 'CN_YI,ISSUE']//发布与未发布
+            is_issue: ['CN_WEI,ISSUE', 'CN_YI,ISSUE'],//发布与未发布
+            auditing: ['CN_WEI,AUDITING', 'CN_YI,PASS', 'CN_WEI,PASS']//审核状态
         };
         var data = {}, a = field.indexOf('is_') == 0 ? field.substr(3) : field;
         data[this.idProperty] = pkValue;
