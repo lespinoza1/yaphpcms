@@ -86,8 +86,7 @@ class CommentsModel extends CommonModel {
             return true;
         }
 
-        C('LOG_FILENAME', CONTROLLER_NAME);
-        trigger_error(__METHOD__ . ',' . $log, E_USER_ERROR);
+        $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $log);
 
         return $error;
     }//end _checkOther
@@ -111,8 +110,7 @@ class CommentsModel extends CommonModel {
             $max_reply_level    = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'max_reply_level');
 
             if ($max_reply_level == $parent_info['level']) {//最多5层回复
-                C('LOG_FILENAME', CONTROLLER_NAME);
-                trigger_error(__METHOD__ . ',level>' . $max_reply_level . var_export($parent_info, true), E_USER_NOTICE);
+                $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ ',level>' . $max_reply_level . var_export($parent_info, true), E_USER_NOTICE);
 
                 $parent_info['level']--;
                 $parent_info['node'] = substr($parent_info['node'], 0, strrpos($parent_info['node'], ','));
@@ -227,8 +225,7 @@ class CommentsModel extends CommonModel {
                 return true;
             }
 
-            C('LOG_FILENAME', CONTROLLER_NAME);
-            trigger_error(__METHOD__ . ',status=0' . var_export($parent_info, true), E_USER_ERROR);
+            $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',status=0' . var_export($parent_info, true));
 
             return L('INVALID,REPLY');
         }
@@ -280,9 +277,8 @@ class CommentsModel extends CommonModel {
         if ($disabled_username = $this->_module->getGuestbookCommentsSetting($module = C('T_VERIFYCODE_MODULE'), 'disabled_username')) {
 
             if (in_array(strtolower($username), explode(EOL_LF, strtolower($disabled_username)))) {
-                C('LOG_FILENAME', CONTROLLER_NAME);
                 $error = L('DISABLED,' . C('T_MODULE') . ',USERNAME') . $username;
-                trigger_error(__METHOD__ . ',' . $module . $error, E_USER_ERROR);
+                $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $module . $error);
 
                 return $error;
             }

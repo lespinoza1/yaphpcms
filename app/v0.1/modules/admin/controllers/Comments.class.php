@@ -225,7 +225,7 @@ class CommentsController extends CommonController {
 
         if (!isset($status_arr[$value])) {
             $log = L('INVALID,AUDITING,STATUS');
-            $this->_triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $log . ': ' . $value);
+            $this->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $log . ': ' . $value);
             $this->_ajaxReturn(false, $log);
         }
 

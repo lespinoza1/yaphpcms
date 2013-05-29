@@ -985,10 +985,7 @@ class CommonController extends BaseController {
                 }
             }
 
-            if ($error) {
-                C('LOG_FILENAME', CONTROLLER_NAME);
-                trigger_error(__METHOD__ . L('MODULE_NAME') . $error . L('NOT_EXIST'), E_USER_WARNING);
-            }
+            $error && $this->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . L('MODULE_NAME') . $error . L('NOT_EXIST'), E_USER_WARNING);
 
             if ($log) {
                 $this->_deleteBlogHtml($delete);
