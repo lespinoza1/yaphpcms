@@ -118,22 +118,32 @@ Ext.define('Yap.controller.Comments', {
             dataIndex: 'username',
             renderer: function(v, cls, record) {
                 return record.get('user_homepage') ? '<a href="{0}" target="_blank" class="link">{1}'.format(record.get('user_homepage'), me.searchReplaceRenderer(v, 'username')) : me.searchReplaceRenderer(v, 'username');
-            }
+            },
+            sortable: false
         }, {
             header: lang('CONTENT'),//内容
             minWidth: 400,
-            dataIndex: 'content'
+            dataIndex: 'content',
+            renderer: function (v) {
+                return me.searchReplaceRenderer(strip_tags(v), 'content');
+            },
+            sortable: false
         }, {
             header: lang('EMAIL'),//邮箱
             align: 'center',
             width: 120,
-            dataIndex: 'email'
+            dataIndex: 'email',
+            renderer: function (v) {
+                me.searchReplaceRenderer(v, 'email');
+            },
+            sortable: false
         }, {
             header: lang('ADD,TIME'),//添加时间
             align: 'center',
             dataIndex: 'add_time',
             width: 140,
-            renderer: this.renderDatetime
+            renderer: this.renderDatetime,
+            sortable: false
         }, {
             header: lang('type'),//类型
             align: 'center',
@@ -141,7 +151,8 @@ Ext.define('Yap.controller.Comments', {
             width: 100,
             renderer: function(v, cls, record) {
                 return me.typeArr[v][1];
-            }
+            },
+            sortable: false
         }, {
             header: lang('STATUS'),//状态
             align: 'center',
@@ -149,7 +160,8 @@ Ext.define('Yap.controller.Comments', {
             width: 80,
             renderer: function(v, cls, record) {
                 return statusArr[v];
-            }
+            },
+            sortable: false
         }, {//操作列
             flex: 1,
             xtype: 'appactioncolumn',
@@ -302,19 +314,19 @@ Ext.define('Yap.controller.Comments', {
                     text: lang('PASS'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', [0, 2]]);
-                        selection.length && me.setOneOrZero(selection[0], 1, 'is_restrict', lang('YOU_CONFIRM,PASS,SELECTED,RECORD'), selection[1]);
+                        selection.length && me.setOneOrZero(selection[0], 1, 'auditing', lang('YOU_CONFIRM,PASS,SELECTED,RECORD'), selection[1]);
                     }
                 }, {
                     text: lang('NO,PASS'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', [0, 1]]);
-                        selection.length && me.setOneOrZero(selection[0], 2, 'status', lang('YOU_CONFIRM,NO,PASS,SELECTED,RECORD'), selection[1]);
+                        selection.length && me.setOneOrZero(selection[0], 2, 'auditing', lang('YOU_CONFIRM,NO,PASS,SELECTED,RECORD'), selection[1]);
                     }
                 }, {
                     text: lang('CN_WEI,AUDITING'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', [1, 2]]);
-                        selection.length && me.setOneOrZero(selection[0], 0, 'status', lang('YOU_CONFIRM,CN_WEI,AUDITING,SELECTED,RECORD'), selection[1]);
+                        selection.length && me.setOneOrZero(selection[0], 0, 'auditing', lang('YOU_CONFIRM,CN_WEI,AUDITING,SELECTED,RECORD'), selection[1]);
                     }
                 }]
             }, '-', lang('ADD,TIME,CN_CONG'),
