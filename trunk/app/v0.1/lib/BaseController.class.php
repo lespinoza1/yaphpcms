@@ -334,6 +334,23 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
+     * trigger_error
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-29 09:32:59
+     *
+     * @param string    $error      错误日志
+     * @param int       $errno      错误号,默认null=E_USER_ERROR
+     * @param string    $filename   记录文件名,默认null=CONTROLLER_NAME
+     *
+     * @return void 无返回值
+     */
+    protected function _triggerError($error, $errno = null, $filename = null) {
+        C('LOG_FILENAME', $filename ? $filename : CONTROLLER_NAME);
+        trigger_error($error, null === $errno ? E_USER_ERROR : $errno);
+    }
+
+    /**
      * 启动方法，Yaf自动调用
      *
      * @author          mrmsl <msl-138@163.com>
