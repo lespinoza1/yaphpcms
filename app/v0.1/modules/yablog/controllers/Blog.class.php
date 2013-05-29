@@ -114,7 +114,7 @@ class BlogController extends CommonController {
         if ($blog_info = $this->_model->find($blog_id)) {
 
             if (date('Ymd', $blog_info['add_time']) != $date) {//日期与id不匹配
-                $this->triggerError(__METHOD__ . ': ' . __LINE __ . ',' . "date=({$date}),id=({$blog_id})");
+                $this->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . "date=({$date}),id=({$blog_id})");
                 $this->_showMessage('error' . $blog_id . ',' . $date, null, 404);
             }
 
