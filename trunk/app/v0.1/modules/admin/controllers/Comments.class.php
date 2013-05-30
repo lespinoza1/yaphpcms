@@ -104,7 +104,7 @@ class CommentsController extends CommonController {
             }
         }
 
-        $this->_model->rollback();
+        //$this->_model->rollback();
     }
 
     /**
