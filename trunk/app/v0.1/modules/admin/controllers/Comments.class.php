@@ -24,18 +24,23 @@ class CommentsController extends CommonController {
     );
 
     /**
-     * 删除后置操作
+     * 操作留言评论后置
      *
      * @author          mrmsl <msl-138@163.com>
-     * @date            2013-04-18 11:05:45
-     *
-     * @param array $pk_id 主键值
+     * @date            2013-05-30 08:28:11
      *
      * @return void 无返回值
      */
-    protected function _afterDelete($pk_id) {
-        $this->_model->table(TB_COMMENTS)->where(array($this->_pk_field => array('IN', $pk_id)))->delete();
-        $this->_deleteCommentsHtml(null);
+    private function _afterAction() {
+        $info = C('T_INFO');
+
+        if (!empty($info['delete_blog_html'])) {
+            $this->_deleteBlogHtml($info['delete_blog_html']);//删除静态页
+
+            //更新评论数
+            !empty($info[COMMENT_TYPE_BLOG]) && $this->_updateBlogCommentsNum($info[COMMENT_TYPE_BLOG], COMMENT_TYPE_BLOG);
+            !empty($info[COMMENT_TYPE_MINIBLOG]) && $this->_updateBlogCommentsNum($info[COMMENT_TYPE_MINIBLOG], COMMENT_TYPE_MINIBLOG);
+        }
     }
 
     /**
@@ -52,16 +57,54 @@ class CommentsController extends CommonController {
     private function _updateBlogCommentsNum($blog_id, $type) {
         $table      = COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG;
         $blog_id    = is_array($blog_id) ? $blog_id : explode(',', $blog_id);
-        $updated    = array();
+
+        static $updated    = array();
 
         foreach($blog_id as $v) {
+            $_key = $type . '_' . $v;
 
-            if (!isset($updated[$v])) {
-                $count = $this->_model->where("type={$type} AND blog_id={$v} AND status=" . COMMENT_STATUS_PASS)->count();
-                $this->_model->execute("UPDATE {$table} SET comments={$count} WHERE blog_id={$v}");
-                $updated[$v] = true;
+            if (!isset($updated[$_key])) {
+                $arr    = $this->_model->field('status')->where("type={$type} AND blog_id={$v}")->select();
+                $total  = $this->_model->getDb()->getProperty('_num_rows');
+                $pass   = 0;
+
+                if ($total) {
+
+                    foreach ($arr as $item) {
+
+                        if (COMMENT_STATUS_PASS == $item['status']) {
+                            $pass++;
+                        }
+                    }
+                }
+
+                $this->_model->execute("UPDATE {$table} SET comments={$pass},total_comments={$total} WHERE blog_id={$v}");
+                $updated[$_key] = true;
             }
         }
+    }
+
+    /**
+     * 删除后置操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-04-18 11:05:45
+     *
+     * @param array $pk_id 主键值
+     *
+     * @return void 无返回值
+     */
+    protected function _afterDelete($pk_id) {
+
+        if ($node_arr = C('T_INFO.node')) {
+
+            foreach ($node_arr as $v) {
+                $this->_model->where("node LIKE '{$v}%'")->delete();
+                $this->_afterAction();
+            }
+        }
+
+        $this->_model->rollback();
     }
 
     /**
@@ -70,15 +113,7 @@ class CommentsController extends CommonController {
     protected function _afterSetField($field, $value, $pk_id) {
 
         if ('status' == $field) {//审核状态
-            $info = C('T_INFO');
-
-            if (!empty($info['delete_blog_html'])) {
-                $this->_deleteBlogHtml($info['delete_blog_html']);//删除静态页
-
-                //更新评论数
-                !empty($info[COMMENT_TYPE_BLOG]) && $this->_updateBlogCommentsNum($info[COMMENT_TYPE_BLOG], COMMENT_TYPE_BLOG);
-                !empty($info[COMMENT_TYPE_MINIBLOG]) && $this->_updateBlogCommentsNum($info[COMMENT_TYPE_MINIBLOG], COMMENT_TYPE_MINIBLOG);
-            }
+            $this->_afterAction();
         }
     }
 
@@ -100,16 +135,19 @@ class CommentsController extends CommonController {
                 COMMENT_TYPE_BLOG       => array(),
                 COMMENT_TYPE_MINIBLOG   => array(),
                 'at_email'              => array(),
+                'node'                  => array(),
             );
 
             foreach ($data as $k => $v) {
-                $log .= $k . ',';
+                $log       .= $k . ',';
+                $type       = $v['type'];
+                $blog_id    = $v['blog_id'];
 
-                if (COMMENT_TYPE_GUESTBOOK != $v['type'] && !isset($selected[$v['type']][$v['blog_id']])) {
-                    $a = $this->_model->table(COMMENT_TYPE_BLOG == $v['type'] ? TB_BLOG : TB_MINIBLOG)->where('blog_id=' . $v['blog_id'])->field('link_url')->find();
-                    $info[$v['type']][] = $v['blog_id'];
+                if (COMMENT_TYPE_GUESTBOOK != $type && !isset($selected[$type][$blog_id])) {
+                    $a = $this->_model->table(COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG)->where('blog_id=' . $blog_id)->field('link_url')->find();
+                    $info[$type][] = $blog_id;
                     $info['delete_blog_html'][] = array('link_url' => $a['link_url']);
-                    $selected[$v['type']][$v['blog_id']] = true;
+                    $selected[$type][$blog_id] = true;
                 }
 
                 if (($parent_id = $v['parent_id']) && !isset($selected['at_email'][$parent_id])) {//有回复时是否发送邮件
@@ -117,6 +155,15 @@ class CommentsController extends CommonController {
 
                     if ($at_email = $this->_model->where('at_email=1 AND comment_id=' . $parent_id)->getField('at_email')) {
                         $info['at_email'] = $parent_id;
+                    }
+                }
+
+                if ('delete' == ACTION_NAME) {//删除,同时需要删除回复
+                    $node   = $v['node'] . ',';
+
+                    if (!isset($selected[$node])) {
+                        $selected[$node] = true;
+                        $info['node'][] = $node;
                     }
                 }
             }
