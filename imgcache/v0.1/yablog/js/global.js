@@ -531,7 +531,8 @@ function strip_tags(str, img) {
  */
 function timeAxis(time) {
     var str,
-        now = new Date().getTime() / 1000
+        today = new Date(),
+        now = today / 1000
         diff = now - time;
 
     if (diff < 60) {
@@ -543,8 +544,14 @@ function timeAxis(time) {
     else if (diff < 86400) {
         return lang('HOURS_AGO').format(Math.floor(diff / 3600));
     }
-    else if (diff < 86400 * 3) {
-        return lang(1 == Math.floor(diff / 86400) ? 'YESTERDAY' : 'THE_DAY_BEFORE_YESTERDAY') + date(' H:i', time * 1000)
+
+    var now = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime(),
+        a = new Date(time * 1000),
+        a = new Date(a.getFullYear(), a.getMonth(), a.getDate()).getTime(),
+        diff = (today - a) / 1000;
+
+    if (diff < 86400 * 3) {//最多至前天23:59:59
+        return lang(diff < 86400 * 2 ? 'YESTERDAY' : 'THE_DAY_BEFORE_YESTERDAY') + date(' H:i', time * 1000)
     }
 
     return date(null, time * 1000);
