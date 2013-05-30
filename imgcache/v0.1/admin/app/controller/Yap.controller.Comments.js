@@ -25,6 +25,11 @@ Ext.define('Yap.controller.Comments', {
         ['2', lang('MINIBLOG,COMMENT')]
     ],
     /**
+     * @property {Array}
+     * 状态
+     */
+    statusArr: [TEXT.gray(lang('CN_WEI,AUDITING')), TEXT.green(lang('CN_YI,PASS')), TEXT.red(lang('CN_WEI,PASS'))],
+    /**
      * @cfg {String}
      * 查询字段
      */
@@ -65,29 +70,29 @@ Ext.define('Yap.controller.Comments', {
      *
      * @param {Mixed}  record      record数据或id串
      * @param {Number} status      状态
-     * @param {String} confirmText 确认信息
      *
      * @return {void} 无返回值
      */
-    auditing: function(record, status, confirmText) {
+    auditing: function(record, status) {
         var pkValue;
         var controller = this.getControllerName();
 
         if (Ext.isString(record)) {//选中删除
             pkValue = record;
-            confirmText = lang('SELECTED,RECORD');
+            var confirmText = 'SELECTED';
         }
         else {//点击删除
             pkValue = record.get(this.idProperty);
+            var confirmText = 'CN_CI';
         }
 
         var options = {
             action: this.getActionUrl(false, 'auditing'),
             data: this.idProperty + '=' + pkValue + '&status=' + status,
-            confirmText: lang('YOU_CONFIRM') + confirmText,
+            confirmText: lang('YOU_CONFIRM') + this.statusArr[status] + lang(confirmText + ',RECORD'),
             failedMsg: lang('AUDITING,FALIURE'),
             scope: this,
-            store: me.store()
+            store: this.store()
         };
 
         this.myConfirm(options);
@@ -144,7 +149,7 @@ Ext.define('Yap.controller.Comments', {
      * @return {Array} 数据列配置
      */
     getListColumns: function() {
-        var me = this, statusArr = [TEXT.gray(lang('CN_WEI,AUDITING')), TEXT.green(lang('CN_YI,PASS')), TEXT.red(lang('CN_WEI,PASS'))];
+        var me = this;
 
         return [{
             text: 'id',//id
@@ -207,7 +212,7 @@ Ext.define('Yap.controller.Comments', {
             dataIndex: 'status',
             width: 80,
             renderer: function(v, cls, record) {
-                return statusArr[v];
+                return me.statusArr[v];
             },
             sortable: false
         }, {//操作列
@@ -362,19 +367,19 @@ Ext.define('Yap.controller.Comments', {
                     text: lang('PASS'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', ['0', '2']]);
-                        selection.length && me.auditing(selection[0], 1, lang('PASS'));
+                        selection.length && me.auditing(selection[0], 1);
                     }
                 }, {
                     text: lang('NO,PASS'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', ['0', '1']]);
-                        selection.length && me.auditing(selection[0], 2, lang('NO,PASS'));
+                        selection.length && me.auditing(selection[0], 2);
                     }
                 }, {
                     text: lang('CN_WEI,AUDITING'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', ['1', '2']]);
-                        selection.length && me.auditing(selection[0], 0, lang('CN_WEI,AUDITING'));
+                        selection.length && me.auditing(selection[0], 0);
                     }
                 }]
             }, '-', lang('ADD,TIME,CN_CONG'),
