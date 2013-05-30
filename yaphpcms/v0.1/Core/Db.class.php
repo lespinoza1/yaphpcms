@@ -911,11 +911,11 @@ class Db {
     protected function _writeRollbackSql() {
 
         C(array('LOG_LEVEL' => E_APP_ROLLBACK_SQL, 'LOG_FILENAME' => 'rollbacksql'));
-        trigger_error(join(EOL_LF, $this->_sql_arr));
+        trigger_error($rollback_sql = join(EOL_LF . '<br />', $this->_sql_arr));
 
         if (sys_config('sys_log_rollback_sql') && false === strpos($this->_query_str, ' ' . $this->_parseTable(TB_LOG) . ' ')) {
             $last_sql = $this->_query_str;
-            D('Log')->addLog($this->_rollback_sql, LOG_TYPE_ROLLBACK_SQL);
+            D('Log')->addLog($rollback_sql, LOG_TYPE_ROLLBACK_SQL);
             $this->_setLastSql($last_sql);
         }
     }
@@ -1200,8 +1200,8 @@ class Db {
      * @return string 最近一次查询的sql语句
      */
     public function getLastSql($model = '') {
-        return isset($this->_model_sql[$model]) ? $this->_model_sql[$model] : $this->_query_str;
-        //return $this->_query_str;
+        //return isset($this->_model_sql[$model]) ? $this->_model_sql[$model] : $this->_query_str;
+        return $this->_query_str;
     }
 
     /**
