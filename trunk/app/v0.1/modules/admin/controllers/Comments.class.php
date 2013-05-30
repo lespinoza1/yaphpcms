@@ -263,7 +263,7 @@ class CommentsController extends CommonController {
         $this->_model->startTrans();
 
         $field      = 'status';
-        $value      = Filter::int('auditing');
+        $value      = Filter::int($field);
         $status_arr = array(
             COMMENT_STATUS_UNAUDITING   => L('CN_WEI,AUDITING'),
             COMMENT_STATUS_PASS         => L('CN_YI,PASS'),
@@ -369,7 +369,7 @@ class CommentsController extends CommonController {
         isset($table) && $this->_model->join($table);
 
         $data      = $this->_model->alias('c')
-        ->field('c.*')
+        ->field('c.*,INET_NTOA(user_ip) AS user_ip')
         ->where($where)
         ->limit($page_info['limit'])
         ->order(('' .$sort) . ' ' . $order)->select();

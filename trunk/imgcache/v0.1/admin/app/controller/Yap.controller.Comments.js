@@ -55,6 +55,44 @@ Ext.define('Yap.controller.Comments', {
         });
     },
 
+    /**
+     * 审核
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-17 14:52:21
+     *
+     * @private
+     *
+     * @param {Mixed}  record      record数据或id串
+     * @param {Number} status      状态
+     * @param {String} confirmText 确认信息
+     *
+     * @return {void} 无返回值
+     */
+    auditing: function(record, status, confirmText) {
+        var pkValue;
+        var controller = this.getControllerName();
+
+        if (Ext.isString(record)) {//选中删除
+            pkValue = record;
+            confirmText = lang('SELECTED,RECORD');
+        }
+        else {//点击删除
+            pkValue = record.get(this.idProperty);
+        }
+
+        var options = {
+            action: this.getActionUrl(false, 'auditing'),
+            data: this.idProperty + '=' + pkValue + '&status=' + status,
+            confirmText: lang('YOU_CONFIRM') + confirmText,
+            failedMsg: lang('AUDITING,FALIURE'),
+            scope: this,
+            store: me.store()
+        };
+
+        this.myConfirm(options);
+    },//end auditing
+
     constructor: function() {//构造函数
         this.defineModel().defineStore();
     },
@@ -131,10 +169,20 @@ Ext.define('Yap.controller.Comments', {
         }, {
             header: lang('EMAIL'),//邮箱
             align: 'center',
-            width: 120,
-            dataIndex: 'email',
+            width: 150,
+            dataIndex: 'user_ip',
             renderer: function (v) {
                 me.searchReplaceRenderer(v, 'email');
+            },
+            sortable: false
+        }, {
+            header: 'ip' + lang('MODULE_NAME_AREA'),//ip地址
+            width: 120,
+            dataIndex: 'user_ip',
+            renderer: function (v, a, record) {
+                var province = record.get('province'), city = record.get('city');
+
+                return 'ip:' + v + '<br />' + province + (province == city ? '' : city);
             },
             sortable: false
         }, {
@@ -314,19 +362,19 @@ Ext.define('Yap.controller.Comments', {
                     text: lang('PASS'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', ['0', '2']]);
-                        selection.length && me.setOneOrZero(selection[0], 1, 'auditing', lang('YOU_CONFIRM,PASS,SELECTED,RECORD'), selection[1]);
+                        selection.length && me.auditing(selection[0], 1, lang('PASS'));
                     }
                 }, {
                     text: lang('NO,PASS'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', ['0', '1']]);
-                        selection.length && me.setOneOrZero(selection[0], 2, 'auditing', lang('YOU_CONFIRM,NO,PASS,SELECTED,RECORD'), selection[1]);
+                        selection.length && me.auditing(selection[0], 2, lang('NO,PASS'));
                     }
                 }, {
                     text: lang('CN_WEI,AUDITING'),
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', ['1', '2']]);
-                        selection.length && me.setOneOrZero(selection[0], 0, 'auditing', lang('YOU_CONFIRM,CN_WEI,AUDITING,SELECTED,RECORD'), selection[1]);
+                        selection.length && me.auditing(selection[0], 0, lang('CN_WEI,AUDITING'));
                     }
                 }]
             }, '-', lang('ADD,TIME,CN_CONG'),
