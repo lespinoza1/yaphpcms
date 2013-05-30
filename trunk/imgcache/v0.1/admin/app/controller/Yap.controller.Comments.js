@@ -153,11 +153,11 @@ Ext.define('Yap.controller.Comments', {
 
         return [{
             text: 'id',//id
-            width: 60,
+            width: 50,
             dataIndex: this.idProperty
         }, {
             header: lang('USERNAME'),//用户
-            width: 100,
+            width: 80,
             dataIndex: 'username',
             renderer: function(v, cls, record) {
                 return record.get('user_homepage') ? '<a href="{0}" target="_blank" class="link">{1}'.format(record.get('user_homepage'), me.searchReplaceRenderer(v, 'username')) : me.searchReplaceRenderer(v, 'username');
@@ -165,7 +165,7 @@ Ext.define('Yap.controller.Comments', {
             sortable: false
         }, {
             header: lang('CONTENT'),//内容
-            minWidth: 400,
+            minWidth: 380,
             dataIndex: 'content',
             renderer: function (v) {
                 return me.searchReplaceRenderer(strip_tags(v), 'content');
@@ -174,7 +174,7 @@ Ext.define('Yap.controller.Comments', {
         }, {
             header: lang('EMAIL'),//邮箱
             align: 'center',
-            width: 150,
+            width: 120,
             dataIndex: 'user_ip',
             renderer: function (v) {
                 me.searchReplaceRenderer(v, 'email');
@@ -201,7 +201,7 @@ Ext.define('Yap.controller.Comments', {
             header: lang('type'),//类型
             align: 'center',
             dataIndex: 'type',
-            width: 100,
+            width: 70,
             renderer: function(v, cls, record) {
                 return me.typeArr[v][1];
             },
@@ -210,7 +210,7 @@ Ext.define('Yap.controller.Comments', {
             header: lang('STATUS'),//状态
             align: 'center',
             dataIndex: 'status',
-            width: 80,
+            width: 60,
             renderer: function(v, cls, record) {
                 return me.statusArr[v];
             },
