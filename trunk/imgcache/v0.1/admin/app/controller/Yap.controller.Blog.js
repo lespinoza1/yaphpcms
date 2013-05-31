@@ -169,19 +169,23 @@ Ext.define('Yap.controller.Blog', {
             header: lang('BELONG_TO_CATEGORY'),//所属分类
             width: 120,
             dataIndex: 'cate_name',
-            sortable: false
+            sortable: false,
+            renderer: function(v, cls, record) {
+                return '<a href="#controller=blog&action=list&cate_id={0}&cate_name={1}" class="link">{1}</a>'.format(record.get('cate_id'), v);
+            }
         }, {
             header: lang('ADD,TIME'),//添加时间
             dataIndex: 'add_time',
             width: 140,
             renderer: this.renderDatetime
-        }, {
-            header: lang('FROM_NAME'),//来源名称
+        }/*, {
+            header: lang('ORIGIN'),//来源名称
             dataIndex: 'from_name',
             //flex: 1,
-            width: 120,
-            renderer: function(v) {
-                return me.searchReplaceRenderer(v, 'from_name');
+            minWidth: 160,
+            renderer: function(v, a, record) {
+                //var name = me.searchReplaceRenderer(v, 'from_name');
+                return '<a href="{0}" taget="_blaink" class="link">{1}</a>'.format(record.get('from_url'), me.searchReplaceRenderer(v, 'from_name'));
             },
             hidden: true,
             sortable: false
@@ -195,7 +199,7 @@ Ext.define('Yap.controller.Blog', {
             },
             hidden: true,
             sortable: false
-        }/*, {
+        }, {
             header: lang('SEO_KEYWORD'),//seo关键字
             dataIndex: 'seo_keyword',
             //flex: 1,
@@ -247,6 +251,7 @@ Ext.define('Yap.controller.Blog', {
                 return me.renderYesNoImg(v, 'is_delete');
             }
         }, {//操作列
+            //minWidth: 180,
             flex: 1,
             xtype: 'appactioncolumn',
             items: [{//编辑
@@ -545,7 +550,7 @@ Ext.define('Yap.controller.Blog', {
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'content', 'add_time', 'title', 'cate_name', 'is_issue', 'is_delete', 'sort_order','from_name', 'from_url', 'hits', 'comments', 'total_comments', 'seo_keyword', 'seo_description', 'link_url'],
+            fields: [this.idProperty, 'content', 'add_time', 'title', 'cate_name', 'cate_id', 'is_issue', 'is_delete', 'sort_order','from_name', 'from_url', 'hits', 'comments', 'total_comments', 'seo_keyword', 'seo_description', 'link_url'],
             /**
              * @cfg {String}
              * 主键
