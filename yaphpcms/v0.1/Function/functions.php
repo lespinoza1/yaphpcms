@@ -1506,12 +1506,12 @@ function get_browser_name () {
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-21 17:27:37
  *
- * @param string $datetime 时间表达式
+ * @param string $ip ip地址,默认null,自动获取
  *
  * @return array|string 成功获取，返回array(province, city)，否则返回字符串作为城市
  */
-function get_ip_info() {
-    $ip = get_client_ip();//'14.153.254.58'
+function get_ip_info($ip = null) {
+    $ip = null === $ip ? get_client_ip() : $ip;//'14.153.254.58'
 
     if (!$ip2long = intval($ip)) {//无法获取到ip
         return '';
