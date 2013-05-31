@@ -199,56 +199,25 @@ class CommentsController extends CommonController {
         $pk_field  = $this->_pk_field;//主键
         $pk_value  = $this->_model->$pk_field;//博客id
         $data      = $this->_model->getProperty('_data');//数据，$model->data 在save()或add()后被重置为array()
-        $to_build  = $data['is_issue'] && !$data['is_delete'];
-        $diff_key  = 'title,content,cate_name,is_issue,seo_keyword,seo_description,sort_order,is_delete';//比较差异字段
+        $diff_key  = 'username,user_homepage,email,content';//比较差异字段
         $msg       = L($pk_value ? 'EDIT' : 'ADD');//添加或编辑
         $log_msg   = $msg . L('MODULE_NAME,FAILURE');//错误日志
         $error_msg = $msg . L('FAILURE');//错误提示信息
-        $cate_info = $this->_getCache($cate_id = $this->_model->cate_id, 'Category');//所属分类
 
-        $data['cate_name'] = $cate_info['cate_name'];//所属分类名称
-        $summary           = strip_tags($data['summary']);
-        $data['summary']   = $summary ? $data['summary'] : cn_substr($data['content'], 300);//摘要，默认取内容前300字节 by mrmsl on 2013-04-12 14:56:41
-
-        unset($data['link_url']);
-
-        if ($pk_value) {//编辑
-
-            if (!$blog_info = $this->_model->find($pk_value)) {//编辑博客不存在
-                $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,MODULE_NAME,%{$pk_field}({$pk_value}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
-                $this->_ajaxReturn(false, $error_msg);
-            }
-
-            if (false === $this->_model->save()) {//更新出错
-                $this->_sqlErrorExit($msg . L('MODULE_NAME') . "{$blog['title']}({$pk_value})" . L('FAILURE'), $error_msg);
-            }
-
-            $cate_info = $this->_getCache($blog_info['cate_id'], 'Category');
-            $blog_info['cate_name'] = $cate_info['cate_name'];//所属分类名
-
-            $diff = $this->_dataDiff($blog_info, $data, $diff_key);//差异
-
-            strpos($diff, 'seo_keyword') && $this->_model->addTags($pk_value, $data['seo_keyword']);
-
-            $this->_model->addLog($msg . L('MODULE_NAME')  . "{$blog_info['title']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
-
-            if (!$to_build) {
-                C('HTML_BUILD_INFO', array($pk_value => array('cate_id' => $blog_info['cate_id'] . ',' . $data['cate_id'], 'link_url' => $blog_info['link_url'])));
-                $this->_deleteCommentsHtml(null);
-            }
-
-            $this->_ajaxReturn(true, $msg . L('SUCCESS'));
+        if (!$commetn_info = $this->_model->find($pk_value)) {//编辑留言评论不存在
+            $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,MODULE_NAME,%{$pk_field}({$pk_value}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(false, $error_msg);
         }
-        else {
-            $data = $this->_dataDiff($data, false, $diff_key);//数据
 
-            if (false === ($insert_id =$this->_model->add())) {//插入出错
-                $this->_sqlErrorExit($msg . L('MODULE_NAME') . $data . L('FAILURE'), $error_msg);
-            }
-
-            $this->_model->addLog($msg . L('MODULE_NAME') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
-            $this->_ajaxReturn(true, $msg . L('SUCCESS'));
+        if (false === $this->_model->save()) {//更新出错
+            $this->_sqlErrorExit($msg . L('MODULE_NAME') . "({$pk_value})" . L('FAILURE'), $error_msg);
         }
+
+        $diff = $this->_dataDiff($commetn_info, $data, $diff_key);//差异
+
+        $this->_model->addLog($msg . L('MODULE_NAME')  . "({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+
+        $this->_ajaxReturn(true, $msg . L('SUCCESS'));
     }//end addAction
 
     /**
