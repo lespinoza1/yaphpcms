@@ -439,6 +439,20 @@ class CommentsController extends CommonController {
 
         $data === false && $this->_sqlErrorExit(L('QUERY,MODULE_NAME') . L('LIST,ERROR'));//出错
 
+        foreach($data as $k => $v) {
+
+            if (COMMENT_TYPE_BLOG == $v['type']) {
+                $info = $this->_model->table(TB_BLOG)->where('blog_id=' . $v['blog_id'])->field('title,link_url')->find();
+                $data[$k]['title'] = $info['title'];
+                $data[$k]['link_url'] = $info['link_url'];
+            }
+            elseif (COMMENT_TYPE_MINIBLOG == $v['type']) {
+                $info = $this->_model->table(TB_MINIBLOG)->where('blog_id=' . $v['blog_id'])->field('add_time,link_url')->find();
+                $data[$k]['title'] = new_date('Y-m-d', $info['add_time']) . ' ' . L('MINIBLOG');
+                $data[$k]['link_url'] = $info['link_url'];
+            }
+        }
+
         $this->_ajaxReturn(true, '', $data, $total);
     }//end listAction
 }
