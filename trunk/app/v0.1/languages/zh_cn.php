@@ -98,6 +98,7 @@ return array(
     'OPERATE'           => '操作',
     'OR'                => '或',
     'ORIGIN'            => '来源',
+    'PARAM'             => '参数',
     'PASSWORD'          => '密码',
     'PASSWORD_NOT_SAME' => '两次输入的密码不一致',
     'PLEASE'            => '请',

@@ -321,6 +321,43 @@ Ext.define('Yap.controller.Comments', {
     },//end pagingBar
 
     /**
+     * 重新获取ip地区信息
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-17 14:52:21
+     *
+     * @private
+     *
+     * @param {Mixed}  record      record数据或id串
+     *
+     * @return {void} 无返回值
+     */
+    afreshIp: function(record) {
+        var data, _lang;
+        var controller = this.getControllerName();
+
+        if (Ext.isString(record)) {//选中删除
+            data = record;
+            _lang  = 'SELECTED';
+        }
+        else {//点击删除
+            data = record.get(this.idProperty) + '|' + record.get('user_ip');
+            _lang = 'CN_CI';
+        }
+
+        var options = {
+            action: this.getActionUrl(false, 'afreshIp'),
+            data:'data=' + data,
+            confirmText: lang('YOU_CONFIRM,AFRESH,GET,' + _lang + ',RECORD,%ip,AREA'),
+            failedMsg: lang('AFRESH,GET,%ip,AREA,FALIURE'),
+            scope: this,
+            store: this.store()
+        };
+
+        this.myConfirm(options);
+    },//end afreshIp
+
+    /**
      * 列表页store
      *
      * @return {Object} Ext.data.Store
@@ -380,6 +417,12 @@ Ext.define('Yap.controller.Comments', {
                     handler: function() {
                         var selection = me.hasSelect(me.selectModel, ['status', ['1', '2']]);
                         selection.length && me.auditing(selection[0], 0);
+                    }
+                }, {
+                    text: lang('AFRESH,GET,%ip,AREA'),
+                    handler: function() {
+                        var selection = me.hasSelect(me.selectModel, me.idProperty + ',user_ip');
+                        selection.length && me.afreshIp(selection[0]);
                     }
                 }]
             }, '-', lang('ADD,TIME,CN_CONG'),

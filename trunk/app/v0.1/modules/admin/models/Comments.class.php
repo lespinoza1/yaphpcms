@@ -39,7 +39,7 @@ class CommentsModel extends CommonModel {
      * @see CommonModel.class.php __construct()方法设置自动验证字段_validate
      */
     protected $_db_fields = array (
-        'comment_id'          => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,DATA,INVALID'),//自增主键
+        'comment_id'     => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,DATA,INVALID'),//自增主键
         'parent_id'      => array('filter' => 'int'),//父id
         'content'        => array('validate' => array('notblank#CONTENT')),
         'status'         => array('filter' => 'int'),

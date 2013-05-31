@@ -252,6 +252,69 @@ class CommentsController extends CommonController {
     }//end addAction
 
     /**
+     * 重新获取ip
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-05-31 08:39:20
+     *
+     * @return void 无返回值
+     */
+    public function afreshIpAction() {
+        //1631|3399838689,1632|3399838679,1633|3399838526,1634|2101762044,1635|3399838523,
+        //1636|3673755165,1637|989600357,1638|3673755356,1639|3399838674,1640|3399838705
+        //,1641|1032096356,1642|976345078,1643|3391871307,1644|2043434434,1645|3395489940,
+        //1646|3549731567,1647|3399838587,1648|3549731521,1649|3708103387,1650|3708103373
+        if (!$data = Filter::string('data')) {
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('AFRESH,GET,%ip,AREA,FAILURE') . '.data' . L('PARAM,IS_EMPTY');
+            C('TRIGGER_ERROR', array($log));
+            $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(L('INVALID_PARAM,%data。') . $msg . L('FAILURE'), LOG_TYPE_INVALID_PARAM);
+        }
+
+        $msg        = L('AFRESH,GET,%ip,AREA');
+        $error      = '';
+        $id_arr     = array();
+        $data_arr   = explode(',', $data);
+
+        foreach($data_arr as $v) {
+            $arr    = explode('|', $v);
+            $count  = count($arr);
+
+            if (2 != $count || !($id = intval($arr[0])) || !($user_ip = sprintf('%u', ip2long($ip = $arr[1]))) || !$this->_model->where(array('comment_id' => $id, 'user_ip' => $user_ip))->field('comment_id')->find()) {
+                $error .= ',' . $v;
+            }
+            else {
+                $id_arr[] = $id;
+
+                $ip_info = get_ip_info($ip);
+                $ip_info = addslashes_deep($ip_info);
+
+                if (is_array($ip_info)) {
+                    $update = "province='{$ip_info[0]}',city='{$ip_info[1]}'";
+                }
+                else {
+                    $update = "city='{$ip_info}'";
+                }
+
+                $this->_model->execute('UPDATE ' . TB_COMMENTS . " SET {$update} WHERE comment_id={$id}");
+            }
+        }
+
+        if (!$id_arr) {
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('AFRESH,GET,%ip,AREA,FAILURE,%。,INVALID,%data=') . $data;
+            C('TRIGGER_ERROR', array($log));
+            $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(L('INVALID_PARAM,%data。') . $msg . L('FAILURE'), LOG_TYPE_INVALID_PARAM);
+        }
+
+        $error && $this->triggerError(substr($error, 1) . L('FORMAT,NOT_CORRECT'));
+
+        $this->_model->addLog($msg . join(',',$id_arr) . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+        $this->_ajaxReturn(true, $msg . L('SUCCESS'));
+
+    }//end afreshIpAction
+
+    /**
      * 审核状态
      *
      * @author          mrmsl <msl-138@163.com>
