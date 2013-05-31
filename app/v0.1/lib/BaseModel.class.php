@@ -588,6 +588,11 @@ class BaseModel extends Model {
         $log_model->autoOperation($data, Model::MODEL_INSERT);
         $log_model->add($data);
         $log_model->commit();
+
+        if ($trigger_error = C($key = 'TRIGGER_ERROR')) {//同时写文本记录
+            call_user_func_array(array($this->_module, 'triggerError'), $trigger_error);
+            C($key, false);
+        }
     }
 
     /**
