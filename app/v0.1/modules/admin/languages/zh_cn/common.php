@@ -14,6 +14,8 @@
 
 return array(
     'ADD'               => '添加',
+    'AFRESH'            => '重新',
+    'AREA'              => '地区',
     'AUDITING'          => '审核',
     'AUTO'              => '自动',
     'AUTO_OPERATION'    => '自动填充',
