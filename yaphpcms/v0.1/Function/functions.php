@@ -1511,7 +1511,13 @@ function get_browser_name () {
  * @return array|string 成功获取，返回array(province, city)，否则返回字符串作为城市
  */
 function get_ip_info($ip = null) {
-    $ip = null === $ip ? get_client_ip() : $ip;//'14.153.254.58'
+
+    if (null === $ip) {
+        $ip = get_client_ip();//'14.153.254.58'
+    }
+    else {
+        $ip = is_numeric($ip) ? long2ip($ip) : $ip;
+    }
 
     if (!$ip2long = intval($ip)) {//无法获取到ip
         return '';
