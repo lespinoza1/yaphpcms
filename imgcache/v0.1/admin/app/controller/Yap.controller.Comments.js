@@ -160,7 +160,7 @@ Ext.define('Yap.controller.Comments', {
             width: 80,
             dataIndex: 'username',
             renderer: function(v, cls, record) {
-                return record.get('user_homepage') ? '<a href="{0}" target="_blank" class="link">{1}'.format(record.get('user_homepage'), me.searchReplaceRenderer(v, 'username')) : me.searchReplaceRenderer(v, 'username');
+                return record.get('user_homepage') ? '<a href="{0}" target="_blank" class="link">{1}</a>'.format(record.get('user_homepage'), me.searchReplaceRenderer(v, 'username')) : me.searchReplaceRenderer(v, 'username');
             },
             sortable: false
         }, {
@@ -168,7 +168,9 @@ Ext.define('Yap.controller.Comments', {
             minWidth: 380,
             dataIndex: 'content',
             renderer: function (v) {
-                return me.searchReplaceRenderer(strip_tags(v), 'content');
+                var data = Ext.Object.fromQueryString(Ext.History.getToken());
+
+                return data.keyword && 'content' == data.column ? me.searchReplaceRenderer(strip_tags(v), 'content') : v;
             },
             sortable: false
         }, {
@@ -203,7 +205,10 @@ Ext.define('Yap.controller.Comments', {
             dataIndex: 'type',
             width: 70,
             renderer: function(v, cls, record) {
-                return me.typeArr[v][1];
+                v = me.typeArr[v][1];
+                var title = record.get('title');
+
+                return title ? '<a href="{0}" target="_blank" class="link" title="{1}">{2}</a>'.format(record.get('link_url'), title, v) : v;
             },
             sortable: false
         }, {
@@ -480,7 +485,7 @@ Ext.define('Yap.controller.Comments', {
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'blog_id', 'content', 'add_time', 'last_reply_time', 'username', 'user_ip', 'username', 'email','user_homepage', 'status', 'type', 'at_email', 'province', 'city','is_admin'],
+            fields: [this.idProperty, 'blog_id', 'content', 'add_time', 'last_reply_time', 'username', 'user_ip', 'username', 'email','user_homepage', 'status', 'type', 'at_email', 'province', 'city', 'is_admin', 'title', 'link_url'],
             /**
              * @cfg {String}
              * 主键
