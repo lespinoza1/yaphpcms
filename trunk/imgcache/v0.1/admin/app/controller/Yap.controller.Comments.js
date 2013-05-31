@@ -117,21 +117,18 @@ Ext.define('Yap.controller.Comments', {
         var me = this, extField = Yap.Field.field(), extCombo = Yap.Field.combo();
 
         return [
-            //发布状态
-            extField.fieldContainer('ISSUE,STATUS', [
-                 extField.checkbox('is_issue', '', '', 'CN_WEI,ISSUE', '0', '', {xtype: 'radio'}),
-                 extField.checkbox('is_issue', '', '', 'CN_YI,ISSUE', '1', '', {xtype: 'radio', style: 'margin-left: 15px'})
-                ], true, {
-                value: {is_issue: Ext.valueFrom(data.is_issue, '1')},
-                xtype: 'radiogroup'
-           }),
-            {//摘要
-                xtype: 'ueditor',
-                name: 'summary',
-                //value: lang('PLEASE_ENTER,CONTENT'),
-                fieldLabel: lang('SUMMARY')
-            },
-            extField.textareaComment(lang('SUMMARY_TIP').format(300)),//SEO描述提示
+            extField.fieldContainer(['USERNAME', [//用户名
+                [null, 'username', 'PLEASE_ENTER,USERNAME'],
+                lang('LT_BYTE').format(20) + '，' + lang('CN_TO_BYTE')
+            ]]),
+            extField.fieldContainer(['email', [//邮箱
+                [null, 'email', '', false, '', {width: 200}],
+                lang('LT_BYTE').format(50)
+            ], true]),
+            extField.fieldContainer(['HOMEPAGE', [//用户主页
+                [null, 'user_homepage', '', false, '', {width: 200}],
+                lang('LT_BYTE').format(50)
+            ], true]),
             {//内容
                 xtype: 'ueditor',
                 name: 'content',
@@ -177,9 +174,9 @@ Ext.define('Yap.controller.Comments', {
             header: lang('EMAIL'),//邮箱
             align: 'center',
             width: 120,
-            dataIndex: 'user_ip',
+            dataIndex: 'email',
             renderer: function (v) {
-                me.searchReplaceRenderer(v, 'email');
+                return me.searchReplaceRenderer(v, 'email');
             },
             sortable: false
         }, {

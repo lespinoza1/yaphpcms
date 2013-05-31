@@ -22,14 +22,6 @@ class CommentsModel extends CommonModel {
      */
     protected $_true_table_name = TB_COMMENTS;
     /**
-     * @var array $_auto 自动填充
-     */
-    protected $_auto = array(
-        'add_time'   => '_addtime#insert',//添加时间
-        'update_time'=> 'time#update',//添加时间
-        'is_issue'   => '_getCheckboxValue',//发布状态
-    );
-    /**
      * @var array $_db_fields
      * 数据表字段信息
      * filter: 数据类型，array(数据类型(string,int,float...),Filter::方法参数1,参数2...)
@@ -39,9 +31,12 @@ class CommentsModel extends CommonModel {
      * @see CommonModel.class.php __construct()方法设置自动验证字段_validate
      */
     protected $_db_fields = array (
-        'comment_id'     => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,DATA,INVALID'),//自增主键
+        'comment_id'     => array('filter' => 'int', 'validate' => 'unsigned#PRIMARY_KEY,DATA,INVALID#0'),//自增主键
+        'username'       => array('validate' => array('_checkLength#USERNAME#value|0|20')),
+        'email'          => array('filter' => 'email', 'validate' => array('_checkLength#EMAIL#value|0|50')),
+        'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#HOMEPAGE,LINK#value|0|50')),
         'parent_id'      => array('filter' => 'int'),//父id
-        'content'        => array('validate' => array('notblank#CONTENT')),
+        'content'        => array('filter' => 'raw', 'validate' => array('notblank#CONTENT')),
         'status'         => array('filter' => 'int'),
         'at_email'       => array('filter' => 'int'),//有人回复时通知我
     );
