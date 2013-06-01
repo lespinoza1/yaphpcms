@@ -23,6 +23,7 @@ return array(
     'BUILD'             => '生成',
     'CACHE'             => '缓存',
     'CLEAR'             => '清除',
+    'CN_CHAKAN'         => '查看',
     'COLUMN'            => '字段',
     'COMMENT'           => '评论',
     'COMPRESS'          => '压缩',

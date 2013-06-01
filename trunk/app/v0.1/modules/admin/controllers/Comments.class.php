@@ -237,7 +237,7 @@ class CommentsController extends CommonController {
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('AFRESH,GET,%ip,AREA,FAILURE') . '.data' . L('PARAM,IS_EMPTY');
             C('TRIGGER_ERROR', array($log));
             $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
-            $this->_ajaxReturn(L('INVALID_PARAM,%data。') . $msg . L('FAILURE'), LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(false, L('INVALID_PARAM,%data。') . $msg . L('FAILURE'));
         }
 
         $msg        = L('AFRESH,GET,%ip,AREA');
@@ -273,7 +273,7 @@ class CommentsController extends CommonController {
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('AFRESH,GET,%ip,AREA,FAILURE,%。,INVALID,%data=') . $data;
             C('TRIGGER_ERROR', array($log));
             $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
-            $this->_ajaxReturn(L('INVALID_PARAM,%data。') . $msg . L('FAILURE'), LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(false, L('INVALID_PARAM,%data。') . $msg . L('FAILURE'));
         }
 
         $error && $this->triggerError(substr($error, 1) . L('FORMAT,NOT_CORRECT'));
@@ -424,4 +424,38 @@ class CommentsController extends CommonController {
 
         $this->_ajaxReturn(true, '', $data, $total);
     }//end listAction
+
+    /**
+     * 查看某一条留言评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-01 11:00:03
+     *
+     * @return void 无返回值
+     */
+    public function viewAction() {
+        $comment_id = Filter::int($this->_pk_field, 'get');
+        $add_time   = Filter::int('add_time', 'get');
+        if (!$comment_id && !$add_time) {//非法参数
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('CN_CHAKAN,MODULE_NAME,%.,INVALID_PARAM') . "{$this->pk_field}({$comment_id}),add_time({$add_time})";
+            $msg = L('INVALID_PARAM');
+        }
+        elseif (!$comment_info = $this->_model->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->find()) {//不存在
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('CN_CHAKAN,MODULE_NAME') . ".{$this->_pk_field}({$comment_id}),add_time({$add_time})" . L('NOT_EXIST');
+            $msg = L('MODULE_NAME,NOT_EXIST');
+        }
+
+        if (!empty($msg)) {//错误
+            C('TRIGGER_ERROR', array($log));
+            $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(false, $msg);
+        }
+
+        if ($parent_id = $comment_info['parent_id']) {
+            $node_arr       = explode(',', $comment_info['node']);
+            $comment_info   = $this->_model->where("type={$comment_info['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]})")->select();
+        }
+
+        $this->_ajaxReturn(true, true, Tree::array2tree($comment_info, $this->_pk_field));
+    }
 }

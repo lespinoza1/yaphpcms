@@ -162,7 +162,8 @@ Ext.define('Yap.controller.Comments', {
             sortable: false
         }, {
             header: lang('CONTENT'),//内容
-            minWidth: 380,
+            flex: 1,
+            minWidth: 300,
             dataIndex: 'content',
             renderer: function (v) {
                 var data = Ext.Object.fromQueryString(Ext.History.getToken());
@@ -218,23 +219,43 @@ Ext.define('Yap.controller.Comments', {
             },
             sortable: false
         }, {//操作列
-            flex: 1,
+            width: 160,
             xtype: 'appactioncolumn',
-            items: [{//编辑
+            items: [{//编辑,查看,删除
                 renderer: function(v, meta, record) {
-                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('EDIT') + '</span>';
+                    var html = [''];
+
+                    html.push('<p class="appactioncolumn">');
+                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="edit">', lang('EDIT'), '</span>| ');
+                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="view">', lang('CN_CHAKAN'), '</span>| ');
+                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="reply">', lang('REPLY'), '</span>| ');
+                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="delete">', lang('DELETE'), '</span>');
+                    html.push('</p>');
+
+                    return html.join('');
                 },
-                handler: function(grid, rowIndex, cellIndex) {
-                    var record = grid.getStore().getAt(rowIndex);
-                    me.edit(record, true, 'cate_id=' + record.get('cate_id'));
-                }
-            }, {//删除
-                renderer: function(v, meta, record) {
-                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE') + '</span>';
-                },
-                handler: function(grid, rowIndex, cellIndex) {
-                    var record = grid.getStore().getAt(rowIndex);
-                    me['delete'](record, lang('CN_CI,' + (0 == record.get('type') ? 'GUESTBOOK' : 'COMMENT')));
+                handler: function(grid, rowIndex, cellIndex, options, event) {
+                    var action = Ext.get(event.getTarget()).getAttribute('data-action'),
+                        record = grid.getStore().getAt(rowIndex);
+
+                    switch (action) {
+
+                        case 'edit'://编辑
+                            me.edit(record);
+                            break;
+
+                        case 'delete'://删除
+                            me['delete'](record, lang('CN_CI,' + (0 == record.get('type') ? 'GUESTBOOK' : 'COMMENT')));
+                            break;
+
+                        case 'view'://查看
+                            me.viewComments(record);
+                            break;
+
+                        case 'reply'://回复
+                            me.replyComments(record);
+                            break;
+                    }
                 }
             }]
         }];
@@ -258,6 +279,7 @@ Ext.define('Yap.controller.Comments', {
         data.page = intval(data.page) || 1;//页
 
         var options = {
+            //onItemContextMenu: function () {log('onItemContextMenu', arguments);},
             onItemClick: function(view, record, element, index, event) {//列表点击事件
                 //me.listitemclick(record, event, 'is_restrict');
                 //me.listitemclick(record, event, 'is_lock');//锁定 by mrmsl on 2012-09-05 17:35:48
@@ -358,6 +380,23 @@ Ext.define('Yap.controller.Comments', {
 
         this.myConfirm(options);
     },//end afreshIp
+
+
+
+    /**
+     * 回复留言评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-01 15:31:27
+     *
+     * @private
+     *
+     * @param {Object}  record      record数据
+     *
+     * @return {void} 无返回值
+     */
+    replyComments: function (record) {
+    },//end viewComments
 
     /**
      * 列表页store
@@ -468,6 +507,90 @@ Ext.define('Yap.controller.Comments', {
         };
     },//end tbar
 
+    /**
+     * 查看留言评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-01 15:30:41
+     *
+     * @private
+     *
+     * @param {Object} data 当前标签数据
+     *
+     * @return {void} 无返回值
+     */
+    viewAction: function (data) {
+        var me = this,
+            pkValue = intval(data[me.idProperty]),
+            addTime = intval(data['add_time']),
+            title = lang('CN_CHAKAN,GUESTBOOK_COMMENTS'),
+            viewData = 'comment_id={0}&add_time={1}'.format(pkValue, addTime);
+        data['text'] = title;
+        Ext.get(data.controller).update(title);
+        Yap.cmp.viewport.setPageTitle(data.controller, data.action, title);
+
+        me._viewStore = me._viewStore || Ext.create('Yap.store.Comments', {
+            url: me.getActionUrl(false, 'view', viewData)
+        });
+
+
+        if (!me._viewPanel) {
+            var loadData = true;
+            me._viewPanel = Ext.create('Ext.Panel', {
+                /**
+                 * @cfg {Boolean}
+                 * 设置自动滚动条
+                 */
+                autoScroll: true,
+                _viewData: viewData,
+                items: Ext.create('Ext.view.View', {
+                    store: me._viewStore,
+                    tpl: [
+                        '<tpl for=".">',
+                            '{% out.push(this.loop(values)); %}',
+                        '</tpl>',
+                        {
+                            loop: function (data) {log(pkValue, data.comment_id);
+                                var html = [];
+                                html.push('<div class="panel-list media comment-detail panel-comment" id="comment-', data.comment_id, '">');
+                                html.push('    <img class="media-object pull-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
+                                html.push('    <div class="media-body">');
+                                html.push('        <p class="muted">');
+                                html.push('            <a href="#base-', data.comment_id, '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>回复</a>');
+                                html.push('            <span class="name-', data.comment_id, '">', data.username, '</span><span class="time-axis pull-right" data-time="1365245024">', data.add_time, '</span>');
+                                html.push('        </p>');
+                                html.push('        ', (pkValue == data.comment_id ? data.content.replace('<p>', '<p style="border : 5px solid #ddd; padding: 8px;">') : data.content));
+                                //html.push(this.loop(item, indent + 1));
+
+                                if (data.data) {
+                                    Ext.Array.each(data.data, function(item) {
+                                        html.push(this.loop(item));
+                                    }, this);
+                                }
+
+                                html.push('</div></div>');
+
+                                return html.join('');
+                            }
+                        }
+                    ]
+                })
+            });
+            me._viewStore.load();
+        }
+
+        if (global('app_contextmenu_refresh')) {
+            me._viewStore.load();
+        }
+        else if (me._viewPanel._viewData != viewData) {
+            me._viewPanel._viewData = viewData;
+            me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
+            me._viewStore.load();
+        }
+
+        Yap.cmp.card.layout.setActiveItem(me._viewPanel);
+    },//end viewComments
+
     //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Blog或Yap.model.Blog
     /**
      * @inheritdoc Yap.controller.Field#defineModel
@@ -482,7 +605,7 @@ Ext.define('Yap.controller.Comments', {
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'blog_id', 'content', 'add_time', 'last_reply_time', 'username', 'user_ip', 'username', 'email','user_homepage', 'status', 'type', 'at_email', 'province', 'city', 'is_admin', 'title', 'link_url'],
+            fields: [this.idProperty, 'blog_id', 'content', 'add_time', 'last_reply_time', 'username', 'user_ip', 'username', 'email','user_homepage', 'status', 'type', 'at_email', 'province', 'city', 'is_admin', 'title', 'link_url', 'data'],
             /**
              * @cfg {String}
              * 主键
@@ -540,6 +663,11 @@ Ext.define('Yap.controller.Comments', {
                 direction: 'DESC'
             },
             constructor: function(config) {//构造函数
+
+                if (config && config.url) {
+                    this.proxy.url = config.url;
+                };
+
                 this.callParent([config || {}]);
             }
         });
