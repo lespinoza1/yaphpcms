@@ -151,7 +151,8 @@ ADD COLUMN province varchar(20) NOT NULL DEFAULT '' COMMENT '用户省份' AFTER
 ADD COLUMN city varchar(20) NOT NULL DEFAULT '' COMMENT '用户城市' AFTER province,
 DROP INDEX status,
 ADD INDEX(blog_id),
-ADD INDEX(type,status)
+ADD INDEX(type,status),
+ADD INDEX(node)
 */
 CREATE TABLE `tb_comments` (
   `comment_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
