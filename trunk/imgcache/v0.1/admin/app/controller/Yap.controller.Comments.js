@@ -249,7 +249,7 @@ Ext.define('Yap.controller.Comments', {
                             break;
 
                         case 'view'://查看
-                            me.viewComments(record);
+                            Yap.History.push('controller=comments&action=view&comment_id={0}&add_time={1}'.format(record.get(me.idProperty), record.get('add_time')));
                             break;
 
                         case 'reply'://回复
