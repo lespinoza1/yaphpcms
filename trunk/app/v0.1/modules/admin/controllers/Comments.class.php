@@ -437,7 +437,7 @@ class CommentsController extends CommonController {
         $comment_id = Filter::int($this->_pk_field, 'get');
         $add_time   = Filter::int('add_time', 'get');
         if (!$comment_id && !$add_time) {//非法参数
-            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('CN_CHAKAN,MODULE_NAME,%.,INVALID_PARAM') . "{$this->pk_field}({$comment_id}),add_time({$add_time})";
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('CN_CHAKAN,MODULE_NAME,%.,INVALID_PARAM') . "{$this->_pk_field}({$comment_id}),add_time({$add_time})";
             $msg = L('INVALID_PARAM');
         }
         elseif (!$comment_info = $this->_model->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->find()) {//不存在
