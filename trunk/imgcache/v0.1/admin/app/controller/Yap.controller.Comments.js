@@ -550,25 +550,25 @@ Ext.define('Yap.controller.Comments', {
                             '{% out.push(this.loop(values)); %}',
                         '</tpl>',
                         {
-                            loop: function (data) {log(pkValue, data.comment_id);
+                            loop: function (data, isReply) {
                                 var html = [];
-                                html.push('<div class="panel-list media comment-detail panel-comment" id="comment-', data.comment_id, '">');
-                                html.push('    <img class="media-object pull-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
-                                html.push('    <div class="media-body">');
-                                html.push('        <p class="muted">');
-                                html.push('            <a href="#base-', data.comment_id, '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>回复</a>');
-                                html.push('            <span class="name-', data.comment_id, '">', data.username, '</span><span class="time-axis pull-right" data-time="1365245024">', data.add_time, '</span>');
-                                html.push('        </p>');
-                                html.push('        ', (pkValue == data.comment_id ? data.content.replace('<p>', '<p style="border : 5px solid #ddd; padding: 8px;">') : data.content));
+                                html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
+                                html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
+                                //html.push('    <div>');
+                                //html.push('        <p class="muted">');
+                                //html.push('            <a href="#base-', data.comment_id, '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>回复</a>');
+                                //html.push('            <span class="name-', data.comment_id, '">', data.username, '</span><span class="time-axis pull-right" data-time="1365245024">', data.add_time, '</span>');
+                               // html.push('        </p>');
+                                html.push('        ', (false && pkValue == data.comment_id ? data.content.replace('<p>', '<p style="border : 5px solid #ddd; padding: 8px;">') : data.content));
                                 //html.push(this.loop(item, indent + 1));
 
                                 if (data.data) {
                                     Ext.Array.each(data.data, function(item) {
-                                        html.push(this.loop(item));
+                                        html.push(this.loop(item, true));
                                     }, this);
                                 }
 
-                                html.push('</div></div>');
+                                html.push('<div class="clear"></div></div>');
 
                                 return html.join('');
                             }
