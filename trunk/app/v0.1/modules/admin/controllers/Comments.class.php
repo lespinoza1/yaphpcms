@@ -440,7 +440,7 @@ class CommentsController extends CommonController {
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('CN_CHAKAN,MODULE_NAME,%.,INVALID_PARAM') . "{$this->_pk_field}({$comment_id}),add_time({$add_time})";
             $msg = L('INVALID_PARAM');
         }
-        elseif (!$comment_info = $this->_model->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->find()) {//不存在
+        elseif (!$comment_info = $this->_model->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->select()) {//不存在
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('CN_CHAKAN,MODULE_NAME') . ".{$this->_pk_field}({$comment_id}),add_time({$add_time})" . L('NOT_EXIST');
             $msg = L('MODULE_NAME,NOT_EXIST');
         }
@@ -451,9 +451,9 @@ class CommentsController extends CommonController {
             $this->_ajaxReturn(false, $msg);
         }
 
-        if ($parent_id = $comment_info['parent_id']) {
-            $node_arr       = explode(',', $comment_info['node']);
-            $comment_info   = $this->_model->where("type={$comment_info['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]})")->select();
+        if ($parent_id = $comment_info[0]['parent_id']) {
+            $node_arr       = explode(',', $comment_info[0]['node']);
+            $comment_info   = $this->_model->where("type={$comment_info[0]['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]})")->select();
         }
 
         $this->_ajaxReturn(true, true, Tree::array2tree($comment_info, $this->_pk_field));
