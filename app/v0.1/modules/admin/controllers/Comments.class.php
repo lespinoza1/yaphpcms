@@ -436,11 +436,12 @@ class CommentsController extends CommonController {
     public function viewAction() {
         $comment_id = Filter::int($this->_pk_field, 'get');
         $add_time   = Filter::int('add_time', 'get');
+        $field      = '*,INET_NTOA(user_ip) AS user_ip';
         if (!$comment_id && !$add_time) {//非法参数
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('CN_CHAKAN,MODULE_NAME,%.,INVALID_PARAM') . "{$this->_pk_field}({$comment_id}),add_time({$add_time})";
             $msg = L('INVALID_PARAM');
         }
-        elseif (!$comment_info = $this->_model->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->select()) {//不存在
+        elseif (!$comment_info = $this->_model->field($field)->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->select()) {//不存在
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('CN_CHAKAN,MODULE_NAME') . ".{$this->_pk_field}({$comment_id}),add_time({$add_time})" . L('NOT_EXIST');
             $msg = L('MODULE_NAME,NOT_EXIST');
         }
@@ -453,9 +454,9 @@ class CommentsController extends CommonController {
 
         if ($parent_id = $comment_info[0]['parent_id']) {
             $node_arr       = explode(',', $comment_info[0]['node']);
-            $comment_info   = $this->_model->where("type={$comment_info[0]['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]})")->select();
+            $comment_info   = $this->_model->field($field)->where("type={$comment_info[0]['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]})")->select();
         }
 
         $this->_ajaxReturn(true, true, Tree::array2tree($comment_info, $this->_pk_field));
-    }
+    }//end viewAction
 }

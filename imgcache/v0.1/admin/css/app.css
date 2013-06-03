@@ -239,17 +239,22 @@ span.appactioncolumn:hover { color: red; }
 img.img-yesno { cursor: pointer; }
 
 .comment-detail {
-  border-bottom: 1px dotted #DDD;
-  margin: 0 10px 10px;
+  border-bottom: 1px dotted #ddd;
+  margin: 0 0 10px;
   padding: 8px 0;
-  clear: both;
 }
 .comment-reply {
   border-bottom: none;
-  border-top: 1px dotted #DDD;
+  border-top: 1px dotted #ddd;
   margin-bottom: 0;
   padding-bottom: 0;
 }
+.comment-body {
+  overflow: hidden;
+  *overflow: visible;
+  zoom: 1;
+}
+.comment-body p{ margin-bottom: 10px; }
 
 .avatar { margin-right: 10px; }
 .avatar-level-1 {
