@@ -454,7 +454,7 @@ class CommentsController extends CommonController {
 
         if ($parent_id = $comment_info[0]['parent_id']) {
             $node_arr       = explode(',', $comment_info[0]['node']);
-            $comment_info   = $this->_model->field($field)->where("type={$comment_info[0]['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]})")->select();
+            $comment_info   = $this->_model->field($field)->where("type={$comment_info[0]['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]}) AND comment_id<={$comment_id}")->select();
         }
 
         $this->_ajaxReturn(true, true, Tree::array2tree($comment_info, $this->_pk_field));
