@@ -426,6 +426,46 @@ class CommentsController extends CommonController {
     }//end listAction
 
     /**
+     * 回复留言评论
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-03 17:11:14
+     *
+     * @return void 无返回值
+     */
+    public function replyAction() {
+        $comment_id = Filter::int($this->_pk_field);
+        $add_time   = Filter::int('add_time');
+
+        if (!$comment_id && !$add_time) {//非法参数
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME,%.,INVALID_PARAM') . "{$this->_pk_field}({$comment_id}),add_time({$add_time})";
+            $msg = L('INVALID_PARAM');
+        }
+        elseif (!$comment_info = $this->_model->field('node,at_email,level')->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->select()) {//不存在
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . ".{$this->_pk_field}({$comment_id}),add_time({$add_time})" . L('NOT_EXIST');
+            $msg = L('MODULE_NAME,NOT_EXIST');
+        }
+        elseif (!$content = Filter::raw('content')) {
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . ".{$this->_pk_field}" . L('REPLY,CONTENT,IS_EMPTY');
+            $msg = L('PLEASE_ENTER,REPLY,CONTENT');
+        }
+
+        if (!empty($msg)) {//错误
+            C('TRIGGER_ERROR', array($log));
+            $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
+            $this->_ajaxReturn(false, $msg);
+        }
+
+        if ($reply_info = $this->_model->field('parent_id')->find()) {//已经回复
+            $add = false;
+            $this->_model->execute('UPDATE ' . TB_COMMENTS . " SET content='{$content}' WHERE comment_id={$reply_info['comment_id']}");
+        }
+        else {
+            $add = true;
+        }
+    }
+
+    /**
      * 查看某一条留言评论
      *
      * @author          mrmsl <msl-138@163.com>
