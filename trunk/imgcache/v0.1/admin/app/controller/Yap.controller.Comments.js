@@ -487,7 +487,7 @@ Ext.define('Yap.controller.Comments', {
                     ['blog_title', lang('BLOG,TITLE')],
                     ['blog_content', lang('BLOG,CONTENT')],
                     ['blog_id', lang('BLOG') + 'id'],
-                    ['miniblog_id', lang('MINIBLOG') + 'id'],
+                    ['miniblog_id', lang('MINIBLOG') + 'id']
                 ],
                 value: data.column,
                 editable: false
@@ -527,7 +527,8 @@ Ext.define('Yap.controller.Comments', {
             viewData = 'comment_id={0}&add_time={1}'.format(pkValue, addTime);
         data['text'] = title;
         Ext.get(data.controller).update(title);
-        Yap.cmp.viewport.setPageTitle(data.controller, data.action, title);
+        Yap.cmp.viewport.setPageTitle(data.controller, 'list');
+        Yap.cmp.viewport.setPageTitle(data.controller, 'list', title + System.sys_show_title_separator + document.title);
 
         me._viewStore = me._viewStore || Ext.create('Yap.store.Comments', {
             url: me.getActionUrl(false, 'view', viewData)
@@ -537,13 +538,10 @@ Ext.define('Yap.controller.Comments', {
         if (!me._viewPanel) {
             var loadData = true;
             me._viewPanel = Ext.create('Ext.Panel', {
-                /**
-                 * @cfg {Boolean}
-                 * 设置自动滚动条
-                 */
                 autoScroll: true,
                 _viewData: viewData,
                 items: Ext.create('Ext.view.View', {
+                    style: 'padding: 8px',
                     store: me._viewStore,
                     tpl: [
                         '<tpl for=".">',
@@ -554,13 +552,15 @@ Ext.define('Yap.controller.Comments', {
                                 var html = [];
                                 html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
                                 html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
-                                //html.push('    <div>');
-                                //html.push('        <p class="muted">');
-                                //html.push('            <a href="#base-', data.comment_id, '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>回复</a>');
-                                //html.push('            <span class="name-', data.comment_id, '">', data.username, '</span><span class="time-axis pull-right" data-time="1365245024">', data.add_time, '</span>');
-                               // html.push('        </p>');
-                                html.push('        ', (false && pkValue == data.comment_id ? data.content.replace('<p>', '<p style="border : 5px solid #ddd; padding: 8px;">') : data.content));
-                                //html.push(this.loop(item, indent + 1));
+                                html.push('    <div class="float-left0 comment-body">');
+                                html.push('        <p class="font-gray">');
+                                html.push('            <span class="float-right">', me.renderDatetime(data.add_time), '</span>');
+
+                                data.user_homepage && html.push('<a href="{0}" class="link" target="_blank">{1}</a>'.format(data.user_homepage, data.username));
+
+                                html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
+                                html.push('        </p>');
+                                html.push('        ', data.content);
 
                                 if (data.data) {
                                     Ext.Array.each(data.data, function(item) {
@@ -568,7 +568,7 @@ Ext.define('Yap.controller.Comments', {
                                     }, this);
                                 }
 
-                                html.push('<div class="clear"></div></div>');
+                                html.push('</div></div>');
 
                                 return html.join('');
                             }
