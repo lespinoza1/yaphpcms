@@ -381,8 +381,6 @@ Ext.define('Yap.controller.Comments', {
         this.myConfirm(options);
     },//end afreshIp
 
-
-
     /**
      * 回复留言评论
      *
@@ -396,7 +394,129 @@ Ext.define('Yap.controller.Comments', {
      * @return {void} 无返回值
      */
     replyComments: function (record) {
+        this.replyWin(record);
     },//end viewComments
+
+    /**
+     * @inheritdoc Yap.controller.Admin#formField
+     */
+    replyFormFields: function () {
+        var me = this, extField = Yap.Field.field();
+        global('app_labelWidth', 60);//提交按钮labelWidth
+        global('app_btnText', lang('REPLY'));//提交按钮文字
+
+        return [
+            {//内容
+                xtype: 'ueditor',
+                name: 'content',
+                value: lang('PLEASE_ENTER,CONTENT'),
+                height: 200,
+                width: 600,
+                fieldLabel: lang('CONTENT')
+            },
+            this.btnSubmit(),//通用提交按钮
+            extField.hiddenField(me.idProperty),
+            extField.hiddenField('add_time')
+        ];
+    },
+
+    /**
+     * @inheritdoc Yap.controller.Base#formPanel
+     */
+    replyFormPanel: function() {
+        var me = this;
+
+        me._replyForm = me._replyForm || Ext.create('Yap.ux.Form', {
+            controller: this,
+            url: this.getActionUrl(false, 'login'),
+            plain: true,
+            //height: 150,
+            items: this.replyFormFields(),
+            fieldDefaults: {
+                labelAlign: 'right',
+                labelSeparator: '：',
+                allowBlank: false,
+                labelPad: 0,
+            },
+            listeners: {
+                submitfailure: function (form, action) {
+                    this.down('component[componentCls=msg]').show().update(action.result.msg || lang('LOGIN,FAILURE'));
+                    return false;
+                },
+                submitsuccess: function (form, action) {
+                    this.down('component[componentCls=msg]').hide();
+                    this.down('component[name=submit]').setText(lang('LOGIN'));
+
+                    var el = Ext.get(me.imgCodeId);
+
+                    if (el) {
+                        el.hide();
+                    }
+
+                    form.reset();
+
+                    if ('undefined' == typeof LOGIN) {//正进行操作，登陆超时
+                       me._win.hide();
+                    }
+                    else {//登陆页
+                        location.replace(System.sys_base_admin_entry);
+                        Alert(lang('LOGIN_SUCCES_TIP'), undefined, false, false);
+                    }
+
+                    return false;
+                }
+            }
+        });
+
+        return me._replyForm;
+    },//end replyFormPanel
+
+    /**
+     * 回复弹出窗口
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-03 21:26:46
+     *
+     * @param {Object}  record      record数据
+     *
+     * @return {void} 无返回值
+     */
+    replyWin: function(record) {
+        var me = this;
+
+        if (!this._win) {//未定义
+            seajs.use(['ueditor', 'ueditorConfig'], function() {
+
+                Ext.require('Yap.ux.Ueditor', function () {
+                    me.ueditor = true;
+                    me._win = Ext.create('Ext.window.Window', {
+                        title: lang('REPLY,GUESTBOOK_COMMENTS'),
+                        border: false,
+                        modal: true,
+                        constrain: true,
+                        closeAction: 'hide',
+                        fit: true,
+                        width: 800,
+                        height: 300,
+                        items: me.replyFormPanel()
+                    });
+                    this.setReplyValue(record);
+                }, me);
+            });
+        }
+        else {
+            this.setReplyValue(record);
+        }
+    },
+
+    setReplyValue: function(record) {
+        this._win.setTitle(lang('REPLY') + ' ' + record.get('username'));
+        this._win.show();
+        log(this._replyForm.getForm().setValues({
+            comment_id: record.get(this.idProperty),
+            add_time: record.get('add_time')
+        }), this._replyForm.getValues());
+    },
 
     /**
      * 列表页store
