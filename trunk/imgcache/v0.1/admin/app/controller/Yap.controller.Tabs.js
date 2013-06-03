@@ -302,7 +302,7 @@ Ext.define('Yap.controller.Tabs', {
 
             var request = Ext.data.JsonP.request({
                 url: url,
-                disableCaching: false,//不禁用缓存 by mrmsl on 2012-08-30 12:18:46
+                disableCaching: System.IS_LOCAL,//不禁用缓存 by mrmsl on 2012-08-30 12:18:46
                 timeout: 3000,
                 callbackName: controllerClassName.replace(/\./g, '_'),
 
