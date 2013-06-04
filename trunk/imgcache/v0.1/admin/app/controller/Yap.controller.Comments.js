@@ -657,16 +657,16 @@ Ext.define('Yap.controller.Comments', {
             }
         });
 
-
         if (!me._viewPanel) {
             var loadData = true;
-            seajs.use(['ueditor', 'ueditorConfig'], function() {
 
-                Ext.require('Yap.ux.Ueditor', function () {
-                    me._viewPanel = Ext.create('Ext.Panel', {
-                        autoScroll: true,
-                        _viewData: viewData,
-                        items: [Ext.create('Ext.view.View', {
+            seajs.use(['Yap.ux.Ueditor', 'ueditor', 'ueditorConfig'], function () {
+
+                me._viewPanel = Ext.create('Ext.Panel', {
+                    autoScroll: true,
+                    _viewData: viewData,
+                    items: [
+                        Ext.create('Ext.view.View', {
                             style: 'padding: 8px',
                             store: me._viewStore,
                             tpl: [
@@ -700,16 +700,17 @@ Ext.define('Yap.controller.Comments', {
                                     }
                                 }
                             ]
-                        }), me.replyFormPanel()]
-                    });
+                        }),
+                        me.replyFormPanel()
+                    ]
+                });
 
-            me._viewPanel._viewData = viewData;
-            me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
-            me._viewStore.load();
-            Yap.cmp.card.layout.setActiveItem(me._viewPanel);
-                }, me);
-            });
-        };
+                me._viewPanel._viewData = viewData;
+                me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
+                me._viewStore.load();
+                Yap.cmp.card.layout.setActiveItem(me._viewPanel);
+            });//end seajs.use
+        }
 
         if (global('app_contextmenu_refresh')) {
             me._viewStore.load();
