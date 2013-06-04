@@ -95,7 +95,7 @@ Ext.define('Yap.controller.Base', {
      *
      * @return {Object} 按钮item配置
      */
-    btnSubmit: function() {
+    btnSubmit: function(submitTip) {
         var me = this;
         var labelWidth = global('app_labelWidth') || 100;//labelWidth
         var btnText = global('app_btnText') || lang('SAVE');//按钮文字
@@ -119,7 +119,7 @@ Ext.define('Yap.controller.Base', {
                     this.up('form').onSubmit(this);//onSubmit(this);
                 }
             },
-            Yap.Field.field().displayField(lang('SUBMIT_TIP'))//可按ctrl+enter提交 提示 by mrmsl on 2012-09-07 09:20:19
+            Yap.Field.field().displayField(undefined === submitTip ? lang('SUBMIT_TIP') : '')//可按ctrl+enter提交 提示 by mrmsl on 2012-09-07 09:20:19
             ]
         }
     },//end btnSubmit
