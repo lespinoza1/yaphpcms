@@ -1161,7 +1161,7 @@ class Db {
      */
     public function insert($data, $options = array(), $replace = false) {
         $values = $fields = array();
-        $this->_model = $options['model'];
+        $this->_model = isset($options['model']) ? $options['model'] : '_think_';
 
         foreach ($data as $key => $val) {
             $value = $this->_parseValue($val);
@@ -1460,7 +1460,7 @@ class Db {
      * @return mixed $this->execute() 返回结果
      */
     public function update($data, $options) {
-        $this->_model = $options['model'];
+        $this->_model = isset($options['model']) ? $options['model'] : '_think_';
 
         $sql = 'UPDATE ' .
         $this->_parseTable($options['table']) .
