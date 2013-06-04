@@ -408,19 +408,39 @@ class CommentsController extends CommonController {
 
         $data === false && $this->_sqlErrorExit(L('QUERY,MODULE_NAME') . L('LIST,ERROR'));//出错
 
-        foreach($data as $k => $v) {
+        $selected = array(COMMENT_TYPE_BLOG => array(), COMMENT_TYPE_MINIBLOG => array());
 
-            if (COMMENT_TYPE_BLOG == $v['type']) {
-                $info = $this->_model->table(TB_BLOG)->where('blog_id=' . $v['blog_id'])->field('title,link_url')->find();
+        foreach($data as $k => $v) {
+            $type = $v['type'];
+
+            if (COMMENT_TYPE_BLOG == $type) {
+                $blog_id = $v['blog_id'];
+
+                if (isset($selected[COMMENT_TYPE_BLOG][$blog_id])) {
+                    $info = $selected[COMMENT_TYPE_BLOG][$blog_id];
+                }
+                else {
+                    $info = $this->_model->table(TB_BLOG)->where('blog_id=' . $blog_id)->field('title,link_url')->find();
+                    $selected[COMMENT_TYPE_BLOG][$blog_id] = $info;
+                }
+
                 $data[$k]['title'] = $info['title'];
                 $data[$k]['link_url'] = $info['link_url'];
             }
-            elseif (COMMENT_TYPE_MINIBLOG == $v['type']) {
-                $info = $this->_model->table(TB_MINIBLOG)->where('blog_id=' . $v['blog_id'])->field('add_time,link_url')->find();
+            elseif (COMMENT_TYPE_MINIBLOG == $type) {
+
+                if (isset($selected[COMMENT_TYPE_MINIBLOG][$blog_id])) {
+                    $info = $selected[COMMENT_TYPE_MINIBLOG][$blog_id];
+                }
+                else {
+                    $info = $this->_model->table(TB_MINIBLOG)->where('blog_id=' . $v['blog_id'])->field('add_time,link_url')->find();
+                    $selected[COMMENT_TYPE_MINIBLOG][$blog_id] = $info;
+                }
+
                 $data[$k]['title'] = new_date('Y-m-d', $info['add_time']) . ' ' . L('MINIBLOG');
                 $data[$k]['link_url'] = $info['link_url'];
             }
-        }
+        }//end foreach
 
         $this->_ajaxReturn(true, '', $data, $total);
     }//end listAction
@@ -441,13 +461,21 @@ class CommentsController extends CommonController {
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME,%.,INVALID_PARAM') . "{$this->_pk_field}({$comment_id}),add_time({$add_time})";
             $msg = L('INVALID_PARAM');
         }
-        elseif (!$comment_info = $this->_model->field('node,at_email,level')->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->select()) {//不存在
+        elseif (!$comment_info = $this->_model->where(array($this->_pk_field => $comment_id, 'add_time' => $add_time))->find()) {//不存在
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . ".{$this->_pk_field}({$comment_id}),add_time({$add_time})" . L('NOT_EXIST');
             $msg = L('MODULE_NAME,NOT_EXIST');
+        }
+        elseif (COMMENT_REPLY_TYPE_ADMIN == $comment_info['admin_reply_type']) {//
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . '.admin_reply_type=' . COMMENT_REPLY_TYPE_ADMIN;
+            $msg = L('INVALID,REPLY');
         }
         elseif (!$content = Filter::raw('content')) {
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . ".{$this->_pk_field}" . L('REPLY,CONTENT,IS_EMPTY');
             $msg = L('PLEASE_ENTER,REPLY,CONTENT');
+        }
+        elseif ('<p>' != substr($content, 0, 3)) {
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . 'substr(0,3)!=p';
+            $msg = L('REPLY,CONTENT,ERROR');
         }
 
         if (!empty($msg)) {//错误
@@ -456,14 +484,95 @@ class CommentsController extends CommonController {
             $this->_ajaxReturn(false, $msg);
         }
 
-        if ($reply_info = $this->_model->field('parent_id')->find()) {//已经回复
-            $add = false;
-            $this->_model->execute('UPDATE ' . TB_COMMENTS . " SET content='{$content}' WHERE comment_id={$reply_info['comment_id']}");
+        $this->_model->startTrans();
+
+        $ip_info = get_ip_info();//ip地址信息
+
+        if (is_array($ip_info)) {
+            $province   = $ip_info[0];
+            $city       = $ip_info[1];
         }
         else {
-            $add = true;
+            $province   = '';
+            $city       = $ip_info;
         }
-    }
+
+        $db   = $this->_model->getDb();
+        $data = array(
+            'province'  => $province,
+            'city'      => $city,
+            'content'   => $content,
+        );
+
+        if (COMMENT_REPLY_TYPE_REPLIED == $comment_info['admin_reply_type']) {//已经回复
+            $add        = false;
+            $reply_info = $this->_model->field($this->_pk_field . ',content')->where('admin_reply_type=' . COMMENT_REPLY_TYPE_ADMIN  . ' AND real_parent_id=' . $comment_id)->find();
+            $log        = $this->_dataDiff(array('content' => $reply_info['content']), $data);
+            $db->update($data, array('table' => TB_COMMENTS, 'where' => "{$this->_pk_field}={$reply_info[$this->_pk_field]}"));
+        }
+        else {
+            $add  = true;
+            $data = $data + array(
+                'parent_id'         => $comment_id,
+                'add_time'          => time(),
+                'username'          => sys_config('module_guestbook_comments_reply_admin_username', 'Module'),
+                'email'             => sys_config('module_guestbook_comments_reply_admin_email', 'Module'),
+                'user_pic'          => str_replace('@common_imgcache', COMMON_IMGCACHE, sys_config('module_guestbook_comments_reply_admin_img', 'Module')),
+                'user_ip'           => get_client_ip(1),
+                'user_homepage'     => BASE_SITE_URL,
+                'admin_reply_type'  => COMMENT_REPLY_TYPE_ADMIN,
+                'status'            => COMMENT_STATUS_PASS,
+                'type'              => $comment_info['type'],
+                'blog_id'           => $comment_info['blog_id'],
+                'at_email'          => 1,
+                'level'             => $comment_info['level'] + 1,
+            );
+
+            $reply = '@<a class="link" href="#comment-' . $comment_info['comment_id'] . '" rel="nofollow">' . $comment_info['username'] .  '</a> ';
+            $data['content'] = substr_replace($data['content'], '<p>' . $reply, 0, 3);
+
+            if (false === $this->_model->getDb()->insert($data, array('table' => TB_COMMENTS))) {
+                $this->_sqlErrorExit(L('REPLY,FAILURE'));
+            }
+
+            $insert_id          = $db->getLastInsertID();
+            $max_reply_level    = $this->getGuestbookCommentsSetting(COMMENT_TYPE_GUESTBOOK == $comment_info['type'] ? 'module_guestbook' : 'module_comments', 'max_reply_level');
+
+            if ($max_reply_level == $comment_info['level']) {//最多5层回复
+                $comment_info['level']--;
+                $comment_info['node'] = substr($comment_info['node'], 0, strrpos($comment_info['node'], ','));
+                $node_arr  = explode(',', $comment_info['node']);
+                $parent_id = $node_arr[$max_reply_level > 2 ? $max_reply_level - 2 : 1];//父级id取第四个
+                $real_parent_id = $comment_id;
+            }
+
+            $update = array(
+                'level'             => $comment_info['level'] + 1,//层级
+                'node'              => $comment_info['node'] . ',' . $insert_id,//节点关系
+            );
+
+            if (!empty($parent_id)) {
+                $update['parent_id'] = $parent_id;
+                $update['real_parent_id'] = $real_parent_id;
+            }
+
+            C('_FACADE_SKIP', true);
+            $this->_model->where($this->_pk_field . '=' . $comment_id)->save(array('admin_reply_type' => COMMENT_REPLY_TYPE_REPLIED));//已经回复
+            $this->_model->where($this->_pk_field . '=' . $insert_id)->save($update);
+            $this->_model->where(array($this->_pk_field => array('IN', $comment_info['node'])))->save(array('last_reply_time' => time()));//更新最上层最后回复时间
+
+            //干掉静态页,重新统计评论数等
+            $a = array($comment_id);
+            $b = '';
+            $this->_beforeExec($a, $b);
+            $this->_afterAction();
+
+            $log = $content;
+        }
+
+        $this->_model->addLog(L('REPLY,GUESTBOOK_COMMENTS') . $this->_pk_field . "({$comment_id})" . $log, LOG_TYPE_ADMIN_OPERATE);
+        $this->_ajaxReturn(true, L('REPLY,SUCCESS'));
+    }//end replyAction
 
     /**
      * 查看某一条留言评论
@@ -492,11 +601,17 @@ class CommentsController extends CommonController {
             $this->_ajaxReturn(false, $msg);
         }
 
-        if ($parent_id = $comment_info[0]['parent_id']) {
-            $node_arr       = explode(',', $comment_info[0]['node']);
-            $comment_info   = $this->_model->field($field)->where("type={$comment_info[0]['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]}) AND comment_id<={$comment_id}")->select();
+        $info = $comment_info[0];
+
+        if (COMMENT_REPLY_TYPE_REPLIED == $info['admin_reply_type']) {//
+            $reply_info         = $this->_model->where('admin_reply_type=' . COMMENT_REPLY_TYPE_ADMIN  . ' AND real_parent_id=' . $info[$this->_pk_field])->find();
         }
 
-        $this->_ajaxReturn(true, true, Tree::array2tree($comment_info, $this->_pk_field));
+        if ($parent_id = $info['parent_id']) {
+            $node_arr       = explode(',', $info['node']);
+            $comment_info   = $this->_model->field($field)->where("type={$info['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]}) AND comment_id<={$comment_id}")->select();
+        }
+
+        $this->_ajaxReturn(true, empty($reply_info) ? false : $reply_info, Tree::array2tree($comment_info, $this->_pk_field));
     }//end viewAction
 }

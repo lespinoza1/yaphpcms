@@ -149,6 +149,7 @@ ADD COLUMN email varchar(50) NOT NULL DEFAULT '' COMMENT '用户email' AFTER use
 ADD COLUMN at_email tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '有回复时是否发送emil;0否;1是'
 ADD COLUMN province varchar(20) NOT NULL DEFAULT '' COMMENT '用户省份' AFTER user_ip,
 ADD COLUMN city varchar(20) NOT NULL DEFAULT '' COMMENT '用户城市' AFTER province,
+ADD COLUMN real_parent_id smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '回复超出最大回复层级时,实际回复id' AFTER parent_id
 DROP INDEX status,
 ADD INDEX(blog_id),
 ADD INDEX(type,status),
@@ -157,6 +158,7 @@ ADD INDEX(node)
 CREATE TABLE `tb_comments` (
   `comment_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `parent_id` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '父id',
+  real_parent_id smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '回复超出最大回复层级时,实际回复id',
  type tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0留言;1博客评论;2微博评论.默认0'
   `username` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名',
   email varchar(50) NOT NULL DEFAULT '' COMMENT '用户email'
