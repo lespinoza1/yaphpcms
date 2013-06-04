@@ -402,7 +402,7 @@ Ext.define('Yap.controller.Comments', {
      */
     replyFormFields: function () {
         var me = this, extField = Yap.Field.field();
-        global('app_labelWidth', 60);//提交按钮labelWidth
+        //global('app_labelWidth', 60);//提交按钮labelWidth
         global('app_btnText', lang('REPLY'));//提交按钮文字
 
         return [
@@ -410,11 +410,11 @@ Ext.define('Yap.controller.Comments', {
                 xtype: 'ueditor',
                 name: 'content',
                 value: lang('PLEASE_ENTER,CONTENT'),
-                height: 200,
-                width: 600,
-                fieldLabel: lang('CONTENT')
+                height: 100,
+                width: 800,
+                fieldLabel: lang('REPLY,CONTENT')
             },
-            this.btnSubmit(),//通用提交按钮
+            this.btnSubmit(false),//通用提交按钮
             extField.hiddenField(me.idProperty),
             extField.hiddenField('add_time')
         ];
@@ -428,40 +428,12 @@ Ext.define('Yap.controller.Comments', {
 
         me._replyForm = me._replyForm || Ext.create('Yap.ux.Form', {
             controller: this,
-            url: this.getActionUrl(false, 'login'),
-            plain: true,
-            //height: 150,
+            url: this.getActionUrl(false, 'reply'),
+            bodyStyle: 'border: none',
             items: this.replyFormFields(),
-            fieldDefaults: {
-                labelAlign: 'right',
-                labelSeparator: '：',
-                allowBlank: false,
-                labelPad: 0,
-            },
             listeners: {
-                submitfailure: function (form, action) {
-                    this.down('component[componentCls=msg]').show().update(action.result.msg || lang('LOGIN,FAILURE'));
-                    return false;
-                },
                 submitsuccess: function (form, action) {
-                    this.down('component[componentCls=msg]').hide();
-                    this.down('component[name=submit]').setText(lang('LOGIN'));
-
-                    var el = Ext.get(me.imgCodeId);
-
-                    if (el) {
-                        el.hide();
-                    }
-
-                    form.reset();
-
-                    if ('undefined' == typeof LOGIN) {//正进行操作，登陆超时
-                       me._win.hide();
-                    }
-                    else {//登陆页
-                        location.replace(System.sys_base_admin_entry);
-                        Alert(lang('LOGIN_SUCCES_TIP'), undefined, false, false);
-                    }
+                    log(arguments);
 
                     return false;
                 }
@@ -653,7 +625,10 @@ Ext.define('Yap.controller.Comments', {
         me._viewStore = me._viewStore || Ext.create('Yap.store.Comments', {
             url: me.getActionUrl(false, 'view', viewData),
             listeners: {
-                load: log
+                load: function (store) {
+                    var data = store.proxy.reader.rawData;
+                    me.replyFormPanel().getForm().setValues(data.msg);
+                }
             }
         });
 
@@ -662,66 +637,65 @@ Ext.define('Yap.controller.Comments', {
 
             seajs.use(['Yap.ux.Ueditor', 'ueditor', 'ueditorConfig'], function () {
 
-                me._viewPanel = Ext.create('Ext.Panel', {
-                    autoScroll: true,
-                    _viewData: viewData,
-                    items: [
-                        Ext.create('Ext.view.View', {
-                            style: 'padding: 8px',
-                            store: me._viewStore,
-                            tpl: [
-                                '<tpl for=".">',
-                                    '{% out.push(this.loop(values)); %}',
-                                '</tpl>',
-                                {
-                                    loop: function (data, isReply) {
-                                        var html = [];
-                                        html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
-                                        html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
-                                        html.push('    <div class="float-left0 comment-body">');
-                                        html.push('        <p class="font-gray">');
-                                        html.push('            <span class="float-right">', me.renderDatetime(data.add_time), '</span>');
+                if (!me._viewPanel) {
+                    me._viewPanel = Ext.create('Ext.Panel', {
+                        autoScroll: true,
+                        _viewData: viewData,
+                        items: [
+                            Ext.create('Ext.view.View', {
+                                style: 'padding: 8px',
+                                store: me._viewStore,
+                                tpl: [
+                                    '<tpl for=".">',
+                                        '{% out.push(this.loop(values)); %}',
+                                    '</tpl>',
+                                    {
+                                        loop: function (data, isReply) {
+                                            var html = [];
+                                            html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
+                                            html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
+                                            html.push('    <div class="float-left0 comment-body">');
+                                            html.push('        <p class="font-gray">');
+                                            html.push('            <span class="float-right">', me.renderDatetime(data.add_time), '</span>');
 
-                                        data.user_homepage && html.push('<a href="{0}" class="link" target="_blank">{1}</a>'.format(data.user_homepage, data.username));
+                                            data.user_homepage && html.push('<a href="{0}" class="link" target="_blank">{1}</a>'.format(data.user_homepage, data.username));
 
-                                        html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
-                                        html.push('        </p>');
-                                        html.push('        ', data.content);
+                                            html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
+                                            html.push('        </p>');
+                                            html.push('        ', data.content);
 
-                                        if (data.data) {
-                                            Ext.Array.each(data.data, function(item) {
-                                                html.push(this.loop(item, true));
-                                            }, this);
+                                            if (data.data) {
+                                                Ext.Array.each(data.data, function(item) {
+                                                    html.push(this.loop(item, true));
+                                                }, this);
+                                            }
+
+                                            html.push('</div></div>');
+
+                                            return html.join('');
                                         }
-
-                                        html.push('</div></div>');
-
-                                        return html.join('');
                                     }
-                                }
-                            ]
-                        }),
-                        me.replyFormPanel()
-                    ]
-                });
+                                ]
+                            }),
+                            me.replyFormPanel()
+                        ]
+                    });
 
-                me._viewPanel._viewData = viewData;
-                me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
-                me._viewStore.load();
+                    me._viewStore.load();
+                }
+
+                if (global('app_contextmenu_refresh')) {
+                    me._viewStore.load();
+                }
+                else if (me._viewPanel._viewData != viewData) {
+                    me._viewPanel._viewData = viewData;
+                    me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
+                    me._viewStore.load();
+                }
+
                 Yap.cmp.card.layout.setActiveItem(me._viewPanel);
             });//end seajs.use
         }
-
-        if (global('app_contextmenu_refresh')) {
-            me._viewStore.load();
-        }
-        /*else if (false && me._viewPanel._viewData != viewData) {
-            me._viewPanel._viewData = viewData;
-            me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
-            me._viewStore.load();
-        }*/
-
-
     },//end viewComments
 
     //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Blog或Yap.model.Blog
