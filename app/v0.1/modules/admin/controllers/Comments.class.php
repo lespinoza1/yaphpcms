@@ -411,10 +411,10 @@ class CommentsController extends CommonController {
         $selected = array(COMMENT_TYPE_BLOG => array(), COMMENT_TYPE_MINIBLOG => array());
 
         foreach($data as $k => $v) {
-            $type = $v['type'];
+            $type       = $v['type'];
+            $blog_id    = $v['blog_id'];
 
             if (COMMENT_TYPE_BLOG == $type) {
-                $blog_id = $v['blog_id'];
 
                 if (isset($selected[COMMENT_TYPE_BLOG][$blog_id])) {
                     $info = $selected[COMMENT_TYPE_BLOG][$blog_id];
