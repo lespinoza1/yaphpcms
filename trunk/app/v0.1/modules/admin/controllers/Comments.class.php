@@ -601,10 +601,12 @@ class CommentsController extends CommonController {
             $this->_ajaxReturn(false, $msg);
         }
 
-        $info = $comment_info[0];
+        $store  = array($this->_pk_field => $comment_id, 'add_time' => $add_time, 'content' => '');
+        $info   = $comment_info[0];
 
         if (COMMENT_REPLY_TYPE_REPLIED == $info['admin_reply_type']) {//
-            $reply_info         = $this->_model->where('admin_reply_type=' . COMMENT_REPLY_TYPE_ADMIN  . ' AND real_parent_id=' . $info[$this->_pk_field])->find();
+            $reply_content = $this->_model->where('admin_reply_type=' . COMMENT_REPLY_TYPE_ADMIN  . ' AND real_parent_id=' . $info[$this->_pk_field])->getField('content');
+            $store['content'] = $reply_content;
         }
 
         if ($parent_id = $info['parent_id']) {
@@ -612,6 +614,6 @@ class CommentsController extends CommonController {
             $comment_info   = $this->_model->field($field)->where("type={$info['type']} AND (node LIKE '{$node_arr[0]},%' OR {$this->_pk_field} = {$node_arr[0]}) AND comment_id<={$comment_id}")->select();
         }
 
-        $this->_ajaxReturn(true, empty($reply_info) ? false : $reply_info, Tree::array2tree($comment_info, $this->_pk_field));
+        $this->_ajaxReturn(true, $store, Tree::array2tree($comment_info, $this->_pk_field));
     }//end viewAction
 }
