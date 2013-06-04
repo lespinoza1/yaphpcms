@@ -157,7 +157,7 @@ class Model {
      */
     private function _facade($data) {
 
-        if ($this->_fields) {//检查非数据字段
+        if ($this->_fields && !C('_FACADE_SKIP')) {//检查非数据字段
 
             foreach ($data as $key => $val) {
 
@@ -169,6 +169,8 @@ class Model {
                 }
             }
         }
+
+        'skip' === C('_FACADE_SKIP') && C('_FACADE_SKIP', false);
 
         $this->_beforeWrite($data);
 
