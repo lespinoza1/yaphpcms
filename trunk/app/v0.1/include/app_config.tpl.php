@@ -49,13 +49,19 @@ define('JSONP_CALLBACK'        , 'jsonpcallback');//jsonp 请求名称
 define('DEFAULT_LANG'          , 'zh_cn');//默认语言
 define('DEFAULT_TIMEZONE'      , 'asia/shanghai');//默认语言
 
-//评论留言类型及审核状态 by mrmsl on 2013-05-13 13:30:23
+//评论留言 by mrmsl on 2013-05-13 13:30:23
+//类型
 define('COMMENT_TYPE_GUESTBOOK'     , 0);//留言
 define('COMMENT_TYPE_BLOG'          , 1);//博客评论
 define('COMMENT_TYPE_MINIBLOG'      , 2);//微博评论
+//审核状态
 define('COMMENT_STATUS_UNAUDITING'  , 0);//未审核
 define('COMMENT_STATUS_PASS'        , 1);//通过
 define('COMMENT_STATUS_UNPASS'      , 2);//不通过
+//回复类型
+define('COMMENT_REPLY_TYPE_DEFAULT' , 0);//默认
+define('COMMENT_REPLY_TYPE_REPLIED' , 1);//已经回复
+define('COMMENT_REPLY_TYPE_ADMIN'   , 2);//管理员回复
 
 //自定义错误类型
 define('E_APP_EXCEPTION'      , 'E_APP_EXCEPTION');//异常

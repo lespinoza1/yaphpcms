@@ -167,7 +167,7 @@ CREATE TABLE `tb_comments` (
   user_pic varchar(50) NOT NULL DEFAULT '' COMMENT '用户头像url',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
    last_reply_time int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复时间',
-  `is_admin` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0管理员;1用户.默认0',
+  `admin_reply_type` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '管理员回复类型,0默认,1已经回复,2属于管理员回复',
    status tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '状态;0;未处理;1已通过;2未通过',
   `level` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '层级',
   `node` varchar(24) NOT NULL DEFAULT '' COMMENT '节点',

@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-05-30 22:16:12
+//最后更新时间:2013-06-04 08:49:54
 
 return array (
   'module_admin_verifycode_enable' => '1',
@@ -14,8 +14,8 @@ return array (
   'module_admin_verifycode_error_limit' => '',
   'module_guestbook_check' => '-1',
   'module_comments_check' => '-1',
-  'module_guestbook_max_reply_level' => '5',
-  'module_comments_max_reply_level' => '5',
+  'module_guestbook_max_reply_level' => '-1',
+  'module_comments_max_reply_level' => '-1',
   'module_guestbook_verifycode_error_limit' => '',
   'module_guestbook_verifycode_refresh_limit' => '',
   'module_guestbook_verifycode_order' => '4312',
@@ -35,15 +35,19 @@ return array (
   'module_comments_verifycode_width' => '40',
   'module_comments_verifycode_enable' => '0',
   'module_guestbook_comments_check' => '1',
-  'module_guestbok_comments_max_reply_level' => '5',
+  'module_guestbook_comments_max_reply_level' => '5',
   'module_comments_alternation' => '-1',
   'module_guestbook_alternation' => '-1',
-  'module_guestbook_comments_alternation' => '-1',
+  'module_guestbook_comments_alternation' => '0',
   'module_guestbook_comments_disabled_username' => 'admin
 yablog
-mrmsl',
+mrmsl
+msl',
   'module_guestbook_disabled_username' => '',
   'module_guestbook_comments_disabled_ip' => '',
   'module_guestbook_disabled_ip' => '',
   'module_comments_disabled_ip' => '',
+  'module_guestbook_comments_reply_admin_username' => 'admin',
+  'module_guestbook_comments_reply_admin_email' => 'msl-138@163.com',
+  'module_guestbook_comments_reply_admin_img' => '@common_imgcacheimages/admin.png',
 );

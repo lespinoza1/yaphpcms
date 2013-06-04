@@ -77,7 +77,7 @@ INSERT INTO `tb_field` VALUES (78,43,'后台imgcache地址','extField.fieldConta
 INSERT INTO `tb_field` VALUES (79,43,'后台管理入口','extField.fieldContainer([\'%@fieldLabel\', [\n    [null,\'@input_name\',\'PLEASE_ENTER,%@field_name\', \'\', \'@value\'],\n    lang(\'RELATIVE,WEBSITE,WWWROOT,OR\') + \'http://\' + lang(\'ABSOLUTE,ADDRESS\')\n]])','string\nnotblank','','sys_base_admin_entry','admin.php',1,2,'',0);
 INSERT INTO `tb_field` VALUES (80,84,'留言是否需要审核','guestbook_comments_check@','int','_getCheckboxValue','module_guestbook_check','-1',1,0,'',0);
 INSERT INTO `tb_field` VALUES (82,99,'评论是否需要审核','guestbook_comments_check@','int','_getCheckboxValue','module_comments_check','-1',1,0,'',0);
-INSERT INTO `tb_field` VALUES (83,100,'标题分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_show_title_separator','|',1,83,'',0);
+INSERT INTO `tb_field` VALUES (83,100,'标题分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_show_title_separator','-',1,83,'',0);
 INSERT INTO `tb_field` VALUES (84,100,'面包屑分割符','extField.textField(\'@input_name\', \'\', \'%@fieldLabel\', \'@value\')','raw\nnotblank','','sys_show_bread_separator','&raquo;',1,83,'',0);
 INSERT INTO `tb_field` VALUES (85,84,'留言最大回复层级','guestbook_comments_max_reply_level@','int','','module_guestbook_max_reply_level','-1',1,0,'',0);
 INSERT INTO `tb_field` VALUES (86,99,'评论最大回复层级','guestbook_comments_max_reply_level@','int','','module_comments_max_reply_level','-1',1,0,'',0);
@@ -99,17 +99,20 @@ INSERT INTO `tb_field` VALUES (101,99,'验证码字母长度','verifycode_length
 INSERT INTO `tb_field` VALUES (102,99,'验证码高度','verifycode_height@','int\nunsigned','','module_comments_verifycode_height','20',1,65,'',0);
 INSERT INTO `tb_field` VALUES (103,99,'验证码宽度','verifycode_width@','int\nunsigned','','module_comments_verifycode_width','40',1,64,'',0);
 INSERT INTO `tb_field` VALUES (104,99,'开启验证码','verifycode_enable@','int','_getCheckboxValue','module_comments_verifycode_enable','0',1,63,'',0);
-INSERT INTO `tb_field` VALUES (105,101,'留言评论是否需要审核','guestbook_comments_check','int','_getCheckboxValue','module_guestbook_comments_check','0',1,0,'',0);
+INSERT INTO `tb_field` VALUES (105,101,'留言评论是否需要审核','guestbook_comments_check','int','_getCheckboxValue','module_guestbook_comments_check','1',1,0,'',0);
 INSERT INTO `tb_field` VALUES (106,101,'留言评论最大回复层级','guestbook_comments_max_reply_level','int','','module_guestbook_comments_max_reply_level','5',1,0,'',0);
 INSERT INTO `tb_field` VALUES (107,99,'评论间隔','guestbook_comments_alternation@','int','','module_comments_alternation','-1',1,0,'',0);
 INSERT INTO `tb_field` VALUES (108,84,'留言间隔','guestbook_comments_alternation@','int','','module_guestbook_alternation','-1',1,0,'',0);
-INSERT INTO `tb_field` VALUES (109,101,'留言评论间隔','guestbook_comments_alternation@','int','','module_guestbook_comments_alternation','120',1,0,'',0);
+INSERT INTO `tb_field` VALUES (109,101,'留言评论间隔','guestbook_comments_alternation@','int','','module_guestbook_comments_alternation','0',1,0,'',0);
 INSERT INTO `tb_field` VALUES (110,101,'留言评论禁用用户名','guestbook_comments_disabled_username','string','','module_guestbook_comments_disabled_username','admin\nyablog\nmrmsl\nmsl',1,110,'',0);
 INSERT INTO `tb_field` VALUES (111,84,'留言禁用用户名','guestbook_comments_disabled_username@','string','','module_guestbook_disabled_username','',1,0,'',0);
 INSERT INTO `tb_field` VALUES (112,99,'评论禁用用户名','guestbook_comments_disabled_username@','string','','module_guestbook_disabled_username','',1,0,'',0);
-INSERT INTO `tb_field` VALUES (113,101,'禁止留言评论ip','guestbook_comments_disabled_ip','string','','module_guestbook_comments_disabled_ip','127.0.0.1\n192.168.124.1',1,113,'',0);
+INSERT INTO `tb_field` VALUES (113,101,'禁止留言评论ip','guestbook_comments_disabled_ip','string','','module_guestbook_comments_disabled_ip','',1,113,'',0);
 INSERT INTO `tb_field` VALUES (114,84,'禁止留言ip','guestbook_comments_disabled_ip@','string','','module_guestbook_disabled_ip','',1,0,'',0);
 INSERT INTO `tb_field` VALUES (115,99,'禁止评论ip','guestbook_comments_disabled_ip@','string','','module_comments_disabled_ip','',1,0,'',0);
+INSERT INTO `tb_field` VALUES (116,101,'管理员回复用户名','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','module_guestbook_comments_reply_admin_username','admin',1,0,'',0);
+INSERT INTO `tb_field` VALUES (117,101,'管理员回复email','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','email\nnotblank','','module_guestbook_comments_reply_admin_email','msl-138@163.com',1,0,'',0);
+INSERT INTO `tb_field` VALUES (118,101,'管理员回复头像','extField.fieldContainer([\'%@fieldLabel\', [\n    [null, \'@input_name\', \'PLEASE_ENTER,%@field_name\', \'\', \'@value\',{width: 320}],\n    \'@common_imgcache=\' + System.sys_base_common_imgcache\n]])','string\nnotblank','','module_guestbook_comments_reply_admin_img','@common_imgcacheimages/admin.png',1,0,'',0);
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
