@@ -157,55 +157,6 @@ class CommonController extends BaseController {
     }
 
     /**
-     * 获取留言评论设置值
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-05-22 10:56:07
-     *
-     * @param string $module 模块
-     * @param string $index  具体键值。默认''
-     *
-     * @return mixed 如果$index不为空，返回该健值，否则返回设置值数组
-     */
-    public function getGuestbookCommentsSetting($module, $index = '') {
-        static $data = array();
-
-        if (isset($data[$module])) {
-            return $index ? $data[$module][$index] : $data[$module];
-        }
-        else {
-            $data[$module] = array();
-        }
-
-        $key_arr = array(//验证码设置健=>取默认值
-            'check'             => -1,//是否审核
-            'alternation'       => -1,//间隔
-            'max_reply_level'   => -1,//最大回复层数
-            'disabled_username' => '',//禁用用户名
-            'disabled_ip'       => '',//禁止ip
-        );
-
-        $key      = $module . '_';
-
-        if('module_guestbook_comments' == $module) {//用空间换时间
-
-            foreach ($key_arr as $k => $v) {
-                $data[$module][$k] = sys_config($key . $k, 'Module');
-            }
-        }
-        else {
-            $default = $this->getGuestbookCommentsSetting('module_guestbook_comments');
-
-            foreach ($key_arr as $k => $v) {
-                $_v = sys_config($key . $k, 'Module');
-                $data[$module][$k] = $v == $_v ? $default[$k] : $_v;
-            }
-        }
-
-        return $index ? $data[$module][$index] : $data[$module];
-    }//end getGuestbookCommentsSetting
-
-    /**
      *
      *
      * @author          mrmsl <msl-138@163.com>

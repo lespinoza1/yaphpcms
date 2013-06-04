@@ -30,6 +30,7 @@ class CommentsModel extends CommonModel {
     protected $_db_fields = array (
         'type'           => array('filter' => 'int', 'validate' => array('_checkType#INVALID_PARAM,TYPE')),
         'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENTS'),//父id
+        'real_parent_id' => array('filter' => 'int', 'validate' => array('_checkLength#REAL,PARENT_ID,DATA#value|0')),
         //用户名
         'username'       => array('validate' => array('_checkUsername#PLEASE_ENTER,USERNAME', '_checkLength#USERNAME#value|0|20')),
         'email'          => array('filter' => 'email', 'validate' => array('_checkLength#EMAIL#value|0|50')),
@@ -106,7 +107,6 @@ class CommentsModel extends CommonModel {
         $pk_value = $data[$this->_pk_field];
 
         if ($parent_info = C('T_PARENT_INFO')) {//父
-            $node_arr           = explode(',', $parent_info['node']);
             $max_reply_level    = $this->_module->getGuestbookCommentsSetting(C('T_VERIFYCODE_MODULE'), 'max_reply_level');
 
             if ($max_reply_level == $parent_info['level']) {//最多5层回复
@@ -114,7 +114,10 @@ class CommentsModel extends CommonModel {
 
                 $parent_info['level']--;
                 $parent_info['node'] = substr($parent_info['node'], 0, strrpos($parent_info['node'], ','));
+                $node_arr  = explode(',', $parent_info['node']);
                 $parent_id = $node_arr[$max_reply_level > 2 ? $max_reply_level - 2 : 1];//父级id取第四个
+                $real_parent_id = $parent_info[$this->_pk_field];
+
             }
 
             $update = array(
@@ -124,10 +127,11 @@ class CommentsModel extends CommonModel {
 
             if (!empty($parent_id)) {
                 $update['parent_id'] = $parent_id;
+                $update['real_parent_id'] = $real_parent_id;
             }
 
             $this->where($this->_pk_field . '=' . $pk_value)->save($update);
-            $this->where(array($this->_pk_field => array('IN', $node_arr)))->save(array('last_reply_time' => time()));//更新最上层最后回复时间
+            $this->where(array($this->_pk_field => array('IN', $parent_info['node'])))->save(array('last_reply_time' => time()));//更新最上层最后回复时间
         }
         else {
 

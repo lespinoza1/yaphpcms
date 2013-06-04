@@ -651,64 +651,76 @@ Ext.define('Yap.controller.Comments', {
         Yap.cmp.viewport.setPageTitle(data.controller, 'list', title + System.sys_show_title_separator + document.title);
 
         me._viewStore = me._viewStore || Ext.create('Yap.store.Comments', {
-            url: me.getActionUrl(false, 'view', viewData)
+            url: me.getActionUrl(false, 'view', viewData),
+            listeners: {
+                load: log
+            }
         });
 
 
         if (!me._viewPanel) {
             var loadData = true;
-            me._viewPanel = Ext.create('Ext.Panel', {
-                autoScroll: true,
-                _viewData: viewData,
-                items: Ext.create('Ext.view.View', {
-                    style: 'padding: 8px',
-                    store: me._viewStore,
-                    tpl: [
-                        '<tpl for=".">',
-                            '{% out.push(this.loop(values)); %}',
-                        '</tpl>',
-                        {
-                            loop: function (data, isReply) {
-                                var html = [];
-                                html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
-                                html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
-                                html.push('    <div class="float-left0 comment-body">');
-                                html.push('        <p class="font-gray">');
-                                html.push('            <span class="float-right">', me.renderDatetime(data.add_time), '</span>');
+            seajs.use(['ueditor', 'ueditorConfig'], function() {
 
-                                data.user_homepage && html.push('<a href="{0}" class="link" target="_blank">{1}</a>'.format(data.user_homepage, data.username));
+                Ext.require('Yap.ux.Ueditor', function () {
+                    me._viewPanel = Ext.create('Ext.Panel', {
+                        autoScroll: true,
+                        _viewData: viewData,
+                        items: [Ext.create('Ext.view.View', {
+                            style: 'padding: 8px',
+                            store: me._viewStore,
+                            tpl: [
+                                '<tpl for=".">',
+                                    '{% out.push(this.loop(values)); %}',
+                                '</tpl>',
+                                {
+                                    loop: function (data, isReply) {
+                                        var html = [];
+                                        html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
+                                        html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
+                                        html.push('    <div class="float-left0 comment-body">');
+                                        html.push('        <p class="font-gray">');
+                                        html.push('            <span class="float-right">', me.renderDatetime(data.add_time), '</span>');
 
-                                html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
-                                html.push('        </p>');
-                                html.push('        ', data.content);
+                                        data.user_homepage && html.push('<a href="{0}" class="link" target="_blank">{1}</a>'.format(data.user_homepage, data.username));
 
-                                if (data.data) {
-                                    Ext.Array.each(data.data, function(item) {
-                                        html.push(this.loop(item, true));
-                                    }, this);
+                                        html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
+                                        html.push('        </p>');
+                                        html.push('        ', data.content);
+
+                                        if (data.data) {
+                                            Ext.Array.each(data.data, function(item) {
+                                                html.push(this.loop(item, true));
+                                            }, this);
+                                        }
+
+                                        html.push('</div></div>');
+
+                                        return html.join('');
+                                    }
                                 }
+                            ]
+                        }), me.replyFormPanel()]
+                    });
 
-                                html.push('</div></div>');
-
-                                return html.join('');
-                            }
-                        }
-                    ]
-                })
-            });
+            me._viewPanel._viewData = viewData;
+            me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
             me._viewStore.load();
-        }
+            Yap.cmp.card.layout.setActiveItem(me._viewPanel);
+                }, me);
+            });
+        };
 
         if (global('app_contextmenu_refresh')) {
             me._viewStore.load();
         }
-        else if (me._viewPanel._viewData != viewData) {
+        /*else if (false && me._viewPanel._viewData != viewData) {
             me._viewPanel._viewData = viewData;
             me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
             me._viewStore.load();
-        }
+        }*/
 
-        Yap.cmp.card.layout.setActiveItem(me._viewPanel);
+
     },//end viewComments
 
     //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Blog或Yap.model.Blog
