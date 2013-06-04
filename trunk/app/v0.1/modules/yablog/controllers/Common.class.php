@@ -71,7 +71,16 @@ class CommonController extends BaseController {
         foreach ($comments as $item) {
             $html .= '
             <div class="panel-list media comment-detail panel-comment' . ($is_reply ? ' panel-comment-reply' : '') . '" id="comment-' . $item['comment_id'] . '">
-                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="' . (!IS_LOCAL && $item['user_pic'] ? $item['user_pic'] : COMMON_IMGCACHE . 'images/guest.png') . '" />
+                <img class="media-object pull-left avatar avatar-level-' . $item['level'] . '" alt="" src="';
+
+            if ($item['user_pic']) {
+                $html .= $item['user_pic'];
+            }
+            else {
+                $html .= $item['email'] ? 'http://www.gravatar.com/avatar/' . md5($item['email']) . '?d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536' : COMMON_IMGCACHE . 'images/guest.png';
+            }
+
+            $html .= '" />
                 <div class="media-body">
                     <p class="muted">
                         <a href="#base-' . $item['comment_id'] . '" rel="nofollow" class="muted pull-right hide reply"><span class="icon-share-alt icon-gray"></span>' . L('REPLY') . '</a>
