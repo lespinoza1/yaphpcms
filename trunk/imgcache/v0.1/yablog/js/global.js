@@ -13,7 +13,8 @@ var HOME_FLAG = 'index',//首页标识
     MINIBLOG_FLAG = 'miniblog',//微博标识
     GUESTBOOK_FLAG = 'guestbook',//留言标识
     IS_OLD_IE = /msie (6|7|8)/i.test(navigator.userAgent),//IE6-8,不支持html5,比如<input required,<input type="url"等
-    _c = Math.random();
+    _c = Math.random(),
+    _hmt = [];
 
 //字符串格式化输出
 String.prototype.format = function() {
@@ -68,6 +69,9 @@ seajs.config({//seajs配置
         },
         cnzz: {//站长统计
             src: 'http://s11.cnzz.com/stat.php?id=5299476&web_id=5299476'
+        },
+        baidu_tongji: {//百度统计
+            src: 'http://hm.baidu.com/hm.js?b121831f7c6ae1ddddfa1a9d52aaa8e9'
         }
     }
 });
@@ -151,7 +155,7 @@ function bootstrap() {
 
     'function' == typeof(ON_LOAD) && ON_LOAD();//回调
 
-    seajs.use('cnzz');//站长统计
+    seajs.use(['baidu_tongji', 'cnzz']);//百度统计,站长统计
 }//end bootstrap
 
 /**
