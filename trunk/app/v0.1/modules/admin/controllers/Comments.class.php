@@ -474,8 +474,7 @@ class CommentsController extends CommonController {
             $msg = L('PLEASE_ENTER,REPLY,CONTENT');
         }
         elseif ('<p>' != substr($content, 0, 3)) {
-            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . 'substr(0,3)!=p';
-            $msg = L('REPLY,CONTENT,ERROR');
+            $content = '<p>' . $content . '</p>';
         }
 
         if (!empty($msg)) {//错误
