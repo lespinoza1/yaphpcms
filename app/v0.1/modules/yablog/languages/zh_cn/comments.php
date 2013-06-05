@@ -19,6 +19,6 @@ return array(
     'SECRET'                    => '保密',
     'SPACE'                     => '空格',
     'TRY_IT_LATER'              => '请稍后再试',
-    'TRY_IT_UNTIL'              => '请于<span style="color: #333; font-weight: bold;">{0}</span>后再试',
+    'TRY_IT_UNTIL'              => '请于 {0} 后再试',
     'YOUR_SUBMIT_HIGH_FREQUENCY'=> '您的%s过于频繁',
 );
