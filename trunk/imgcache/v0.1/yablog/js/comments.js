@@ -244,28 +244,39 @@ define('comments', [], function (require, exports, module) {
                 beforeSend: function () {
                     me._submitBtn = me._commentForm.find('#' + me._submitBtnId).attr('disabled', true);
                 },
-                ok: function (flag) {
-                    location.href = System.sys_base_site_url + 'msg.shtml?flag=' + flag;
+                ok: function () {
+                    location.href = System.sys_base_site_url + 'msg.shtml?success=1&type=' + (me._guestbookType == me._commentType ? 'guestbook' : 'comment');
                 },
                 success: function(data) {
+
                     if (data) {
 
                         if (data.success) {
-                            this.ok(data.success);
+                            this.ok();
+                        }
+                        else if (data.msg) {
+
+                            if (data.redirect) {
+                                lang('SERVER_ERROR', data.msg);
+                                this.error();
+                            }
+                            else {
+                                me._commentForm.trigger('error', data.msg);
+                            }
                         }
                         else {
-                            me._commentForm.trigger('error', data.msg || lang('SYSTEM_ERROR'));
+                            this.error();
                         }
                     }
                     else {
-                        me._commentForm.trigger('error', lang('SYSTEM_ERROR'));
+                        this.error();
                     }
                 },
                 complete: function() {
                     me._submitBtn.attr('disabled', false);
                 },
                 error: function() {
-                    me._commentForm.trigger('error', lang('SYSTEM_ERROR'));
+                    location.href = System.sys_base_site_url + 'msg.shtml?msg=' + encodeURIComponent(lang('SERVER_ERROR'));
                 }
             });
 
@@ -293,6 +304,7 @@ define('comments', [], function (require, exports, module) {
             }
 
             me._verifycodeModule = verifycodeModule;
+            me._commentType = type;
 
             var html = [];
             html.push('<form class="form-horizontal" id="' + me._commentFormId + '" method="post" action="' + System.sys_base_site_url + 'comments/add.shtml">');
