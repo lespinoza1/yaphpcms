@@ -176,6 +176,11 @@ class CommentsModel extends CommonModel {
         }
 
         $data['email'] = empty($data['email']) ? '' : strtolower($data['email']);
+
+        if (!empty($data['at_email']) && empty($data['email'])) {//勾选 有人回复我时通知我，邮箱却为空
+            $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . L(C('T_MODULE')) . ',' . L('AT_ME_NOTICE_ME') . ',' . L('EMAIL,IS_EMPTY'), E_USER_WARNING);
+            unset($data['at_email']);
+        }
     }
 
     /**
