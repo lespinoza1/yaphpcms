@@ -17,7 +17,6 @@ return array(
     'CN_BANGDING'       => '绑定',
     'CN_BANGDING_TIP'   => '勾选后，将绑定其电脑网卡信息，该管理员只能用IE浏览器在一台电脑登陆',
     'ENTER_REALNAME'    => '请输入真实姓名',
-    'MODULE_NAME_ADMIN' => '管理员',
     'RELEASE'           => '解除',
     'ROLE'              => '角色',
 );

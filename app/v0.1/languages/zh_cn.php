@@ -31,6 +31,7 @@ return array(
     'CN_WEI'            => '未',//by mrmsl on 2012-09-15 11:19:15
     'CN_XIUGAI'         => '修改',
     'CN_YI'             => '已',//by mrmsl on 2012-09-15 11:19:23
+    'CN_YU'             => '与',
     'CN_YOU'            => '由',
     'CN_YUAN'           => '原',
     'COMMENT'           => '评论',
