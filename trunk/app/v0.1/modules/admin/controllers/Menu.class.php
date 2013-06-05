@@ -79,11 +79,14 @@ class MenuController extends CommonController {
 
         $menu_id      = $menu_id === null  ? Filter::int($this->_pk_field, 'get') : $menu_id;
         $include_self = $include_self === null ? isset($_GET['include_self']) : $include_self;
+        $role_id      = $this->_admin_info['role_id'];
 
         foreach ($data as $menu) {
 
             //(站长或有该菜单权限)及(如果所属菜单，则干掉自己，否则显示状态) by mrmsl on 2012-08-16 11:55:22
-            if (($this->_admin_info['role_id'] == ADMIN_ROLE_ID || array_key_exists($this->_admin_info['role_id'], $menu['priv'])) && ($this->_unshift && !$include_self ? $menu_id != $menu[$this->_pk_field] : $menu['is_show'])) {
+            $has_priv   = ADMIN_ROLE_ID == $role_id || isset($menu['priv'][$role_id]);
+
+            if ($has_priv && ($this->_unshift && !$include_self ? $menu_id != $menu[$this->_pk_field] : $menu['is_show'])) {
                 $tree[$k] = array(
                     'menu_id' => $menu['menu_id'],
                     'parent_id' => $menu['parent_id'],
