@@ -741,16 +741,16 @@ ul.hot-blogs li {
   border-bottom: none;
 }
 .page-not-found,
-.system-infomation {
+.system-information {
   padding: 20px 350px;
   line-height: 150%;
 }
 .page-not-found h4,
-.system-infomation h4 {
+.system-information h4 {
   color: red;
   font-size: 18px;
 }
-.system-infomation h4 {
+.system-information h4 {
   color: #080;
 }
 #gototop {
