@@ -346,6 +346,7 @@ class CommentsController extends CommonController {
         $column         = Filter::string('column', 'get');//搜索字段
         $type           = Filter::int('type', 'get');//类型
         $status         = Filter::int('auditing', 'get');//状态
+        $reply_type     = Filter::int('admin_reply_type', 'get');//回复状态
         $where          = array();
         $column_arr     = array(
             'username'      => 'c.username',
@@ -383,6 +384,10 @@ class CommentsController extends CommonController {
 
         if (-1 != $status) {//状态
             $where['c.status'] = $status;
+        }
+
+        if (-1 != $reply_type) {//回复状态
+            $where['c.admin_reply_type'] = $reply_type;
         }
 
         isset($table) && $this->_model->join($table);

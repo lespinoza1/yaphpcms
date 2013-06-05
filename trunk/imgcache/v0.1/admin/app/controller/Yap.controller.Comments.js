@@ -26,6 +26,15 @@ Ext.define('Yap.controller.Comments', {
     ],
     /**
      * @property {Array}
+     * 回复类型
+     */
+    replyArr: [
+        ['0', lang('CN_WEI,REPLY')],
+        ['1', lang('CN_YI,REPLY')],
+        ['2', lang('MODULE_NAME_ADMIN,REPLY')]
+    ],
+    /**
+     * @property {Array}
      * 状态
      */
     statusArr: [TEXT.gray(lang('CN_WEI,AUDITING')), TEXT.green(lang('CN_YI,PASS')), TEXT.red(lang('CN_WEI,PASS'))],
@@ -33,7 +42,7 @@ Ext.define('Yap.controller.Comments', {
      * @cfg {String}
      * 查询字段
      */
-    queryField: 'sort,order,date_start,date_end,column,keyword,type,auditing,page,match_mode',//查询字段
+    queryField: 'sort,order,date_start,date_end,column,keyword,type,auditing,admin_reply_type,page,match_mode',//查询字段
 
     /**
      * @inheritdoc Yap.controller.Base#addAction
@@ -227,12 +236,26 @@ Ext.define('Yap.controller.Comments', {
             header: lang('type'),//类型
             align: 'center',
             dataIndex: 'type',
-            width: 70,
+            width: 80,
             renderer: function(v, cls, record) {
-                v = me.typeArr[v][1];
-                var title = record.get('title');
+                var title = record.get('title'),
+                replyType = record.get('admin_reply_type'),
+                html = me.typeArr[v][1];
 
-                return title ? '<a href="{0}" target="_blank" class="link" title="{1}">{2}</a>'.format(record.get('link_url'), title, v) : v;
+                html = title ? '<a href="{0}" target="_blank" class="link" title="{1}">{2}</a>'.format(record.get('link_url'), title, html) : html;
+                html += '<br />';
+
+                if (2 == replyType) {
+                    html += TEXT.gray(me.replyArr[2][1]);
+                }
+                else if (1 == replyType) {
+                    html += TEXT.green(me.replyArr[1][1]);
+                }
+                else {
+                    html += TEXT.red(me.replyArr[0][1]);
+                }
+
+                return html;
             },
             sortable: false
         }, {
@@ -301,6 +324,7 @@ Ext.define('Yap.controller.Comments', {
         data.match_mode = data.match_mode || 'eq';//匹配模式
         data.type = Ext.valueFrom(data.type, '-1');//类型
         data.auditing = Ext.valueFrom(data.auditing, '-1');//审核状态
+        data.admin_reply_type = Ext.valueFrom(data.admin_reply_type, '-1');//回复状态
         data.page = intval(data.page) || 1;//页
 
         var options = {
@@ -486,8 +510,9 @@ Ext.define('Yap.controller.Comments', {
      * @return {Object} Ext.tool.Toolbar工具栏配置项
      */
     tbar: function(data) {
-        var me = this, extField = Yap.Field.field(), extCombo = Yap.Field.combo(), typeArr = Ext.Array.clone(me.typeArr);
+        var me = this, extField = Yap.Field.field(), extCombo = Yap.Field.combo(), typeArr = Ext.Array.clone(me.typeArr), replyArr = Ext.Array.clone(me.replyArr);
         typeArr.unshift(['-1', lang('TYPE')]);
+        replyArr.unshift(['-1', lang('REPLY,STATUS')]);
 
         return {
             xtype: 'toolbar',
@@ -531,6 +556,11 @@ Ext.define('Yap.controller.Comments', {
             }),
             extCombo.auditing(),//审核状态
             {
+                xtype: 'combobox',//回复状态
+                width: 90,
+                itemId: 'admin_reply_type',
+                store: replyArr
+            }, {
                 xtype: 'combobox',//搜索字段
                 width: 80,
                 itemId: 'column',
@@ -681,7 +711,7 @@ Ext.define('Yap.controller.Comments', {
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'blog_id', 'content', 'add_time', 'last_reply_time', 'username', 'user_ip', 'username', 'email','user_homepage', 'status', 'type', 'at_email', 'province', 'city', 'is_admin', 'title', 'link_url', 'data'],
+            fields: [this.idProperty, 'blog_id', 'content', 'add_time', 'last_reply_time', 'username', 'user_ip', 'username', 'email','user_homepage', 'status', 'type', 'at_email', 'province', 'city', 'is_admin', 'title', 'link_url', 'data', 'admin_reply_type'],
             /**
              * @cfg {String}
              * 主键
