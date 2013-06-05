@@ -23,6 +23,7 @@ class CommentsModel extends CommonModel {
         'content'           => '_setContent',
         'status'            => '_setStatus',
         'at_email'          => '_getCheckboxValue',//有人回复时通知我
+        'real_parent_id'    => array('parent_id', Model::MODEL_INSERT, 'field', null),//实际回复id
     );
     /**
      * @var array $_db_fields 表字段
@@ -116,7 +117,6 @@ class CommentsModel extends CommonModel {
                 $parent_info['node'] = substr($parent_info['node'], 0, strrpos($parent_info['node'], ','));
                 $node_arr  = explode(',', $parent_info['node']);
                 $parent_id = $node_arr[$max_reply_level > 2 ? $max_reply_level - 2 : 1];//父级id取第四个
-                $real_parent_id = $parent_info[$this->_pk_field];
 
             }
 
@@ -127,7 +127,6 @@ class CommentsModel extends CommonModel {
 
             if (!empty($parent_id)) {
                 $update['parent_id'] = $parent_id;
-                $update['real_parent_id'] = $real_parent_id;
             }
 
             $this->where($this->_pk_field . '=' . $pk_value)->save($update);

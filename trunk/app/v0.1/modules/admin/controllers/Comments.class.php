@@ -514,6 +514,7 @@ class CommentsController extends CommonController {
             $add  = true;
             $data = $data + array(
                 'parent_id'         => $comment_id,
+                'real_parent_id'    => $comment_id,
                 'add_time'          => time(),
                 'username'          => sys_config('module_guestbook_comments_reply_admin_username', 'Module'),
                 'email'             => sys_config('module_guestbook_comments_reply_admin_email', 'Module'),
@@ -543,7 +544,6 @@ class CommentsController extends CommonController {
                 $comment_info['node'] = substr($comment_info['node'], 0, strrpos($comment_info['node'], ','));
                 $node_arr  = explode(',', $comment_info['node']);
                 $parent_id = $node_arr[$max_reply_level > 2 ? $max_reply_level - 2 : 1];//父级id取第四个
-                $real_parent_id = $comment_id;
             }
 
             $update = array(
@@ -553,7 +553,6 @@ class CommentsController extends CommonController {
 
             if (!empty($parent_id)) {
                 $update['parent_id'] = $parent_id;
-                $update['real_parent_id'] = $real_parent_id;
             }
 
             C('_FACADE_SKIP', true);
