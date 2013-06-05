@@ -227,8 +227,7 @@ Ext.define('Yap.controller.Comments', {
 
                     html.push('<p class="appactioncolumn">');
                     html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="edit">', lang('EDIT'), '</span>| ');
-                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="view">', lang('CN_CHAKAN'), '</span>| ');
-                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="reply">', lang('REPLY'), '</span>| ');
+                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="view">', lang('CN_CHAKAN,CN_YU,REPLY'), '</span>| ');
                     html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="delete">', lang('DELETE'), '</span>');
                     html.push('</p>');
 
