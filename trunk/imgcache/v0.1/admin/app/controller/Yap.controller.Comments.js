@@ -61,6 +61,32 @@ Ext.define('Yap.controller.Comments', {
     },
 
     /**
+     * 登陆查看面板后置操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-05 09:05:06
+     *
+     * @private
+     *
+     * @param {String} viewData 面板数据，用于判断是否为相同评论id
+     *
+     * @return {void} 无返回值
+     */
+    afterViewPanel: function (viewData) {
+
+        if (global('app_contextmenu_refresh')) {
+            this._viewStore.load();
+        }
+        else if (this._viewPanel._viewData != viewData) {
+            this._viewPanel._viewData = viewData;
+            this._viewStore.proxy.url = this.getActionUrl(false, 'view', viewData);
+            this._viewStore.load();
+        }
+
+        Yap.cmp.card.layout.setActiveItem(this._viewPanel);
+    },
+
+    /**
      * 审核
      *
      * @author          mrmsl <msl-138@163.com>
@@ -381,22 +407,6 @@ Ext.define('Yap.controller.Comments', {
     },//end afreshIp
 
     /**
-     * 回复留言评论
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-06-01 15:31:27
-     *
-     * @private
-     *
-     * @param {Object}  record      record数据
-     *
-     * @return {void} 无返回值
-     */
-    replyComments: function (record) {
-        this.replyWin(record);
-    },//end viewComments
-
-    /**
      * @inheritdoc Yap.controller.Admin#formField
      */
     replyFormFields: function () {
@@ -441,53 +451,6 @@ Ext.define('Yap.controller.Comments', {
 
         return me._replyForm;
     },//end replyFormPanel
-
-    /**
-     * 回复弹出窗口
-     *
-     * @author          mrmsl <msl-138@163.com>
-     * @date            2013-06-03 21:26:46
-     *
-     * @param {Object}  record      record数据
-     *
-     * @return {void} 无返回值
-     */
-    replyWin: function(record) {
-        var me = this;
-
-        if (!this._win) {//未定义
-            seajs.use(['ueditor', 'ueditorConfig'], function() {
-
-                Ext.require('Yap.ux.Ueditor', function () {
-                    me.ueditor = true;
-                    me._win = Ext.create('Ext.window.Window', {
-                        title: lang('REPLY,GUESTBOOK_COMMENTS'),
-                        border: false,
-                        modal: true,
-                        constrain: true,
-                        closeAction: 'hide',
-                        fit: true,
-                        width: 800,
-                        height: 300,
-                        items: me.replyFormPanel()
-                    });
-                    this.setReplyValue(record);
-                }, me);
-            });
-        }
-        else {
-            this.setReplyValue(record);
-        }
-    },
-
-    setReplyValue: function(record) {
-        this._win.setTitle(lang('REPLY') + ' ' + record.get('username'));
-        this._win.show();
-        log(this._replyForm.getForm().setValues({
-            comment_id: record.get(this.idProperty),
-            add_time: record.get('add_time')
-        }), this._replyForm.getValues());
-    },
 
     /**
      * 列表页store
@@ -631,71 +594,78 @@ Ext.define('Yap.controller.Comments', {
             }
         });
 
-        if (!me._viewPanel) {
-            var loadData = true;
-
-            seajs.use(['Yap.ux.Ueditor', 'ueditor', 'ueditorConfig'], function () {
-
-                if (!me._viewPanel) {
-                    me._viewPanel = Ext.create('Ext.Panel', {
-                        autoScroll: true,
-                        _viewData: viewData,
-                        items: [
-                            Ext.create('Ext.view.View', {
-                                style: 'padding: 8px',
-                                store: me._viewStore,
-                                tpl: [
-                                    '<tpl for=".">',
-                                        '{% out.push(this.loop(values)); %}',
-                                    '</tpl>',
-                                    {
-                                        loop: function (data, isReply) {
-                                            var html = [];
-                                            html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
-                                            html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
-                                            html.push('    <div class="float-left0 comment-body">');
-                                            html.push('        <p class="font-gray">');
-                                            html.push('            <span class="float-right">', me.renderDatetime(data.add_time), '</span>');
-
-                                            data.user_homepage && html.push('<a href="{0}" class="link" target="_blank">{1}</a>'.format(data.user_homepage, data.username));
-
-                                            html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
-                                            html.push('        </p>');
-                                            html.push('        ', data.content);
-
-                                            if (data.data) {
-                                                Ext.Array.each(data.data, function(item) {
-                                                    html.push(this.loop(item, true));
-                                                }, this);
-                                            }
-
-                                            html.push('</div></div>');
-
-                                            return html.join('');
-                                        }
-                                    }
-                                ]
-                            }),
-                            me.replyFormPanel()
-                        ]
-                    });
-
-                    me._viewStore.load();
-                }
-
-                if (global('app_contextmenu_refresh')) {
-                    me._viewStore.load();
-                }
-                else if (me._viewPanel._viewData != viewData) {
-                    me._viewPanel._viewData = viewData;
-                    me._viewStore.proxy.url = me.getActionUrl(false, 'view', viewData);
-                    me._viewStore.load();
-                }
-
-                Yap.cmp.card.layout.setActiveItem(me._viewPanel);
-            });//end seajs.use
+        if (me._viewPanel) {
+            me.afterViewPanel(viewData);
+        }
+        else {
+            me.viewPanel(viewData);
         }
     },//end viewComments
+
+    /**
+     * 登陆面板
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-05 09:06:59
+     *
+     * @private
+     *
+     * @param {String} viewData 面板数据，用于判断是否为相同评论id
+     *
+     * @return {void} 无返回值
+     */
+    viewPanel: function (viewData) {
+        var me = this;
+
+        seajs.use(['Yap.ux.Ueditor', 'ueditor', 'ueditorConfig'], function () {
+
+            me._viewPanel = Ext.create('Ext.Panel', {
+                autoScroll: true,
+                _viewData: viewData,
+                items: [
+                    Ext.create('Ext.view.View', {
+                        style: 'padding: 8px',
+                        store: me._viewStore,
+                        tpl: [
+                            '<tpl for=".">',
+                                '{% out.push(this.loop(values)); %}',
+                            '</tpl>',
+                            {
+                                loop: function (data, isReply) {
+                                    var html = [];
+                                    html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
+                                    html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
+                                    html.push('    <div class="float-left0 comment-body">');
+                                    html.push('        <p class="font-gray">');
+                                    html.push('            <span class="float-right">', me.renderDatetime(data.add_time), '</span>');
+
+                                    data.user_homepage && html.push('<a href="{0}" class="link" target="_blank">{1}</a>'.format(data.user_homepage, data.username));
+
+                                    html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
+                                    html.push('        </p>');
+                                    html.push('        ', data.content);
+
+                                    if (data.data) {
+                                        Ext.Array.each(data.data, function(item) {
+                                            html.push(this.loop(item, true));
+                                        }, this);
+                                    }
+
+                                    html.push('</div></div>');
+
+                                    return html.join('');
+                                }
+                            }
+                        ]
+                    }),
+                    me.replyFormPanel()
+                ]
+            });
+
+            me._viewStore.load();
+            me.afterViewPanel(viewData);
+        });//end seajs.use
+    },//end viewPanel
 
     //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Blog或Yap.model.Blog
     /**
