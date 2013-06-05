@@ -43,6 +43,7 @@ return array(
     'MEMO'              => '备注',
     'MENU'              => '菜单',
     'MODULE'            => '模块',
+    'MODULE_NAME_ADMIN' => '管理员',
     'MOVE'              => '移动',
     'NO_PERMISSION'     => '您没有权限执行该操作',
     'OBJECT'            => '对象',

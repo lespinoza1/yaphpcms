@@ -466,8 +466,8 @@ class CommentsController extends CommonController {
             $msg = L('MODULE_NAME,NOT_EXIST');
         }
         elseif (COMMENT_REPLY_TYPE_ADMIN == $comment_info['admin_reply_type']) {//
-            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . '.admin_reply_type=' . COMMENT_REPLY_TYPE_ADMIN;
-            $msg = L('INVALID,REPLY');
+            $msg = L('MODULE_NAME_ADMIN,REPLY,%。,CAN_NOT,REPLY');
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . '.admin_reply_type=' . COMMENT_REPLY_TYPE_ADMIN . ',' . $msg;
         }
         elseif (!$content = Filter::raw('content')) {
             $log = __METHOD__ . ': ' . __LINE__ . ',' . L('REPLY,MODULE_NAME') . ".{$this->_pk_field}" . L('REPLY,CONTENT,IS_EMPTY');
