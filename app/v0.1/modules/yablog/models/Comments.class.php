@@ -89,6 +89,7 @@ class CommentsModel extends CommonModel {
         }
 
         $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $log);
+        C('T_REDIRECT', true);
 
         return $error;
     }//end _checkOther
@@ -188,21 +189,26 @@ class CommentsModel extends CommonModel {
      * @return true|string true存在，否则错误信息
      */
     protected function _checkBlog($blog_id) {
+        $result = true;
+        $type   = C('T_TYPE');
         $table  = array(
             COMMENT_TYPE_BLOG       => TB_BLOG,
             COMMENT_TYPE_MINIBLOG   => TB_MINIBLOG,
         );
-        $type = C('T_TYPE');
 
         if (COMMENT_TYPE_GUESTBOOK == $type) {//留言,blog_id=0
-            return !$blog_id;
+            $result = !$blog_id;
         }
         elseif (!isset($table[$type])) {
-            return false;
+            $result = false;
+        }
+        elseif (!$blog_id || !$this->table($table[$type])->where('blog_id=' . $blog_id)->find()) {
+            $result = false;
         }
 
+        !$result && C('T_REDIRECT', true);
 
-        return $blog_id && $this->table($table[$type])->where('blog_id=' . $blog_id)->find();
+        return $result;
     }
 
     /**
@@ -233,10 +239,14 @@ class CommentsModel extends CommonModel {
 
             $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',status=0' . var_export($parent_info, true));
 
-            return L('INVALID,REPLY');
+            $error = L('INVALID,REPLY');
         }
 
-        return L('REPLY,NOT_EXIST');
+        $error = L('REPLY,NOT_EXIST');
+
+        C('T_REDIRECT', true);
+
+        return $error;
     }
 
     /**
@@ -261,6 +271,8 @@ class CommentsModel extends CommonModel {
             return true === $check_other ? true : $check_other;
         }
 
+        C('T_REDIRECT', true);
+
         return false;
     }
 
@@ -282,9 +294,10 @@ class CommentsModel extends CommonModel {
 
         if ($disabled_username = $this->_module->getGuestbookCommentsSetting($module = C('T_VERIFYCODE_MODULE'), 'disabled_username')) {
 
-            if (in_array(strtolower($username), explode(EOL_LF, strtolower($disabled_username)))) {
+            if (in_array(strtolower($username), explode(PHP_EOL, strtolower($disabled_username)))) {
                 $error = L('DISABLED,' . C('T_MODULE') . ',USERNAME') . $username;
                 $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $module . $error);
+                C('T_REDIRECT', true);
 
                 return $error;
             }

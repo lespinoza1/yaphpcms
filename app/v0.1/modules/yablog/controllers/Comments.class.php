@@ -29,12 +29,12 @@ class CommentsController extends CommonController {
     public function addAction() {
         $check = $this->_model->checkCreate();//自动创建数据
 
-        true !== $check && $this->_ajaxReturn(false, $check);//未通过验证
+        true !== $check && $this->_ajaxReturn(array('success' => false, 'msg' => $check, 'redirect' => C('T_REDIRECT')));//未通过验证
 
         $this->_model->startTrans()->add();
 
         clear_verifycoe(C('T_VERIFYCODE_MODULE'));
 
-        $this->_ajaxReturn(COMMENT_TYPE_GUESTBOOK == C('T_TYPE') ? 'guestbook' : 'comment');
+        $this->_ajaxReturn(true);
     }
 }
