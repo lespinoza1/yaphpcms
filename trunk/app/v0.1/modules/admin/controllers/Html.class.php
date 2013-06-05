@@ -351,7 +351,7 @@ class HtmlController extends CommonController {
                 $error .= $this->_build($item);
             }
 
-           $error && $this->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $error . L('NOT_EXIST');
+           $error && $this->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $error . L('NOT_EXIST'));
         }
 
         $this->_successAction();
