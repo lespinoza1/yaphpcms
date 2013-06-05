@@ -193,10 +193,10 @@ define('comments', [], function (require, exports, module) {
                 return false;
             }
 
-            if (me._commentForm.find('input[name=at_email]').attr('checked')) {
+            if (me._commentForm.find('input[name=at_email]').prop('checked')) {
                 var el = me._commentForm.find('input[name=email]'), email = el.val().trim();
 
-                if (!el.val().trim()) {//勾选 有人回复我时通知我，邮箱却为空
+                if (!email) {//勾选 有人回复我时通知我，邮箱却为空
                     me._commentForm.trigger('error', [lang('PLEASE_ENTER,EMAIL'), el]);
 
                     return false;
