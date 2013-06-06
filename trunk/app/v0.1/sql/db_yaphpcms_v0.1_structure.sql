@@ -254,7 +254,7 @@ CREATE TABLE `tb_mail_history` (
   `content` text NOT NULL COMMENT '邮件内容',
   PRIMARY KEY (`history_id`),
   KEY (`template_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='邮件模板表 by mashanling on 2013-06-06 11:00:50';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=gbk COMMENT='邮件模板表 by mashanling on 2013-06-06 11:00:50';
 
 /*tb_mail_template邮件模板表*/
 CREATE TABLE `tb_mail_template` (
