@@ -21,6 +21,10 @@ Ext.define('Yap.controller.Mail', {
      */
     nameColumn: 'template_name',//名称字段
 
+    constructor: function() {//构造函数
+        this.defineModel().defineStore();
+    },
+
     /**
      * @inheritdoc Yap.controller.Base#listAction
      */
@@ -58,10 +62,10 @@ Ext.define('Yap.controller.Mail', {
                 lang('LT_BYTE').format(20) + '，' + lang('CN_TO_BYTE')
             ]]),
             extField.fieldContainer(['MAIL_SUBJECT', [//邮件主题
-                [null, this.nameColumn, 'PLEASE_ENTER,MAIL_SUBJECT'],
+                [null, 'subject', 'PLEASE_ENTER,MAIL_SUBJECT', '', '', {width: 400}],
                 lang('LT_BYTE').format(150)
             ]]),
-            extField.textarea('content', 'PLEASE_ENTER,MAIL_CONTENT', 'MAIL_CONTENT', '', { width: 1000, height: 500 }),//模板内容
+            extField.textarea('content', 'PLEASE_ENTER,MAIL_CONTENT', 'MAIL_CONTENT', '', { width: 1000, height: 300 }),//模板内容
             extField.sortOrderField(),//排序
             extField.memoField(),//备注
             extField.textareaComment(lang('LT_BYTE').format(60)),//备注提示
@@ -110,11 +114,29 @@ Ext.define('Yap.controller.Mail', {
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
-                    me['delete'](record, lang('YOU_CONFIRM,DELETE') + '<span class="font-bold font-red">' + htmlspecialchars(record.get(me.nameColumn)) + '</span>');
+                    me['delete'](record, '<span class="font-bold font-red">' + htmlspecialchars(record.get(me.nameColumn)) + '</span>');
                 }
             }]
         }];
     },//end getListColumns
+
+    /**
+     * 分页条
+     *
+     * @param {Object} data 当前标签数据
+     *
+     * @return {Object} Ext.toolbar.Paging配置项
+     */
+    pagingBar: function(data) {
+        var me = this;
+
+        return {
+            xtype: 'pagingtoolbar',
+            dock: 'bottom',
+            store: this.store(),
+            displayInfo: true
+        };
+    },//end pagingBar
 
     /**
      * @inheritdoc Yap.controller.Admin#store
@@ -141,7 +163,82 @@ Ext.define('Yap.controller.Mail', {
             dock: 'top',
             items: this.deleteItem()
         }
-    }//end tbar
+    },//end tbar
+
+    //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Mail或Yap.model.Mail
+    /**
+     * @inheritdoc Yap.controller.Field#defineModel
+     */
+    defineModel: function() {
+        /**
+         * 博客数据模型
+         */
+        Ext.define('Yap.model.Mail', {
+            extend: 'Ext.data.Model',
+            /**
+             * @cfg {Array}
+             * 字段
+             */
+            fields: [this.idProperty, 'subject', 'content', 'add_time', 'template_name', 'update_time', 'memo', 'sort_order'],
+            /**
+             * @cfg {String}
+             * 主键
+             */
+            idProperty: this.idProperty
+        });
+
+        return this;
+    },
+
+    /**
+     * @inheritdoc Yap.controller.Field#defineStore
+     * @member Yap.controller.Mail
+     */
+    defineStore: function() {
+        /**
+         * 博客数据容器
+         */
+        Ext.define('Yap.store.Mail', {
+            extend: 'Ext.data.Store',
+            /**
+             * @cfg {Boolean}
+             * 自动消毁
+             */
+            autoDestroy: true,
+
+            /**
+             * @cfg {Object/String}
+             * 模型
+             */
+            model: 'Yap.model.Mail',
+            /**
+             * @cfg {Object}
+             * proxy
+             */
+            proxy: {
+                type: C.dataType,
+                url: this.getActionUrl(false, 'list'),
+                reader: C.dataReader(),
+                listeners: exception(),//捕获异常 by mrmsl on 2012-07-08 21:44:36
+                messageProperty: 'msg',
+                simpleSortMode: true
+            },
+            //增加排序，以防点击列表头部排序时，多余传参，出现不必要的错误 by mrmsl on 2012-07-27 16:21:54
+            /**
+             * @cfg {Object}
+             * sorters
+             */
+            sorters: {
+                property : 'sort_order',
+                direction: 'ASC'
+            },
+            constructor: function(config) {//构造函数
+                this.callParent([config || {}]);
+            }
+        });
+
+        return this;
+    }//end defineStore
 });
 
 //放到最后，以符合生成jsduck类说明
