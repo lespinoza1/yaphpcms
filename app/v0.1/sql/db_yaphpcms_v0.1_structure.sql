@@ -230,6 +230,45 @@ CREATE TABLE `tb_log` (
   KEY `admin_id` (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='系统日志表 by mashanling on 2012-12-27 11:38:36';
 
+/*tb_mail_template邮件模板表*/
+CREATE TABLE `tb_mail_template` (
+  `template_id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `template_name` varchar(20) NOT NULL DEFAULT '' COMMENT '',
+  `sort_order` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '排序,越小越靠前',
+  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后登陆时间',
+  `memo` varchar(60) NOT NULL DEFAULT '' COMMENT '备注',
+  `subject` varchar(150) NOT NULL DEFAULT '' COMMENT '',
+  `content` text NOT NULL COMMENT '',
+  PRIMARY KEY (`template_id`),
+  UNIQUE KEY (`template_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='邮件模板表 by mashanling on 2013-06-06 10:00:44';
+
+/*tb_mail_history邮件发送历史表*/
+CREATE TABLE `tb_mail_history` (
+  `history_id` mediumint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `template_id` tinyint(2) unsigned NOT NULL DEFAULT 0 COMMENT '邮件模板id',
+  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发送时间',
+  `email` varchar(50) NOT NULL DEFAULT '' COMMENT '发送邮箱',
+  `subject` varchar(150) NOT NULL DEFAULT '' COMMENT '邮件主题',
+  `content` text NOT NULL COMMENT '邮件内容',
+  PRIMARY KEY (`history_id`),
+  KEY (`template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='邮件模板表 by mashanling on 2013-06-06 11:00:50';
+
+/*tb_mail_template邮件模板表*/
+CREATE TABLE `tb_mail_template` (
+  `template_id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `template_name` varchar(20) NOT NULL DEFAULT '' COMMENT '模板名称',
+  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `memo` varchar(60) NOT NULL DEFAULT '' COMMENT '备注',
+  `subject` varchar(150) NOT NULL DEFAULT '' COMMENT '邮件主题',
+  `content` text NOT NULL COMMENT '模板内容',
+  PRIMARY KEY (`template_id`),
+  UNIQUE KEY (`template_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk COMMENT='邮件模板表 by mashanling on 2013-06-06 10:00:44';
+
 /*tb_menu菜单表*/
 CREATE TABLE `tb_menu` (
   `menu_id` smallint(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',

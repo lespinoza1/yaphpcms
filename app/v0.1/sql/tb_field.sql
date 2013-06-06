@@ -104,7 +104,7 @@ INSERT INTO `tb_field` VALUES (106,101,'留言评论最大回复层级','guestbo
 INSERT INTO `tb_field` VALUES (107,99,'评论间隔','guestbook_comments_alternation@','int','','module_comments_alternation','-1',1,0,'',0);
 INSERT INTO `tb_field` VALUES (108,84,'留言间隔','guestbook_comments_alternation@','int','','module_guestbook_alternation','-1',1,0,'',0);
 INSERT INTO `tb_field` VALUES (109,101,'留言评论间隔','guestbook_comments_alternation@','int','','module_guestbook_comments_alternation','0',1,0,'',0);
-INSERT INTO `tb_field` VALUES (110,101,'留言评论禁用用户名','guestbook_comments_disabled_username','string','','module_guestbook_comments_disabled_username','admin\nyablog\nmrmsl\nmsl',1,110,'',0);
+INSERT INTO `tb_field` VALUES (110,101,'留言评论禁用用户名','guestbook_comments_disabled_username','string','','module_guestbook_comments_disabled_username','admin\nyablog\nmrmsl',1,110,'',0);
 INSERT INTO `tb_field` VALUES (111,84,'留言禁用用户名','guestbook_comments_disabled_username@','string','','module_guestbook_disabled_username','',1,0,'',0);
 INSERT INTO `tb_field` VALUES (112,99,'评论禁用用户名','guestbook_comments_disabled_username@','string','','module_guestbook_disabled_username','',1,0,'',0);
 INSERT INTO `tb_field` VALUES (113,101,'禁止留言评论ip','guestbook_comments_disabled_ip','string','','module_guestbook_comments_disabled_ip','',1,113,'',0);
@@ -112,7 +112,13 @@ INSERT INTO `tb_field` VALUES (114,84,'禁止留言ip','guestbook_comments_disab
 INSERT INTO `tb_field` VALUES (115,99,'禁止评论ip','guestbook_comments_disabled_ip@','string','','module_comments_disabled_ip','',1,0,'',0);
 INSERT INTO `tb_field` VALUES (116,101,'管理员回复用户名','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','module_guestbook_comments_reply_admin_username','admin',1,0,'',0);
 INSERT INTO `tb_field` VALUES (117,101,'管理员回复email','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','email\nnotblank','','module_guestbook_comments_reply_admin_email','msl-138@163.com',1,0,'',0);
-INSERT INTO `tb_field` VALUES (118,101,'管理员回复头像','extField.fieldContainer([\'%@fieldLabel\', [\n    [null, \'@input_name\', \'PLEASE_ENTER,%@field_name\', \'\', \'@value\',{width: 320}],\n    \'@common_imgcache=\' + System.sys_base_common_imgcache\n]])','string\nnotblank','','module_guestbook_comments_reply_admin_img','@common_imgcacheimages/admin.png',1,0,'',0);
+INSERT INTO `tb_field` VALUES (118,101,'管理员回复头像','extField.fieldContainer([\'%@fieldLabel\', [\n    [null, \'@input_name\', \'PLEASE_ENTER,%@field_name\', \'\', \'@value\',{width: 320}],\n    \'@common_imgcache@=\' + System.sys_base_common_imgcache\n]])','string\nnotblank','','module_guestbook_comments_reply_admin_img','@common_imgcache@images/admin.png',1,0,'',0);
+INSERT INTO `tb_field` VALUES (119,45,'邮件发送方法','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_mail_method','smtp',1,119,'',0);
+INSERT INTO `tb_field` VALUES (120,45,'smtp服务器','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_mail_smtp','smtp.163.com',1,120,'',0);
+INSERT INTO `tb_field` VALUES (121,45,'smtp端口','extField.numberField(\'@input_name\',\'\', \'%@fieldLabel\', \'@value\', {minValue:0})','int\nunsigned','','sys_mail_smtp_port','25',1,121,'',0);
+INSERT INTO `tb_field` VALUES (122,45,'邮箱帐号','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','email\nnotblank','','sys_mail_email','yablog@163.com',1,122,'',0);
+INSERT INTO `tb_field` VALUES (123,45,'邮箱密码','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\', {inputType: \'password\'})','string\nnotblank','','sys_mail_password','mrmsl170066918',1,123,'',0);
+INSERT INTO `tb_field` VALUES (125,45,'显示发件人姓名','extField.textField(\'@input_name\', \'PLEASE_ENTER,%@field_name\', \'%@fieldLabel\', \'@value\')','string\nnotblank','','sys_mail_from_name','mrmsl',1,125,'',0);
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
