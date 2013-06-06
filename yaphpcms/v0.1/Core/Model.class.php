@@ -161,7 +161,7 @@ class Model {
 
             foreach ($data as $key => $val) {
 
-                if (!in_array($key, $this->_fields, true) || 0 === strpos($key, '_')) {//_开头
+                if ((!in_array($key, $this->_fields, true) || 0 === strpos($key, '_')) && !isset($this->_auto[$key])) {//_开头
                     unset($data[$key]);
                 }
                 elseif (C('DB_FIELDTYPE_CHECK') && is_scalar($val)) {//字段类型检查
