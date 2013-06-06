@@ -299,7 +299,9 @@ class CommentsModel extends CommonModel {
 
         if ($disabled_username = $this->_module->getGuestbookCommentsSetting($module = C('T_VERIFYCODE_MODULE'), 'disabled_username')) {
 
-            if (in_array(strtolower($username), explode(EOL_LF, strtolower($disabled_username)))) {
+            $separator = false === strpos($disabled_username, EOL_CRLF) ? EOL_LF : EOL_CRLF;//公司64位\n，家里32位\r\n,奇了怪了
+
+            if (in_array(strtolower($username), explode($separator, strtolower($disabled_username)))) {
                 $error = L('DISABLED,' . C('T_MODULE') . ',USERNAME') . $username;
                 $this->_module->triggerError(__METHOD__ . ': ' . __LINE__ . ',' . $module . $error);
                 C('T_REDIRECT', true);
