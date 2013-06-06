@@ -100,7 +100,8 @@ class MailController extends CommonController {
      * @return void 无返回值
      */
     public function listAction() {
-        $data = array_values($this->_getCache());
-        $this->_ajaxReturn(true, '', $data);
+        $data = $this->_getCache();
+        $data = $data ? array_values($data) : array();
+        $this->_ajaxReturn(true, '', $data, count($data));
     }
 }
