@@ -51,7 +51,7 @@ INSERT INTO `tb_menu` VALUES (79,24,'模块设置','module','#',1,79,2,'24,79','
 INSERT INTO `tb_menu` VALUES (80,79,'管理员模块','module','admin',1,80,3,'24,79,80','');
 INSERT INTO `tb_menu` VALUES (81,0,'mrmsl','test','test',0,81,1,'81','');
 INSERT INTO `tb_menu` VALUES (82,25,'事务回滚SQL','log','rollbackSql',1,82,3,'24,25,82','');
-INSERT INTO `tb_menu` VALUES (83,85,'留言管理','guestbook','list',1,83,2,'85,83','');
+INSERT INTO `tb_menu` VALUES (83,85,'留言评论管理','comments','list',1,83,2,'85,83','');
 INSERT INTO `tb_menu` VALUES (84,101,'留言模块','module','guestbook',1,84,4,'24,79,101,84','');
 INSERT INTO `tb_menu` VALUES (85,0,'内容管理','content','#',1,85,1,'85','');
 INSERT INTO `tb_menu` VALUES (86,85,'博客管理','blog','#',1,86,2,'85,86','');
@@ -60,7 +60,6 @@ INSERT INTO `tb_menu` VALUES (88,86,'添加博客','blog','add',1,88,3,'85,86,88
 INSERT INTO `tb_menu` VALUES (89,85,'博客分类管理','category','#',1,89,2,'85,89','');
 INSERT INTO `tb_menu` VALUES (90,89,'分类列表','category','list',1,90,3,'85,89,90','');
 INSERT INTO `tb_menu` VALUES (91,89,'添加分类','category','add',1,91,3,'85,89,91','');
-INSERT INTO `tb_menu` VALUES (92,85,'评论管理','comment','list',1,92,2,'85,92','');
 INSERT INTO `tb_menu` VALUES (93,85,'微博管理','miniblog','#',1,93,2,'85,93','');
 INSERT INTO `tb_menu` VALUES (94,93,'微博列表','miniblog','list',1,94,3,'85,93,94','');
 INSERT INTO `tb_menu` VALUES (95,93,'添加微博','miniblog','add',1,95,3,'85,93,95','');
@@ -70,6 +69,10 @@ INSERT INTO `tb_menu` VALUES (98,96,'添加生成静态页','html','add',1,98,3,
 INSERT INTO `tb_menu` VALUES (99,101,'评论模块','module','comments',1,99,4,'24,79,101,99','');
 INSERT INTO `tb_menu` VALUES (100,42,'显示设置','system','show',1,100,3,'24,42,100','');
 INSERT INTO `tb_menu` VALUES (101,79,'留言评论模块','module','guestbook_comments',1,101,3,'24,79,101','');
+INSERT INTO `tb_menu` VALUES (102,24,'邮件模板及历史管理','Mail','#',1,102,2,'24,102','');
+INSERT INTO `tb_menu` VALUES (103,102,'邮件模板列表','Mail','list',1,103,3,'24,102,103','');
+INSERT INTO `tb_menu` VALUES (104,102,'添加邮件模板','Mail','add',1,104,3,'24,102,104','');
+INSERT INTO `tb_menu` VALUES (105,102,'邮件历史','Mail','history',1,105,3,'24,102,105','');
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

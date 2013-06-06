@@ -38,3 +38,5 @@ define('TB_BLOG'               , TB_PREFIX . 'blog');           //博客表 by m
 define('TB_MINIBLOG'           , TB_PREFIX . 'miniblog');       //微博表 by mrmsl on 2013-03-23 13:31:57
 define('TB_TAG'                , TB_PREFIX . 'tag');            //标签表 by mrmsl on 2013-03-21 14:48:58
 define('TB_HTML'               , TB_PREFIX . 'html');           //生成静态页管理 by mrmsl on 2013-05-18 09:40:56
+define('TB_MAIL_TEMPLATE'      , TB_PREFIX . 'mail_template');  //邮件模板 by mrmsl on 2013-06-06 16:33:17
+define('TB_MAIL_HISTORY'       , TB_PREFIX . 'mail_history');   //邮件历史 by mrmsl on 2013-06-06 16:33:49

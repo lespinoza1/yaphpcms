@@ -1,6 +1,6 @@
 <?php
 //后台自动生成，请毋修改
-//最后更新时间:2013-05-27 08:17:03
+//最后更新时间:2013-06-06 08:29:06
 
 return array (
   'sys_base_domain' => 'www.yaphpcms.com',
@@ -66,6 +66,13 @@ return array (
   'sys_show_title_separator' => '-',
   'sys_show_bread_separator' => '&raquo;',
   'sys_base_copyright' => 'Copyright &copy; 2013 yablog 版权所有',
+  'sys_mail_method' => 'smtp',
+  'sys_mail_smtp' => 'smtp.163.com',
+  'sys_mail_smtp_port' => '25',
+  'sys_mail_email' => 'yablog@163.com',
+  'sys_mail_password' => 'mrmsl170066918',
+  'sys_mail_from_email' => 'mrmsl@qq.com',
+  'sys_mail_from_name' => 'mrmsl',
   'sys_base_domain_scope' => '.yaphpcms.com',
   'sys_base_website' => 'http://www.yaphpcms.com/',
 );

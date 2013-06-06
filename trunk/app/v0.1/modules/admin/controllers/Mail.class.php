@@ -1,0 +1,106 @@
+<?php
+/**
+ * 邮件模板控制器
+ *
+ * @file            Mail.class.php
+ * @package         Yap\Module\Admin\Controller
+ * @version         0.1
+ * @copyright       Copyright (c) 2013 {@link http://www.yaphpcms.com yaphpcms} All rights reserved
+ * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-06-06 15:56:11
+ * @lastmodify      $Date$ $Author$
+ */
+
+class MailController extends CommonController {
+    /**
+     * @var bool $_after_exec_cache true删除后调用CommonController->_setCache()生成缓存， CommonController->delete()会用到。默认true
+     */
+    protected $_after_exec_cache   = true;
+
+    /**
+     * @var string $_name_column 名称字段 CommonController->delete()会用到。默认template_name
+     */
+    protected $_name_column = 'template_name';
+
+    /**
+     * @var array $_priv_map 权限映射，如'delete' => 'add'删除权限映射至添加权限
+     */
+    protected $_priv_map = array(//权限映射
+    	   'delete'   => 'add',//删除
+        'info'     => 'add',//具体信息
+    );
+
+    /**
+     * 获取写缓存数据
+     * @date            2012-09-05 14:22:04
+     * @lastmodify      2013-01-21 15:44:59 by mrmsl
+     *
+     * @return mixed 查询成功，返回数组，否则false
+     */
+    protected function _setCacheData() {
+        return $this->_model->key_column($this->_pk_field)->order('sort_order ASC,' . $this->_pk_field . ' ASC')->select();
+    }
+
+    /**
+     * 添加或保存
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-06 16:03:15
+     *
+     * @return void 无返回值
+     */
+    public function addAction() {
+        $check     = $this->_model->checkCreate();//自动创建数据
+
+        $check !== true && $this->_ajaxReturn(false, $check);//未通过验证
+
+        $pk_field  = $this->_pk_field;//主键
+        $pk_value  = $this->_model->$pk_field;//主键值
+        $data      = $this->_model->getProperty('_data');//数据，$model->data 在save()或add()后被重置为array()
+        $diff_key  = 'template_name,subject,sort_order,memo,content';//比较差异字段
+        $msg       = L($pk_value ? 'EDIT' : 'ADD');//添加或编辑
+        $log_msg   = $msg . L('MODULE_NAME,FAILURE');//错误日志
+        $error_msg = $msg . L('FAILURE');//错误提示信息
+
+        if ($pk_value) {//编辑
+
+            if (!$info = $this->_getCache($pk_value)) {//不存在
+                $this->_model->addLog($log_msg . '<br />' . L("INVALID_PARAM,%:,MODULE_NAME,%{$pk_field}({$pk_value}),NOT_EXIST"), LOG_TYPE_INVALID_PARAM);
+                $this->_ajaxReturn(false, $error_msg);
+            }
+
+            if (false === $this->_model->save()) {//更新出错
+                $this->_sqlErrorExit($msg . L('MODULE_NAME') . "{$info['template_name']}({$pk_value})" . L('FAILURE'), $error_msg);
+            }
+
+            $diff = $this->_dataDiff($info, $data, $diff_key);//差异
+            $this->_model->addLog($msg . L('MODULE_NAME')  . "{$info['template_name']}({$pk_value})." . $diff. L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+            $this->_setCache()->_ajaxReturn(true, $msg . L('SUCCESS'));
+
+        }
+        else {
+            $data = $this->_dataDiff($data, false, $diff_key);//数据
+
+            if ($this->_model->add() === false) {//插入出错
+                $this->_sqlErrorExit($msg . L('MODULE_NAME') . $data . L('FAILURE'), $error_msg);
+            }
+
+            $this->_model->addLog($msg . L('MODULE_NAME') . $data . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+            $this->_setCache()->_ajaxReturn(true, $msg . L('SUCCESS'));
+        }
+    }//end addAction
+
+    /**
+     * 列表
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-06 16:22:42
+     *
+     * @return void 无返回值
+     */
+    public function listAction() {
+        $data = array_values($this->_getCache());
+        $this->_ajaxReturn(true, '', $data);
+    }
+}

@@ -522,7 +522,7 @@ class CommentsController extends CommonController {
                 'add_time'          => time(),
                 'username'          => sys_config('module_guestbook_comments_reply_admin_username', 'Module'),
                 'email'             => sys_config('module_guestbook_comments_reply_admin_email', 'Module'),
-                'user_pic'          => str_replace('@common_imgcache', COMMON_IMGCACHE, sys_config('module_guestbook_comments_reply_admin_img', 'Module')),
+                'user_pic'          => str_replace('@common_imgcache@', COMMON_IMGCACHE, sys_config('module_guestbook_comments_reply_admin_img', 'Module')),
                 'user_ip'           => get_client_ip(1),
                 'user_homepage'     => BASE_SITE_URL,
                 'admin_reply_type'  => COMMENT_REPLY_TYPE_ADMIN,
