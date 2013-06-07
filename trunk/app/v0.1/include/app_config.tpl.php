@@ -84,6 +84,7 @@ define('LOG_TYPE_VERIFYCODE_ERROR'    , 8); //验证码错误
 define('LOG_TYPE_LOAD_SCRIPT_TIME'    , 9); //css及js加载时间
 define('LOG_TYPE_SLOWQUERY'           , 10);//慢查询
 define('LOG_TYPE_ROLLBACK_SQL'        , 11);//事务回滚sql
+define('LOG_TYPE_EMAIL'               , 12);//邮件发送错误
 
 //状态码
 define('HTTP_STATUS_UNLOGIN'          , 401);//未登陆
