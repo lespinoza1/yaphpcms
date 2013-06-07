@@ -86,12 +86,12 @@ Ext.define('Yap.controller.Mail', {
             dataIndex: this.idProperty
         }, {
             header: lang('TEMPLATE,NAME'),//模板名
-            width: 120,
+            width: 150,
             dataIndex: this.nameColumn
         }, {
             header: lang('ORDER'),//排序
             dataIndex: 'sort_order',
-            width: 50,
+            width: 60,
             align: 'center'
         }, {
             header: lang('MEMO'),//备注
