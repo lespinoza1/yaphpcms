@@ -103,14 +103,14 @@ Ext.define('Yap.controller.Mail', {
             xtype: 'appactioncolumn',
             items: [{
                 renderer: function(v, meta, record) {//编辑
-                    return record.get(me.idProperty) == ADMIN_ROLE_ID && ADMIN_INFO.roleId != ADMIN_ROLE_ID ? '' : '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('EDIT') + '</span>';
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('EDIT') + '</span>';
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     me.edit(grid.getStore().getAt(rowIndex));
                 }
             }, {
                 renderer: function(v, meta, record) {//删除
-                    return record.get(me.idProperty) == ADMIN_ROLE_ID && ADMIN_INFO.roleId != ADMIN_ROLE_ID ? '' : '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE') + '</span>';
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE') + '</span>';
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
