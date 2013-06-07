@@ -451,6 +451,27 @@ function N($key, $step = 0) {
 }
 
 /**
+ * 字符串命名风格转换
+ *
+ * @author          liu21st <liu21st@gmail.com>
+ * @lastmodify      2013-01-22 16:58:35 by mrmsl
+ *
+ * @param string $name 待转换字符串
+ * @param int    $type 转换格式，0 => user_action => userAction, 1=> UserAction => user_action。默认0
+ *
+ * @return string 转换后字符串
+ */
+function parse_name($name, $type = 0) {
+
+    if ($type) {//user_action => userAction
+        return ucfirst(preg_replace('/_([a-zA-Z])/e', "strtoupper('\\1')", $name));
+    }
+    else {//UserAction => user_action
+        return strtolower(trim(preg_replace('/[A-Z]/', '_\\0', $name), '_'));
+    }
+}
+
+/**
  * 页面重定向
  *
  * @lastmodify 2012-12-03 13:25:06 by mrmsl
@@ -1215,6 +1236,20 @@ function new_date($format = null, $time = null) {
  */
 function new_mkdir($path, $mode = 0755) {
     return is_dir($path) ? true : mkdir($path, $mode, true);
+}
+
+/**
+ * 文件存在时再删除文件
+ *
+ * @author          mrmsl <msl-138@163.com>
+ * @date            2013-06-07 10:24:41
+ *
+ * @param string $filename 待删除文件
+ *
+ * @return bool true删除成功，否则false
+ */
+function new_unlink($filename) {
+    return is_file($filename) && unlink($filename);
 }
 
 /**
