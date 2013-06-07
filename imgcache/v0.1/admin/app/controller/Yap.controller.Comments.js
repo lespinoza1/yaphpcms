@@ -297,11 +297,7 @@ Ext.define('Yap.controller.Comments', {
                             break;
 
                         case 'view'://查看
-                            Yap.History.push('controller=comments&action=view&comment_id={0}&add_time={1}'.format(record.get(me.idProperty), record.get('add_time')));
-                            break;
-
-                        case 'reply'://回复
-                            me.replyComments(record);
+                            Yap.History.push('controller=comments&action=view&comment_id={0}&add_time={1}&back={2}'.format(record.get(me.idProperty), record.get('add_time'), encodeURIComponent(location.href)));
                             break;
                     }
                 }
@@ -463,14 +459,7 @@ Ext.define('Yap.controller.Comments', {
             controller: this,
             url: this.getActionUrl(false, 'reply'),
             bodyStyle: 'border: none',
-            items: this.replyFormFields(),
-            listeners: {
-                submitsuccess: function (form, action) {
-                    log(arguments);
-
-                    return false;
-                }
-            }
+            items: this.replyFormFields()
         });
 
         return me._replyForm;
