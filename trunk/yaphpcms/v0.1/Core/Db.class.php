@@ -1031,7 +1031,7 @@ class Db {
      * @return mixed $this->execute()返回结果
      */
     public function delete($options = array()) {
-        $this->_model = $options['model'];
+        $this->_model = isset($options['model']) ? $options['model'] : '_think_';
         $sql = 'DELETE FROM ' .
         $this->_parseTable($options['table']) .
         $this->_parseWhere(isset($options['where']) ? $options['where'] : '') .
@@ -1376,7 +1376,7 @@ class Db {
      * @return array|false 查询成功，返回结果集，否则返回false
      */
     public function select($options = array()) {
-        $this->_model = $options['model'];
+        $this->_model = isset($options['model']) ? $options['model'] : '_think_';
         $sql        = $this->buildSelectSql($options);
         $cache      = isset($options['cache']) ? $options['cache'] : false;
         $key_column = isset($options['key_column']) ? $options['key_column'] : false;//返回结果数e键值
