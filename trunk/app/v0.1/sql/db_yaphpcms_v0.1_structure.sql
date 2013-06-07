@@ -248,6 +248,7 @@ CREATE TABLE `tb_mail_template` (
 CREATE TABLE `tb_mail_history` (
   `history_id` mediumint(4) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `template_id` tinyint(2) unsigned NOT NULL DEFAULT 0 COMMENT '邮件模板id',
+  `times` tinyint(2) unsigned NOT NULL DEFAULT 0 COMMENT '发送次数,0表示发送失败',
   `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发送时间',
   `email` varchar(50) NOT NULL DEFAULT '' COMMENT '发送邮箱',
   `subject` varchar(150) NOT NULL DEFAULT '' COMMENT '邮件主题',
