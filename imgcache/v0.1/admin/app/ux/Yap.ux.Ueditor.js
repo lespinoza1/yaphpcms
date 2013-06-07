@@ -142,6 +142,19 @@ Ext.define('Yap.ux.Ueditor', {
      */
     setValue: function(value){
         this.callParent(arguments);
-        this.editor && this.editor.setContent(value);
+
+        if (this.editor) {
+
+            if (this.editor.body) {
+                this.editor.setContent(value);
+            }
+            else {//未初始化完成,如chrome this.editor.body.innerHTML is 'undefined', 故延时100ms by mashanling on 2013-06-07 08:27:06
+                var editor = this.editor;
+
+                setTimeout(function() {
+                    editor.setContent(value);
+                }, 100);
+            }
+        }
     }
 });
