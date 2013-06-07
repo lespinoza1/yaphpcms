@@ -351,6 +351,9 @@ class BaseController extends Yaf_Controller_Abstract {
             }
             else {
                 $this->_model = D(empty($this->_model_name) ? 'Common' : $this->_model_name);//模型
+
+                //无对应模型类,指定模型表名
+                !empty($this->_true_table_name) && $this->_model->setProperty('_true_table_name', $this->_true_table_name);
             }
 
             $this->_model->setProperty('_module', $this);
