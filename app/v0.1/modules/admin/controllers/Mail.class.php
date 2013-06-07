@@ -32,6 +32,32 @@ class MailController extends CommonController {
     );
 
     /**
+     * 删除后置操作
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-07 09:03:17
+     *
+     * @param array $pk_id 主键值
+     *
+     * @return void 无返回值
+     */
+    protected function _afterDelete($pk_id) {
+        $o      = $this->_getViewTemplate();
+        $data   = $this->_getCache();
+        $path   = THEME_PATH . 'mail/';
+        $suffix = C('TEMPLATE_SUFFIX');
+
+        foreach($data as $id => $item) {
+
+            if (in_array($id, $pk_id)) {
+                $o->clearCache(CONTROLLER_NAME, $item['template_name']);//清除缓存
+                new_unlink($path . $item['template_name'] . $suffix);//模板文件
+
+            }
+        }
+    }
+
+    /**
      * 获取写缓存数据
      * @date            2012-09-05 14:22:04
      * @lastmodify      2013-01-21 15:44:59 by mrmsl
@@ -39,7 +65,18 @@ class MailController extends CommonController {
      * @return mixed 查询成功，返回数组，否则false
      */
     protected function _setCacheData() {
-        return $this->_model->key_column($this->_pk_field)->order('sort_order ASC,' . $this->_pk_field . ' ASC')->select();
+        $data   = $this->_model->key_column($this->_pk_field)->order('sort_order ASC,' . $this->_pk_field . ' ASC')->select();
+        $path   = FRONT_THEME_PATH . 'mail/';
+        $suffix = C('TEMPLATE_SUFFIX');
+
+        new_mkdir($path);
+
+        foreach ($data as $item) {
+            $template_name  = $path . $item['template_name'] . $suffix;
+            file_put_contents($template_name, $item['content']);//邮件模板
+        }
+
+        return $data;
     }
 
     /**
