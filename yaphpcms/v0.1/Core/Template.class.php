@@ -179,7 +179,7 @@ class Template {
                 unlink($filename);
             }
 
-            //is_file($filename = $cache_dir . $action . $cache_id . C('HTML_SUFFIX')) && unlink($filename);//缓存文件
+            is_file($filename = $cache_dir . $action . $cache_id . C('HTML_SUFFIX')) && unlink($filename);//缓存文件
 
             if ($cache_id) {//同时清除多个
                 $cache_id = is_array($cache_id) ? $cache_id : explode(',', $cache_id);
