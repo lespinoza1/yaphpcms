@@ -114,6 +114,16 @@ class CommentsController extends CommonController {
 
         if ('status' == $field) {//审核状态
             $this->_afterAction();
+
+            if ($at_email = C('T_INFO.at_email')) {
+                require_cache(LIB_PATH . 'Mailer.class.php');
+                $mailer = new Mailer($this->_model, $this->_getViewTemplate());
+
+                foreach($at_email as $v) {
+                    $v['subject'] = $v['email'] . rand(1000, 9999);
+                    var_dump($mailer->mail('comments_at_email', $v));
+                }
+            }
         }
     }
 
@@ -150,12 +160,12 @@ class CommentsController extends CommonController {
                     $selected[$type][$blog_id] = true;
                 }
 
-                if (($parent_id = $v['parent_id']) && !isset($selected['at_email'][$parent_id])) {//有回复时是否发送邮件
-                    $selected['at_email'][$parent_id] = true;
+                if (($parent_id = $v['parent_id']) && !in_array($parent_id, $selected['at_email'])) {//有回复时是否发送邮件
+                    $selected['at_email'][] = $parent_id;
 
-                    if ($at_email = $this->_model->where('at_email=1 AND comment_id=' . $parent_id)->getField('at_email')) {
-                        $info['at_email'] = $parent_id;
-                    }
+                    /*if ($at_email = $this->_model->where('at_email=1 AND comment_id=' . $parent_id)->getField('at_email')) {
+                        $info['at_email'][] = $this->_model->field('type,email,content,comment_id')->find($parent_id);
+                    }*/
                 }
 
                 if ('delete' == ACTION_NAME) {//删除,同时需要删除回复
@@ -166,6 +176,10 @@ class CommentsController extends CommonController {
                         $info['node'][] = $node;
                     }
                 }
+            }
+
+            if ($selected['at_email']) {
+                $info['at_email'] = $this->_model->field('type,email,content,comment_id')->where(array($this->_pk_field => array('IN', $selected['at_email']), 'at_email' => 1))->select();
             }
 
             C('T_INFO', $info);
