@@ -30,6 +30,10 @@ class Mailer extends PHPMailer {
      */
     private $_view_template = null;
     /**
+     * @var int $_insert_history_id 邮件历史插入id
+     */
+    private $_insert_history_id = 0;
+    /**
      * @var string $CharSet 邮件内容编码，默认utf-8
      */
     public $CharSet = 'utf-8';
@@ -65,32 +69,24 @@ class Mailer extends PHPMailer {
      * @return true|string true发送成功，否则错误信息
      */
     private function _comments_at_email($info) {
-        $info['content'] = $this->_view_template->fetch('Mail', 'comments_at_email');
-        var_dump($info);exit;
-    }
+        $comment_info   = $info['email'];
+        $name           = L(COMMENT_TYPE_GUESTBOOK == $comment_info['type'] ? 'COMMENT' : 'GUESTBOOK');
+        $info['email'] = $comment_info['email'];
+        $info['mail_type'] = MAIL_TYPE_COMMMENTS_AT_EMAIL;
+        $info['subject'] = str_replace('{$subject}', $name, $info['subject']);
+        $info['content'] = $this->_view_template
+        ->assign(array(
+            'subject'       => $name,
+            'content'       => $comment_info['content'],
+        ))
+        ->fetch('Mail', 'comments_at_email');
 
-    /**
-     * 执行发送邮件
-     *
-     * @author      mrmsl <msl-138@163.com>
-     * @date        2013-06-07 17:05:04
-     *
-     * @param array $info 邮件信息,array('email' => $email, 'subject' => $subject, 'content' => $content)
-     *
-     * @return true|string true发送成功，否则错误信息
-     */
-    private function _doMail($info) {
-        $this->subject = $info['subject'];
-        $this->MsgHTML($info['content']);
-        $this->AddAddress($info['email']);
+        $result = $this->doMail($info);
 
-        if ($this->Send()) {
-            return true;
-        }
-        else {
-            $this->_model->addLog(L('SEND,CN_YOUJIAN') . $info['email'] . "({$info['subject']})" . L('FAILURE'), LOG_TYPE_EMAIL);
-            return $this->ErrorInfo;
-        }
+        C('_FACADE_SKIP', 'skip');
+        $this->_model->table(TB_COMMENTS)->where(array('comment_id' => $comment_info['comment_id']))->save(array('at_email' => true === $result ? MAIL_RESULT_SUCCESS : MAIL_RESULT_FAILURE));
+
+        return $result;
     }
 
     /**
@@ -111,7 +107,7 @@ class Mailer extends PHPMailer {
         ->find();
 
         if ($info) {
-            return $this->_doMail($info);
+            return $this->doMail($info);
         }
         else {
             $error  = L('MAIL_TEMPLATE,INFO') . "({$history_id})" . L('NOT_EXIST');
@@ -144,6 +140,78 @@ class Mailer extends PHPMailer {
     }
 
     /**
+     * 执行发送邮件
+     *
+     * @author      mrmsl <msl-138@163.com>
+     * @date        2013-06-07 17:05:04
+     *
+     * @param array $info 邮件信息,array('email' => $email, 'subject' => $subject, 'content' => $content)
+     *
+     * @return true|string true发送成功，否则错误信息
+     */
+    public function doMail($info) {
+        $info['mail_type'] = isset($info['mail_type']) ? $info['mail_type'] : MAIL_TYPE_MISC;
+        $this->subject = $info['subject'];
+        $this->MsgHTML($info['content']);
+        $this->AddAddress($info['email']);
+
+        $history_id = isset($info['history_id']) ? $info['history_id'] : 0;
+
+        if (!$history_id) {
+            $insert_data = array(
+                'template_id'   => $info['template_id'],
+                'add_time'      => time(),
+                'email'         => $info['email'],
+                'subject'       => $info['subject'],
+                'content'       => $info['content'],
+            );
+        }
+
+        $success    = rand(0, 1);//测试,不需要真正发邮件
+        var_dump($info);//return
+
+        if ($success) {//$this->Send()) {
+
+            if ($history_id) {
+                C('_FACADE_SKIP', 'skip');
+                $this->_model->table(TB_MAIL_HISTORY)->where(array('history_id' => $history_id))->setInc('times');
+            }
+            else {
+                $insert_data['times'] = 1;
+            }
+
+            $result = true;
+        }
+        else {
+            $this->_model->addLog(L('SEND,CN_YOUJIAN') . $info['email'] . "({$info['subject']})" . L('FAILURE'), LOG_TYPE_EMAIL);
+            $result = $this->ErrorInfo;
+            $result = false;
+        }
+
+        if (!$history_id) {
+            C('_FACADE_SKIP', 'skip');
+            $this->_model->table(TB_MAIL_HISTORY)->add($insert_data);
+            $this->_insert_history_id = $this->_model->getDb()->getLastInsertID();
+        }
+
+        return $result;
+    }//end doMail
+
+    /**
+     * 获取属性值
+     *
+     * @author      mrmsl <msl-138@163.com>
+     * @date        2013-06-11 17:10:08
+     *
+     * @param string $name 属性值
+     *
+     * @return mixed 属性值
+     */
+    public function getProperty($name) {
+        return isset($this->$name) ? $this->$name : null;
+    }
+
+    /**
      * 发送邮件
      *
      * @author      mrmsl <msl-138@163.com>
@@ -160,7 +228,7 @@ class Mailer extends PHPMailer {
            return $this->_reMail($mail_info);
         }
         elseif (is_array($mail_info)) {
-            return $this->_doMail($mail_info);
+            return $this->doMail($mail_info);
         }
         else {
             static $mail_template_info = array();
@@ -169,7 +237,7 @@ class Mailer extends PHPMailer {
                 $info = $this->_model
                 ->table(TB_MAIL_TEMPLATE)
                 ->where(array('template_name' => $mail_info))
-                ->field('subject,template_name')
+                ->field('template_id,subject,template_name')
                 ->find();
 
                 if (!$info) {
@@ -182,12 +250,12 @@ class Mailer extends PHPMailer {
                     return $error;
                 }
 
-                $info['email'] = $email;
                 $mail_template_info[$mail_info] = $info;
             }
 
             if ($info = $mail_template_info[$mail_info]) {
                 if (method_exists($this, $method = '_' . $mail_info)) {//_+邮件模板名即为发送方法
+                    $info['email'] = $email;
                     return $this->$method($info);
                 }
                 else {
