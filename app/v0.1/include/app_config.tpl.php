@@ -86,6 +86,10 @@ define('LOG_TYPE_SLOWQUERY'           , 10);//慢查询
 define('LOG_TYPE_ROLLBACK_SQL'        , 11);//事务回滚sql
 define('LOG_TYPE_EMAIL'               , 12);//邮件发送错误
 
+//发送邮件类型
+define('MAIL_TYPE_MISC'                 , 0);//其它类型
+define('MAIL_TYPE_COMMMENTS_AT_EMAIL'   , 1);//留言评论,有人回复我时通知我
+
 //状态码
 define('HTTP_STATUS_UNLOGIN'          , 401);//未登陆
 define('HTTP_STATUS_NO_PRIV'          , 403);//没有权限
