@@ -1,7 +1,7 @@
 <?php
 /**
  * 项目常量定义模板，修改此文件后，后台修改网站基本信息，重新生成后生效。生成对应文件为app_config.php
- * 后台自动生成，请毋修改。最后更新时间: 2013-06-11 08:24:48
+ * 后台自动生成，请毋修改。最后更新时间: 2013-06-11 17:26:16
  *
  * @file            app_config.tpl
  * @package         Yap
@@ -10,7 +10,7 @@
  * @license         http://www.apache.org/licenses/LICENSE-2.0.html Apache License 2.0
  * @author          mrmsl <msl-138@163.com>
  * @date            2013-05-04 08:41:37
- * @lastmodify      2013-06-11 08:24:48
+ * @lastmodify      2013-06-11 17:26:16
  */
 
 //核心配置
@@ -89,6 +89,9 @@ define('LOG_TYPE_EMAIL'               , 12);//邮件发送错误
 //发送邮件类型
 define('MAIL_TYPE_MISC'                 , 0);//其它类型
 define('MAIL_TYPE_COMMMENTS_AT_EMAIL'   , 1);//留言评论,有人回复我时通知我
+
+define('MAIL_RESULT_SUCCESS'            , 10);//发送成功
+define('MAIL_RESULT_FAILURE'            , 11);//发送失败
 
 //状态码
 define('HTTP_STATUS_UNLOGIN'          , 401);//未登陆
