@@ -43,7 +43,7 @@ class MailModel extends CommonModel {
         //模板名
         'template_name'     => array('validate' => array('_checkUnique#PLEASE_ENTER,TEMPLATE,NAME#data|template_name|TEMPLATE,NAME', '_checkLength#TEMPLATE,NAME#value|0|20')),
         'subject'           => array('validate' => array('notblank#MAIL_SUBJECT', '_checkLength#MAIL_SUBJECT#value|0|150')),
-        'content'           => array('validate' => 'notblank#MAIL_CONTENT'),
+        'content'           => array('filter' => 'raw', 'validate' => 'notblank#MAIL_CONTENT'),
         //备注
         'memo'              => array('validate' => array('return#MEMO', '_checkLength#MEMO#value|0|60')),
         'sort_order'        => array('filter' => 'int', 'validate' => 'unsigned#ORDER#-2'),//排序
