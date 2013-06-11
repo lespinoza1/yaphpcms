@@ -90,6 +90,9 @@ define('LOG_TYPE_EMAIL'               , 12);//邮件发送错误
 define('MAIL_TYPE_MISC'                 , 0);//其它类型
 define('MAIL_TYPE_COMMMENTS_AT_EMAIL'   , 1);//留言评论,有人回复我时通知我
 
+define('MAIL_RESULT_SUCCESS'            , 10);//发送成功
+define('MAIL_RESULT_FAILURE'            , 11);//发送失败
+
 //状态码
 define('HTTP_STATUS_UNLOGIN'          , 401);//未登陆
 define('HTTP_STATUS_NO_PRIV'          , 403);//没有权限
