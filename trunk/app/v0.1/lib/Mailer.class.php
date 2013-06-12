@@ -51,7 +51,7 @@ class Mailer extends PHPMailer {
     /**
      * @var string 发送邮件方法。默认smtp，可用mail, sendmail, smtp
      */
-    public $thiser = 'smtp';
+    public $Mailer = 'smtp';
 
     /**
      * @var bool true smtp发送需要验证用户。默认true
@@ -70,14 +70,14 @@ class Mailer extends PHPMailer {
      */
     private function _comments_at_email($info) {
         $comment_info   = $info['email'];
-        $name           = L(COMMENT_TYPE_GUESTBOOK == $comment_info['type'] ? 'COMMENT' : 'GUESTBOOK');
         $info['email'] = $comment_info['email'];
         $info['mail_type'] = MAIL_TYPE_COMMMENTS_AT_EMAIL;
-        $info['subject'] = str_replace('{$subject}', $name, $info['subject']);
+        $info['subject'] = str_replace('{$comment_name}', $comment_name = $comment_info['comment_name'], $info['subject']);
         $info['content'] = $this->_view_template
         ->assign(array(
-            'subject'       => $name,
+            'comment_name'  => $comment_name,
             'content'       => $comment_info['content'],
+            'link_url'      => $comment_info['link_url'],
         ))
         ->fetch('Mail', 'comments_at_email');
 
@@ -150,8 +150,7 @@ class Mailer extends PHPMailer {
      * @return true|string true发送成功，否则错误信息
      */
     public function doMail($info) {
-        $info['mail_type'] = isset($info['mail_type']) ? $info['mail_type'] : MAIL_TYPE_MISC;
-        $this->subject = $info['subject'];
+        $this->Subject = $info['subject'];
         $this->MsgHTML($info['content']);
         $this->AddAddress($info['email']);
 
@@ -164,13 +163,14 @@ class Mailer extends PHPMailer {
                 'email'         => $info['email'],
                 'subject'       => $info['subject'],
                 'content'       => $info['content'],
+                'mail_type'     => isset($info['mail_type']) ? $info['mail_type'] : MAIL_TYPE_MISC,
             );
         }
 
         $success    = rand(0, 1);//测试,不需要真正发邮件
-        var_dump($info);//return
+        //var_dump($info);//return
 
-        if ($success) {//$this->Send()) {
+        if ($this->Send()) {
 
             if ($history_id) {
                 C('_FACADE_SKIP', 'skip');
@@ -185,7 +185,7 @@ class Mailer extends PHPMailer {
         else {
             $this->_model->addLog(L('SEND,CN_YOUJIAN') . $info['email'] . "({$info['subject']})" . L('FAILURE'), LOG_TYPE_EMAIL);
             $result = $this->ErrorInfo;
-            $result = false;
+            //$result = false;
         }
 
         if (!$history_id) {
