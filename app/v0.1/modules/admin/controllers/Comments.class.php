@@ -179,7 +179,35 @@ class CommentsController extends CommonController {
             }
 
             if ($selected['at_email']) {
-                $info['at_email'] = $this->_model->field('type,email,content,comment_id')->where(array($this->_pk_field => array('IN', $selected['at_email']), 'at_email' => 1))->select();
+                $info['at_email'] = $this->_model->field('type,email,content,comment_id,blog_id')->where(array($this->_pk_field => array('IN', $selected['at_email']), 'at_email' => 1))->select();
+
+                if ($info['at_email']) {
+                    $blog_info = array(
+                        COMMENT_TYPE_BLOG       => array(),
+                        COMMENT_TYPE_MINIBLOG   => array(),
+                    );
+
+                    foreach ($info['at_email'] as &$v) {
+                        $blog_id    = $v['blog_id'];
+                        $type       = $v['type'];
+
+                        if (COMMENT_TYPE_GUESTBOOK == $type) {
+                            $v['comment_name'] = L('GUESTBOOK');
+                            $link_url = BASE_SITE_URL . 'guestbook.shtml';
+                        }
+                        else {
+                            $v['comment_name'] = L('COMMENT');
+
+                            if (!isset($blog_info[$type][$blog_id])) {
+                                $blog_info[$type][$blog_id] = $this->_model->table(COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG)->where('blog_id=' . $blog_id)->getField('link_url');
+                            }
+
+                            $link_url = $blog_info[$type][$blog_id];
+                        }
+
+                        $v['link_url'] = $link_url . '#comment-' . $v['comment_id'];
+                    }
+                }
             }
 
             C('T_INFO', $info);
