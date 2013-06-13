@@ -183,8 +183,8 @@ class Mailer extends PHPMailer {
             $result = true;
         }
         else {
-            $this->_model->addLog(L('SEND,CN_YOUJIAN') . $info['email'] . "({$info['subject']})" . L('FAILURE'), LOG_TYPE_EMAIL);
             $result = $this->ErrorInfo;
+            $this->_model->addLog(L('SEND,CN_YOUJIAN') . $info['email'] . "({$info['subject']})" . L('FAILURE') . ': ' . $result, LOG_TYPE_EMAIL);
             //$result = false;
         }
 
