@@ -30,7 +30,8 @@ class CommentsModel extends CommonModel {
      */
     protected $_db_fields = array (
         'type'           => array('filter' => 'int', 'validate' => array('_checkType#INVALID_PARAM,TYPE')),
-        'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENTS'),//父id
+        'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id ,调用C('T_TYPE')放于type后面
+        'parent_id'      => array('filter' => 'int', 'validate' =>  '_checkReply#INVALID,COMMENTS'),//父id,调到C('T_BLOG_ID')放于_checkBlog后面
         'real_parent_id' => array('filter' => 'int', 'validate' => array('_checkLength#REAL,PARENT_ID,DATA#value|0')),
         //用户名
         'username'       => array('validate' => array('_checkUsername#PLEASE_ENTER,USERNAME', '_checkLength#USERNAME#value|0|20')),
@@ -44,7 +45,6 @@ class CommentsModel extends CommonModel {
         'user_homepage'  => array('filter' => 'url', 'validate' => array(array('', '{%PLEASE_ENTER,CORRECT,CN_DE,HOMEPAGE,LINK}', Model::VALUE_VALIDATE, 'url'), '_checkLength#HOMEPAGE,LINK#value|0|50')),
         'user_pic'       => array('filter' => 'url', 'validate' => array('_checkLength#USER_PIC,DATA#value|0')),
         'status'         => array('filter' => 'int', 'validate' => array('_checkLength#STATUS,DATA#value|0')),
-        'blog_id'        => array('filter' => 'int', 'validate' =>  '_checkBlog#BLOG,NOT_EXIST'),//博客id 或 微博id ,调用C('T_TYPE')放于type后面
         '_verify_code'   => array('validate' => '_checkVerifycode#PLEASE_ENTER,VERIFY_CODE#module_admin'),//验证码
         'province'       => array('validate' => array('_checkLength#PROVINCE,DATA#value|0')),
         'city'           => array('validate' => array('_checkLength#CITY,DATA#value|0')),
@@ -106,6 +106,11 @@ class CommentsModel extends CommonModel {
      * @return void 无返回值
      */
     protected function _afterInsert($data, $options) {
+
+        if (TB_COMMENTS != $options['table']) {
+            return;
+        }
+
         $pk_value = $data[$this->_pk_field];
 
         if ($parent_info = C('T_PARENT_INFO')) {//父
@@ -153,6 +158,15 @@ class CommentsModel extends CommonModel {
             if (COMMENT_TYPE_GUESTBOOK != $type) {//评论数+1
                 $this->execute('UPDATE ' . (COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG) . ' SET comments=comments+1 WHERE blog_id=' . $data['blog_id']);
             }
+
+            if (($parent_info = C('T_PARENT_INFO')) && $parent_info['at_email']) {
+                require_cache(LIB_PATH . 'Mailer.class.php');
+                $view_template = Template::getInstance();
+                $view_template->assign(sys_config());
+                $view_template->_caching = false;
+                $mailer = new Mailer($this, $view_template);
+                $mailer->mail('comments_at_email', $parent_info);
+            }
         }
 
         //总评论数+1
@@ -165,6 +179,11 @@ class CommentsModel extends CommonModel {
      * {@inheritDoc}
      */
     protected function _beforeInsert(&$data, $options) {
+
+        if (TB_COMMENTS != $options['table']) {
+            return;
+        }
+
         $ip_info = get_ip_info();//ip地址信息
 
         if (is_array($ip_info)) {
@@ -207,11 +226,13 @@ class CommentsModel extends CommonModel {
         elseif (!isset($table[$type])) {
             $result = false;
         }
-        elseif (!$blog_id || !$this->table($table[$type])->where('blog_id=' . $blog_id)->find()) {
+        elseif (!$blog_id || !($blog_link_url = $this->table($table[$type])->where('blog_id=' . $blog_id)->getField('link_url'))) {
             $result = false;
         }
 
         !$result && C('T_REDIRECT', true);
+        C('T_BLOG_ID', $blog_id);
+        C('T_BLOG_LINK_URL', isset($blog_link_url) ? $blog_link_url : '');
 
         return $result;
     }
@@ -232,13 +253,25 @@ class CommentsModel extends CommonModel {
             return true;
         }
 
-        $parent_info = $this->field('comment_id,username,level,node,status')->find($parent_id);//父亲信息
-
-        C('T_PARENT_INFO', $parent_info);
+        $parent_info = $this->field('comment_id,username,email,content,level,node,status,type,blog_id,at_email')->where(array($this->_pk_field => $parent_id, 'type' => C('T_TYPE'), 'blog_id' => C('T_BLOG_ID')))->find();//父亲信息
 
         if ($parent_info) {
 
             if (1 == $parent_info['status']) {//已通过
+
+                if (COMMENT_TYPE_GUESTBOOK == C('T_TYPE')) {
+                    $comment_name = L('GUESTBOOK');
+                    $link_url = BASE_SITE_URL . 'guestbook.shtml';
+                }
+                else {
+                    $comment_name = L('COMMENT');
+                    $link_url = C('T_BLOG_LINK_URL');
+                }
+
+                $parent_info['link_url'] = $link_url . '#comment-' . $parent_id;
+                $parent_info['comment_name'] = $comment_name;
+                C('T_PARENT_INFO', $parent_info);
+
                 return true;
             }
 
@@ -247,12 +280,14 @@ class CommentsModel extends CommonModel {
             $error = L('INVALID,REPLY');
         }
 
+        C('T_PARENT_INFO', $parent_info);
+
         $error = L('REPLY,NOT_EXIST');
 
         C('T_REDIRECT', true);
 
         return $error;
-    }
+    }//end _checkReply
 
     /**
      * 验证评论类型
