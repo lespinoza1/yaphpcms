@@ -66,11 +66,11 @@ class LogController extends CommonController {
             $where['content'] = $this->_buildMatchQuery('content', $keyword, Filter::string('match_mode', 'get'));
         }
 
-        if ($date_start && ($date_start = local_strtotime($date_start))) {
+        if ($date_start && ($date_start = strtotime($date_start))) {
             $where['log_time'][] = array('EGT', $date_start);
         }
 
-        if ($date_end && ($date_end = local_strtotime($date_end))) {
+        if ($date_end && ($date_end = strtotime($date_end))) {
             $where['log_time'][] = array('ELT', $date_end);
         }
 

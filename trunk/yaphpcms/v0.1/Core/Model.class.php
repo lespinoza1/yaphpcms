@@ -1001,8 +1001,8 @@ class Model {
 
             case 'expire':
                 list($start, $end) = explode(',', $rule);
-                $start = is_numeric($start) ? $start : local_strtotime($start);
-                $end   = is_numeric($end) ? $end : local_strtotime($end);
+                $start = is_numeric($start) ? $start : strtotime($start);
+                $end   = is_numeric($end) ? $end : strtotime($end);
 
                 return time() >= $start && time() <= $end;
                 break;
