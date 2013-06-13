@@ -26,6 +26,43 @@ Ext.define('Yap.controller.MailHistory', {
     },
 
     /**
+     * 重新发送
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-13 22:31:13
+     *
+     * @private
+     *
+     * @param {Mixed}  record      record数据或id串
+     *
+     * @return {void} 无返回值
+     */
+    afreshSend: function(record) {
+        var data, _lang;
+        var controller = this.getControllerName();
+
+        if (Ext.isString(record)) {//选中删除
+            data = record;
+            _lang  = 'SELECTED';
+        }
+        else {//点击删除
+            data = record.get(this.idProperty) + '|' + record.get('add_time');
+            _lang = 'CN_CI';
+        }
+
+        var options = {
+            action: this.getActionUrl(false, 'afreshSend'),
+            data:'data=' + data,
+            confirmText: lang('YOU_CONFIRM,AFRESH,SEND,' + _lang + ',RECORD,CN_YOUJIAN'),
+            failedMsg: lang('AFRESH,SEND,CN_YOUJIAN,FALIURE'),
+            scope: this,
+            store: this.store()
+        };
+
+        this.myConfirm(options);
+    },//end afreshSend
+
+    /**
      * @inheritdoc Yap.controller.Base#listAction
      */
     listAction: function(data) {
@@ -61,28 +98,43 @@ Ext.define('Yap.controller.MailHistory', {
             width: 50,
             dataIndex: this.idProperty
         }, {
-            header: lang('EMAIL'),//排序
+            header: lang('EMAIL'),//邮箱
             dataIndex: 'email',
-            width: 120,
-            align: 'center'
+            width: 150,
+            renderer: function(v) {
+                return me.searchReplaceRenderer(v, 'email');
+            }
         }, {
             header: lang('BELONG_TO,MAIL_TEMPLATE'),//模板名
             width: 150,
             dataIndex: 'template_name'
         }, {
-            header: lang('MAIL_SUBJECT'),//备注
+            header: lang('MAIL_SUBJECT'),//邮件主题
             flex: 1,
             dataIndex: 'subject',
-            sortable: false
+            sortable: false,
+            renderer: function(v) {
+                return me.searchReplaceRenderer(v, 'subject');
+            }
+        }, {
+            header: lang('SEND,TIME'),//发送时间
+            dataIndex: 'add_time',
+            width: 150,
+            renderer: function(v) {
+                var data = Ext.Object.fromQueryString(Ext.History.getToken()),
+                    datetime = me.renderDatetime(v);
+
+                return data.date_start || data.date_end ? TEXT.red(datetime) : datetime;
+            }
         }, {//操作列
             width: 160,
             xtype: 'appactioncolumn',
             items: [{
-                renderer: function(v, meta, record) {//编辑
-                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('EDIT') + '</span>';
+                renderer: function(v, meta, record) {//重新发送
+                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('AFRESH,SEND') + '</span>';
                 },
                 handler: function(grid, rowIndex, cellIndex) {
-                    me.edit(grid.getStore().getAt(rowIndex));
+                    me.afreshSend(grid.getStore().getAt(rowIndex));
                 }
             }, {
                 renderer: function(v, meta, record) {//删除
@@ -90,7 +142,7 @@ Ext.define('Yap.controller.MailHistory', {
                 },
                 handler: function(grid, rowIndex, cellIndex) {
                     var record = grid.getStore().getAt(rowIndex);
-                    me['delete'](record, '<span class="font-bold font-red">' + htmlspecialchars(record.get(me.nameColumn)) + '</span>');
+                    me['delete'](record, lang('CN_CI,RECORD'));
                 }
             }]
         }];
@@ -196,13 +248,16 @@ Ext.define('Yap.controller.MailHistory', {
             items: [{
                 text: lang('OPERATE'),
                 itemId: 'btn',
-                menu: [this.deleteItem(), {
-                    text: lang('DELETE'),
+                menu: [
+                this.deleteItem(),
+                {
+                    text: lang('AFRESH,SEND'),
                     handler: function() {
-                        var selection = me.hasSelect(me.selectModel);
-                        selection.length && me.deleteBlogHtml(selection);
+                        var selection = me.hasSelect(me.selectModel, me.idProperty + ',add_time');
+                        selection.length && me.afreshSend(selection[0]);
                     }
-                }]
+                }
+            ]
             }, '-', lang('ADD,TIME,CN_CONG'),
             extField.dateField({itemId: 'date_start'}), lang('TO'),
             extField.dateField({itemId: 'date_end'}), '-', lang('BELONG_TO,MAIL_TEMPLATE'),
