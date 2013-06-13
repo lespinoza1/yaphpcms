@@ -101,7 +101,7 @@ class Mailer extends PHPMailer {
      */
     private function _reMail($history_id) {
         $info = $this->_model
-        ->field('email,subject,content')
+        ->field('history_id,email,subject,content')
         ->table(TB_MAIL_HISTORY)
         ->where('history_id=' . $history_id)
         ->find();
@@ -110,7 +110,7 @@ class Mailer extends PHPMailer {
             return $this->doMail($info);
         }
         else {
-            $error  = L('MAIL_TEMPLATE,INFO') . "({$history_id})" . L('NOT_EXIST');
+            $error  = L('CN_YOUJIAN,INFO') . "({$history_id})" . L('NOT_EXIST');
             $log    = __METHOD__ . ': ' . __LINE__ . ',' . $error;
             C('TRIGGER_ERROR', array($log, E_USER_ERROR, 'mail.error'));
             $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
