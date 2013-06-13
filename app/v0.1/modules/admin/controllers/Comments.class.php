@@ -156,7 +156,7 @@ class CommentsController extends CommonController {
                 if (COMMENT_TYPE_GUESTBOOK != $type && !isset($selected[$type][$blog_id])) {
                     $a = $this->_model->table(COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG)->where('blog_id=' . $blog_id)->field('link_url')->find();
                     $info[$type][] = $blog_id;
-                    $info['delete_blog_html'][] = array('link_url' => $a['link_url']);
+                    $info['delete_blog_html'][$blog_id] = array('link_url' => $a['link_url']);
                     $selected[$type][$blog_id] = true;
                 }
 
@@ -182,10 +182,6 @@ class CommentsController extends CommonController {
                 $info['at_email'] = $this->_model->field('type,email,content,comment_id,blog_id')->where(array($this->_pk_field => array('IN', $selected['at_email']), 'at_email' => 1))->select();
 
                 if ($info['at_email']) {
-                    $blog_info = array(
-                        COMMENT_TYPE_BLOG       => array(),
-                        COMMENT_TYPE_MINIBLOG   => array(),
-                    );
 
                     foreach ($info['at_email'] as &$v) {
                         $blog_id    = $v['blog_id'];
@@ -197,12 +193,7 @@ class CommentsController extends CommonController {
                         }
                         else {
                             $v['comment_name'] = L('COMMENT');
-
-                            if (!isset($blog_info[$type][$blog_id])) {
-                                $blog_info[$type][$blog_id] = $this->_model->table(COMMENT_TYPE_BLOG == $type ? TB_BLOG : TB_MINIBLOG)->where('blog_id=' . $blog_id)->getField('link_url');
-                            }
-
-                            $link_url = $blog_info[$type][$blog_id];
+                            $link_url = $info['delete_blog_html'][$blog_id]['link_url'];
                         }
 
                         $v['link_url'] = $link_url . '#comment-' . $v['comment_id'];
