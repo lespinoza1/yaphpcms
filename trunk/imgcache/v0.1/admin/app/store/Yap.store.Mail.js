@@ -69,7 +69,7 @@ Ext.define('Yap.store.Mail', {
     },
     constructor: function(config) {//构造函数.
         config = config || {};
-        this.proxy.url = config.url || getActionUrl('role/list');
+        this.proxy.url = config.url || getActionUrl('mail/list');
         this.callParent([config]);
     }
 });
