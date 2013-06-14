@@ -166,7 +166,7 @@ class BaseController extends Yaf_Controller_Abstract {
      * @return void 无返回值
      */
     protected function _fetch($controller = MODULE_NAME, $action = ACTION_NAME, $cache_id = '') {
-        return $this->_FAILURE()
+        return $this->getViewTemplate()
         ->fetch($controller ? $controller : MODULE_NAME, $action ? $action : ACTION_NAME, $cache_id);
     }
 
