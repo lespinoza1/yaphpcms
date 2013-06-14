@@ -30,6 +30,33 @@ class MailHistoryController extends CommonController {
     }
 
     /**
+     * 重新发送邮件
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-13 17:39:13
+     *
+     * @return void 无返回值
+     */
+    public function afreshSendAction() {
+        $msg        = L('AFRESH,SEND,CN_YOUJIAN');
+
+        if (!$data = $this->_getPairsData('history_id,add_time')) {
+            $this->_ajaxReturn(false, L('INVALID_PARAM,%data。') . $msg . L('FAILURE'));
+        }
+
+        require(LIB_PATH . 'Mailer.class.php');
+        $mailer = new Mailer($this->_model, $this->_getViewTemplate());
+
+        foreach ($data as $item) {
+            $mailer->doMail($item);
+        }
+
+        $this->_model->addLog($msg . join(',', array_keys($data)) . L('SUCCESS'), LOG_TYPE_ADMIN_OPERATE);
+        $this->_ajaxReturn(true, $msg . L('SUCCESS'));
+
+    }//end afreshIpActi
+
+    /**
      * 列表
      *
      * @author          mrmsl <msl-138@163.com>
