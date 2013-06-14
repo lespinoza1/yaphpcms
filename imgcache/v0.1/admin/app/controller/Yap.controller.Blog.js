@@ -462,7 +462,7 @@ Ext.define('Yap.controller.Blog', {
                                                 cate_id: cateId
                                             },
                                             confirmText: lang('YOU_CONFIRM,MOVE,SELECTED,RECORD,TO') + '<strong style="font-weight: bold; color: red">' + record.get('cate_name') + '</strong>',
-                                            failedMsg: lang('MOVE,FALIURE'),
+                                            failedMsg: lang('MOVE,FAILURE'),
                                             scope: me,
                                             store: me.store()
                                         });

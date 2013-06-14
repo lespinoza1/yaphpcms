@@ -412,7 +412,7 @@ Ext.define('Yap.controller.Admin', {
                                                 role_id: record.get('role_id')
                                             },
                                             confirmText: lang('YOU_CONFIRM,MOVE,SELECTED,RECORD,TO') + '<strong style="font-weight: bold; color: red">' + record.get('role_name') + '</strong>',
-                                            failedMsg: lang('MOVE,FALIURE'),
+                                            failedMsg: lang('MOVE,FAILURE'),
                                             scope: me,
                                             store: me.store()
                                         });
