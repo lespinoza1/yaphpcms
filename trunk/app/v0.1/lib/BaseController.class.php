@@ -259,6 +259,76 @@ class BaseController extends Yaf_Controller_Abstract {
     }
 
     /**
+     * 根据两字段组合值获取数据,如id及add_time匹配才能获取到数据,而不仅仅根据id
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-14 16:22:53
+     *
+     * @param string|array $field_arr   组合字段,通常为array('id','add_time')
+     * @param string $data 组合信息,默认null=$_POST['data'],格式:id1|add_time1,id2|add_time2,...
+     * @param string $field 选取字段,默认*
+     * @param string $table ,默认null
+     *
+     * @return array 数据
+     */
+    protected function _getPairsData($field_arr, $data = null, $field = '*', $pk_field = null, $table = null) {
+        $data       = null === $data ? Filter::string('data') : $data;
+        $return_arr = array();
+
+        if (!$data) {
+            return $return_arr;
+        }
+
+        $data = explode(',', $data);
+
+        foreach($data as $k => $v) {
+            $v_arr = explode('|', $v);
+
+            if (isset($v_arr[0], $v_arr[1]) && ($column_1 = intval($v_arr[0])) && ($column_2 = intval($v_arr[1]))) {
+                $return_arr[$column_1] = $column_2;
+            }
+        }
+
+        if (!$return_arr) {
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . L('INVALID_PARAM') . var_export($data, true);
+            C('TRIGGER_ERROR', array($log));
+            $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
+
+            return $return_arr;
+        }
+
+        $column_1_arr   = array_keys($return_arr);
+        $column_2_arr   = array_values($return_arr);
+        $pk_field       = $pk_field ? $pk_field : $this->_pk_field;
+        $field_arr      = is_array($field_arr) ? $field_arr : explode(',', $field_arr);
+
+        $table && $this->_model->table($table);
+
+        $data           = $this->_model
+        ->where(array($field_arr[0] => array('IN', $column_1_arr), $field_arr[1] => array('IN', $column_2_arr)))
+        ->field($field)
+        ->key_column($pk_field)
+        ->select();
+
+        $un_match       = count($data) == count($return_arr) ? '' : 'data count not match.';
+
+        foreach($data as $k => $v) {
+
+            if ($return_arr[$k] != $v[$field_arr[1]]) {//id与时间不匹配
+                $un_match .= ",{$k}({$return_arr[$k]}) => {$k}({$v[$field_arr[1]]})[correct]";
+                unset($data[$k]);
+            }
+        }
+
+        if ($un_match) {
+            $log = __METHOD__ . ': ' . __LINE__ . ',' . $un_match;
+            C('TRIGGER_ERROR', array($log, E_USER_WARNING));
+            $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);;
+
+        return $data;
+    }//end _getPairsData
+
+    /**
      * 获取视图模板引擎实例
      *
      * @author            mrmsl <msl-138@163.com>
