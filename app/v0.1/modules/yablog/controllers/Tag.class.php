@@ -53,7 +53,7 @@ class TagController extends CommonController {
             '_page_size'    => $page_size,
         ));
 
-        $o = $this->_getViewTemplate()
+        $o = $this->getViewTemplate()
         ->assign(array(
             'web_title'     => L('TAG'),
             'tag_arr'       => $tag_arr,

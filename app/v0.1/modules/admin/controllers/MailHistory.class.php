@@ -45,7 +45,7 @@ class MailHistoryController extends CommonController {
         }
 
         require(LIB_PATH . 'Mailer.class.php');
-        $mailer = new Mailer($this->_model, $this->_getViewTemplate());
+        $mailer = new Mailer($this->_model, $this->getViewTemplate());
 
         foreach ($data as $item) {
             $mailer->doMail($item);

@@ -126,7 +126,7 @@ class BlogController extends CommonController {
             $filename = str_replace(BASE_SITE_URL, WWWROOT, $blog_info['link_url']);
             new_mkdir(dirname($filename));
 
-            $o = $this->_getViewTemplate('build_html')
+            $o = $this->getViewTemplate('build_html')
             ->assign($this->_getNextAndPrevBlog($blog_id))//上下篇
             ->assign('blog_info', $blog_info)//博客内容
             ->assign(array(

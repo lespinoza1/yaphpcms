@@ -157,7 +157,7 @@ class CategoryController extends CommonController {
         if ($cate_id) {
             $error          = '';
             $log            = '';
-            $template       = $this->_getViewTemplate();
+            $template       = $this->getViewTemplate();
             $name_column    = $this->_name_column;
             $cache_path     = $template->_cache_path . CONTROLLER_NAME . DS;
 

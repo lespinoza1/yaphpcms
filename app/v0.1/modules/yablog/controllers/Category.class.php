@@ -82,7 +82,7 @@ class CategoryController extends CommonController {
             '_page_size'    => PAGE_SIZE,
         ));
 
-        $o = $this->_getViewTemplate($page_one && !$is_tag ? 'build_html' : null)
+        $o = $this->getViewTemplate($page_one && !$is_tag ? 'build_html' : null)
         ->assign(array(
             'blog_arr'  => $blog_arr,
             'paging'    => $paging->getHtml(),

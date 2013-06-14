@@ -52,7 +52,7 @@ class GuestbookController extends CommonController {
             '_page_size'    => PAGE_SIZE,
         ));
 
-        $o = $this->_getViewTemplate($page_one ? 'build_html' : null)
+        $o = $this->getViewTemplate($page_one ? 'build_html' : null)
         ->assign(array(
             'web_title'     => L('GUESTBOOK'),
             'guestbook_html' => $this->_getRecurrsiveComments($guestbook_arr),

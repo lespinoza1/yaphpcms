@@ -142,7 +142,7 @@ class CommonController extends BaseController {
             }
         }
 
-        $template = $this->_getViewTemplate();
+        $template = $this->getViewTemplate();
 
         if (is_string($link_url)) {//text,link
             $template->assign('link_url', explode(',', $link_url));
