@@ -21,10 +21,6 @@ Ext.define('Yap.controller.Mail', {
      */
     nameColumn: 'template_name',//名称字段
 
-    constructor: function() {//构造函数
-        this.defineModel().defineStore();
-    },
-
     /**
      * @inheritdoc Yap.controller.Base#listAction
      */
@@ -163,83 +159,8 @@ Ext.define('Yap.controller.Mail', {
             dock: 'top',
             items: this.deleteItem()
         }
-    },//end tbar
-
-    //放到最后定义，否则，jsduck后，上面的方法将属于Yap.store.Mail或Yap.model.Mail
-    /**
-     * @inheritdoc Yap.controller.Field#defineModel
-     */
-    defineModel: function() {
-        /**
-         * 博客数据模型
-         */
-        Ext.define('Yap.model.Mail', {
-            extend: 'Ext.data.Model',
-            /**
-             * @cfg {Array}
-             * 字段
-             */
-            fields: [this.idProperty, 'subject', 'content', 'add_time', 'template_name', 'update_time', 'memo', 'sort_order'],
-            /**
-             * @cfg {String}
-             * 主键
-             */
-            idProperty: this.idProperty
-        });
-
-        return this;
-    },
-
-    /**
-     * @inheritdoc Yap.controller.Field#defineStore
-     * @member Yap.controller.Mail
-     */
-    defineStore: function() {
-        /**
-         * 博客数据容器
-         */
-        Ext.define('Yap.store.Mail', {
-            extend: 'Ext.data.Store',
-            /**
-             * @cfg {Boolean}
-             * 自动消毁
-             */
-            autoDestroy: true,
-
-            /**
-             * @cfg {Object/String}
-             * 模型
-             */
-            model: 'Yap.model.Mail',
-            /**
-             * @cfg {Object}
-             * proxy
-             */
-            proxy: {
-                type: C.dataType,
-                url: this.getActionUrl(false, 'list'),
-                reader: C.dataReader(),
-                listeners: exception(),//捕获异常 by mrmsl on 2012-07-08 21:44:36
-                messageProperty: 'msg',
-                simpleSortMode: true
-            },
-            //增加排序，以防点击列表头部排序时，多余传参，出现不必要的错误 by mrmsl on 2012-07-27 16:21:54
-            /**
-             * @cfg {Object}
-             * sorters
-             */
-            sorters: {
-                property : 'sort_order',
-                direction: 'ASC'
-            },
-            constructor: function(config) {//构造函数
-                this.callParent([config || {}]);
-            }
-        });
-
-        return this;
-    }//end defineStore
+    }//end tbar
 });
 
 //放到最后，以符合生成jsduck类说明
-Ext.data.JsonP.Yap_controller_Mail(Yap.controller.Mail);
+Ext.data.JsonP.Yap_controller_Mail(['Yap.store.Mail', Yap.controller.Mail]);
