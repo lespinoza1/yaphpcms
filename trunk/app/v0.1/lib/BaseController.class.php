@@ -323,7 +323,8 @@ class BaseController extends Yaf_Controller_Abstract {
         if ($un_match) {
             $log = __METHOD__ . ': ' . __LINE__ . ',' . $un_match;
             C('TRIGGER_ERROR', array($log, E_USER_WARNING));
-            $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);;
+            $this->_model->addLog($log, LOG_TYPE_INVALID_PARAM);
+        }
 
         return $data;
     }//end _getPairsData
