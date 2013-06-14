@@ -117,6 +117,10 @@ Ext.define('Yap.controller.MailHistory', {
                 return me.searchReplaceRenderer(v, 'subject');
             }
         }, {
+            header: lang('SUCCESS,SEND,CN_CISHU'),//成功发送次数
+            dataIndex: 'times',
+            width: 100
+        }, {
             header: lang('SEND,TIME'),//发送时间
             dataIndex: 'add_time',
             width: 150,
