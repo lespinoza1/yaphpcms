@@ -54,7 +54,7 @@ Ext.define('Yap.controller.MailHistory', {
             action: this.getActionUrl(false, 'afreshSend'),
             data:'data=' + data,
             confirmText: lang('YOU_CONFIRM,AFRESH,SEND,' + _lang + ',RECORD,CN_YOUJIAN'),
-            failedMsg: lang('AFRESH,SEND,CN_YOUJIAN,FALIURE'),
+            failedMsg: lang('AFRESH,SEND,CN_YOUJIAN,FAILURE'),
             scope: this,
             store: this.store()
         };
@@ -136,15 +136,7 @@ Ext.define('Yap.controller.MailHistory', {
                 handler: function(grid, rowIndex, cellIndex) {
                     me.afreshSend(grid.getStore().getAt(rowIndex));
                 }
-            }, {
-                renderer: function(v, meta, record) {//删除
-                    return '<span class="appactioncolumn appactioncolumn-'+ this +'">' + lang('DELETE') + '</span>';
-                },
-                handler: function(grid, rowIndex, cellIndex) {
-                    var record = grid.getStore().getAt(rowIndex);
-                    me['delete'](record, lang('CN_CI,RECORD'));
-                }
-            }]
+            }, me.deleteColumnItem(null)]
         }];
     },//end getListColumns
 
@@ -258,11 +250,19 @@ Ext.define('Yap.controller.MailHistory', {
                     }
                 }
             ]
-            }, '-', lang('ADD,TIME,CN_CONG'),
+            }, '-', lang('SEND,TIME,CN_CONG'),
             extField.dateField({itemId: 'date_start'}), lang('TO'),
             extField.dateField({itemId: 'date_end'}), '-', lang('BELONG_TO,MAIL_TEMPLATE'),
-            extField.hiddenField('template_id'),//template_id
-            /*{
+            //extField.hiddenField('template_id'),//template_id
+            extField.base({
+                xtype: 'combobox',
+                width: 150,
+                itemId: me.idProperty,
+                value: data[me.idProperty],
+                displayField: 'template_name',
+                valueField: me.idProperty,
+                store: Ext.create('Yap.store.Mail')
+            }),/*{
                 xtype: 'treepicker',
                 width: 150,
                 itemId: 'template_name',
@@ -383,4 +383,4 @@ Ext.define('Yap.controller.MailHistory', {
 });
 
 //放到最后，以符合生成jsduck类说明
-Ext.data.JsonP.Yap_controller_MailHistory(Yap.controller.MailHistory);
+Ext.data.JsonP.Yap_controller_MailHistory(['Yap.store.Mail', Yap.controller.MailHistory]);
