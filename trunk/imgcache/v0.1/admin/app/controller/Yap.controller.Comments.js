@@ -125,7 +125,7 @@ Ext.define('Yap.controller.Comments', {
             action: this.getActionUrl(false, 'auditing'),
             data: this.idProperty + '=' + pkValue + '&status=' + status,
             confirmText: lang('YOU_CONFIRM') + this.statusArr[status] + lang(confirmText + ',RECORD'),
-            failedMsg: lang('AUDITING,FALIURE'),
+            failedMsg: lang('AUDITING,FAILURE'),
             scope: this,
             store: this.store()
         };
@@ -418,7 +418,7 @@ Ext.define('Yap.controller.Comments', {
             action: this.getActionUrl(false, 'afreshIp'),
             data:'data=' + data,
             confirmText: lang('YOU_CONFIRM,AFRESH,GET,' + _lang + ',RECORD,%ip,AREA'),
-            failedMsg: lang('AFRESH,GET,%ip,AREA,FALIURE'),
+            failedMsg: lang('AFRESH,GET,%ip,AREA,FAILURE'),
             scope: this,
             store: this.store()
         };

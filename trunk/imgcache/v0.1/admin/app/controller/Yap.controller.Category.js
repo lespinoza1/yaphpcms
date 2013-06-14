@@ -55,7 +55,7 @@ Ext.define('Yap.controller.Category', {
             action: this.getActionUrl(false, 'clearCache'),
             data: this.idProperty + '=' + pkValue,
             confirmText: lang('YOU_CONFIRM,CLEAR') + confirmText + lang('STATIC_PAGE,CACHE'),
-            failedMsg: lang('CLEAR,FALIURE'),
+            failedMsg: lang('CLEAR,FAILURE'),
             scope: this,
             callback: function () {
                 //log(this._listgrid.getSelectionModel().deselectAll(), this._listgrid.getSelectionModel().store);

@@ -239,7 +239,7 @@ Ext.define('Yap.controller.Base', {
             action: this.getActionUrl(false, 'delete'),
             data: this.idProperty + '=' + pkValue,
             confirmText: confirmText,
-            failedMsg: lang('DELETE,FALIURE'),
+            failedMsg: lang('DELETE,FAILURE'),
             scope: this,
             store: this.store()
         };
@@ -283,7 +283,7 @@ Ext.define('Yap.controller.Base', {
             action: this.getActionUrl(false, 'deleteBlogHtml'),
             data: this.idProperty + '=' + pkValue,
             confirmText: lang('YOU_CONFIRM,DELETE') + confirmText + lang('STATIC_PAGE'),
-            failedMsg: lang('DELETE,FALIURE'),
+            failedMsg: lang('DELETE,FAILURE'),
             scope: this,
             callback: function () {
                 this.selectModel.deselectAll();
