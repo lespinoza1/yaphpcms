@@ -302,18 +302,19 @@ Ext.define('Yap.controller.Base', {
      *
      * @protected
      *
-     * @param {String} confirmField 删除提示字段
+     * @param {String} [confirmField=null] 删除提示字段
      *
      * @return {Object} actioncolumn item 配置
      */
     deleteColumnItem: function(confirmField) {
-        var me = this;
+        var me = this,
+            confirmText = null === confirmField ? lang('CN_CI,RECORD') : (confirmField ? htmlspecialchars(record.get(confirmField)) : '');
 
         return {
             text: lang('DELETE'),
             handler: function(grid, rowIndex, cellIndex) {
                 var record = grid.getStore().getAt(rowIndex);
-                me['delete'](record, '<span class="font-red font-bold">' + (confirmField ? record.get(confirmField) : '') + '</span>');
+                me['delete'](record, confirmField ? '<span class="font-red font-bold">' + confirmText + '</span>' : confirmText);
             }
         };
     },
