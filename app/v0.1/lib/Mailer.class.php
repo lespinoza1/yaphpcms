@@ -125,18 +125,18 @@ class Mailer extends PHPMailer {
      * @author      mrmsl <msl-138@163.com>
      * @date        2013-06-05 17:42:41
      *
-     * @param object $_model            数据库实例
+     * @param object $model            数据库实例
      * @param object $view_template     默认null,自动获取
      * @param bool   $exceptions        true可捕获发送异常。默认false
      *
      * @return void 无返回值
      */
-    public function __construct($_model, $view_template = null,$exceptions = false) {
+    public function __construct($model, $view_template = null,$exceptions = false) {
         parent::__construct($exceptions);
         $this->SetLanguage('zh_cn', PHPMAILER_PATH . 'language/');
         $this->setConfig();
-        $this->_model = $_model;
-        $this->_view_template = null === $view_template ? $_model->module->getViewTemplate(array('_caching' => false)) : $view_template;
+        $this->_model = $model;
+        $this->_view_template = null === $view_template ? $model->getProperty('_module')->getViewTemplate(array('_caching' => false)) : $view_template;
     }
 
     /**
