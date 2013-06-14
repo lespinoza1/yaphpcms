@@ -122,7 +122,7 @@ class HtmlController extends CommonController {
      * @return void 无返回值
      */
     private function _html_msg($info) {
-        $this->_getViewTemplate('build_html')->assign('web_title', L('SYSTEM_INFOMATION'));
+        $this->getViewTemplate('build_html')->assign('web_title', L('SYSTEM_INFOMATION'));
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
     }
 
@@ -137,7 +137,7 @@ class HtmlController extends CommonController {
      * @return void 无返回值
      */
     private function _html_page_not_found($info) {
-        $this->_getViewTemplate('build_html')->assign('web_title', L('PAGE_NOT_FOUND'));
+        $this->getViewTemplate('build_html')->assign('web_title', L('PAGE_NOT_FOUND'));
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
     }
 
@@ -152,7 +152,7 @@ class HtmlController extends CommonController {
      * @return void 无返回值
      */
     private function _ssi_footer($info) {
-        $this->_getViewTemplate('build_html')->assign('footer', sys_config('sys_base_copyright'));
+        $this->getViewTemplate('build_html')->assign('footer', sys_config('sys_base_copyright'));
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
     }
 
@@ -174,7 +174,7 @@ class HtmlController extends CommonController {
         ->field('link_url,title')
         ->limit(10)
         ->select();
-        $this->_getViewTemplate('build_html')->assign('blogs', $blogs);
+        $this->getViewTemplate('build_html')->assign('blogs', $blogs);
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
     }
 
@@ -189,7 +189,7 @@ class HtmlController extends CommonController {
      * @return void 无返回值
      */
     private function _ssi_navbar($info) {
-        $this->_getViewTemplate('build_html')->assign('category_html', $this->_categoryNav());
+        $this->getViewTemplate('build_html')->assign('category_html', $this->_categoryNav());
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
     }
 
@@ -213,7 +213,7 @@ class HtmlController extends CommonController {
         ->field('c.*,b.link_url,b.title')
         ->limit(10)
         ->select();
-        $this->_getViewTemplate('build_html')->assign('comments', $comments);
+        $this->getViewTemplate('build_html')->assign('comments', $comments);
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
     }
 
@@ -234,7 +234,7 @@ class HtmlController extends CommonController {
         ->field('DISTINCT `tag`')
         ->limit(50)
         ->select();
-        $this->_getViewTemplate('build_html')->assign('tags', $tags);
+        $this->getViewTemplate('build_html')->assign('tags', $tags);
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
     }
 

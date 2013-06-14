@@ -42,7 +42,7 @@ class MailController extends CommonController {
      * @return void 无返回值
      */
     protected function _afterDelete($pk_id) {
-        $o      = $this->_getViewTemplate();
+        $o      = $this->getViewTemplate();
         $data   = $this->_getCache();
         $path   = THEME_PATH . 'mail/';
         $suffix = C('TEMPLATE_SUFFIX');

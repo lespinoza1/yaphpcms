@@ -64,7 +64,7 @@ class MiniblogController extends CommonController {
             '_page_size'    => PAGE_SIZE,
         ));
 
-        $o = $this->_getViewTemplate($page_one ? 'build_html' : null)
+        $o = $this->getViewTemplate($page_one ? 'build_html' : null)
         ->assign(array(
             'web_title' => L('MINIBLOG'),
             'blog_arr'  => $blog_arr,
@@ -109,7 +109,7 @@ class MiniblogController extends CommonController {
             $filename = str_replace(BASE_SITE_URL, WWWROOT, $blog_info['link_url']);
             new_mkdir(dirname($filename));
 
-            $o = $this->_getViewTemplate('build_html')
+            $o = $this->getViewTemplate('build_html')
             ->assign('blog_info', $blog_info)//微博内容
             ->assign(array(
                 'web_title'         => L('MINIBLOG,DETAIL') . TITLE_SEPARATOR . L('MINIBLOG'),

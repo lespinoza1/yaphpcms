@@ -166,7 +166,7 @@ class BaseController extends Yaf_Controller_Abstract {
      * @return void 无返回值
      */
     protected function _fetch($controller = MODULE_NAME, $action = ACTION_NAME, $cache_id = '') {
-        return $this->_getViewTemplate()
+        return $this->_FAILURE()
         ->fetch($controller ? $controller : MODULE_NAME, $action ? $action : ACTION_NAME, $cache_id);
     }
 
@@ -330,46 +330,6 @@ class BaseController extends Yaf_Controller_Abstract {
     }//end _getPairsData
 
     /**
-     * 获取视图模板引擎实例
-     *
-     * @author            mrmsl <msl-138@163.com>
-     * @data              2013-04-12 15:36:13
-     * @lastmodify        2013-04-15 17:05:13 by mrmsl
-     *
-     * @param mixed $config 模板引擎配置。默认null.为build_html生成静态页时，$config = array('_caching' => true, '_force_compile' => false);
-     *
-     * @return object 视图模板引擎实例
-     */
-    protected function _getViewTemplate($config = null) {
-
-        if (!$this->_view_template) {
-            $this->_view_template = Template::getInstance();
-            $this->_view_template->assign(sys_config())
-            //->assign('L', L())
-            //->assign('C', C())
-            ->assign('me', $this)
-            ->assign('nav_id', strtolower(CONTROLLER_NAME));
-        }
-
-        if (null !== $config) {//属性
-
-            if ('build_html' === $config) {//生成静态页
-                $config = array(
-                    '_caching'          => false,
-                    '_force_compile'    => false,
-                );
-            }
-
-            foreach($config as $k => $v) {
-                $this->_view_template->$k = $v;
-
-            }
-        }
-
-        return $this->_view_template;
-    }
-
-    /**
      * url跳转
      *
      * @author          mrmsl <msl-138@163.com>
@@ -490,6 +450,46 @@ class BaseController extends Yaf_Controller_Abstract {
 
         return $index ? $data[$module][$index] : $data[$module];
     }//end getGuestbookCommentsSetting
+
+    /**
+     * 获取视图模板引擎实例
+     *
+     * @author            mrmsl <msl-138@163.com>
+     * @data              2013-04-12 15:36:13
+     * @lastmodify        2013-04-15 17:05:13 by mrmsl
+     *
+     * @param mixed $config 模板引擎配置。默认null.为build_html生成静态页时，$config = array('_caching' => true, '_force_compile' => false);
+     *
+     * @return object 视图模板引擎实例
+     */
+    public function getViewTemplate($config = null) {
+
+        if (!$this->_view_template) {
+            $this->_view_template = Template::getInstance();
+            $this->_view_template->assign(sys_config())
+            //->assign('L', L())
+            //->assign('C', C())
+            ->assign('me', $this)
+            ->assign('nav_id', strtolower(CONTROLLER_NAME));
+        }
+
+        if (null !== $config) {//属性
+
+            if ('build_html' === $config) {//生成静态页
+                $config = array(
+                    '_caching'          => false,
+                    '_force_compile'    => false,
+                );
+            }
+
+            foreach($config as $k => $v) {
+                $this->_view_template->$k = $v;
+
+            }
+        }
+
+        return $this->_view_template;
+    }
 
      /**
      * 获取不带链接的类似面包屑导航，如菜单管理»添加菜单

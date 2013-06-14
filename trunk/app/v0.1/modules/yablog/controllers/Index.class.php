@@ -83,7 +83,7 @@ class IndexController extends CommonController {
     public function indexAction() {
         $blog_arr = $this->_getBlogs();
         //$miniblog = $this->_getLatesttMiniblog();
-        $this->_getViewTemplate()
+        $this->getViewTemplate()
         //->assign('miniblog', $miniblog)
         ->assign('blog_arr', $blog_arr)
         ->assign('web_title', sys_config('sys_base_web_index_title'));

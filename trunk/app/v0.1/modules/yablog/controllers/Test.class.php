@@ -31,7 +31,7 @@ class TestController extends CommonController {
     public function addGuestbookAction() {
         $rand_content = $this->_model->table(TB_COMMENTS)
         ->field('0 AS `parent_id`,0 AS `type`, 0 AS `blog_id`,username,"http://www.abc.com/path\"/?querystring => https://www.abc.com/path/?querystring" AS content,user_homepage')->order('RAND()')->limit(1)->select();
-        $this->_getViewTemplate()
+        $this->getViewTemplate()
         ->assign('guestbook', $rand_content);
         $this->_display(CONTROLLER_NAME, 'index');
     }
@@ -48,7 +48,7 @@ class TestController extends CommonController {
         $rand_content = $this->_model->table(TB_BLOG)
         ->field(array('CONCAT("blog,",blog_id,",",add_time)' => 'diggs'))->where('blog_id=687')->find();
         //order('RAND()')->find();
-        $this->_getViewTemplate()
+        $this->getViewTemplate()
         ->assign('digg', $rand_content);
         $this->_display(CONTROLLER_NAME, 'index');
     }
