@@ -67,7 +67,9 @@ Ext.define('Yap.store.Mail', {
         property : 'sort_order',
         direction: 'ASC'
     },
-    constructor: function(config) {//构造函数
-        this.callParent([config || {}]);
+    constructor: function(config) {//构造函数.
+        config = config || {};
+        this.proxy.url = config.url || getActionUrl('role/list');
+        this.callParent([config]);
     }
 });

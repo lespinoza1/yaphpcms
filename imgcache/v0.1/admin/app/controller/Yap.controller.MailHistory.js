@@ -252,16 +252,20 @@ Ext.define('Yap.controller.MailHistory', {
             ]
             }, '-', lang('SEND,TIME,CN_CONG'),
             extField.dateField({itemId: 'date_start'}), lang('TO'),
-            extField.dateField({itemId: 'date_end'}), '-', lang('BELONG_TO,MAIL_TEMPLATE'),
+            extField.dateField({itemId: 'date_end'}), '-',
             //extField.hiddenField('template_id'),//template_id
             extField.base({
                 xtype: 'combobox',
                 width: 150,
+                _getQueryData: true,
                 itemId: me.idProperty,
                 value: data[me.idProperty],
                 displayField: 'template_name',
                 valueField: me.idProperty,
-                store: Ext.create('Yap.store.Mail')
+                emptyText: lang('BELONG_TO,MAIL_TEMPLATE'),
+                store: Ext.create('Yap.store.Mail', {
+                    url: me.getActionUrl('mail', 'list?combo')
+                })
             }),/*{
                 xtype: 'treepicker',
                 width: 150,
