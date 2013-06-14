@@ -117,7 +117,7 @@ class CommentsController extends CommonController {
 
             if ($at_email = C('T_INFO.at_email')) {
                 require_cache(LIB_PATH . 'Mailer.class.php');
-                $mailer = new Mailer($this->_model, $this->getViewTemplate());
+                $mailer = new Mailer($this->_model);
 
                 foreach($at_email as $v) {
                     $v['subject'] = $v['email'] . rand(1000, 9999);

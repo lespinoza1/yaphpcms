@@ -161,10 +161,7 @@ class CommentsModel extends CommonModel {
 
             if (($parent_info = C('T_PARENT_INFO')) && $parent_info['at_email']) {
                 require_cache(LIB_PATH . 'Mailer.class.php');
-                $view_template = Template::getInstance();
-                $view_template->assign(sys_config());
-                $view_template->_caching = false;
-                $mailer = new Mailer($this, $view_template);
+                $mailer = new Mailer($this);
                 $mailer->mail('comments_at_email', $parent_info);
             }
         }

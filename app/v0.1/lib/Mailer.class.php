@@ -126,17 +126,17 @@ class Mailer extends PHPMailer {
      * @date        2013-06-05 17:42:41
      *
      * @param object $_model            数据库实例
-     * @param object $view_template
-     * @param bool   $exceptions true可捕获发送异常。默认false
+     * @param object $view_template     默认null,自动获取
+     * @param bool   $exceptions        true可捕获发送异常。默认false
      *
      * @return void 无返回值
      */
-    public function __construct($_model, $view_template,$exceptions = false) {
+    public function __construct($_model, $view_template = null,$exceptions = false) {
         parent::__construct($exceptions);
         $this->SetLanguage('zh_cn', PHPMAILER_PATH . 'language/');
         $this->setConfig();
         $this->_model = $_model;
-        $this->_view_template = $view_template;
+        $this->_view_template = null === $view_template ? $_model->module->getViewTemplate(array('_caching' => false)) : $view_template;
     }
 
     /**
