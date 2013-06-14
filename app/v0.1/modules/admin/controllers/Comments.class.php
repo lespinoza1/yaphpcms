@@ -120,8 +120,7 @@ class CommentsController extends CommonController {
                 $mailer = new Mailer($this->_model);
 
                 foreach($at_email as $v) {
-                    $v['subject'] = $v['email'] . rand(1000, 9999);
-                    var_dump($mailer->mail('comments_at_email', $v));
+                    $mailer->mail('comments_at_email', $v);
                 }
             }
         }
@@ -178,7 +177,7 @@ class CommentsController extends CommonController {
                 }
             }
 
-            if ($selected['at_email']) {
+            if (COMMENT_STATUS_PASS == C('T_STATUS') && $selected['at_email']) {
                 $info['at_email'] = $this->_model->field('type,email,content,comment_id,blog_id')->where(array($this->_pk_field => array('IN', $selected['at_email']), 'at_email' => 1))->select();
 
                 if ($info['at_email']) {
@@ -206,14 +205,6 @@ class CommentsController extends CommonController {
 
         return $log ? substr($log, 0, -1) : null;
     }//end _beforeExec
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function _infoCallback(&$cate_info) {
-        //$cate_info['add_time'] = new_date(sys_config('sys_timezone_datetime_format'), $cate_info['add_time']);
-        //$cate_info['cate_name'] = $this->_getCache($cate_info['cate_id'] . '.cate_name', 'Category');
-    }
 
     /**
      * 添加或保存
@@ -342,6 +333,7 @@ class CommentsController extends CommonController {
         }
 
         C('T_STATUS_ARR', array($field => $status_arr));
+        C('T_STATUS', $value);
         $this->_setOneOrZero($field, $value);
     }//end auditingAction
 
