@@ -76,7 +76,7 @@ class Mailer extends PHPMailer {
         $info['content'] = $this->_view_template
         ->assign(array(
             'comment_name'  => $comment_name,
-            'content'       => $comment_info['content'],
+            'content'       => $comment_info['parent_id'] ? str_replace('@<a class="link" href="', '@<a class="link" target="_blank" href="' . substr_replace($comment_info['link_url'], '', strpos($comment_info['link_url'], '#')), $comment_info['content']) : $comment_info['content'],
             'link_url'      => $comment_info['link_url'],
         ))
         ->fetch('Mail', 'comments_at_email');

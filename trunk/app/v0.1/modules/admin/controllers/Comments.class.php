@@ -178,7 +178,7 @@ class CommentsController extends CommonController {
             }
 
             if (COMMENT_STATUS_PASS == C('T_STATUS') && $selected['at_email']) {
-                $info['at_email'] = $this->_model->field('type,email,content,comment_id,blog_id')->where(array($this->_pk_field => array('IN', $selected['at_email']), 'at_email' => 1))->select();
+                $info['at_email'] = $this->_model->field('type,email,content,comment_id,blog_id,parent_id')->where(array($this->_pk_field => array('IN', $selected['at_email']), 'at_email' => 1))->select();
 
                 if ($info['at_email']) {
 
