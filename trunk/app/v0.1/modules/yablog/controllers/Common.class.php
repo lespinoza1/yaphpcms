@@ -42,7 +42,7 @@ class CommonController extends BaseController {
     private function _getReplyComments($comment_id, $is_reply = false) {
         $data = $this->_model
         ->table(TB_COMMENTS)
-        ->where('status=1 AND parent_id=' . $comment_id)
+        ->where('status=' . COMMENT_STATUS_PASS . ' AND parent_id=' . $comment_id)
         ->order('comment_id')
         ->select();
 
