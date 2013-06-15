@@ -250,7 +250,7 @@ class CommentsModel extends CommonModel {
             return true;
         }
 
-        $parent_info = $this->field('comment_id,username,email,content,level,node,status,type,blog_id,at_email')->where(array($this->_pk_field => $parent_id, 'type' => C('T_TYPE'), 'blog_id' => C('T_BLOG_ID')))->find();//父亲信息
+        $parent_info = $this->field('comment_id,parent_id,username,email,content,level,node,status,type,blog_id,at_email')->where(array($this->_pk_field => $parent_id, 'type' => C('T_TYPE'), 'blog_id' => C('T_BLOG_ID')))->find();//父亲信息
 
         if ($parent_info) {
 
@@ -357,7 +357,7 @@ class CommentsModel extends CommonModel {
      */
     protected function _setContent($content) {
 
-        if ($v = C('T_PARENT_INFO')) {//回复 @用户名
+        if ($v = C('T_PARENT_INFO')) {//回复 @用户名,务必@<a class="link",因为邮件会添加target="target_blank",后台会添加onclick="return false"属性
             $reply = '@<a class="link" href="#comment-' . $v['comment_id'] . '" rel="nofollow">' . $v['username'] .  '</a> ';
         }
 

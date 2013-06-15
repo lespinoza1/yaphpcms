@@ -654,7 +654,7 @@ Ext.define('Yap.controller.Comments', {
                                     var html = [];
                                     html.push('<div class="comment-detail', isReply ? ' comment-reply' : '' ,'" id="comment-', data.comment_id, '">');
                                     html.push('    <img class="float-left avatar avatar-level-', data.level, '" alt="" src="http://imgcache.yaphpcms.com/common/images/guest.png" />');
-                                    html.push('    <div class="float-left0 comment-body">');
+                                    html.push('    <div class="comment-body">');
                                     html.push('        <p class="font-gray">');
                                     html.push('            <span class="float-right">', me.renderDatetime(data.add_time), '</span>');
 
@@ -662,7 +662,7 @@ Ext.define('Yap.controller.Comments', {
 
                                     html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
                                     html.push('        </p>');
-                                    html.push('        ', data.content);
+                                    html.push('        ', data.parent_id ? data.content.replace('@<a class="link"', '@<a class="link" onclick="return false"') : data.content;
 
                                     if (data.data) {
                                         Ext.Array.each(data.data, function(item) {
