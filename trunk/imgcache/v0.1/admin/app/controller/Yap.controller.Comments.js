@@ -662,7 +662,7 @@ Ext.define('Yap.controller.Comments', {
 
                                     html.push('            ip: ', data.user_ip, '[', data.province, data.province == data.city ? '' : data.city, ']');
                                     html.push('        </p>');
-                                    html.push('        ', data.parent_id ? data.content.replace('@<a class="link"', '@<a class="link" onclick="return false"') : data.content;
+                                    html.push('        ', data.parent_id ? data.content.replace('@<a class="link"', '@<a class="link" onclick="return false"') : data.content);
 
                                     if (data.data) {
                                         Ext.Array.each(data.data, function(item) {
