@@ -35,18 +35,17 @@ class CommonController extends BaseController {
      * @date            2013-04-28 12:47:13
      *
      * @param int   $comment_id 评论id
-     * @param bool  $is_reply   true为回复。默认false
      *
      * @return string $this->getRecurrsiveComments()返回html
      */
-    private function _getReplyComments($comment_id, $is_reply = false) {
+    private function _getReplyComments($comment_id) {
         $data = $this->_model
         ->table(TB_COMMENTS)
-        ->where('status=' . COMMENT_STATUS_PASS . ' AND parent_id=' . $comment_id)
+        ->where('status=' . COMMENT_STATUS_PASS . " AND node LIKE '{$comment_id},%'")
         ->order('comment_id')
         ->select();
 
-        return $this->_getRecurrsiveComments($data, $is_reply);
+        return $data ? $this->_getRecurrsiveComments(Tree::array2tree($data, 'comment_id'), true) : '';
     }
 
     /**
@@ -108,8 +107,11 @@ class CommonController extends BaseController {
             $html .= $item['content'];
             $html .= '<span id="base-' . $item['comment_id'] . '"></span>';
 
-            if ($item['last_reply_time'] > $item['add_time'] && $item['level'] < 5) {
-                $html .= $this->_getReplyComments($item['comment_id'], true);
+            if (!empty($item['data'])) {
+                $html .= $this->_getRecurrsiveComments($item['data'], true);
+            }
+            elseif ($item['last_reply_time'] > $item['add_time'] && $item['level'] < 5 && !$is_reply) {
+                $html .= $this->_getReplyComments($item['comment_id']);
             }
 
             $html .= '
