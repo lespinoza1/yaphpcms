@@ -142,7 +142,7 @@ class MailController extends CommonController {
 
         if (isset($_GET['combo'])) {//邮件历史,所属邮件模板
             $pk_field   = $this->_pk_field;
-            $_data      = array(array($pk_field => 0, 'template_name' => L('BELONG_TO,MAIL_TEMPLATE')));
+            $_data      = array(array($pk_field => '0', 'template_name' => L('BELONG_TO,MAIL_TEMPLATE')));
 
             foreach($data as $v) {
                 $_data[] = array($pk_field => $v[$pk_field], 'template_name' => $v['template_name']);
