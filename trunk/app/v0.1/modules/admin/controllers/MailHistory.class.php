@@ -79,7 +79,7 @@ class MailHistoryController extends CommonController {
         $keyword        = Filter::string('keyword', 'get');//关键字
         $date_start     = Filter::string('date_start', 'get');//开始时间
         $date_end       = Filter::string('date_end', 'get');//结束时间
-        $template_id    = Filter::int('log_type', 'get');//
+        $template_id    = Filter::int('template_id', 'get');//
         $column         = Filter::string('column', 'get');//搜索字段
         $where          = array();
 

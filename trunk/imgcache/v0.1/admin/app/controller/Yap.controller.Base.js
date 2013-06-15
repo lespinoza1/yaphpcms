@@ -566,7 +566,7 @@ Ext.define('Yap.controller.Base', {
     getQueryData: function(tbar, data) {
         Ext.each(tbar.items.items, function(item) {
 
-            if (item.isXType('textfield') || item.isXType('hiddenfield') || item._getQueryData) {
+            if (item.isXType('textfield') || item.isXType('hiddenfield')) {
                 data[item.itemId || item.name] = item.getSubmitValue();//getSubmitValue() by mrmsl on 2012-09-08 23:17:13
             }
         });

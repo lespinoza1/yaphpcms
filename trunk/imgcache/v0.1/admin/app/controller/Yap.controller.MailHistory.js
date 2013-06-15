@@ -257,32 +257,33 @@ Ext.define('Yap.controller.MailHistory', {
             }, '-', lang('SEND,TIME,CN_CONG'),
             extField.dateField({itemId: 'date_start'}), lang('TO'),
             extField.dateField({itemId: 'date_end'}), '-',
-            //extField.hiddenField('template_id'),//template_id
-            extField.base({
+            {
                 xtype: 'combobox',
                 width: 150,
-                _getQueryData: true,
-                itemId: me.idProperty,
-                value: data[me.idProperty],
+                editable: false,
+                value: data.template_id,
+                itemId: 'template_id',
                 displayField: 'template_name',
-                valueField: me.idProperty,
+                valueField: 'template_id',
                 emptyText: lang('BELONG_TO,MAIL_TEMPLATE'),
                 store: Ext.create('Yap.store.Mail', {
                     url: me.getActionUrl('mail', 'list?combo')
-                })
-            }),/*{
-                xtype: 'treepicker',
-                width: 150,
-                itemId: 'template_name',
-                value: data.cate_id,
-                emptyText: lang('BELONG_TO_CATEGORY'),
-                displayField: 'cate_name',
-                pickerIdProperty: 'cate_id',
-                store: Ext.create('Yap.store.Category', {
-                    folderSort: false,
-                    url: this.getActionUrl('category', 'publicCategory', 'unshift&parent_id={0}&emptyText={1}'.format(data.cate_id, lang('BELONG_TO_CATEGORY')))
-                })
-            }, */{
+                }),
+                listeners: {
+                    beforequery: function() {//展开前
+
+                        if (this.value) {//已初始值，不重复加载
+                            this.expand();
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    render: function() {
+                        this.value && this.getStore().load();//初始值，自动加载
+                    }
+                }
+            }, {
                 xtype: 'combobox',//搜索字段
                 width: 70,
                 itemId: 'column',
