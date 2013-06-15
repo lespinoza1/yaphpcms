@@ -204,18 +204,50 @@ class HtmlController extends CommonController {
      * @return void 无返回值
      */
     private function _ssi_new_comments($info) {
-        $comments = $this->_model
+        $data = $this->_model
         ->table(TB_COMMENTS)
-        ->alias('c')
-        ->join(' LEFT JOIN ' . TB_BLOG . ' AS b ON c.blog_id=b.blog_id AND b.is_issue=1 AND b.is_delete=0')
-        ->where('c.status=1 AND c.type!=2')
-        ->order('c.comment_id DESC')
-        ->field('c.*,b.link_url,b.title')
+        ->where('status=' . COMMENT_STATUS_PASS)
+        ->order('comment_id DESC')
         ->limit(10)
         ->select();
-        $this->getViewTemplate('build_html')->assign('comments', $comments);
+
+        $selected = array(COMMENT_TYPE_BLOG => array(), COMMENT_TYPE_MINIBLOG => array());
+
+        foreach($data as $k => $v) {
+            $type       = $v['type'];
+            $blog_id    = $v['blog_id'];
+
+            if (COMMENT_TYPE_BLOG == $type) {
+
+                if (isset($selected[COMMENT_TYPE_BLOG][$blog_id])) {
+                    $blog_info = $selected[COMMENT_TYPE_BLOG][$blog_id];
+                }
+                else {
+                    $blog_info = $this->_model->table(TB_BLOG)->where('blog_id=' . $blog_id)->field('title,link_url')->find();
+                    $selected[COMMENT_TYPE_BLOG][$blog_id] = $blog_info;
+                }
+
+                $data[$k]['title'] = $blog_info['title'];
+                $data[$k]['link_url'] = $blog_info['link_url'];
+            }
+            elseif (COMMENT_TYPE_MINIBLOG == $type) {
+
+                if (isset($selected[COMMENT_TYPE_MINIBLOG][$blog_id])) {
+                    $blog_info = $selected[COMMENT_TYPE_MINIBLOG][$blog_id];
+                }
+                else {
+                    $blog_info = $this->_model->table(TB_MINIBLOG)->where('blog_id=' . $v['blog_id'])->field('add_time,link_url')->find();
+                    $selected[COMMENT_TYPE_MINIBLOG][$blog_id] = $blog_info;
+                }
+
+                $data[$k]['title'] = new_date('Y-m-d', $blog_info['add_time']) . ' ' . L('MINIBLOG');
+                $data[$k]['link_url'] = $blog_info['link_url'];
+            }
+        }//end foreach
+
+        $this->getViewTemplate('build_html')->assign('comments', $data);
         $this->_buildHtml(WWWROOT . $info['html_name'] . C('HTML_SUFFIX'), $this->_fetch($info['_controller'], $info['_action']));
-    }
+    }//end _ssi_new_comments
 
     /**
      * 标签云

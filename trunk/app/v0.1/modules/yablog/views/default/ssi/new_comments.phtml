@@ -15,7 +15,7 @@
                 </p>
                 <p class="dot">
                     {php $content = cn_substr($item['content'], 40);}
-                    {if $item['link_url']}
+                    {if isset($item['link_url'])}
                     <a href="{$item.link_url}#comment-{$item.comment_id}" rel="nofollow" title="{L COMMENT} {php echo htmlspecialchars($item['title'], ENT_QUOTES);}">{$content}</a>
                     {else}
                     <a href="{BASE_SITE_URL}guestbook.shtml#comment-{$item.comment_id}" rel="nofollow" title="{L GUESTBOOK}">{$content}</a>
