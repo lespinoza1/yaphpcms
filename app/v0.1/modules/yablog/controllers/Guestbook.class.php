@@ -33,7 +33,7 @@ class GuestbookController extends CommonController {
     public function indexAction() {
         $total      = $this->_model
         ->table(TB_COMMENTS)
-        ->where($where = 'type=0 AND status=1 AND parent_id=0')
+        ->where($where = 'type=' . COMMENT_TYPE_GUESTBOOK . ' AND status=' . COMMENT_STATUS_PASS . ' AND parent_id=0')
         ->count();
         $page_info      = Filter::page($total, 'page', PAGE_SIZE);
         $page           = $page_info['page'];

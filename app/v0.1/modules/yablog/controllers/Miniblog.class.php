@@ -31,7 +31,7 @@ class MiniblogController extends CommonController {
     private function _getBlogComments($blog_id) {
         $comments = $this->_model
         ->table(TB_COMMENTS)
-        ->where('type=2 AND status=1 AND parent_id=0 AND blog_id=' . $blog_id)
+        ->where('type=' . COMMENT_TYPE_MINIBLOG . ' AND status=' . COMMENT_STATUS_PASS . ' AND parent_id=0 AND blog_id=' . $blog_id)
         ->order('last_reply_time DESC')
         ->select();
 
