@@ -813,7 +813,7 @@ class Db {
                         $where_str .= $key . ' ' . strtoupper($v) . ' ' . $v1;
                     }
                     else {
-                        $v1   = is_string($v1) ? explode(',', $v1) : $v1;
+                        $v1   = is_array($v1) ? $v1 : explode(',', $v1);
                         $zone = implode(',', $this->_parseValue($v1));
                         $where_str .= $key . ' ' . strtoupper($v) . '(' . $zone . ')';
                     }
