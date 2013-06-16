@@ -307,13 +307,13 @@ Ext.define('Yap.controller.Base', {
      * @return {Object} actioncolumn item 配置
      */
     deleteColumnItem: function(confirmField) {
-        var me = this,
-            confirmText = null === confirmField ? lang('CN_CI,RECORD') : (confirmField ? htmlspecialchars(record.get(confirmField)) : '');
+        var me = this;
 
         return {
             text: lang('DELETE'),
             handler: function(grid, rowIndex, cellIndex) {
-                var record = grid.getStore().getAt(rowIndex);
+                var record = grid.getStore().getAt(rowIndex),
+                confirmText = null === confirmField ? lang('CN_CI,RECORD') : (confirmField ? htmlspecialchars(record.get(confirmField)) : '')
                 me['delete'](record, confirmField ? '<span class="font-red font-bold">' + confirmText + '</span>' : confirmText);
             }
         };
