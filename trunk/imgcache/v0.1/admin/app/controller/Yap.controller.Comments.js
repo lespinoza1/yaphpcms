@@ -456,6 +456,7 @@ Ext.define('Yap.controller.Comments', {
         var me = this;
 
         me._replyForm = me._replyForm || Ext.create('Yap.ux.Form', {
+            height: 400,
             controller: this,
             url: this.getActionUrl(false, 'reply'),
             bodyStyle: 'border: none',
