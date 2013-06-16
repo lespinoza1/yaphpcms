@@ -44,6 +44,42 @@ class CommentsController extends CommonController {
     }
 
     /**
+     * 获取有回复需要发邮件留言评论信息
+     *
+     * @author          mrmsl <msl-138@163.com>
+     * @date            2013-06-16 21:51:08
+     *
+     * @param array|string $comment_ids comment_id串或数组
+     * @param array $blog_info 评论博客或微博
+     *
+     * @return array 留言评论信息
+     */
+    private function _getMailCommentsInfo($comment_ids, $blog_info) {
+        $info = $this->_model->field('type,email,content,comment_id,blog_id,parent_id')->where(array($this->_pk_field => array('IN', $comment_ids), 'at_email' => 1))->select();
+
+        if ($info) {
+
+            foreach ($info as &$v) {
+                $blog_id    = $v['blog_id'];
+                $type       = $v['type'];
+
+                if (COMMENT_TYPE_GUESTBOOK == $type) {
+                    $v['comment_name'] = L('GUESTBOOK');
+                    $link_url = BASE_SITE_URL . 'guestbook.shtml';
+                }
+                else {
+                    $v['comment_name'] = L('COMMENT');
+                    $link_url = $blog_info[$blog_id]['link_url'];
+                }
+
+                $v['link_url'] = $link_url . '#comment-' . $v['comment_id'];
+            }
+        }
+
+        return $info;
+    }//end _getMailCommentsInfo
+
+    /**
      * 更新博客,微博评论数
      *
      * @author          mrmsl <msl-138@163.com>
@@ -178,26 +214,7 @@ class CommentsController extends CommonController {
             }
 
             if (COMMENT_STATUS_PASS == C('T_STATUS') && $selected['at_email']) {
-                $info['at_email'] = $this->_model->field('type,email,content,comment_id,blog_id,parent_id')->where(array($this->_pk_field => array('IN', $selected['at_email']), 'at_email' => 1))->select();
-
-                if ($info['at_email']) {
-
-                    foreach ($info['at_email'] as &$v) {
-                        $blog_id    = $v['blog_id'];
-                        $type       = $v['type'];
-
-                        if (COMMENT_TYPE_GUESTBOOK == $type) {
-                            $v['comment_name'] = L('GUESTBOOK');
-                            $link_url = BASE_SITE_URL . 'guestbook.shtml';
-                        }
-                        else {
-                            $v['comment_name'] = L('COMMENT');
-                            $link_url = $info['delete_blog_html'][$blog_id]['link_url'];
-                        }
-
-                        $v['link_url'] = $link_url . '#comment-' . $v['comment_id'];
-                    }
-                }
+                $info['at_email'] = $this->_getMailCommentsInfo($selected['at_email'], $info['delete_blog_html']);
             }
 
             C('T_INFO', $info);
@@ -593,7 +610,12 @@ class CommentsController extends CommonController {
             $a = array($comment_id);
             $b = '';
             $this->_beforeExec($a, $b);
-            $this->_afterAction();
+
+            //处理发送有回复邮件
+            if ($comment_info['at_email']) {
+                C('T_INFO.at_email', $this->_getMailCommentsInfo($comment_id, C('T_INFO.delete_blog_html')));
+                $this->_afterSetField('status', null, null);
+            }
 
             $log = $content;
         }
