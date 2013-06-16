@@ -43,7 +43,10 @@ Ext.define('Yap.controller.Mail', {
             }
         };
 
-        this.callParent([data, options]);
+        seajs.use(['Yap.ux.Ueditor', 'ueditor', 'ueditorConfig'], function () {
+            me.ueditor = true;
+            me.superclass.addAction.apply(me, [data, options]);
+        });
     },
 
     /**
@@ -61,7 +64,12 @@ Ext.define('Yap.controller.Mail', {
                 [null, 'subject', 'PLEASE_ENTER,MAIL_SUBJECT', '', '', {width: 400}],
                 lang('LT_BYTE').format(150)
             ]]),
-            extField.textarea('content', 'PLEASE_ENTER,MAIL_CONTENT', 'MAIL_CONTENT', '', { width: 1000, height: 300 }),//模板内容
+            {//内容
+                xtype: 'ueditor',
+                name: 'content',
+                fieldLabel: lang('CONTENT')
+            },
+            //extField.textarea('content', 'PLEASE_ENTER,MAIL_CONTENT', 'MAIL_CONTENT', '', { width: 1000, height: 300 }),//模板内容
             extField.sortOrderField(),//排序
             extField.memoField(),//备注
             extField.textareaComment(lang('LT_BYTE').format(60)),//备注提示
