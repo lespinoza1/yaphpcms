@@ -200,10 +200,10 @@ Ext.define('Yap.controller.Comments', {
             flex: 1,
             minWidth: 300,
             dataIndex: 'content',
-            renderer: function (v) {
+            renderer: function (v, cls, record) {
                 var data = Ext.Object.fromQueryString(Ext.History.getToken());
 
-                return data.keyword && 'content' == data.column ? me.searchReplaceRenderer(strip_tags(v), 'content') : v;
+                return data.keyword && 'content' == data.column ? me.searchReplaceRenderer(strip_tags(v), 'content') : (record.get('parent_id') > 0 ? v.replace('@<a class="link"', '@<a class="link" onclick="return false"') : v);
             },
             sortable: false
         }, {
@@ -701,7 +701,7 @@ Ext.define('Yap.controller.Comments', {
              * @cfg {Array}
              * 字段
              */
-            fields: [this.idProperty, 'blog_id', 'content', 'add_time', 'last_reply_time', 'username', 'user_ip', 'username', 'email','user_homepage', 'status', 'type', 'at_email', 'province', 'city', 'is_admin', 'title', 'link_url', 'data', 'admin_reply_type'],
+            fields: [this.idProperty, 'blog_id', 'content', 'add_time', 'last_reply_time', 'username', 'user_ip', 'username', 'email','user_homepage', 'status', 'type', 'at_email', 'province', 'city', 'is_admin', 'title', 'link_url', 'data', 'admin_reply_type', 'parent_id'],
             /**
              * @cfg {String}
              * 主键
