@@ -83,8 +83,8 @@ class Mailer extends PHPMailer {
 
         $result = $this->doMail($info);
 
-        C('_FACADE_SKIP', 'skip');
-        $this->_model->table(TB_COMMENTS)->where(array('comment_id' => $comment_info['comment_id']))->save(array('at_email' => true === $result ? MAIL_RESULT_SUCCESS : MAIL_RESULT_FAILURE));
+        //C('_FACADE_SKIP', 'skip');
+        //$this->_model->table(TB_COMMENTS)->where(array('comment_id' => $comment_info['comment_id']))->save(array('at_email' => true === $result ? MAIL_RESULT_SUCCESS : MAIL_RESULT_FAILURE));
 
         return $result;
     }
