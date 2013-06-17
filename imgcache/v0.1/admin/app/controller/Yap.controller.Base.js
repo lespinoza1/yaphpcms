@@ -604,7 +604,7 @@ Ext.define('Yap.controller.Base', {
             selection = this.filterSelection(selection, internalId[0], internalId[1]);
 
             if (Ext.isEmpty(selection)) {
-                !arguments[3] && info(lang('SELECTED_RECORD_NOT_TO_BE_UPDATE'), null, true);
+                !arguments[3] && info(lang('SELECTED,RECORD,DO_NOT_NEED_TO_BE_UPDATE'), null, true);
                 return false;
             }
 

@@ -37,7 +37,7 @@ Ext.define('Yap.controller.Comments', {
      * @property {Array}
      * 状态
      */
-    statusArr: [TEXT.gray(lang('CN_WEI,AUDITING')), TEXT.green(lang('CN_YI,PASS')), TEXT.red(lang('CN_WEI,PASS'))],
+    statusArr: [TEXT.gray(lang('CN_WEI,AUDITING'), null), TEXT.green(lang('CN_YI,PASS')), TEXT.red(lang('CN_WEI,PASS'))],
     /**
      * @cfg {String}
      * 查询字段
@@ -278,13 +278,19 @@ Ext.define('Yap.controller.Comments', {
                     html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="edit">', lang('EDIT'), '</span>| ');
                     html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="view">', lang('CN_CHAKAN,CN_YU,REPLY'), '</span>| ');
                     html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="delete">', lang('DELETE'), '</span>');
+                    html.push('   </p><p>');
+                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="pass" data-status="1">', lang('PASS'), '</span>| ');
+                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="pass" data-status="2">', lang('NO,PASS'), '</span>| ');
+                    html.push('   <span class="appactioncolumn appactioncolumn-', this, '" data-action="pass" data-status="0">', lang('CN_WEI,AUDITING'), '</span>');
                     html.push('</p>');
 
                     return html.join('');
                 },
                 handler: function(grid, rowIndex, cellIndex, options, event) {
-                    var action = Ext.get(event.getTarget()).getAttribute('data-action'),
-                        record = grid.getStore().getAt(rowIndex);
+                    var element = Ext.get(event.getTarget()),
+                        action = element.getAttribute('data-action'),
+                        record = grid.getStore().getAt(rowIndex),
+                        id = record.get(me.idProperty);
 
                     switch (action) {
 
@@ -297,7 +303,17 @@ Ext.define('Yap.controller.Comments', {
                             break;
 
                         case 'view'://查看
-                            Yap.History.push('controller=comments&action=view&comment_id={0}&add_time={1}&back={2}'.format(record.get(me.idProperty), record.get('add_time'), encodeURIComponent(location.href)));
+                            Yap.History.push('controller=comments&action=view&comment_id={0}&add_time={1}&back={2}'.format(id, record.get('add_time'), encodeURIComponent(location.href)));
+                            break;
+
+                        case 'pass'://通过,不通过,未审核
+
+                            if (record.get('status') == element.getAttribute('data-status')) {
+                                info(lang('CN_CI,RECORD,DO_NOT_NEED_TO_BE_UPDATE'), null, true);
+                                return;
+                            }
+
+                            me.auditing(record, element.getAttribute('data-status'));
                             break;
                     }
                 }

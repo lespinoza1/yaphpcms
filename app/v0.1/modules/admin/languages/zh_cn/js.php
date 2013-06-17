@@ -76,7 +76,7 @@ return array(
     'SECOND'                    => '秒',//by mrmsl on 2012-09-11 12:52:25
     'SELECT'                    => '选择',
     'SELECTED'                  => '选中',
-    'SELECTED_RECORD_NOT_TO_BE_UPDATE' => '选中记录已是需要设置的状态，无需再设置',
+    'DO_NOT_NEED_TO_BE_UPDATE'  => '已是需要设置的状态，无需再设置',
     'SELECT_ONE'                => '请至少选择一条记录',
     'SESSION_COOKIE_SECURE_TIP' => '是否仅通过https发送 cookie',
     'SESSION_COOKIE_HTTPONLY_TIP' => 'session cookie只能通过http获取，javascript无法获取',
