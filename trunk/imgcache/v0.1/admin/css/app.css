@@ -233,7 +233,7 @@ a.a-font-000:hover {color: #096DD1; text-decoration: none;}
 .txt-password { padding-left: 18px; background: url(images/icon_password.png) no-repeat left center; }
 .txt-code { background: url(); }
 
-p.appactioncolumn { height: 18px; line-height: 18px; }
+p.appactioncolumn { height: 20px; line-height: 20px; }
 span.appactioncolumn { cursor: pointer; margin-right: 6px; color: #096DD1; }
 span.appactioncolumn:hover { color: red; }
 img.img-yesno { cursor: pointer; }
