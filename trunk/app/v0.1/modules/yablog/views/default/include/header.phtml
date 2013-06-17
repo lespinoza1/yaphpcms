@@ -10,5 +10,5 @@
     {echo css('yablog.css', IMGCACHE_CSS); }
 </head>
 <body><!---->
-<div id="wrap" class="hide0">
+<div id="wrap"{if '192.168.129.1' == get_client_ip()} style="visibility: hidden;"{/if}>
     <!--#include virtual="/v0.1/ssi/navbar.shtml"-->
